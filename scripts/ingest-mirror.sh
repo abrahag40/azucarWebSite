@@ -1,24 +1,28 @@
 #!/usr/bin/env bash
-# Ingesta de una captura HTTrack al repositorio para auditoría offline.
+# Ingesta de las capturas HTTrack al repositorio para auditoría offline.
 #
-#   Uso:  ./scripts/ingest-mirror.sh /ruta/a/la/captura [nombre-destino]
-#   Ej.:  ./scripts/ingest-mirror.sh ~/Documents/Projects/azucarWeb azucarhotel
+# Se ejecuta UNA sola vez, desde dentro del repositorio, y procesa las tres
+# capturas de golpe. No deja nada fuera de la carpeta del proyecto.
 #
-# Copia sólo los archivos de texto (HTML/CSS/JS/SVG/…) y genera un manifiesto
-# completo con el tamaño de TODO, imágenes incluidas. Así el repositorio queda
-# ligero y no se pierde el dato de peso, que es justo lo que necesita el
-# análisis de rendimiento.
+#   Uso:  ./scripts/ingest-mirror.sh /Users/abraham/Documents/Projects/azucarWeb
+#
+# Qué hace:
+#   1. Copia cada captura íntegra —imágenes incluidas— excepto los artefactos
+#      internos de HTTrack (hts-cache, ^), que son duplicación pura.
+#   2. Genera un manifiesto con el tamaño de TODOS los archivos del original,
+#      incluso los que no se copian. El dato de peso no se pierde nunca.
+#   3. Produce un resumen por extensión y el ranking de archivos más pesados.
 #
 # Compatible con macOS (bash 3.2, herramientas BSD) y Linux.
 
 set -euo pipefail
 
-SRC="${1:-}"
-NAME="${2:-captura}"
-MAX_TEXT_BYTES=$((5 * 1024 * 1024))   # no copiar "texto" de más de 5 MB (bundles minificados)
+SRC_ROOT="${1:-}"
+MAX_FILE_BYTES=$((50 * 1024 * 1024))   # GitHub rechaza >100 MB; cortamos antes
 
-if [ -z "$SRC" ] || [ ! -d "$SRC" ]; then
-  echo "ERROR: pasa la ruta de la captura. Ej.: $0 ~/Documents/Projects/azucarWeb azucarhotel" >&2
+if [ -z "$SRC_ROOT" ] || [ ! -d "$SRC_ROOT" ]; then
+  echo "ERROR: pasa la carpeta que contiene las capturas." >&2
+  echo "  Ej.: $0 /Users/abraham/Documents/Projects/azucarWeb" >&2
   exit 1
 fi
 
@@ -28,74 +32,90 @@ if [ -z "$REPO" ]; then
   exit 1
 fi
 
-SRC="$(cd "$SRC" && pwd)"
-DEST="$REPO/investigacion/mirrors/$NAME"
-rm -rf "$DEST"; mkdir -p "$DEST/archivos"
+SRC_ROOT="$(cd "$SRC_ROOT" && pwd)"
+BASE="$REPO/investigacion/mirrors"
 
-echo "Origen : $SRC"
-echo "Destino: $DEST"
+# captura_origen:nombre_destino
+CAPTURAS="actualWebsite:azucarhotel propuestaAnterior:resnexus plantillaBase:cappa"
+
+echo "Origen : $SRC_ROOT"
+echo "Destino: $BASE"
 echo
 
-# ---------- 1. Manifiesto completo (todo, con tamaños) ----------
-echo "bytes	ruta" > "$DEST/manifiesto.tsv"
-find "$SRC" -type f -print0 | while IFS= read -r -d '' f; do
-  printf '%s\t%s\n' "$(wc -c < "$f" | tr -d ' ')" "${f#$SRC/}"
-done | sort -t"$(printf '\t')" -k1,1nr >> "$DEST/manifiesto.tsv"
+for par in $CAPTURAS; do
+  ORIG="${par%%:*}"
+  NAME="${par##*:}"
+  SRC="$SRC_ROOT/$ORIG"
 
-TOTAL_FILES=$(( $(wc -l < "$DEST/manifiesto.tsv") - 1 ))
-echo "Manifiesto: $TOTAL_FILES archivos"
+  if [ ! -d "$SRC" ]; then
+    echo "!! No encontrada: $ORIG — se omite"
+    continue
+  fi
 
-# ---------- 2. Copia de archivos de texto ----------
-COPIED=0; SKIPPED_BIG=0
-find "$SRC" -type f \( \
-     -iname '*.html' -o -iname '*.htm'  -o -iname '*.css'  -o -iname '*.js'   \
-  -o -iname '*.mjs'  -o -iname '*.json' -o -iname '*.xml'  -o -iname '*.txt'  \
-  -o -iname '*.svg'  -o -iname '*.webmanifest' -o -iname '*.map' -o -iname '*.php' \
-  \) -print0 | while IFS= read -r -d '' f; do
-    sz=$(wc -c < "$f" | tr -d ' ')
-    if [ "$sz" -gt "$MAX_TEXT_BYTES" ]; then
-      echo "  omitido por tamaño ($sz B): ${f#$SRC/}" >> "$DEST/omitidos.txt"
-      continue
-    fi
-    rel="${f#$SRC/}"
-    mkdir -p "$DEST/archivos/$(dirname "$rel")"
-    cp "$f" "$DEST/archivos/$rel"
+  DEST="$BASE/$NAME"
+  rm -rf "$DEST"; mkdir -p "$DEST"
+
+  echo "── $ORIG → $NAME"
+
+  # 1. Manifiesto del ORIGINAL completo, antes de excluir nada
+  printf 'bytes\truta\n' > "$DEST/manifiesto.tsv"
+  find "$SRC" -type f -print0 | while IFS= read -r -d '' f; do
+    printf '%s\t%s\n' "$(wc -c < "$f" | tr -d ' ')" "${f#$SRC/}"
+  done | sort -t"$(printf '\t')" -k1,1nr >> "$DEST/manifiesto.tsv"
+
+  TOTAL=$(( $(wc -l < "$DEST/manifiesto.tsv") - 1 ))
+
+  # 2. Copia íntegra, menos artefactos internos de HTTrack
+  mkdir -p "$DEST/archivos"
+  ( cd "$SRC" && tar cf - . ) | ( cd "$DEST/archivos" && tar xf - )
+  find "$DEST/archivos" \( -name 'hts-cache' -o -name '^' \) -type d -prune -exec rm -rf {} + 2>/dev/null || true
+
+  # 3. Cortar archivos individuales demasiado grandes para git
+  find "$DEST/archivos" -type f -size +"$((MAX_FILE_BYTES/1024))"k -print -delete \
+    >> "$DEST/excluidos-por-tamano.txt" 2>/dev/null || true
+  [ -s "$DEST/excluidos-por-tamano.txt" ] || rm -f "$DEST/excluidos-por-tamano.txt"
+
+  COPIADOS=$(find "$DEST/archivos" -type f | wc -l | tr -d ' ')
+  PESO_ORIG=$(du -sh "$SRC" | cut -f1)
+  PESO_DEST=$(du -sh "$DEST/archivos" | cut -f1)
+
+  # 4. Resumen legible
+  {
+    echo "# Captura: $NAME  (origen: $ORIG)"
+    echo
+    echo "| dato | valor |"
+    echo "|---|---|"
+    echo "| Archivos en el original | $TOTAL |"
+    echo "| Archivos versionados | $COPIADOS |"
+    echo "| Peso del original | $PESO_ORIG |"
+    echo "| Peso versionado (sin hts-cache) | $PESO_DEST |"
+    echo
+    echo "## Por extensión"
+    echo
+    echo '| ext | archivos | KB |'
+    echo '|---|---|---|'
+    tail -n +2 "$DEST/manifiesto.tsv" | awk -F'\t' '
+      { n=split($2,a,"."); ext=(n>1 ? tolower(a[n]) : "(sin-ext)");
+        cnt[ext]++; sum[ext]+=$1 }
+      END { for (e in cnt) printf "| %s | %d | %.0f |\n", e, cnt[e], sum[e]/1024 }' \
+      | sort -t'|' -k4 -rn | head -25
+    echo
+    echo "## 30 archivos más pesados"
+    echo
+    echo '| KB | ruta |'
+    echo '|---|---|'
+    tail -n +2 "$DEST/manifiesto.tsv" | head -30 | awk -F'\t' '{printf "| %.0f | %s |\n", $1/1024, $2}'
+  } > "$DEST/resumen.md"
+
+  echo "   $TOTAL archivos · original $PESO_ORIG · versionado $PESO_DEST"
 done
-COPIED=$(find "$DEST/archivos" -type f | wc -l | tr -d ' ')
-echo "Copiados : $COPIED archivos de texto"
-
-# ---------- 3. Logs de HTTrack ----------
-find "$SRC" -maxdepth 3 -type f \( -name 'hts-log.txt' -o -name '*.whtt' -o -name 'hts-cache' \) \
-  -exec cp {} "$DEST/" \; 2>/dev/null || true
-
-# ---------- 4. Resumen por extensión ----------
-{
-  echo "# Resumen de la captura: $NAME"
-  echo
-  echo "- Archivos totales: $TOTAL_FILES"
-  echo "- Archivos de texto copiados al repositorio: $COPIED"
-  echo "- Peso total del original: $(du -sh "$SRC" | cut -f1)"
-  echo
-  echo "## Por extensión (cantidad y peso total)"
-  echo
-  echo '| ext | archivos | KB |'
-  echo '|---|---|---|'
-  tail -n +2 "$DEST/manifiesto.tsv" | awk -F'\t' '
-    { n=split($2,a,"."); ext = (n>1 ? tolower(a[n]) : "(sin ext)");
-      cnt[ext]++; sum[ext]+=$1 }
-    END { for (e in cnt) printf "| %s | %d | %.0f |\n", e, cnt[e], sum[e]/1024 }' | sort -t'|' -k4 -rn
-  echo
-  echo "## 25 archivos más pesados"
-  echo
-  echo '| KB | ruta |'
-  echo '|---|---|'
-  tail -n +2 "$DEST/manifiesto.tsv" | head -25 | awk -F'\t' '{printf "| %.0f | %s |\n", $1/1024, $2}'
-} > "$DEST/resumen.md"
 
 echo
-echo "Listo. Revisa $DEST/resumen.md"
+echo "════════════════════════════════════════════"
+du -sh "$BASE" | awk '{print "Total a versionar: " $1}'
+echo "════════════════════════════════════════════"
 echo
 echo "Siguiente paso:"
-echo "  git add investigacion/mirrors/$NAME"
-echo "  git commit -m \"chore: captura HTTrack de $NAME\""
+echo "  git add investigacion/mirrors"
+echo "  git commit -m \"chore: capturas HTTrack de los tres sitios\""
 echo "  git push -u origin claude/hotel-tulum-web-audit-0yly29"
