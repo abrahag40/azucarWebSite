@@ -114,8 +114,29 @@ echo
 echo "════════════════════════════════════════════"
 du -sh "$BASE" | awk '{print "Total a versionar: " $1}'
 echo "════════════════════════════════════════════"
-echo
-echo "Siguiente paso:"
-echo "  git add investigacion/mirrors"
-echo "  git commit -m \"chore: capturas HTTrack de los tres sitios\""
-echo "  git push -u origin claude/hotel-tulum-web-audit-0yly29"
+
+# ---------- Publicar ----------
+BRANCH="claude/hotel-tulum-web-audit-0yly29"
+cd "$REPO"
+git add investigacion/mirrors
+if git diff --cached --quiet; then
+  echo "No hay cambios que publicar."
+  exit 0
+fi
+git commit -q -m "chore: capturas HTTrack de los tres sitios
+
+Ingesta generada por scripts/ingest-mirror.sh. Incluye manifiesto con el tamano
+de todos los archivos del original y resumen por extension de cada captura."
+echo "Publicando en $BRANCH ..."
+for intento in 1 2 3 4; do
+  if git push -u origin "$BRANCH"; then
+    echo
+    echo "Listo. Las capturas ya estan en el repositorio."
+    exit 0
+  fi
+  espera=$((2 ** intento))
+  echo "Push fallido, reintento en ${espera}s ..."
+  sleep "$espera"
+done
+echo "ERROR: no se pudo publicar despues de 4 intentos." >&2
+exit 1
