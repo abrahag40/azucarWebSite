@@ -173,6 +173,76 @@ justificarla. La arquitectura se deriva de restricciones operativas, no de gusto
 
 ---
 
+## L-011 — Un requerimiento del cliente puede ser imposible: el trabajo es encontrar qué quiso decir
+
+**Lección.** El cliente pidió "que el huésped reserve desde el sitio" y a la vez informó que
+no tiene PMS ni channel manager y actualiza las OTAs a mano. Confirmación instantánea sobre
+ese estado produce **sobreventa por diseño**: no es un bug, es aritmética de inventario
+compartido sin sincronización.
+
+**Por qué.** La respuesta profesional no fue obedecer ("sí, ponemos calendario") ni negarse
+("no se puede"). Fue separar la **intención** — que el huésped pueda iniciar la reserva sin
+irse a Booking — de la **implementación** que el cliente imaginó, y satisfacer la intención
+con *request-to-book*.
+
+**Antipatrón evitado.** *Order-taking*: implementar literalmente lo pedido y entregar un
+sistema que rompe la operación del cliente. El desastre habría llegado en temporada alta y
+con nuestro nombre encima.
+
+**Detalle que lo hace más grave:** la auditoría ya había detectado la queja "habitación
+distinta a la reservada". Construir confirmación instantánea habría **amplificado el
+problema que nos contrataron a resolver.**
+
+---
+
+## L-012 — Una decisión provisional deja de ser deuda técnica cuando se aísla y se documenta
+
+**Lección.** El flujo de reserva manual vive detrás de un módulo `booking/` con interfaz
+definida. Ningún otro componente conoce su implementación. Migrar a un motor SaaS es
+sustituir ese módulo.
+
+**Por qué.** Sabemos que esta decisión va a cambiar. Lo que convierte "solución temporal" en
+deuda técnica no es ser temporal: es estar **entrelazada** con todo lo demás y no estar
+documentada como temporal.
+
+**Técnica:** *anti-corruption layer* (Eric Evans, *Domain-Driven Design*). Se aísla la
+decisión volátil detrás de una frontera estable para que el cambio previsto sea contenido.
+
+---
+
+## L-013 — Cuando el cliente no tiene el dato, el trabajo no es exigírselo: es crearlo
+
+**Lección.** El cliente no lleva registro de reservas directas vs. OTA ni de comisiones. En
+vez de insistir, la analítica se convirtió en **entregable del sprint 1**.
+
+**Por qué.** Sin línea base no se puede demostrar que el trabajo sirvió: sólo opinar que se
+ve mejor. Y cada semana sin instrumentar es una semana de datos que no existirá jamás — el
+dato del pasado no se puede recuperar retroactivamente.
+
+**Antipatrón evitado.** Dejar la medición para el final "cuando ya esté el sitio". Para
+entonces sólo tienes el después, sin el antes, y no puedes probar nada.
+
+---
+
+## L-014 — Documento interno y documento de cliente son artefactos distintos
+
+**Lección.** El banco de preguntas del repositorio cita a BABOK, nombra antipatrones y
+explica técnicas. El `.docx` que recibe el cliente no contiene **nada** de eso: sólo
+preguntas claras, hallazgos explicados en su idioma y el porqué en términos de su negocio.
+
+**Por qué.** El mismo contenido, dos audiencias, dos objetivos. Al cliente el vocabulario
+metodológico no lo tranquiliza: lo distancia, y a veces lo lee como intento de impresionar.
+Lo que sí lo compromete es ver que ya hicimos la tarea sobre **su** hotel.
+
+**Antipatrón evitado.** Exportar el documento interno con un cambio de portada. Se nota
+siempre, y baja la tasa de respuesta.
+
+**Detalle deliberado:** el brief incluye "no nos mandes contraseñas por este documento".
+Un cliente confiado manda credenciales por WhatsApp; instruir el canal seguro **antes** de
+que ocurra es parte del trabajo.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -186,3 +256,6 @@ justificarla. La arquitectura se deriva de restricciones operativas, no de gusto
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
 | R-08 | Cliente no cumple el SLA de 48 h y la cadencia quincenal se rompe | Alto | SLA escrito en contrato + pendientes del cliente visibles en cada demo |
 | R-09 | Catálogo posiblemente sobre-segmentado (8 tipos para 21 unidades) reduce la conversión | Medio | Validar inventario real y proponer agrupación comercial |
+| R-10 | Sobreventa si alguna vez se activa confirmación instantánea sin channel manager | Muy alto | Prohibido por ADR-0003. La interfaz nunca dice "confirmada" |
+| R-11 | El hotel no cumple el tiempo de respuesta publicado y el flujo genera frustración | Alto | Responsable y horario acordados **antes** del lanzamiento (B1, B2) |
+| R-12 | Sin CMS, el cliente no puede editar el sitio. Consistente hoy, puede molestar después | Medio | Debe quedar **aceptado por escrito**, no asumido (F4) |
