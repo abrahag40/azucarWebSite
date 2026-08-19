@@ -1,0 +1,58 @@
+HTTrack3.49-2 launched on Wed, 19 Aug 2026 14:38:29 at https://azucarhotel.com/ ^
+(httrack https://azucarhotel.com/ ^ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+14:41:16	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/robots.txt (from primary/primary)
+14:41:16	Warning: 	Retry after error -5 (Unable to get server's address: nodename nor servname provided, or not known) at link ^/ (from primary/primary)
+14:41:16	Error: 	"Method Not Allowed" (405) at link https://azucarhotel.com/xmlrpc.php (from https://azucarhotel.com/)
+14:44:19	Warning: 	Retry after error -4 (No data (connection closed)) at link https://azucarhotel.com/wp-content/uploads/2025/06/9.webp (from https://azucarhotel.com/)
+14:44:19	Warning: 	Retry after error -4 (No data (connection closed)) at link https://azucarhotel.com/wp-content/uploads/2025/04/img_azucar_099.webp (from https://azucarhotel.com/)
+14:44:24	Warning: 	Retry after error -5 (Unable to get server's address: unknown error) at link ^/ (from primary/primary)
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=887
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=887 to https://azucarhotel.com/habitaciones/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=1067
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=1067 to https://azucarhotel.com/nosotros/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=898
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=898 to https://azucarhotel.com/reservaciones/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=928
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=928 to https://azucarhotel.com/autorizacion-de-pago-con-tdc/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=938
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=938 to https://azucarhotel.com/servicios/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=2347
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=2347 to https://azucarhotel.com/amenidades-y-facilidades/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=947
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=947 to https://azucarhotel.com/preguntas-frecuentes/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=2424
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=2424 to https://azucarhotel.com/politicas/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=958
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=958 to https://azucarhotel.com/contacto/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=990
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=990 to https://azucarhotel.com/politica-de-privacidad/
+14:45:09	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/ (from primary/primary)
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=445
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=445 to https://azucarhotel.com/en/rooms/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=505
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=505 to https://azucarhotel.com/en/about-us/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=586
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=586 to https://azucarhotel.com/en/reservations/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=606
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=606 to https://azucarhotel.com/en/cc-payment-authorization/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=730
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=730 to https://azucarhotel.com/en/services/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=2356
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=2356 to https://azucarhotel.com/en/amenities-facilities/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=761
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=761 to https://azucarhotel.com/en/frequent-questions/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=2433
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=2433 to https://azucarhotel.com/en/policies/
+14:45:09	Warning: 	Moved Permanently for https://azucarhotel.com/?p=423
+14:45:09	Warning: 	File has moved from https://azucarhotel.com/?p=423 to https://azucarhotel.com/en/contact/
+14:45:10	Warning: 	Moved Permanently for https://azucarhotel.com/?p=993
+14:45:10	Warning: 	File has moved from https://azucarhotel.com/?p=993 to https://azucarhotel.com/en/privacy-policy/
+
+HTTrack Website Copier/3.49-2 mirror complete in 6 minutes 41 seconds : 434 links scanned, 405 files written (21192390 bytes overall) [17622848 bytes received at 43947 bytes/sec], 4717919 bytes transferred using HTTP compression in 22 files, ratio 21%, 9.1 requests per connection
+(3 errors, 44 warnings, 0 messages)
