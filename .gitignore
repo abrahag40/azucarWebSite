@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+.pnp/
+.pnp.js
+
+# Build
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Capturas HTTrack (pesadas: se versiona solo el análisis, no el binario)
+# Descomenta si el mirror supera ~50 MB y lo movemos a Drive.
+# investigacion/mirrors/
+
+# Logs
+*.log
+npm-debug.log*
+hts-log.txt
+hts-cache/
