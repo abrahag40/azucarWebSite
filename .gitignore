@@ -24,9 +24,22 @@ desktop.ini
 .idea/
 *.swp
 
-# Capturas HTTrack (pesadas: se versiona solo el análisis, no el binario)
-# Descomenta si el mirror supera ~50 MB y lo movemos a Drive.
-# investigacion/mirrors/
+# Capturas HTTrack: se versionan los archivos de texto y el manifiesto.
+# Los binarios pesados quedan fuera; su tamaño se conserva en manifiesto.tsv.
+investigacion/mirrors/**/*.jpg
+investigacion/mirrors/**/*.jpeg
+investigacion/mirrors/**/*.png
+investigacion/mirrors/**/*.gif
+investigacion/mirrors/**/*.webp
+investigacion/mirrors/**/*.avif
+investigacion/mirrors/**/*.mp4
+investigacion/mirrors/**/*.webm
+investigacion/mirrors/**/*.woff
+investigacion/mirrors/**/*.woff2
+investigacion/mirrors/**/*.ttf
+investigacion/mirrors/**/*.eot
+investigacion/mirrors/**/*.zip
+investigacion/mirrors/**/*.pdf
 
 # Logs
 *.log
