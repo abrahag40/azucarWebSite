@@ -14,6 +14,11 @@
 #   3. Produce un resumen por extensión y el ranking de archivos más pesados.
 #
 # Compatible con macOS (bash 3.2, herramientas BSD) y Linux.
+#
+# NOTA: nunca canalizar hacia `head` dentro de este script. Con `set -o pipefail`,
+# cuando head cierra la tubería el proceso de la izquierda recibe SIGPIPE, sale con
+# 141, y `set -e` aborta el script. Para limitar filas se usa `awk 'NR<=N'`, que
+# consume toda la entrada y no provoca SIGPIPE.
 
 set -euo pipefail
 trap 'echo; echo "════════════════════════════════════════════"; echo "  ✗ EL SCRIPT FALLÓ en la línea $LINENO"; echo "  Nada se publicó. Copia estas últimas líneas."; echo "════════════════════════════════════════════"' ERR
@@ -99,13 +104,13 @@ for par in $CAPTURAS; do
       { n=split($2,a,"."); ext=(n>1 ? tolower(a[n]) : "(sin-ext)");
         cnt[ext]++; sum[ext]+=$1 }
       END { for (e in cnt) printf "| %s | %d | %.0f |\n", e, cnt[e], sum[e]/1024 }' \
-      | sort -t'|' -k4 -rn | head -25
+      | sort -t'|' -k4 -rn | awk 'NR<=25'
     echo
     echo "## 30 archivos más pesados"
     echo
     echo '| KB | ruta |'
     echo '|---|---|'
-    tail -n +2 "$DEST/manifiesto.tsv" | head -30 | awk -F'\t' '{printf "| %.0f | %s |\n", $1/1024, $2}'
+    awk -F'\t' 'NR>1 && NR<=31 {printf "| %.0f | %s |\n", $1/1024, $2}' "$DEST/manifiesto.tsv"
   } > "$DEST/resumen.md"
 
   echo "   $TOTAL archivos · original $PESO_ORIG · versionado $PESO_DEST"
