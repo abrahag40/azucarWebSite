@@ -38,7 +38,22 @@ const one = (re, s) => { const m = s.match(re); return m ? m[1].trim() : null; }
 const strip = s => s.replace(/\s+/g, ' ').trim();
 
 const files = walk(FILES_DIR);
-const htmlFiles = files.filter(f => /\.html?$/i.test(f));
+// HTTrack deja un stub HTML por cada redireccion 301 encontrada. No son paginas
+// del sitio: contarlas infla todas las metricas. Se separan y se reportan aparte,
+// porque el mapa de redirecciones que contienen SI es informacion valiosa.
+const esStub = f => {
+  const s = readFileSync(f, 'utf8');
+  return /<title[^>]*>\s*Page has moved\s*<\/title>/i.test(s) || /HTTrack/i.test(s) && /has moved/i.test(s);
+};
+const htmlTodos = files.filter(f => /\.html?$/i.test(f));
+const stubs = htmlTodos.filter(esStub);
+const htmlFiles = htmlTodos.filter(f => !stubs.includes(f));
+
+// Mapa de redirecciones extraido de los stubs: insumo directo de las 301 del relanzamiento
+const redirecciones = stubs.map(f => {
+  const s = readFileSync(f, 'utf8');
+  return { stub: relative(FILES_DIR, f), destino: (s.match(/URL=([^"'>\s]+)/i) || [])[1] || (s.match(/href=["']([^"']+)["']/i) || [])[1] || '?' };
+});
 
 // ---------- pesos por tipo ----------
 const byExt = {};
@@ -101,7 +116,15 @@ for (const f of htmlFiles) {
   for (const m of all(/<script[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi, src)) {
     try {
       const d = JSON.parse(m[1].trim());
-      const tipos = (Array.isArray(d) ? d : [d]).map(x => x['@type']).filter(Boolean).flat();
+      const rec = (o, acc = []) => {
+        if (Array.isArray(o)) o.forEach(v => rec(v, acc));
+        else if (o && typeof o === 'object') {
+          if (o['@type']) acc.push(...[o['@type']].flat());
+          Object.values(o).forEach(v => rec(v, acc));
+        }
+        return acc;
+      };
+      const tipos = [...new Set(rec(d))];
       jsonld.push({ pagina: rel, tipos });
     } catch { jsonld.push({ pagina: rel, tipos: ['(JSON inválido)'] }); }
   }
@@ -159,6 +182,30 @@ const dup = arr => { const c = {}; arr.forEach(x => x && (c[x] = (c[x] || 0) + 1
 const hallazgos = [];
 const F = (sev, tema, det) => hallazgos.push({ sev, tema, det });
 
+// ---------- seguridad y datos sensibles en formularios ----------
+// Un formulario que captura PAN o CVV fuera de un entorno certificado es el
+// hallazgo de mayor severidad posible en un sitio de hotel. Se busca por nombre
+// de campo, que es donde queda la evidencia aunque la etiqueta esté maquillada.
+const PAN  = /(numero[_-]?(de[_-]?)?tarjeta|card[_-]?number|cc[_-]?num|creditcard)/i;
+const CVV  = /(cvv|cvc|codigo[_-]?(de[_-]?)?seguridad|security[_-]?code)/i;
+const EXPI = /(exp[_-]?(tarjeta|date|month|year)|vencimiento)/i;
+const formsPCI = forms.filter(f => f.campos.some(c => PAN.test(c) || CVV.test(c)));
+for (const f of formsPCI) {
+  const pan = f.campos.filter(c => PAN.test(c));
+  const cvv = f.campos.filter(c => CVV.test(c));
+  const exp = f.campos.filter(c => EXPI.test(c));
+  F('crítica', 'PCI-DSS / Seguridad',
+    `\`${f.pagina}\` captura datos de tarjeta en un formulario propio: `
+    + [pan.length && `PAN (${pan.join(', ')})`, cvv.length && `**CVV (${cvv.join(', ')})**`, exp.length && `expiración (${exp.join(', ')})`]
+        .filter(Boolean).join(' · ')
+    + `. Destino: \`${f.action}\``);
+}
+const formsHttp = forms.filter(f => /^http:\/\//i.test(f.action));
+if (formsHttp.length) F('crítica', 'Seguridad', `${formsHttp.length} formulario(s) envían a http:// sin cifrar`);
+const restApi = files.filter(f => /wp-json/.test(f)).length;
+if (restApi) F('media', 'Seguridad', `API REST de WordPress accesible sin autenticación (${restApi} respuestas capturadas en \`/wp-json/\`) — expone estructura, contenido y usuarios`);
+
+
 const sinTitle = pages.filter(p => !p.title);
 const sinDesc = pages.filter(p => !p.description);
 const titleDup = dup(pages.map(p => p.title));
@@ -181,6 +228,11 @@ if (sinViewport.length) F('alta', 'Móvil', `${sinViewport.length} página(s) si
 if (totalAlt) F('alta', 'A11y', `${totalAlt} <img> sin atributo alt (WCAG 1.1.1)`);
 if (totalDim) F('media', 'Rendimiento', `${totalDim} <img> sin width/height → provoca CLS`);
 if (imgs.length && modernas === 0) F('media', 'Rendimiento', `0 de ${imgs.length} imágenes en formato moderno (WebP/AVIF)`);
+const tiposSchema = [...new Set(jsonld.flatMap(j => j.tipos))];
+const HOTELERO = /^(Hotel|LodgingBusiness|HotelRoom|Resort|BedAndBreakfast|Offer|AggregateRating|Review|LocalBusiness)$/;
+if (jsonld.length && !tiposSchema.some(t => HOTELERO.test(t)))
+  F('alta', 'SEO', `schema.org presente pero **genérico** (${tiposSchema.slice(0,6).join(', ')}): sin Hotel, LodgingBusiness, HotelRoom, Offer ni AggregateRating. Google no puede mostrar precio, disponibilidad ni estrellas en resultados`);
+if (stubs.length) F('info', 'Captura', `${stubs.length} stub(s) de redirección de HTTrack excluidos del análisis · el mapa de destinos alimenta las 301 del relanzamiento`);
 if (!jsonld.length) F('alta', 'SEO', 'Sin datos estructurados schema.org — un hotel sin schema.org/Hotel pierde presentación enriquecida en Google');
 if (huella.wordpress) F('info', 'Stack', `WordPress detectado · temas: ${huella.tema.join(', ') || '?'} · ${huella.plugins.length} plugins`);
 const pesadas = imgs.filter(i => i.b > 500 * 1024);
@@ -198,7 +250,7 @@ const titleLargo = pages.filter(p => p.titleLen > 60);
 if (titleLargo.length) F('info', 'SEO', `${titleLargo.length} <title> de más de 60 caracteres: Google los trunca en resultados`);
 
 // ---------- informe ----------
-const sev = { alta: '🔴', media: '🟡', info: 'ℹ️' };
+const sev = { 'crítica': '🚨', alta: '🔴', media: '🟡', info: 'ℹ️' };
 const tabla = (h, r) => [`| ${h.join(' | ')} |`, `|${h.map(() => '---').join('|')}|`, ...r.map(x => `| ${x.join(' | ')} |`)].join('\n');
 
 const md = `# Auditoría técnica — \`${basename(ROOT)}\`
@@ -209,7 +261,8 @@ const md = `# Auditoría técnica — \`${basename(ROOT)}\`
 ## Resumen
 
 ${tabla(['Métrica', 'Valor'], [
-  ['Páginas HTML', pages.length],
+  ['Páginas HTML reales', pages.length],
+  ['Stubs de redirección (excluidos)', stubs.length],
   ['Páginas en español', es.length],
   ['Páginas en inglés', en.length],
   ['Archivos totales', files.length],
@@ -252,6 +305,11 @@ ${enlacesReserva.length ? tabla(['Página', 'Destino', 'Texto'],
 ${forms.length ? tabla(['Página', 'Método', 'Destino', 'Campos', '&lt;label&gt;'],
   forms.map(f => [`\`${f.pagina}\``, f.method, `\`${f.action.slice(0,50)}\``, f.campos.length, f.labels])) : '_Ninguno._'}
 
+## Mapa de redirecciones detectadas (insumo de las 301)
+
+${redirecciones.length ? tabla(['Origen (stub)', 'Destino'],
+  redirecciones.map(r => [`\`${r.stub}\``, `\`${r.destino}\``])) : '_Ninguna._'}
+
 ## Inventario de páginas
 
 ${tabla(['Ruta', 'KB', 'lang', 'title', 'desc', 'h1', 'canon', 'img'],
@@ -275,7 +333,7 @@ ${tabla(['ext', 'archivos', 'KB', '%'],
 writeFileSync(join(ROOT, 'informe.md'), md);
 writeFileSync(join(ROOT, 'datos.json'), JSON.stringify(
   { resumen: { paginas: pages.length, es: es.length, en: en.length, archivos: files.length, bytes: totalBytes },
-    hallazgos, huella, pages, forms, jsonld, enlacesReserva,
+    hallazgos, huella, pages, forms, jsonld, enlacesReserva, redirecciones, tiposSchema,
     dominiosExternos: [...extDomains.entries()].map(([d, r]) => ({ dominio: d, n: r.n, ctx: [...r.ctx] })),
     imagenes: imgs.slice(0, 200), pesoPorExtension: byExt }, null, 2));
 

@@ -243,13 +243,95 @@ que ocurra es parte del trabajo.
 
 ---
 
+## L-015 — Entregué automatización cuyo fallo era indistinguible del éxito
+
+**Lección.** El script de ingesta terminaba imprimiendo *"Siguiente paso: git add / commit /
+push"* y salía con código 0. Abraham leyó ese final limpio como éxito. Los 21 MB quedaron en
+disco sin publicar y perdimos dos rondas.
+
+**Por qué.** Cuando se entrega automatización, **el modo de fallo es parte del entregable**.
+Un script que falla en silencio convierte un error detectable en una suposición equivocada,
+y el costo se paga más tarde y más caro.
+
+**Corregido:** `trap ERR` con banner y número de línea, verificación de que la ingesta
+produjo archivos antes de publicar, y "no hay cambios" pasa de salida limpia a error.
+
+---
+
+## L-016 — Diagnosticar antes de reproducir es adivinar con buena letra
+
+**Lección.** Ante el fallo de ingesta encontré una causa plausible —SIGPIPE en
+`tail | head` bajo `set -o pipefail`— y la anuncié con seguridad. Monté el fixture, la
+reintroduje deliberadamente y **el script no falló**: con 450 archivos la salida cabe en el
+buffer de 64 KB de la tubería y `tail` nunca recibe SIGPIPE. La hipótesis era falsa.
+
+**Por qué.** Una explicación plausible y una explicación verdadera se sienten igual desde
+dentro. Lo único que las distingue es la reproducción. Anunciar la primera como si fuera la
+segunda gasta credibilidad que después hace falta.
+
+**El defecto se corrigió igual**, pero etiquetado como lo que es: riesgo latente que depende
+del volumen, no la causa del fallo observado.
+
+**Antipatrón evitado:** *diagnóstico por plausibilidad*.
+
+---
+
+## L-017 — El fixture de prueba debe parecerse al dato real en la dimensión que importa
+
+**Lección.** La primera prueba del auditor usó 7 archivos y pasó limpia. Con datos reales
+—428 archivos— aparecieron dos defectos: contaba como páginas los 20 stubs de redirección
+de HTTrack, inflando todas las métricas, y leía `@type` sólo al primer nivel, sin ver el
+`@graph` de Yoast.
+
+**Por qué.** Un fixture pequeño prueba que el código *corre*, no que *acierta*. Los defectos
+de un analizador viven en la variedad y el volumen de la entrada, que es justo lo que un
+fixture cómodo no tiene.
+
+**Consecuencia concreta:** de no corregirlo, el informe habría dicho *"24 páginas sin meta
+viewport"* cuando la cifra real es 4. Entregarle al cliente una cifra inflada por seis
+destruye la credibilidad de todo el resto del documento — incluido lo que sí es verdad.
+
+---
+
+## L-018 — Una auditoría que sólo encuentra defectos no es rigurosa, es tendenciosa
+
+**Lección.** Habíamos planteado como hipótesis que la fotografía estaría vieja o mal
+comprimida, y llegamos a incluir en el brief la recomendación de considerar una sesión
+nueva. El mirror la desmintió: 244 de 251 imágenes en WebP, la más pesada de 195 KB,
+subidas en 2025. La recomendación se retiró.
+
+**Por qué.** El sesgo profesional empuja a encontrar problemas: justifican el encargo. Pero
+una recomendación de gasto basada en una hipótesis no verificada es exactamente lo que
+destruye la confianza cuando el cliente descubre que no hacía falta.
+
+**Regla portable:** en todo informe de auditoría, la sección *"lo que ya está bien"* es
+obligatoria. Y cuando el dato contradice una hipótesis propia, **se retira por escrito y se
+dice que se retira**, no se deja morir en silencio.
+
+---
+
+## L-019 — Los hallazgos de mayor valor no son los que fuiste a buscar
+
+**Lección.** La auditoría buscaba SEO, rendimiento y accesibilidad. El hallazgo dominante
+resultó ser un formulario de Contact Form 7 que captura número de tarjeta **y CVV**: una
+violación frontal de PCI-DSS 3.3.1 y 4.2.1, y un pasivo legal activo del cliente hoy mismo.
+
+**Por qué.** Aparece porque la auditoría fue **exhaustiva y automatizada**: se revisaron los
+24 formularios del sitio, no los tres que a alguien se le habría ocurrido mirar a mano.
+
+**Consecuencia de método:** el control quedó incorporado al auditor, así que cualquier
+captura futura lo detecta sola. *Un hallazgo valioso encontrado a mano es suerte; el mismo
+hallazgo codificado como control es capacidad.*
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
 |---|---|---|---|
 | R-01 | **Licencia de la plantilla Cappa.** Publicar producción sobre un demo raspado sin licencia es exposición legal para nosotros y para el cliente | Alto | Definir quién compra la licencia **antes** de escribir código de producción |
 | R-02 | Motor de reservas / PMS actual desconocido. Define el alcance completo | Alto | Pregunta prioritaria en la entrevista |
-| R-03 | Calidad y derechos de la fotografía existente. En un hotel de playa, la foto **es** el producto | Alto | Inventariar en el mirror; preguntar si hay banco original y sesión reciente |
+| R-03 | ~~Calidad de la fotografía~~ **CERRADO** — el mirror confirma 244 WebP de 2025 bien dimensionadas. Queda sólo la cesión de derechos | ~~Alto~~ Bajo | Preguntar únicamente por los derechos (C5.3) |
 | R-04 | Posible ficha duplicada en TripAdvisor | Medio | Validar y proponer consolidación como victoria rápida |
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
@@ -259,3 +341,5 @@ que ocurra es parte del trabajo.
 | R-10 | Sobreventa si alguna vez se activa confirmación instantánea sin channel manager | Muy alto | Prohibido por ADR-0003. La interfaz nunca dice "confirmada" |
 | R-11 | El hotel no cumple el tiempo de respuesta publicado y el flujo genera frustración | Alto | Responsable y horario acordados **antes** del lanzamiento (B1, B2) |
 | R-12 | Sin CMS, el cliente no puede editar el sitio. Consistente hoy, puede molestar después | Medio | Debe quedar **aceptado por escrito**, no asumido (F4) |
+| R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
+| R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |

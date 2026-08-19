@@ -84,7 +84,7 @@ sin cerrar la anterior.
 | # | Fase | Entregable | Estado |
 |---|---|---|---|
 | 0 | Fundación del proyecto | Repo, CLAUDE.md, estructura `docs/`, ADR-0001 | ✅ |
-| 1 | Descubrimiento / auditoría | Auditoría técnica y de contenido del sitio actual + propuesta ResNexus + plantilla | 🔄 En curso |
+| 1 | Descubrimiento / auditoría | Auditoría técnica y de contenido del sitio actual + propuesta ResNexus + plantilla | 🔄 Sitio actual ✅ · faltan ResNexus y Cappa |
 | 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | 🔄 Banco de preguntas listo |
 | 3 | Arquitectura de información | Sitemap, wireframes, mapa de contenido | ⬜ |
 | 4 | Diseño / adaptación de plantilla | Design system sobre Cappa | ⬜ |
@@ -179,8 +179,18 @@ Decisión y justificación pieza por pieza en
 
 ## 9. Estado actual / siguiente acción
 
-**Bloqueante del sprint 0:** las capturas HTTrack (0.4). En cuanto estén, Claude ejecuta
-0.5, 0.6 y 0.7 — auditoría, inventario de contenido y análisis de Cappa.
+🚨 **ACCIÓN URGENTE, FUERA DEL PLAN DE SPRINTS.** El sitio actual captura número de tarjeta
+y **CVV** en `/autorizacion-de-pago-con-tdc/` y `/en/cc-payment-authorization/` mediante
+Contact Form 7, que lo envía por correo. Incumple PCI-DSS 3.3.1 y 4.2.1 y la LFPDPPP.
+**Despublicar hoy y purgar el histórico**, con independencia del rediseño.
+Detalle en [`auditoria-sitio-actual.md`](docs/01-descubrimiento/auditoria-sitio-actual.md) §1.
+
+**Hecho:** auditoría técnica del sitio actual (0.5). WordPress + Divi, 26 páginas reales
+con paridad ES/EN, 244 imágenes WebP de 2025 bien dimensionadas, sin analítica, schema.org
+genérico sin tipos hoteleros, **8 tipos de alojamiento confirmados con sus nombres**.
+
+**Bloqueante:** faltan por ingerir las capturas de ResNexus y Cappa. Sin ellas siguen
+detenidas la historia 0.7 (análisis de la plantilla) y el análisis competitivo.
 
 **Listo para arrancar sin esperar:** el sprint 1 sólo necesita el visto bueno de ADR-0004
 y los accesos. La estructura del proyecto Astro no depende del mirror.
