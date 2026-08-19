@@ -16,6 +16,7 @@
 # Compatible con macOS (bash 3.2, herramientas BSD) y Linux.
 
 set -euo pipefail
+trap 'echo; echo "════════════════════════════════════════════"; echo "  ✗ EL SCRIPT FALLÓ en la línea $LINENO"; echo "  Nada se publicó. Copia estas últimas líneas."; echo "════════════════════════════════════════════"' ERR
 
 SRC_ROOT="${1:-}"
 MAX_FILE_BYTES=$((50 * 1024 * 1024))   # GitHub rechaza >100 MB; cortamos antes
@@ -115,13 +116,26 @@ echo "════════════════════════�
 du -sh "$BASE" | awk '{print "Total a versionar: " $1}'
 echo "════════════════════════════════════════════"
 
+# ---------- Verificación previa ----------
+IngestaTotal=$(find "$BASE" -type f 2>/dev/null | wc -l | tr -d ' ')
+if [ "$IngestaTotal" -eq 0 ]; then
+  echo "  ✗ La ingesta no copió ningún archivo. Revisa las rutas de origen." >&2
+  exit 1
+fi
+
 # ---------- Publicar ----------
 BRANCH="claude/hotel-tulum-web-audit-0yly29"
 cd "$REPO"
 git add investigacion/mirrors
 if git diff --cached --quiet; then
-  echo "No hay cambios que publicar."
-  exit 0
+  echo
+  echo "════════════════════════════════════════════"
+  echo "  ✗ NO HAY NADA QUE PUBLICAR"
+  echo "  La ingesta no produjo archivos versionables."
+  echo "  Revisa que .gitignore no los esté excluyendo:"
+  echo "    git check-ignore -v investigacion/mirrors/azucarhotel/archivos/*"
+  echo "════════════════════════════════════════════"
+  exit 1
 fi
 git commit -q -m "chore: capturas HTTrack de los tres sitios
 
@@ -138,5 +152,12 @@ for intento in 1 2 3 4; do
   echo "Push fallido, reintento en ${espera}s ..."
   sleep "$espera"
 done
-echo "ERROR: no se pudo publicar despues de 4 intentos." >&2
+echo
+echo "════════════════════════════════════════════" >&2
+echo "  ✗ NO SE PUDO PUBLICAR tras 4 intentos" >&2
+echo "  El commit SÍ existe en local: nada se perdió." >&2
+echo "  Causa más probable: falta autenticación con GitHub." >&2
+echo "  Prueba:  gh auth login     (o configura un token/SSH)" >&2
+echo "  Y luego: git push -u origin $BRANCH" >&2
+echo "════════════════════════════════════════════" >&2
 exit 1
