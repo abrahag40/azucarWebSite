@@ -89,6 +89,90 @@ la solución que imagina; nuestro trabajo es encontrar el problema que hay debaj
 
 ---
 
+## L-006 — Conoce el estándar, luego decide desviarte y di por qué
+
+**Lección.** Se pidió "usar Scrum". La respuesta profesional no fue ni obedecer ni negarse:
+fue tomar las prácticas que resuelven un problema real de este proyecto y **omitir por
+escrito** las que no, con justificación pieza por pieza.
+
+**Por qué.** Scrum supone un Product Owner disponible con autoridad, un producto continuo y
+un equipo de varias personas. Aquí no hay ninguna de las tres cosas: hay un hotelero
+ocupado, un proyecto con fecha de fin y una o dos personas.
+
+**Antipatrón evitado.** **Water-Scrum-Fall**: hacer cascada de siempre y llamarle "sprints"
+a las fases. Se conservan los rituales y se pierde el único beneficio real del método.
+
+**Prueba ácida, aplicable a cualquier proyecto:** *al final de cada iteración el cliente
+debe poder abrir una URL y ver algo real.* Si el entregable es un PDF, era una fase de
+cascada disfrazada.
+
+**Regla portable:** desviarse del estándar sin conocerlo es ignorancia; no desviarse nunca
+es dogma. Ninguna de las dos es criterio profesional.
+
+---
+
+## L-007 — Interroga también a tu propia organización
+
+**Lección.** El levantamiento tiene dos frentes. Preguntas al cliente **y** preguntas hacia
+adentro: capacidad real, modelo de contrato, mecanismo de cambio de alcance, quién mantiene
+después, criterio para rechazar el proyecto.
+
+**Por qué.** Un PM que sólo interroga al cliente gestiona la mitad del riesgo. Los proyectos
+de consultoría chica rara vez mueren por un requerimiento mal entendido; mueren por
+capacidad comprometida que no existía y por alcance que creció sin mecanismo para cobrarlo.
+
+**Antipatrón evitado.** *Happy-path capacity planning*: planear sobre las horas que
+quisieras tener.
+
+**Ver:** `docs/02-requerimientos/preguntas-internas.md`
+
+---
+
+## L-008 — La Definition of Ready es el filtro que salva los sprints
+
+**Lección.** Una historia no entra al sprint si su contenido — texto y fotos — no existe.
+
+**Por qué.** En un sitio de hotel la ruta crítica es el contenido, no el código. Sin este
+filtro los sprints se llenan de trabajo bloqueado esperando una sesión de fotos que nadie
+agendó, terminan en cero y nadie sabe explicar por qué.
+
+**Corolario:** la producción de contenido se gestiona como **carril paralelo** con fechas
+propias desde el sprint 1, nunca como una historia dentro de un sprint. Si esperas "al
+sprint del contenido", llegas al sprint 3 con *lorem ipsum*.
+
+---
+
+## L-009 — Escribir la DoD convierte la calidad en requisito de entrada
+
+**Lección.** Accesibilidad, performance y SEO van dentro de la Definition of Done de **cada**
+historia, no en una fase final de "optimización".
+
+**Por qué.** Toda fase que vive al final se recorta cuando el calendario aprieta — y el
+calendario siempre aprieta. Metido en la DoD, el trabajo no puede recortarse sin declarar
+explícitamente que se está bajando el estándar, que es una conversación distinta y mucho
+más difícil de tener en silencio.
+
+**Antipatrón evitado.** *"Ya después le metemos accesibilidad."* Nunca ocurre, y retrofitear
+accesibilidad cuesta varias veces más que construirla desde el inicio.
+
+---
+
+## L-010 — Las preguntas que deciden la arquitectura no son técnicas
+
+**Lección.** Dos preguntas de negocio deciden el stack completo antes de escribir una línea:
+*¿quién actualizará el contenido después del lanzamiento?* y *¿con qué motor de reservas
+opera hoy?*
+
+**Por qué.** Si nadie del hotel va a editar, un sitio estático es superior en costo,
+velocidad y seguridad. Si el gerente sube promociones cada semana, hace falta CMS,
+capacitación y manual. Elegir el stack antes de responder esto es construir sobre una
+suposición — y es de las decisiones más caras de revertir.
+
+**Antipatrón evitado.** Elegir la tecnología por preferencia del desarrollador y después
+justificarla. La arquitectura se deriva de restricciones operativas, no de gustos.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -98,3 +182,7 @@ la solución que imagina; nuestro trabajo es encontrar el problema que hay debaj
 | R-03 | Calidad y derechos de la fotografía existente. En un hotel de playa, la foto **es** el producto | Alto | Inventariar en el mirror; preguntar si hay banco original y sesión reciente |
 | R-04 | Posible ficha duplicada en TripAdvisor | Medio | Validar y proponer consolidación como victoria rápida |
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
+| R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
+| R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
+| R-08 | Cliente no cumple el SLA de 48 h y la cadencia quincenal se rompe | Alto | SLA escrito en contrato + pendientes del cliente visibles en cada demo |
+| R-09 | Catálogo posiblemente sobre-segmentado (8 tipos para 21 unidades) reduce la conversión | Medio | Validar inventario real y proponer agrupación comercial |

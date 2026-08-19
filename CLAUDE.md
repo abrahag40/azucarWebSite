@@ -66,7 +66,7 @@ sin cerrar la anterior.
 |---|---|---|---|
 | 0 | Fundación del proyecto | Repo, CLAUDE.md, estructura `docs/`, ADR-0001 | ✅ |
 | 1 | Descubrimiento / auditoría | Auditoría técnica y de contenido del sitio actual + propuesta ResNexus + plantilla | 🔄 En curso |
-| 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | ⬜ |
+| 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | 🔄 Banco de preguntas listo |
 | 3 | Arquitectura de información | Sitemap, wireframes, mapa de contenido | ⬜ |
 | 4 | Diseño / adaptación de plantilla | Design system sobre Cappa | ⬜ |
 | 5 | Implementación | Sitio | ⬜ |
@@ -105,14 +105,38 @@ Runbook de captura: `docs/01-descubrimiento/runbook-captura-httrack.md`
 
 ---
 
-## 6. Estado actual / siguiente acción
+## 6. Marco de trabajo
 
-**Siguiente acción concreta:** Abraham ejecuta las 3 capturas HTTrack del runbook y hace
-commit del resultado. Con eso Claude produce la auditoría de la Fase 1.
+**Entrega iterativa con revisión quincenal del cliente** — Scrum adaptado, no Scrum puro.
+Decisión y justificación pieza por pieza en
+[`ADR-0002`](docs/decisiones/ADR-0002-marco-de-trabajo-iterativo.md); operación en
+[`marco-de-trabajo.md`](docs/02-requerimientos/marco-de-trabajo.md).
+
+- Sprints de **2 semanas**, cada uno cierra con **demo sobre URL real de staging**.
+- Se conservan: backlog con criterios de aceptación, Sprint Review, Definition of Ready,
+  Definition of Done, planning y retro ligeras.
+- Se omiten con justificación: daily standup, story points/velocity, Scrum Master dedicado.
+- El cliente no es Product Owner: es **Cliente-Decisor con SLA de 48 h hábiles**.
+  Abraham es **Proxy PO**.
+- **Prueba ácida contra Water-Scrum-Fall:** si el entregable de una iteración es un
+  documento y no algo que el cliente pueda abrir en el navegador, no era un sprint.
 
 ---
 
-## 7. Índice de documentación
+## 7. Estado actual / siguiente acción
+
+**Bloqueante:** Abraham ejecuta las 3 capturas HTTrack del runbook y hace commit del
+resultado. Con eso Claude produce la auditoría de la Fase 1.
+
+**En paralelo, sin dependencia de las capturas:**
+1. Responder las preguntas internas (`docs/02-requerimientos/preguntas-internas.md`) —
+   especialmente modelo de contrato, capacidad real y licencia de Cappa.
+2. Agendar la entrevista de 45–60 min con el Cliente-Decisor.
+3. Decidir el formato de entrega del brief pre-llenado (Google Doc recomendado sobre .docx).
+
+---
+
+## 8. Índice de documentación
 
 - `docs/README.md` — mapa de la documentación
 - `docs/01-descubrimiento/` — auditoría, capturas, hallazgos
@@ -120,3 +144,16 @@ commit del resultado. Con eso Claude produce la auditoría de la Fase 1.
 - `docs/03-arquitectura/` — sitemap, stack, decisiones técnicas
 - `docs/04-diseno/` — design system, adaptación de plantilla
 - `docs/decisiones/` — ADRs y bitácora de aprendizaje
+
+**Documentos vigentes:**
+
+| Documento | Contenido |
+|---|---|
+| `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura local |
+| `docs/01-descubrimiento/hallazgos-preliminares.md` | Hallazgos vía document analysis |
+| `docs/02-requerimientos/preguntas-cliente.md` | Banco de preguntas al cliente (6 bloques) |
+| `docs/02-requerimientos/preguntas-internas.md` | 20 preguntas de preparación interna |
+| `docs/02-requerimientos/marco-de-trabajo.md` | Roles, cadencia, DoR, DoD, plan de sprints |
+| `docs/decisiones/ADR-0001-…` | Descubrimiento antes de requerimientos |
+| `docs/decisiones/ADR-0002-…` | Marco de trabajo iterativo (Scrum adaptado) |
+| `docs/decisiones/bitacora-aprendizaje.md` | 10 lecciones + 9 riesgos abiertos |
