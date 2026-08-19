@@ -18,6 +18,25 @@
 | **Repositorio** | `abrahag40/azucarWebSite` |
 | **Rama de trabajo** | `claude/hotel-tulum-web-audit-0yly29` |
 
+### Datos confirmados por el cliente (2026-08-19)
+
+| Hecho | Consecuencia de proyecto |
+|---|---|
+| **No opera ningún PMS.** Gestión manual | No hay fuente de verdad de disponibilidad |
+| **No usa channel manager.** El manager actualiza cada OTA a mano | Confirmación instantánea = sobreventa garantizada |
+| **Quiere que el huésped reserve desde el sitio** | Se resuelve como **solicitud de reserva**, no confirmación instantánea → [ADR-0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| Acepta que por ahora sea manual; revisar a futuro | Arquitectura con frontera de reemplazo aislada |
+| **No tiene datos comparativos** de OTA vs. directo ni de comisiones | No hay línea base → instrumentar analítica es entregable del **sprint 1** |
+| **El contenido lo gestiona Abraham**, no el hotel | No se requiere CMS → habilita stack estático ([ADR-0004](docs/decisiones/ADR-0004-stack-tecnico.md)) |
+| Puede responder el desglose de impuestos (C3) | Cotización con total real: ataca la queja de "me cobraron más" |
+| **Precio y modelo contractual: cerrados fuera de este repo** | No se discuten aquí |
+
+### Alcance de Claude en este proyecto
+
+**Sólo software.** Fotografía, redacción, licencias, contratos y trato con el cliente los
+gestiona Abraham por fuera y los consulta cuando haga falta. Aparecen en la documentación
+únicamente como **dependencias que bloquean historias**, nunca como tareas nuestras.
+
 ### Insumos entregados por el cliente / contexto
 
 1. **Sitio actual**: https://azucarhotel.com/ — *base de partida, NO fuente de verdad absoluta*.
@@ -92,7 +111,26 @@ Runbook de captura: `docs/01-descubrimiento/runbook-captura-httrack.md`
 
 ---
 
-## 5. Convenciones
+## 5. Decisiones técnicas vigentes
+
+| Tema | Decisión | ADR |
+|---|---|---|
+| **Reservas** | Solicitud de reserva sujeta a confirmación. **Sin calendario de disponibilidad.** Cotización con impuestos desglosados. Notificación al manager por correo + WhatsApp. Aislado en módulo `booking/` para migrar a motor SaaS sin reescribir | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| **Stack** | **Astro** estático, i18n ES/EN nativo, *content collections* para alojamiento, despliegue en Cloudflare Pages con preview por rama, formulario contra función serverless | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
+| **Plantilla Cappa** | Fuente de **diseño**, no de código. Se extraen tokens y se reconstruyen componentes con HTML semántico y accesible. Se descarta su JS no utilizado | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
+| **Pagos** | Enlace de pago enviado por el hotel. **No tocamos datos de tarjeta → fuera de alcance PCI-DSS** | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+
+### Reglas que no se rompen
+
+1. **Nunca decir "reserva confirmada"** en la interfaz. Siempre *"solicitud sujeta a confirmación"*.
+2. **Nunca mostrar disponibilidad** que no podemos respaldar. Falsa disponibilidad es peor que ninguna.
+3. **El total cotizado incluye impuestos.** Es la diferencia frente a las OTAs y la cura de la queja recurrente.
+4. **Accesibilidad y Core Web Vitals van en la DoD de cada historia**, jamás en una fase final.
+5. **El contenido se modela como datos**, nunca incrustado en el marcado.
+
+---
+
+## 6. Convenciones
 
 - **Idioma**: documentación y commits en español. Código, nombres de archivo y ramas en inglés.
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/) —
@@ -105,7 +143,7 @@ Runbook de captura: `docs/01-descubrimiento/runbook-captura-httrack.md`
 
 ---
 
-## 6. Marco de trabajo
+## 7. Marco de trabajo
 
 **Entrega iterativa con revisión quincenal del cliente** — Scrum adaptado, no Scrum puro.
 Decisión y justificación pieza por pieza en
@@ -123,20 +161,39 @@ Decisión y justificación pieza por pieza en
 
 ---
 
-## 7. Estado actual / siguiente acción
+## 8. Plan de desarrollo (fijado)
 
-**Bloqueante:** Abraham ejecuta las 3 capturas HTTrack del runbook y hace commit del
-resultado. Con eso Claude produce la auditoría de la Fase 1.
+**6 sprints × 2 semanas ≈ 12 semanas.** Detalle con criterios de aceptación en
+[`plan-de-desarrollo.md`](docs/02-requerimientos/plan-de-desarrollo.md).
 
-**En paralelo, sin dependencia de las capturas:**
-1. Responder las preguntas internas (`docs/02-requerimientos/preguntas-internas.md`) —
-   especialmente modelo de contrato, capacidad real y licencia de Cappa.
-2. Agendar la entrevista de 45–60 min con el Cliente-Decisor.
-3. Decidir el formato de entrega del brief pre-llenado (Google Doc recomendado sobre .docx).
+| Sprint | Foco | Demo — lo que el cliente abre en su navegador |
+|---|---|---|
+| **0** 🔄 | Fundación, auditoría, inventario de contenido, mapeo de URLs, backlog | Informe de auditoría + backlog aprobado |
+| **1** | Astro + i18n + CI/CD + design tokens + componentes base + **analítica** | **Home** navegable bilingüe, CWV verdes |
+| **2** | Alojamiento: listado, detalle, galería, `schema.org` | Catálogo completo ES/EN |
+| **3** 🔴 | **Solicitud de reserva** end-to-end, cotización con impuestos, WhatsApp, aviso de privacidad | El manager recibe una solicitud real en su teléfono |
+| **4** | Servicios, restaurante, spa, galería, ubicación, contacto, políticas, legales | Sitio completo navegable |
+| **5** | WCAG 2.2 AA, CWV, **301**, seguridad, rollback, lanzamiento, traspaso | Sitio en producción |
 
 ---
 
-## 8. Índice de documentación
+## 9. Estado actual / siguiente acción
+
+**Bloqueante del sprint 0:** las capturas HTTrack (0.4). En cuanto estén, Claude ejecuta
+0.5, 0.6 y 0.7 — auditoría, inventario de contenido y análisis de Cappa.
+
+**Listo para arrancar sin esperar:** el sprint 1 sólo necesita el visto bueno de ADR-0004
+y los accesos. La estructura del proyecto Astro no depende del mirror.
+
+**Pendientes de Abraham (fuera del carril de software):**
+1. Visto bueno a ADR-0003 y ADR-0004.
+2. Licencia de Cappa (R-01) — bloquea assets en producción.
+3. Accesos: dominio, hosting, Analytics, Search Console (R-06, R-07).
+4. Enviar el brief `.docx` al cliente y agendar la entrevista.
+
+---
+
+## 10. Índice de documentación
 
 - `docs/README.md` — mapa de la documentación
 - `docs/01-descubrimiento/` — auditoría, capturas, hallazgos
@@ -155,5 +212,8 @@ resultado. Con eso Claude produce la auditoría de la Fase 1.
 | `docs/02-requerimientos/preguntas-internas.md` | 20 preguntas de preparación interna |
 | `docs/02-requerimientos/marco-de-trabajo.md` | Roles, cadencia, DoR, DoD, plan de sprints |
 | `docs/decisiones/ADR-0001-…` | Descubrimiento antes de requerimientos |
+| `docs/02-requerimientos/plan-de-desarrollo.md` | **Plan fijado: 6 sprints con criterios de aceptación** |
 | `docs/decisiones/ADR-0002-…` | Marco de trabajo iterativo (Scrum adaptado) |
-| `docs/decisiones/bitacora-aprendizaje.md` | 10 lecciones + 9 riesgos abiertos |
+| `docs/decisiones/ADR-0003-…` | Arquitectura de reserva sin PMS |
+| `docs/decisiones/ADR-0004-…` | Stack técnico (Astro estático) |
+| `docs/decisiones/bitacora-aprendizaje.md` | Lecciones acumuladas + riesgos abiertos |

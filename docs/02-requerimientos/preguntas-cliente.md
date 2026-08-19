@@ -26,15 +26,18 @@
 > ("un carrusel") y lo obliga a hablar de consecuencias. Si la respuesta no es medible,
 > repregunta: *"¿cómo lo sabrías?"*
 
-**A2.** ¿Qué porcentaje de tus reservas entra hoy por OTA (Booking, Expedia, Airbnb) y qué
-porcentaje directo? ¿Cuánto pagaste de comisión el año pasado, en pesos?
-> 🎯 **La pregunta de ROI del proyecto entero.** Si paga, digamos, $600k MXN al año en
-> comisiones, mover 10 puntos porcentuales a directo paga el rediseño varias veces. Sin
-> este número, nuestro trabajo se discute como gasto estético; con él, como inversión.
+**A2.** ¿Por dónde te entran hoy las reservas y cuál sientes que domina: Booking, Expedia,
+Airbnb, WhatsApp, teléfono, correo? Aunque sea a percepción, sin cifras.
+> ⚠️ **Ajustada.** El cliente **no lleva registro comparativo** de OTA vs. directo ni de
+> comisiones pagadas. Se pregunta por **percepción ordenada**, no por números.
+> **Consecuencia de proyecto:** sin línea base no se puede demostrar la mejora después.
+> Por eso instrumentar analítica y medir el canal de origen deja de ser un "extra" y pasa a
+> ser **entregable del sprint 1**: estamos construyendo el dato que hoy no existe.
+> *Lección: cuando el cliente no tiene el dato, el trabajo no es exigírselo — es crearlo.*
 
-**A3.** ¿Cuál es tu tarifa promedio (ADR) y tu ocupación por temporada?
-> Permite calcular el valor de **una** reserva directa incremental. Es la unidad en la que
-> se debe expresar cada decisión de diseño.
+**A3.** ¿Qué meses se te llenan solos y en cuáles batallas?
+> Sustituye a la pregunta por ADR y ocupación, que el cliente no tiene documentados. La
+> estacionalidad sí la conoce de memoria y es suficiente para priorizar.
 
 **A4.** ¿Cuál es tu temporada alta y en qué ventana **no podemos** lanzar bajo ninguna circunstancia?
 > 🔸 Hipótesis: alta = diciembre–abril (Riviera Maya) + Semana Santa. Lanzar en pico de
@@ -59,37 +62,43 @@ y habitación entregada distinta a la reservada. ¿Lo reconoces? ¿de dónde cre
 
 ---
 
-## BLOQUE B — Reservas y tecnología · ENTREVISTA
-> 🔴 **Bloque más importante del levantamiento.** Sus respuestas determinan el alcance,
-> el precio y el plazo. Si sales de la reunión sin B1–B4 respondidas, la reunión falló.
+## BLOQUE B — Operación de reservas · ENTREVISTA
+> ✅ **Parcialmente resuelto.** El cliente ya confirmó: **no usa PMS, no usa channel
+> manager, y el manager actualiza cada OTA a mano.** Quiere que el huésped pueda reservar
+> desde el sitio. Eso define la arquitectura — ver
+> [ADR-0003](../decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md).
+> Lo que queda por preguntar son las condiciones de operación del flujo.
 
-**B1.** ¿Con qué **PMS** operas hoy? (ResNexus, Cloudbeds, Little Hotelier, Hotelogix,
-Siteminder… o una hoja de cálculo)
+**B1. 🔴 ¿Cuál es el tiempo de respuesta a una solicitud de reserva que puedes cumplir
+siempre?** (2 h en horario · 12 h · 24 h)
+> Es una promesa pública. Publicar un tiempo y no cumplirlo es peor que no publicarlo.
 
-**B2.** ¿Con qué **motor de reservas**? Detectamos el dominio `azucarhoteltulum.sys-rsrv.com`.
-¿Lo reconoces? ¿Contrato vigente, hasta cuándo, cuánto cuesta al mes o por comisión?
-> Define el proyecto entero: **sitio de marketing que enlaza a un motor externo** vs.
-> **sitio que integra un motor**. Son dos proyectos distintos en alcance, precio y plazo.
+**B2. ¿Quién responde las solicitudes, en qué horario, y quién cubre fines de semana?**
+> **Condición de éxito del lanzamiento.** Si nadie responde en horas, el sitio genera
+> frustración en vez de reservas. No es un detalle operativo: es un requisito.
 
-**B3.** ¿Usas **channel manager**? ¿Quién carga tarifas y disponibilidad, y cada cuánto?
-> Si la carga es manual, el sitio nuevo hereda ese cuello de botella. Hay que saberlo antes
-> de prometer "disponibilidad en tiempo real".
+**B3.** ¿Con qué pasarela de pago cuentas o puedes contratar? (Stripe, Mercado Pago, Clip,
+Conekta, PayPal)
+> El cobro se hace por **enlace de pago** enviado por el hotel: nosotros no tocamos datos de
+> tarjeta y así el proyecto **queda fuera del alcance de PCI-DSS**. Es una decisión
+> deliberada de reducción de riesgo, no una limitación.
 
-**B4.** ¿Aceptas pago en línea hoy? ¿Con qué pasarela? ¿Cobras anticipo, garantía o el total?
-> Pagos = requisito regulado (PCI-DSS del lado del proveedor) y el punto de mayor fricción
-> de conversión. No se improvisa en sprint 4.
+**B4.** ¿Cuáles son el correo y el WhatsApp oficiales para recibir solicitudes?
 
-**B5.** ¿Por qué **no** se concretó la propuesta de la agencia anterior con ResNexus?
-> 😬 Pregunta incómoda, obligatoria. Te dice el criterio real de decisión del cliente, dónde
-> está su umbral de precio, y qué comportamiento de proveedor no tolera. Es la forma más
-> barata de no repetir el fracaso ajeno.
+**B5.** ¿Vendes o quieres vender algo más: spa, tours, transportación al aeropuerto,
+day pass o beach club, bodas y eventos?
+> Bodas y eventos suelen ser el segmento de mayor margen en hotelería boutique y casi
+> siempre están subrepresentados en el sitio.
 
-**B6.** ¿Vendes o quieres vender algo más en línea: spa, tours, transportación aeropuerto,
-day pass o beach club, eventos y bodas?
-> Las bodas y eventos suelen ser el segmento de mayor margen en hotelería boutique y casi
-> siempre están subrepresentados en el sitio. Vale la pena preguntarlo explícitamente.
+**B6.** ¿Por qué **no** se concretó la propuesta de la agencia anterior con ResNexus?
+> 😬 Incómoda y obligatoria. Te dice el criterio real de decisión del cliente y qué
+> comportamiento de proveedor no tolera. La forma más barata de no repetir el fracaso ajeno.
 
----
+**B7.** Te vamos a presentar, sin compromiso, el costo/beneficio de un motor de reservas
+con *channel manager* (~USD 50–150/mes). Resolvería de raíz el riesgo de vender dos veces
+la misma habitación. ¿Lo revisamos después del lanzamiento?
+> Se plantea como recomendación registrada, no como venta. Si el cliente la declina hoy,
+> queda por escrito que se advirtió — y ese registro protege a ambas partes.
 
 ## BLOQUE C — Contenido y activos · BRIEF ASÍNCRONO
 > El **contenido es la ruta crítica** de todo proyecto web de hotel, no el código. Este
@@ -193,18 +202,17 @@ vetar una decisión ya aprobada?
 > El *stakeholder oculto que aparece al final* es una causa clásica de retrabajo. Se
 > identifica al principio o se paga después.
 
-**F2.** ¿Cuál es el presupuesto disponible y el modelo que prefieres: alcance cerrado a
-precio cerrado, o entregas iterativas con bolsa de horas?
-> Ver ADR-0002: la respuesta cambia el marco de trabajo contractual.
+*(F2 — presupuesto y modelo contractual: **cerrado fuera de este documento**. No se pregunta.)*
 
 **F3.** ¿Hay una fecha ancla? (temporada, aniversario, campaña, fin de contrato con proveedor)
 
-**F4. 🔴 Después del lanzamiento, ¿quién actualiza el contenido — tarifas, fotos,
-promociones? ¿Alguien del hotel, nosotros, o nadie?**
-> **Esta pregunta decide la arquitectura técnica completa.** Si nadie del hotel va a
-> editar, un sitio estático rápido y barato es superior. Si el gerente va a subir
-> promociones cada semana, necesitamos CMS, capacitación y manual. Elegir el stack antes
-> de responder esto es construir sobre una suposición.
+**F4. ✅ RESUELTA — Después del lanzamiento, ¿quién actualiza el contenido?**
+> Respuesta confirmada: **lo gestiona Abraham**, no personal del hotel. El equipo del hotel
+> atiende OTAs y solicitudes, no el sitio.
+> **Consecuencia:** no se requiere CMS. Habilita el stack estático del
+> [ADR-0004](../decisiones/ADR-0004-stack-tecnico.md).
+> Se conserva escrita porque **debe quedar aceptado explícitamente que el cliente no podrá
+> editar el sitio por su cuenta.** Lo asumido sin escribir es la queja del mes tres.
 
 **F5.** La plantilla Cappa es comercial. ¿La licencia se compra a nombre del hotel, o la
 adquirimos nosotros y se factura dentro del proyecto?
