@@ -1,7 +1,0 @@
-# HTTrack Website Copier Cookie File
-# This file format is compatible with Netscape cookies
-webbuilder.resnexus.com	TRUE	/	FALSE	1999999999	JSESSIONID	7EAF2A43261337778259F61F2EC247C3
-webbuilder.resnexus.com	TRUE	/	FALSE	1999999999	AWSALB	gxGUJGDdrk+qzgtbbnPRNsbcxUBAaPgEcKkHNPehVJzWFnHoTVOi6XZ/chBBUNSGLEg8t3P8ZLZ8Gu7IRYFYIsml9nCeRCbklYCKCV0BeHQeqLPWyq9zYB7PDdUS
-webbuilder.resnexus.com	TRUE	/	FALSE	1999999999	AWSALBCORS	gxGUJGDdrk+qzgtbbnPRNsbcxUBAaPgEcKkHNPehVJzWFnHoTVOi6XZ/chBBUNSGLEg8t3P8ZLZ8Gu7IRYFYIsml9nCeRCbklYCKCV0BeHQeqLPWyq9zYB7PDdUS
-webbuilder.resnexus.com	TRUE	/	FALSE	1999999999	SameSite	None
-

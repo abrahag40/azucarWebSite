@@ -3,7 +3,7 @@
 | dato | valor |
 |---|---|
 | Archivos en el original | 21 |
-| Archivos versionados | 17 |
+| Archivos versionados | 16 |
 | Peso del original | 3.3M |
 | Peso versionado (sin hts-cache) | 2.8M |
 
