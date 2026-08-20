@@ -378,6 +378,31 @@ próxima vez no habrá que deducir qué pasó: estará escrito.
 
 ---
 
+## L-022 — Ante una credencial ajena: redactar, nunca suprimir la protección
+
+**Lección.** GitHub bloqueó el push porque la captura de ResNexus contiene un **token
+secreto de Mapbox** incrustado en el HTML del lado del cliente. GitHub ofrece un enlace para
+autorizar el push de todos modos. **No se usa.**
+
+**Por qué.** Ese enlace no arregla nada: publica una credencial ajena y viva en un
+repositorio, y encima la deja en el historial de git para siempre, donde ya no se borra con
+un commit. Que la fuga la haya causado su dueño no nos autoriza a amplificarla.
+
+**Solución correcta: redactar el valor y conservar el hallazgo.** El token se sustituye por
+`[[REDACTADO:tipo]]` y se registra archivo, línea y tipo en `secretos-redactados.md`. Para
+el análisis sirve exactamente igual —lo que importa es *que existe*, no cuál es— y no
+propagamos nada. Quedó incorporado a la ingesta, así que aplica sola a toda captura futura.
+
+**Antipatrón evitado:** *silenciar el control en vez de resolver la causa*. Es el mismo
+reflejo que desactivar un test que falla o poner `# noqa`: quita el aviso y deja el problema,
+sólo que ahora sin aviso.
+
+**Y es un hallazgo de inteligencia competitiva:** el producto sobre el que la agencia
+anterior construyó su propuesta expone una credencial secreta en el navegador. Dice algo
+sobre su nivel de rigor técnico. Si procede avisar a ResNexus, es decisión de Abraham.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -396,3 +421,4 @@ próxima vez no habrá que deducir qué pasó: estará escrito.
 | R-12 | Sin CMS, el cliente no puede editar el sitio. Consistente hoy, puede molestar después | Medio | Debe quedar **aceptado por escrito**, no asumido (F4) |
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
+| R-15 | La captura de ResNexus contiene un token secreto de Mapbox expuesto del lado del cliente. Redactado en el repositorio; **sigue expuesto en el sitio de ResNexus** | Informativo — no es nuestro ni del cliente | Decidir si se notifica a ResNexus |

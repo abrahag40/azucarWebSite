@@ -48,6 +48,71 @@ echo "Destino: $BASE"
 echo "Registro: $LOG"
 echo
 
+
+# ── Redacta credenciales encontradas en los archivos capturados. ──────────────
+# Un mirror de un sitio ajeno puede contener credenciales que su dueño dejó
+# expuestas en el cliente. Versionarlas seria propagar la fuga; ignorarlas seria
+# perder el hallazgo. Se redacta el valor y se registra la ubicacion y el tipo.
+redactar_secretos() {
+  local DEST="$1" NAME="$2"
+  local REPORTE="$DEST/secretos-redactados.md"
+  local TMP="$DEST/.hits"
+  : > "$TMP"
+
+  # tipo|regex-perl  (solo prefijos inequivocos; evitamos falsos positivos)
+  local PATRONES='mapbox-secret|sk\.ey[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}
+mapbox-public|pk\.ey[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}
+google-api-key|AIza[0-9A-Za-z_-]{35}
+aws-access-key|AKIA[0-9A-Z]{16}
+stripe-live|[sr]k_live_[0-9a-zA-Z]{16,}
+github-token|gh[pousr]_[A-Za-z0-9]{30,}
+slack-token|xox[baprs]-[A-Za-z0-9-]{10,}'
+
+  local ARCHIVOS
+  ARCHIVOS=$(find "$DEST/archivos" -type f \( -iname '*.html' -o -iname '*.htm' -o -iname '*.js' \
+    -o -iname '*.css' -o -iname '*.json' -o -iname '*.xml' -o -iname '*.txt' -o -iname '*.svg' \
+    -o -iname '*.map' -o -iname '*.php' \) 2>/dev/null || true)
+  [ -z "$ARCHIVOS" ] && return 0
+
+  local TIPO RE N=0
+  while IFS='|' read -r TIPO RE; do
+    [ -z "$TIPO" ] && continue
+    # 1) Registrar ubicaciones SIN el valor
+    echo "$ARCHIVOS" | while IFS= read -r f; do
+      [ -z "$f" ] && continue
+      perl -ne "print \"$TIPO\t\$ARGV\t\$.\n\" if /$RE/" "$f" 2>/dev/null || true
+    done >> "$TMP"
+    # 2) Sustituir el valor
+    echo "$ARCHIVOS" | while IFS= read -r f; do
+      [ -z "$f" ] && continue
+      perl -pi -e "s/$RE/[[REDACTADO:$TIPO]]/g" "$f" 2>/dev/null || true
+    done
+  done <<EOF
+$PATRONES
+EOF
+
+  N=$(wc -l < "$TMP" | tr -d ' ')
+  if [ "$N" -eq 0 ]; then rm -f "$TMP"; return 0; fi
+
+  {
+    echo "# Credenciales redactadas en la captura \`$NAME\`"
+    echo
+    echo "GitHub bloquea el push de repositorios que contengan credenciales, y con razón."
+    echo "Estas se encontraron **en el sitio capturado**, expuestas del lado del cliente por"
+    echo "su propietario. El valor se sustituyó por \`[[REDACTADO:tipo]]\`; aquí queda la"
+    echo "ubicación y el tipo, que es lo que necesita el análisis."
+    echo
+    echo "**No son credenciales nuestras ni del cliente.** Si procede avisar a su dueño, es"
+    echo "una decisión de Abraham, no de este script."
+    echo
+    echo "| tipo | archivo | línea |"
+    echo "|---|---|---|"
+    sort -u "$TMP" | awk -F'\t' -v d="$DEST/archivos/" '{ p=$2; sub(d,"",p); printf "| %s | `%s` | %s |\n", $1, p, $3 }'
+  } > "$REPORTE"
+  rm -f "$TMP"
+  echo "   ⚠ $N credencial(es) redactada(s) — ver $(basename "$REPORTE")"
+}
+
 # ── Procesa una captura. Se invoca en subshell aislado. ────────────────────────
 procesar_captura() {
   local ORIG="$1" NAME="$2" SRC="$3" DEST="$4"
@@ -73,7 +138,10 @@ procesar_captura() {
   ( cd "$SRC" && tar cf - --exclude './hts-cache' --exclude './^' . ) \
     | ( cd "$DEST/archivos" && tar xf - )
 
-  # 3. Cortar archivos individuales demasiado grandes para git
+  # 3. Redactar credenciales antes de que git las vea
+  redactar_secretos "$DEST" "$NAME"
+
+  # 4. Cortar archivos individuales demasiado grandes para git
   find "$DEST/archivos" -type f -size +"$((MAX_FILE_BYTES/1024))"k -print -delete \
     > "$DEST/excluidos-por-tamano.txt" 2>/dev/null || true
   [ -s "$DEST/excluidos-por-tamano.txt" ] || rm -f "$DEST/excluidos-por-tamano.txt"
@@ -88,7 +156,7 @@ procesar_captura() {
     return 1
   fi
 
-  # 4. Resumen legible
+  # 5. Resumen legible
   {
     echo "# Captura: $NAME  (origen: $ORIG)"
     echo
