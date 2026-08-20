@@ -325,6 +325,33 @@ hallazgo codificado como control es capacidad.*
 
 ---
 
+## L-020 — Advertir y documentar es la postura correcta; construirlo, no
+
+**Lección.** Encontramos un incumplimiento serio en el sitio del cliente. La postura correcta
+no es imponer la corrección ni callarla: es **informar con evidencia, ofrecer opciones y
+dejar que el cliente decida por escrito**. El hotel tiene la relación con su banco, conoce su
+operación y asume sus riesgos. Nosotros somos el proveedor de software, no su tutor.
+
+**Por qué funciona.** El instrumento es un **acuse de aceptación de riesgo** (*risk
+acceptance sign-off*), práctica estándar en consultoría de seguridad: se documenta el
+hallazgo, se ofrecen alternativas con costo y esfuerzo, y se registra la decisión firmada.
+Protege al cliente —decide informado— y protege al proveedor —queda constancia de que se
+advirtió—. *Lo que no se escribe, no se advirtió.*
+
+**Dónde está el límite, y hay que nombrarlo.** Advertir y documentar cubre el pasado. Pero
+si el cliente pidiera **replicar el mismo mecanismo en el sitio nuevo**, ahí ya no seríamos
+observadores: seríamos quienes lo construyen. Eso sí se declina, y se ofrece la alternativa
+conforme —enlace de pasarela, que además ya era nuestra decisión de arquitectura
+(ADR-0003)—. La distinción es limpia: **no somos responsables de lo que encontramos; sí de
+lo que construimos.**
+
+**Antipatrón evitado por ambos lados.** *Callarlo* para no incomodar al cliente que pagó
+anticipo, e *imponerlo* como condición para continuar. El primero deja al cliente expuesto
+sin saberlo; el segundo convierte un servicio en un ultimátum y ninguna de las dos cosas es
+asesoría.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
