@@ -414,6 +414,61 @@ sola a toda captura futura.
 
 ---
 
+## L-023 — El Product Backlog es un artefacto, no una lista de tareas
+
+**Lección.** El plan pasó de una tabla de "qué toca en cada sprint" a un **Product Backlog**
+con épicas, historias de usuario, criterios de aceptación en formato *Dado/Cuando/Entonces*,
+tallas y dependencias declaradas.
+
+**Por qué.** Una tarea escrita como *"hacer el header"* no permite saber cuándo está bien
+hecha; la discusión se resuelve por opinión. Una historia con criterios verificables permite
+que alguien que no escribió el código diga si está terminada. **Es lo que convierte
+"terminado" de opinión en hecho.**
+
+El formato *Como \<rol\>, quiero \<capacidad\> para \<beneficio\>* obliga a declarar
+para quién y para qué. Cuando no se puede completar la frase, casi siempre es porque la
+historia no tenía valor y era una tarea técnica disfrazada.
+
+**Antipatrón evitado:** *backlog como lista de pendientes*. Sin rol, sin beneficio y sin
+criterio de aceptación, no se puede priorizar por valor —sólo por lo que suena urgente— y no
+se puede cerrar sin discutir.
+
+---
+
+## L-024 — Escribir el Sprint Goal antes de elegir las historias
+
+**Lección.** Cada sprint declara **un objetivo en una frase**, y se escribe *antes* de
+seleccionar el contenido del sprint.
+
+**Por qué.** Es el artefacto de Scrum que más se omite y el que más sirve a mitad de sprint:
+cuando aparece trabajo nuevo, el Sprint Goal permite decidir si entra **sin discutir**. Si no
+acerca al objetivo, va al backlog. Sin él, cualquier petición parece razonable y el sprint se
+convierte en una lista de deseos con fecha.
+
+**Corolario — regla de congelación:** cerrado el Planning, el Sprint Backlog no crece. Sólo
+un fallo en producción justifica romper la iteración.
+
+---
+
+## L-025 — La documentación de un proyecto tiene una puerta de entrada, no diez
+
+**Lección.** `CLAUDE.md` se reescribió como **columna vertebral**: contexto, decisiones
+vigentes, reglas que no se rompen, estado actual y un índice a todo lo demás. El resto de
+documentos son profundidad, no entrada.
+
+**Por qué.** Documentación repartida sin jerarquía tiene el mismo efecto que no tenerla:
+nadie sabe por dónde empezar, así que nadie empieza. Un único punto de entrada que responda
+*dónde estamos y qué no se puede romper* es lo que permite que alguien —o una sesión nueva—
+se incorpore sin que nadie le cuente nada.
+
+**Prueba de que funciona:** si al abrir una sesión nueva hay que explicar el proyecto de
+viva voz, la documentación falló. Se arregla el documento, no se repite la explicación.
+
+**Antipatrón evitado:** *documentación como archivo muerto*. Se escribe al final, para
+cumplir, y nadie la lee. Aquí se escribe durante, y se lee al empezar cada sesión.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

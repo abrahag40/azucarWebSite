@@ -13,11 +13,37 @@ Mapa de la documentación. El contexto general y las reglas de trabajo viven en
 | `04-diseno/` | Design system, adaptación de la plantilla Cappa |
 | `decisiones/` | ADRs (Architecture Decision Records) y bitácora de aprendizaje |
 
+## Por dónde empezar
+
+1. [`../CLAUDE.md`](../CLAUDE.md) — contexto, decisiones vigentes y estado actual
+2. [Product Backlog](02-requerimientos/backlog-producto.md) — qué se construye y con qué criterios
+3. [Plan de desarrollo](02-requerimientos/plan-de-desarrollo.md) — cómo se ejecuta cada sprint
+4. [Bitácora de aprendizaje](decisiones/bitacora-aprendizaje.md) — por qué se hizo así
+
 ## Documentos vigentes
 
-- [Runbook de captura con HTTrack](01-descubrimiento/runbook-captura-httrack.md) — **acción pendiente de Abraham**
+### Requerimientos y planificación
+- [**Product Backlog**](02-requerimientos/backlog-producto.md) — épicas, historias, criterios de aceptación
+- [**Plan de desarrollo**](02-requerimientos/plan-de-desarrollo.md) — 6 sprints con guion de demo
+- [Marco de trabajo](02-requerimientos/marco-de-trabajo.md) — roles, cadencia, DoR, DoD
+- [Preguntas al cliente](02-requerimientos/preguntas-cliente.md) · [Preguntas internas](02-requerimientos/preguntas-internas.md)
+
+### Descubrimiento
+- [Auditoría del sitio actual](01-descubrimiento/auditoria-sitio-actual.md)
+- [🚨 Aviso al cliente — datos de tarjeta](01-descubrimiento/aviso-cliente-datos-de-tarjeta.md)
+- [Análisis competitivo de ResNexus](01-descubrimiento/analisis-propuesta-resnexus.md)
+- [Runbook de captura HTTrack](01-descubrimiento/runbook-captura-httrack.md)
 - [Hallazgos preliminares](01-descubrimiento/hallazgos-preliminares.md)
+
+### Diseño y despliegue
+- [Análisis de la plantilla Cappa](04-diseno/analisis-plantilla-cappa.md)
+- [Runbook de accesos y despliegue](05-despliegue/runbook-accesos-y-despliegue.md)
+
+### Decisiones
 - [ADR-0001 — Descubrimiento antes de requerimientos](decisiones/ADR-0001-descubrimiento-antes-de-requerimientos.md)
+- [ADR-0002 — Marco de trabajo iterativo](decisiones/ADR-0002-marco-de-trabajo-iterativo.md)
+- [ADR-0003 — Arquitectura de reserva sin PMS](decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md)
+- [ADR-0004 — Stack técnico](decisiones/ADR-0004-stack-tecnico.md)
 - [Bitácora de aprendizaje](decisiones/bitacora-aprendizaje.md)
 
 ## Sobre los ADR

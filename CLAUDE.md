@@ -1,245 +1,264 @@
 # CLAUDE.md — Proyecto Azúcar Hotel Tulum
 
-> Archivo de memoria persistente del proyecto. Claude lo lee automáticamente al
-> inicio de cada sesión. **Todo lo que deba sobrevivir al cierre de una sesión
-> vive aquí o en `docs/`.**
+> **Memoria persistente del proyecto.** Claude lee este archivo al inicio de cada sesión.
+> Todo lo que deba sobrevivir al cierre de una sesión vive aquí o en `docs/`.
+>
+> **Cómo leer este documento:** las secciones 1 a 4 son contexto que no cambia. La 5 son las
+> decisiones vigentes y las reglas que no se rompen. La 9 es dónde estamos hoy. Si sólo vas
+> a leer dos secciones, lee la **5** y la **9**.
 
 ---
 
-## 1. Contexto del proyecto
+## 1. Contexto
 
 | Campo | Valor |
 |---|---|
 | **Cliente** | Azúcar Hotel Tulum |
 | **Ubicación** | Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, MX |
-| **Sitio actual** | https://azucarhotel.com/ |
-| **Naturaleza** | Hotel boutique frente a playa. Fundado abril 2008. ~21 habitaciones / 8 tipos de alojamiento (a validar) |
+| **Sitio vigente** | https://azucarhotel.com/ (WordPress + Divi) |
+| **Naturaleza** | Hotel boutique frente a playa. Abril de 2008. ~21 unidades en 8 tipos |
 | **Encargo** | Rediseño y renovación del sitio web |
 | **Repositorio** | `abrahag40/azucarWebSite` |
 | **Rama de trabajo** | `claude/hotel-tulum-web-audit-0yly29` |
+| **Código del sitio** | `site/` (Astro) |
 
-### Datos confirmados por el cliente (2026-08-19)
+### Hechos confirmados por el cliente
 
 | Hecho | Consecuencia de proyecto |
 |---|---|
 | **No opera ningún PMS.** Gestión manual | No hay fuente de verdad de disponibilidad |
-| **No usa channel manager.** El manager actualiza cada OTA a mano | Confirmación instantánea = sobreventa garantizada |
-| **Quiere que el huésped reserve desde el sitio** | Se resuelve como **solicitud de reserva**, no confirmación instantánea → [ADR-0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
-| Acepta que por ahora sea manual; revisar a futuro | Arquitectura con frontera de reemplazo aislada |
-| **No tiene datos comparativos** de OTA vs. directo ni de comisiones | No hay línea base → instrumentar analítica es entregable del **sprint 1** |
-| **El contenido lo gestiona Abraham**, no el hotel | No se requiere CMS → habilita stack estático ([ADR-0004](docs/decisiones/ADR-0004-stack-tecnico.md)) |
-| Puede responder el desglose de impuestos (C3) | Cotización con total real: ataca la queja de "me cobraron más" |
+| **No usa channel manager.** El manager actualiza cada OTA a mano | Confirmación instantánea = sobreventa por diseño |
+| **Quiere que el huésped reserve desde el sitio** | Se resuelve como **solicitud sujeta a confirmación** → ADR-0003 |
+| **No tiene datos comparativos** de OTA vs. directo ni de comisiones | No hay línea base → instrumentar analítica es entregable del sprint 1 |
+| **El contenido lo gestiona Abraham**, no el hotel | No se requiere CMS → habilita stack estático → ADR-0004 |
+| Puede responder el desglose de impuestos (C3) | Cotización con total real: cura la queja de "me cobraron más" |
 | **Precio y modelo contractual: cerrados fuera de este repo** | No se discuten aquí |
 
-### Alcance de Claude en este proyecto
+### Alcance de Claude
 
 **Sólo software.** Fotografía, redacción, licencias, contratos y trato con el cliente los
-gestiona Abraham por fuera y los consulta cuando haga falta. Aparecen en la documentación
-únicamente como **dependencias que bloquean historias**, nunca como tareas nuestras.
-
-### Insumos entregados por el cliente / contexto
-
-1. **Sitio actual**: https://azucarhotel.com/ — *base de partida, NO fuente de verdad absoluta*.
-2. **Propuesta de otra agencia (no concretada)**: https://webbuilder.resnexus.com/site/38e233bb/?preview=true
-   — construida sobre ResNexus (PMS + motor de reservas + website builder). Analizar como
-   inteligencia competitiva y como señal de qué tecnología ya evaluó el cliente.
-3. **Plantilla base acordada (punto de inflexión)**: https://duruthemes.com/demo/html/cappa/demo1-light/index11.html
-   — se capturará con HTTrack y se adaptará al rediseño.
+gestiona Abraham por fuera. Aparecen en la documentación únicamente como **dependencias que
+bloquean historias**, nunca como tareas nuestras.
 
 ---
 
-## 2. Roles y forma de trabajo
+## 2. Roles y contrato de aprendizaje
 
-- **Claude** actúa como **líder de proyecto / arquitecto**: propone el orden correcto de
-  las fases, justifica cada decisión con fundamento de industria y ejecuta.
-- **Abraham** es el responsable del proyecto y el interlocutor con el cliente. Es también
-  quien ejecuta las tareas que requieren la máquina local (HTTrack, Burp, Wireshark) y
-  quien tiene contacto directo con el cliente.
+- **Claude**: líder de proyecto y arquitecto. Propone el orden correcto, justifica con
+  fundamento de industria y ejecuta.
+- **Abraham**: responsable del proyecto, interlocutor con el cliente, y quien ejecuta lo que
+  requiere su máquina o cuentas externas.
 
-### Contrato de aprendizaje (obligatorio, no negociable)
+### Contrato de aprendizaje — obligatorio, no negociable
 
-Este proyecto es también un vehículo de formación profesional para Abraham. Por lo tanto:
+Este proyecto es también un vehículo de formación profesional para Abraham:
 
-1. **Nunca entregar una decisión sin su porqué.** Cada recomendación se acompaña de la
-   razón y, cuando existe, de la fuente o el estándar de industria que la respalda
-   (BABOK, Nielsen Norman Group, Google Web Vitals, WCAG, 12-Factor, ADR, etc.).
-2. **Nombrar la técnica.** Si se aplica una práctica con nombre propio
-   (*document analysis*, *straw-man document*, *content inventory*, *ADR*), se dice cómo
-   se llama para que sea buscable y repetible.
-3. **Señalar el antipatrón evitado.** Explicar qué habría pasado si se hacía de la forma
-   intuitiva pero incorrecta. El contraste es lo que fija el aprendizaje.
-4. **Registrar en la bitácora.** Toda lección se acumula en
-   `docs/decisiones/bitacora-aprendizaje.md` — no se pierde al cerrar sesión.
-5. **Ajustar el nivel de ceremonia.** Esto es un sitio web de un hotel boutique, no un ERP.
-   Cuando un estándar sea desproporcionado, se dice explícitamente qué se omite y por qué
-   omitirlo es la decisión correcta aquí. *Rigor sí, burocracia no.*
+1. **Nunca entregar una decisión sin su porqué**, con la fuente o el estándar que la
+   respalda (BABOK, Nielsen Norman, WCAG, Core Web Vitals, PCI-DSS, DDD, ADR…).
+2. **Nombrar la técnica** cuando tenga nombre propio (*document analysis*, *straw-man*,
+   *anti-corruption layer*, *Sprint Goal*), para que sea buscable y repetible.
+3. **Señalar el antipatrón evitado.** El contraste es lo que fija el aprendizaje.
+4. **Registrar en `docs/decisiones/bitacora-aprendizaje.md`.** No se pierde al cerrar sesión.
+5. **Ajustar el nivel de ceremonia.** Es un hotel boutique, no un ERP. Cuando un estándar
+   sea desproporcionado, se dice qué se omite y por qué omitirlo es lo correcto aquí.
+   *Rigor sí, burocracia no.*
+6. **Corregirse en voz alta.** Si un dato desmiente una afirmación previa, se retira por
+   escrito. Esta bitácora tiene ya varias correcciones y son parte del valor.
 
 ---
 
-## 3. Metodología acordada
+## 3. Metodología
 
-Fases secuenciales con entregable verificable cada una. No se avanza a la siguiente
-sin cerrar la anterior.
-
-| # | Fase | Entregable | Estado |
-|---|---|---|---|
-| 0 | Fundación del proyecto | Repo, CLAUDE.md, estructura `docs/`, ADR-0001 | ✅ |
-| 1 | Descubrimiento / auditoría | Auditoría del sitio actual + propuesta ResNexus + plantilla Cappa | ✅ Completa |
-| 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | 🔄 Banco de preguntas listo |
-| 3 | Arquitectura de información | Sitemap, wireframes, mapa de contenido | ⬜ |
-| 4 | Diseño / adaptación de plantilla | Design system sobre Cappa | ⬜ |
-| 5 | Implementación | Sitio | 🔄 Sprint 1 en curso |
-| 6 | QA, performance, SEO, accesibilidad | Checklist de salida | ⬜ |
-| 7 | Despliegue y traspaso | Runbook + capacitación | ⬜ |
+| # | Fase | Estado |
+|---|---|---|
+| 0 | Fundación del proyecto | ✅ |
+| 1 | Descubrimiento y auditoría | ✅ |
+| 2 | Levantamiento de requerimientos | 🔄 brief entregado, entrevista pendiente |
+| 3 | Arquitectura de información | ✅ resuelta dentro del backlog |
+| 4 | Diseño / adaptación de plantilla | ✅ tokens extraídos |
+| 5 | Implementación | 🔄 **sprint 1** |
+| 6 | QA, performance, SEO, accesibilidad | ⬜ sprint 5 |
+| 7 | Despliegue y traspaso | ⬜ sprint 5 |
 
 ---
 
-## 4. Restricciones técnicas del entorno (importante)
+## 4. Entorno de trabajo
 
-**La sesión remota de Claude tiene el egreso de red bloqueado por política.** Verificado:
-`azucarhotel.com`, `duruthemes.com`, `webbuilder.resnexus.com` y `tripadvisor.com`
-devuelven `EGRESS_BLOCKED`. Consecuencias operativas:
+**Este proyecto se trabaja desde una sesión local** (`claude` en la terminal, dentro del
+repositorio). La sesión remota en la nube **no tiene acceso al sistema de archivos de la
+Mac, ni al navegador, ni salida a internet** hacia dominios externos. Consecuencias:
 
-- ❌ Claude **no puede** hacer `curl`/`WebFetch` directo a los sitios objetivo.
-- ✅ Claude **sí puede** usar búsqueda web indexada (OTAs, agregadores, reseñas).
-- ✅ **La captura la ejecuta Abraham en local con HTTrack** y versiona el resultado en el
-  repo. A partir de ahí Claude analiza el HTML/CSS/JS **offline**, que es de hecho la
-  forma correcta: el análisis se hace sobre un artefacto congelado y reproducible, no
-  sobre un sitio vivo que cambia bajo nuestros pies.
-
-Runbook de captura: `docs/01-descubrimiento/runbook-captura-httrack.md`
+- Las capturas HTTrack ya están **ingeridas y versionadas** en `investigacion/mirrors/`.
+  Ese trabajo está hecho y no se repite.
+- Configurar Cloudflare, Analytics o cualquier consola web lo hace Abraham, con el
+  paso a paso de `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
 
 ---
 
-## 5. Decisiones técnicas vigentes
+## 5. Decisiones vigentes y reglas que no se rompen
 
 | Tema | Decisión | ADR |
 |---|---|---|
-| **Reservas** | Solicitud de reserva sujeta a confirmación. **Sin calendario de disponibilidad.** Cotización con impuestos desglosados. Notificación al manager por correo + WhatsApp. Aislado en módulo `booking/` para migrar a motor SaaS sin reescribir | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
-| **Stack** | **Astro** estático, i18n ES/EN nativo, *content collections* para alojamiento, despliegue en Cloudflare Pages con preview por rama, formulario contra función serverless | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
-| **Plantilla Cappa** | Fuente de **diseño**, no de código. Se extraen tokens y se reconstruyen componentes con HTML semántico y accesible. Se descarta su JS no utilizado | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
-| **Pagos** | Enlace de pago enviado por el hotel. **No tocamos datos de tarjeta → fuera de alcance PCI-DSS** | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| **Orden de trabajo** | Descubrimiento antes que requerimientos | [0001](docs/decisiones/ADR-0001-descubrimiento-antes-de-requerimientos.md) |
+| **Marco** | Iterativo quincenal. **Scrum adaptado, no puro** | [0002](docs/decisiones/ADR-0002-marco-de-trabajo-iterativo.md) |
+| **Reservas** | Solicitud sujeta a confirmación. Sin calendario de disponibilidad. Cotización con impuestos. Aviso al manager por correo + WhatsApp. Aislado en `booking/` | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| **Stack** | **Astro** estático, i18n ES/EN nativo, *content collections*, Cloudflare Pages, formulario contra función serverless | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
+| **Plantilla Cappa** | Fuente de **diseño**, no de código. Se extraen tokens y se reconstruyen componentes | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
+| **Pagos** | Enlace de pago del hotel. **No tocamos datos de tarjeta → fuera de alcance PCI-DSS** | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
 
-### Reglas que no se rompen
+### 🔴 Reglas que no se rompen
 
-1. **Nunca decir "reserva confirmada"** en la interfaz. Siempre *"solicitud sujeta a confirmación"*.
-2. **Nunca mostrar disponibilidad** que no podemos respaldar. Falsa disponibilidad es peor que ninguna.
-3. **El total cotizado incluye impuestos.** Es la diferencia frente a las OTAs y la cura de la queja recurrente.
-4. **Accesibilidad y Core Web Vitals van en la DoD de cada historia**, jamás en una fase final.
-5. **El contenido se modela como datos**, nunca incrustado en el marcado.
+1. **Nunca decir "reserva confirmada"** en la interfaz. Siempre *"solicitud sujeta a
+   confirmación"*. **El CI lo verifica y falla el build.**
+2. **Nunca mostrar disponibilidad** que no podamos respaldar. El esquema de datos no tiene
+   ese campo, a propósito.
+3. **El total cotizado incluye impuestos.** Es el diferenciador frente a las OTAs.
+4. **Nunca capturar datos de tarjeta.** Es el hallazgo crítico del sitio vigente; el sitio
+   nuevo no lo reproduce.
+5. **Accesibilidad y Core Web Vitals van en la DoD de cada historia**, jamás en una fase final.
+6. **El contenido se modela como datos**, nunca incrustado en el marcado.
+7. **Datos sin confirmar por el cliente no se publican.** `build:prod` falla.
 
 ---
 
 ## 6. Convenciones
 
-- **Idioma**: documentación y commits en español. Código, nombres de archivo y ramas en inglés.
-- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/) —
-  `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`.
-- **Decisiones**: toda decisión con consecuencias se registra como ADR en
-  `docs/decisiones/ADR-XXXX-titulo.md` (formato Michael Nygard).
+- **Idioma:** documentación y commits en español. Código, archivos y ramas en inglés.
+- **Commits:** [Conventional Commits](https://www.conventionalcommits.org/).
+- **Decisiones:** toda decisión con consecuencias es un ADR en `docs/decisiones/`
+  (formato Michael Nygard).
 - **Nunca** hacer push a una rama distinta de la designada sin autorización explícita.
-- **Nada de datos del cliente en el repo** (contraseñas de PMS, accesos de hosting,
-  credenciales de OTAs). Esos van en un gestor de secretos aparte.
+- **Nada de credenciales del cliente en el repositorio.** Los identificadores públicos
+  (como `G-…` de GA4) sí pueden versionarse; las llaves no.
+- Toda captura de terceros pasa por la redacción de credenciales de `ingest-mirror.sh`.
 
 ---
 
-## 7. Marco de trabajo
+## 7. Marco de trabajo — resumen operativo
 
-**Entrega iterativa con revisión quincenal del cliente** — Scrum adaptado, no Scrum puro.
-Decisión y justificación pieza por pieza en
-[`ADR-0002`](docs/decisiones/ADR-0002-marco-de-trabajo-iterativo.md); operación en
-[`marco-de-trabajo.md`](docs/02-requerimientos/marco-de-trabajo.md).
-
-- Sprints de **2 semanas**, cada uno cierra con **demo sobre URL real de staging**.
-- Se conservan: backlog con criterios de aceptación, Sprint Review, Definition of Ready,
-  Definition of Done, planning y retro ligeras.
-- Se omiten con justificación: daily standup, story points/velocity, Scrum Master dedicado.
-- El cliente no es Product Owner: es **Cliente-Decisor con SLA de 48 h hábiles**.
-  Abraham es **Proxy PO**.
-- **Prueba ácida contra Water-Scrum-Fall:** si el entregable de una iteración es un
-  documento y no algo que el cliente pueda abrir en el navegador, no era un sprint.
-
----
-
-## 8. Plan de desarrollo (fijado)
-
-**6 sprints × 2 semanas ≈ 12 semanas.** Detalle con criterios de aceptación en
+**Entrega iterativa con revisión quincenal.** Detalle en ADR-0002 y en
 [`plan-de-desarrollo.md`](docs/02-requerimientos/plan-de-desarrollo.md).
 
-| Sprint | Foco | Demo — lo que el cliente abre en su navegador |
-|---|---|---|
-| **0** 🔄 | Fundación, auditoría, inventario de contenido, mapeo de URLs, backlog | Informe de auditoría + backlog aprobado |
-| **1** 🔄 | Astro + i18n + CI/CD + design tokens + componentes base + **analítica** | **Home** navegable bilingüe, CWV verdes |
-| **2** | Alojamiento: listado, detalle, galería, `schema.org` | Catálogo completo ES/EN |
-| **3** 🔴 | **Solicitud de reserva** end-to-end, cotización con impuestos, WhatsApp, aviso de privacidad | El manager recibe una solicitud real en su teléfono |
-| **4** | Servicios, restaurante, spa, galería, ubicación, contacto, políticas, legales | Sitio completo navegable |
-| **5** | WCAG 2.2 AA, CWV, **301**, seguridad, rollback, lanzamiento, traspaso | Sitio en producción |
+- Sprints de **2 semanas**, cada uno con **Sprint Goal escrito** y demo sobre URL real.
+- **Se conservan:** Product Backlog, Sprint Backlog congelado, Sprint Review, Definition of
+  Ready, Definition of Done, Planning y retro ligeras.
+- **Se omiten con justificación:** daily standup, story points y velocity, Scrum Master
+  dedicado, refinamiento como ceremonia formal.
+- El cliente **no es Product Owner**: es **Cliente-Decisor con SLA de 48 h hábiles**.
+  Abraham es **Proxy PO**.
+- Tablero: `Backlog → Ready → En curso (WIP 2) → En revisión → Bloqueado → Hecho`.
+
+> **Prueba ácida contra Water-Scrum-Fall:** si el entregable de una iteración es un
+> documento y no algo que el cliente pueda abrir en el navegador, no era un sprint.
 
 ---
 
-## 9. Estado actual / siguiente acción
+## 8. Plan de sprints
 
-🚨 **ACCIÓN URGENTE, FUERA DEL PLAN DE SPRINTS.** El sitio actual captura número de tarjeta
-y **CVV** en `/autorizacion-de-pago-con-tdc/` y `/en/cc-payment-authorization/` mediante
-Contact Form 7, que lo envía por correo. Incumple PCI-DSS 3.3.1 y 4.2.1 y la LFPDPPP.
-**Despublicar hoy y purgar el histórico**, con independencia del rediseño.
-Detalle en [`auditoria-sitio-actual.md`](docs/01-descubrimiento/auditoria-sitio-actual.md) §1.
+**6 sprints × 2 semanas ≈ 12 semanas.** Guion de demo, criterios de entrada y salida e
+historias con criterios de aceptación en
+[`plan-de-desarrollo.md`](docs/02-requerimientos/plan-de-desarrollo.md) y
+[`backlog-producto.md`](docs/02-requerimientos/backlog-producto.md).
 
-**Hecho:** auditoría técnica del sitio actual (0.5). WordPress + Divi, 26 páginas reales
-con paridad ES/EN, 244 imágenes WebP de 2025 bien dimensionadas, sin analítica, schema.org
-genérico sin tipos hoteleros, **8 tipos de alojamiento confirmados con sus nombres**.
+| Sprint | Sprint Goal | Demo |
+|---|---|---|
+| **0** ✅ | Entender el terreno con evidencia reproducible | Auditoría + backlog aprobado |
+| **1** 🔄 | Home bilingüe en URL real, rápida y accesible, sobre cimientos definitivos | Home en staging, CWV verdes, 0 JS |
+| **2** | Que el huésped recorra los 8 tipos y elija uno | Catálogo completo ES/EN |
+| **3** 🔴 | Que el manager reciba una solicitud real en su teléfono | Flujo de reserva de extremo a extremo |
+| **4** | Que el sitio responda todo lo que el huésped pregunta | Sitio completo navegable |
+| **5** | Producción sin perder posicionamiento y con reversión probada | Sitio en producción |
 
-**Hecho también:** análisis competitivo de la propuesta ResNexus (construida sobre Duda;
-la agencia **provisionó una propiedad real en el motor** — ver R-16) y análisis de la
-plantilla Cappa (historia 0.7): 19 archivos JS y 8.2 MB de tipografías que se descartan;
-se extraen tokens y se reconstruyen componentes.
+---
 
-**Sprint 1 en curso.** Hecho: proyecto Astro con i18n ES/EN (1.1), design tokens extraídos
-de Cappa con corrección de contraste (1.3), componentes base accesibles (1.4), esquema de
-alojamiento validado en compilación con los 8 tipos reales (1.5), home bilingüe (1.6),
-componente de analítica listo para activarse (1.7) y CI con guardias de la DoD (1.2).
-El sitio compila con **0 archivos JS y 56 KB**, y el mismo auditor que encontró 21 hallazgos
-en el sitio vigente encuentra **0** en el nuevo. Código en `site/`.
+## 9. Estado actual
 
-**Ojo — datos sin verificar:** unidades, capacidad y camas de cada tipo son estimaciones
-nuestras, no datos del cliente (sólo nombre, vista y descripción salen del sitio real).
-`npm run build:prod` **falla** mientras sigan sin confirmarse. Es la pregunta C1 del brief.
+### 🚨 Urgente, fuera del plan de sprints
 
-**Pendientes de Abraham (fuera del carril de software):**
-1. Visto bueno a ADR-0003. **ADR-0004 aprobado 2026-08-20.**
-2. Licencia de Cappa (R-01) — reducida: las 3 tipografías son Google Fonts (SIL OFL) y
-   quedan fuera. Sigue pendiente por iconos e imágenes del demo.
-3. Accesos: dominio, hosting, Analytics, Search Console (R-06, R-07).
-4. Enviar el brief `.docx` al cliente y agendar la entrevista.
+El sitio vigente **captura número de tarjeta y CVV** en `/autorizacion-de-pago-con-tdc/` y
+`/en/cc-payment-authorization/` mediante Contact Form 7, que lo envía por correo. Incumple
+**PCI-DSS 3.3.1 y 4.2.1** y la **LFPDPPP**.
+Aviso al cliente redactado con acuse de decisión:
+[`aviso-cliente-datos-de-tarjeta.md`](docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md).
+**Pendiente: enviarlo.**
+
+### Sprint 0 — cerrado
+
+Auditoría del sitio vigente (26 páginas reales, paridad ES/EN, 244 imágenes WebP de 2025
+bien dimensionadas, sin analítica, schema.org genérico sin tipos hoteleros, 468 `<img>` sin
+`alt`, **8 tipos de alojamiento confirmados con sus nombres**). Análisis competitivo de
+ResNexus —construido sobre Duda; la agencia **provisionó una propiedad real en el motor**,
+R-16— y análisis de Cappa: 19 archivos JS y 8.2 MB de tipografías que se descartan.
+
+### Sprint 1 — en curso
+
+Hecho: proyecto Astro con i18n (H1.1), design tokens con corrección de contraste (H1.3),
+componentes base accesibles (H1.4), esquema de alojamiento validado en compilación con los
+8 tipos reales (H1.5), home bilingüe con `schema.org/Hotel` (H1.6), componente de analítica
+integrado e inerte (H1.7) y CI con guardias de la DoD (H1.2, falta la cuenta).
+
+**El sitio compila con 0 archivos JS y 56 KB**, y el mismo auditor que encontró 21 hallazgos
+en el sitio vigente encuentra **0** en el nuevo.
+
+### ⚠️ Datos sin verificar
+
+De cada tipo de alojamiento, sólo **nombre, vista y descripción** provienen del sitio real.
+**Unidades, capacidad y camas son estimaciones nuestras** y suman 22 contra las 21
+reportadas. Están marcadas como no verificadas y `npm run build:prod` **falla** hasta que el
+cliente responda la pregunta **C1**.
+
+### Bloqueantes para cerrar el sprint 1
+
+1. **Cuenta de Cloudflare Pages conectada** → sin URL de staging no hay demo (H1.2)
+2. **ID de medición de GA4** (`G-…`) → activa H1.7
+3. **Respuesta a C1** → desbloquea `build:prod`
+
+### Pendientes de Abraham, fuera del carril de software
+
+1. Enviar el aviso de datos de tarjeta al cliente. **Es lo primero.**
+2. Visto bueno a ADR-0003. *(ADR-0004 aprobado el 2026-08-20.)*
+3. Licencia de Cappa (R-01) — **reducida**: las tres tipografías son Google Fonts con
+   licencia SIL OFL y quedan fuera. Sigue pendiente por iconos e imágenes del demo.
+4. Accesos de `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
+5. Enviar el brief `.docx` y agendar la entrevista.
 
 ---
 
 ## 10. Índice de documentación
 
-- `docs/README.md` — mapa de la documentación
-- `docs/01-descubrimiento/` — auditoría, capturas, hallazgos
-- `docs/02-requerimientos/` — brief, entrevista, backlog
-- `docs/03-arquitectura/` — sitemap, stack, decisiones técnicas
-- `docs/04-diseno/` — design system, adaptación de plantilla
-- `docs/decisiones/` — ADRs y bitácora de aprendizaje
-
-**Documentos vigentes:**
-
 | Documento | Contenido |
 |---|---|
-| `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura local |
-| `docs/01-descubrimiento/hallazgos-preliminares.md` | Hallazgos vía document analysis |
-| `docs/02-requerimientos/preguntas-cliente.md` | Banco de preguntas al cliente (6 bloques) |
+| `docs/README.md` | Mapa de la documentación |
+| **`docs/02-requerimientos/backlog-producto.md`** | **Product Backlog: épicas, historias, criterios de aceptación** |
+| **`docs/02-requerimientos/plan-de-desarrollo.md`** | **Plan de sprints con guion de demo y criterios de entrada/salida** |
+| `docs/02-requerimientos/marco-de-trabajo.md` | Roles, cadencia, DoR, DoD |
+| `docs/02-requerimientos/preguntas-cliente.md` | Banco de preguntas (6 bloques) |
 | `docs/02-requerimientos/preguntas-internas.md` | 20 preguntas de preparación interna |
-| `docs/02-requerimientos/marco-de-trabajo.md` | Roles, cadencia, DoR, DoD, plan de sprints |
-| `docs/decisiones/ADR-0001-…` | Descubrimiento antes de requerimientos |
-| `docs/02-requerimientos/plan-de-desarrollo.md` | **Plan fijado: 6 sprints con criterios de aceptación** |
-| `docs/decisiones/ADR-0002-…` | Marco de trabajo iterativo (Scrum adaptado) |
-| `docs/decisiones/ADR-0003-…` | Arquitectura de reserva sin PMS |
+| `docs/02-requerimientos/brief-azucar-hotel-tulum.docx` | Brief pre-llenado para el cliente |
 | `docs/01-descubrimiento/auditoria-sitio-actual.md` | Auditoría técnica del sitio vigente |
-| `docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md` | Aviso al cliente + acuse de decisión |
+| `docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md` | Aviso PCI-DSS + acuse de decisión |
 | `docs/01-descubrimiento/analisis-propuesta-resnexus.md` | Inteligencia competitiva |
+| `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
+| `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
+| `docs/decisiones/ADR-0001..0004` | Decisiones con consecuencias |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **22 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
-| `docs/decisiones/ADR-0004-…` | Stack técnico (Astro estático) |
-| `docs/decisiones/bitacora-aprendizaje.md` | Lecciones acumuladas + riesgos abiertos |
+| `scripts/README.md` | Ingesta de capturas y auditor automatizado |
+
+---
+
+## 11. Comandos frecuentes
+
+```bash
+# Sitio
+cd site && npm ci
+npm run dev          # desarrollo
+npm run datos        # ¿qué datos de alojamiento siguen sin verificar?
+npm run build        # build (avisa)
+npm run build:prod   # build de producción (FALLA si hay datos sin verificar)
+
+# Auditoría — misma vara para el sitio viejo y para el nuevo
+node scripts/audit-mirror.mjs investigacion/mirrors/azucarhotel
+node scripts/audit-mirror.mjs site/dist
+```
