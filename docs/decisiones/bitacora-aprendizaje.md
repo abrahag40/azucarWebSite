@@ -380,9 +380,20 @@ próxima vez no habrá que deducir qué pasó: estará escrito.
 
 ## L-022 — Ante una credencial ajena: redactar, nunca suprimir la protección
 
-**Lección.** GitHub bloqueó el push porque la captura de ResNexus contiene un **token
-secreto de Mapbox** incrustado en el HTML del lado del cliente. GitHub ofrece un enlace para
-autorizar el push de todos modos. **No se usa.**
+**Lección.** GitHub bloqueó el push porque la captura de ResNexus contiene tokens de Mapbox
+incrustados en el HTML. GitHub ofrece un enlace para autorizar el push de todos modos.
+**No se usa.**
+
+> ⚠️ **Corrección posterior.** Se afirmó que eran tokens **secretos** (`sk.`) porque así los
+> etiqueta el detector de GitHub: *"Mapbox Secret Access Token"*. Al ingerir la captura, el
+> reporte de redacción mostró que los 12 son **`pk.` — públicos**, que Mapbox diseña
+> explícitamente para ir en el cliente. La redacción siguió siendo correcta, pero la
+> severidad era mucho menor de lo anunciado.
+>
+> **Es la segunda vez en esta fase que afirmo una causa antes de tener el dato** (ver
+> L-016). El patrón es el mismo: una fuente plausible —ahí una hipótesis técnica, aquí la
+> etiqueta de una herramienta— tomada como verificación. *Una herramienta que nombra un
+> hallazgo no lo ha clasificado por ti.*
 
 **Por qué.** Ese enlace no arregla nada: publica una credencial ajena y viva en un
 repositorio, y encima la deja en el historial de git para siempre, donde ya no se borra con
@@ -397,9 +408,9 @@ propagamos nada. Quedó incorporado a la ingesta, así que aplica sola a toda ca
 reflejo que desactivar un test que falla o poner `# noqa`: quita el aviso y deja el problema,
 sólo que ahora sin aviso.
 
-**Y es un hallazgo de inteligencia competitiva:** el producto sobre el que la agencia
-anterior construyó su propuesta expone una credencial secreta en el navegador. Dice algo
-sobre su nivel de rigor técnico. Si procede avisar a ResNexus, es decisión de Abraham.
+**Lo que sí sobrevive de la lección:** ante cualquier credencial ajena, redactar y conservar
+el hallazgo, nunca suprimir el control. Y quedó incorporado a la ingesta, así que aplica
+sola a toda captura futura.
 
 ---
 
@@ -421,4 +432,5 @@ sobre su nivel de rigor técnico. Si procede avisar a ResNexus, es decisión de 
 | R-12 | Sin CMS, el cliente no puede editar el sitio. Consistente hoy, puede molestar después | Medio | Debe quedar **aceptado por escrito**, no asumido (F4) |
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
-| R-15 | La captura de ResNexus contiene un token secreto de Mapbox expuesto del lado del cliente. Redactado en el repositorio; **sigue expuesto en el sitio de ResNexus** | Informativo — no es nuestro ni del cliente | Decidir si se notifica a ResNexus |
+| R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
+| R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

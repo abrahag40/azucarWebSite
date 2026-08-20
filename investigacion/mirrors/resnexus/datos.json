@@ -1,0 +1,775 @@
+{
+  "resumen": {
+    "paginas": 13,
+    "es": 13,
+    "en": 0,
+    "archivos": 17,
+    "bytes": 2912033
+  },
+  "hallazgos": [
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "1 <title> duplicado(s): \"Azúcar | Hotel Boutique Frente al Mar en la Z\" ×2"
+    },
+    {
+      "sev": "alta",
+      "tema": "Móvil",
+      "det": "1 página(s) sin meta viewport → no responsivo"
+    },
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "12 página(s) con meta robots noindex — invisibles para Google"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO/A11y",
+      "det": "3 página(s) sin exactamente un <h1>"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO",
+      "det": "1 página(s) sin canonical"
+    },
+    {
+      "sev": "media",
+      "tema": "Rendimiento",
+      "det": "40 <img> sin width/height → provoca CLS"
+    },
+    {
+      "sev": "media",
+      "tema": "Rendimiento",
+      "det": "0 de 2 imágenes en formato moderno (WebP/AVIF)"
+    },
+    {
+      "sev": "media",
+      "tema": "A11y",
+      "det": "1 página(s) con salto en la jerarquía de encabezados (ej. h1 → h6 en `index.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)"
+    },
+    {
+      "sev": "info",
+      "tema": "SEO",
+      "det": "2 <title> de más de 60 caracteres: Google los trunca en resultados"
+    }
+  ],
+  "huella": {
+    "wordpress": false,
+    "tema": [],
+    "plugins": [],
+    "jquery": false,
+    "generators": []
+  },
+  "pages": [
+    {
+      "ruta": "index.html",
+      "bytes": 5294,
+      "lang": "en",
+      "title": "Local index - HTTrack Website Copier",
+      "titleLen": 36,
+      "description": "HTTrack is an easy-to-use website mirror utility. It allows you to download a World Wide website from the Internet to a local directory,building recursively all structures, getting html, images, and other files from the server to your computer. Links are rebuiltrelatively so that you can freely browse to the local site (works with any browser). You can mirror several sites together so that you can jump from one toanother. You can, also, update an existing mirror site, or resume an interrupted download. The robot is fully configurable, with an integrated help",
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [
+        "Index of locally available sites:"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h1 → h6",
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "bytes": 302610,
+      "lang": "es",
+      "title": "Contacto | Azúcar Hotel Tulum",
+      "titleLen": 29,
+      "description": "Planea tu estancia en Tulum y recibe atención personalizada para crear una experiencia inolvidable frente al Caribe.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/contacto",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Contacto"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 3,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 28,
+      "estilosInline": 41
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/experienciasf587.html",
+      "bytes": 204229,
+      "lang": "es",
+      "title": "Experiencias y Atracciones en Tulum | Azúcar Hotel",
+      "titleLen": 50,
+      "description": "Que hacer en Tulum? Descubre cenotes, ruinas mayas, gastronomía y experiencias únicas a pocos minutos de Azúcar Hotel Tulum.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/experiencias",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Experiencias en Tulum"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 9,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 27
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/galeriaf587.html",
+      "bytes": 221829,
+      "lang": "es",
+      "title": "Galería | Descubre Azúcar Hotel Tulum",
+      "titleLen": 37,
+      "description": "Planea tu estancia en Tulum y recibe atención personalizada para crear una experiencia inolvidable frente al Caribe.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/galeria",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Galer&iacute;a"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 33,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 30,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 43
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "bytes": 205835,
+      "lang": "es",
+      "title": "Villas y Suites Frente al Mar | Azúcar Hotel Tulum",
+      "titleLen": 50,
+      "description": "Explora villas y suites diseñadas para el descanso, con vistas al Caribe, espacios privados y una experiencia auténtica en Tulum.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/habitaciones",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Habitaciones"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 3,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 28
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "bytes": 382392,
+      "lang": "es",
+      "title": "Hotel Boutique Frente al Mar en Tulum | Azúcar Hotel",
+      "titleLen": 52,
+      "description": "Despierta frente al Caribe mexicano y disfruta una experiencia diseñada para descansar, explorar y vivir Tulum a tu ritmo.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/site/38e233bb",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "AZUCAR"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 1,
+      "imgsLazy": 0,
+      "scriptsInline": 31,
+      "estilosInline": 130
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "bytes": 291530,
+      "lang": "es",
+      "title": "Nosotros | La Historia de Azúcar Hotel Tulum",
+      "titleLen": 44,
+      "description": "Descubre Azúcar Hotel Tulum: spa, beach club, wellness y eventos frente al mar. Un espacio diseñado para descansar, conectar y vivir el Caribe.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/nosotros",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Nosotros"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 17,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 120
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/path=/index.html",
+      "bytes": 152626,
+      "lang": "es",
+      "title": "Azúcar | Hotel Boutique Frente al Mar en la Zona Hotelera de Tulum",
+      "titleLen": 66,
+      "description": "Descubre un hotel boutique frente al mar en Tulum, donde la arquitectura, la naturaleza y el Caribe crean experiencias para recordar.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/dmPageNotFound",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": null,
+      "imgs": 1,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 22,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/politica-de-privacidadf587.html",
+      "bytes": 276386,
+      "lang": "es",
+      "title": "Política de Privacidad | Azúcar Hotel Tulum",
+      "titleLen": 43,
+      "description": "Consulta cómo protegemos y gestionamos la información personal de nuestros huéspedes y visitantes.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/politica-de-privacidad",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Pol&iacute;tica de Privacidad"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 1,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 204
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/politicasf587.html",
+      "bytes": 195955,
+      "lang": "es",
+      "title": "Políticas del Hotel | Azúcar Hotel Tulum",
+      "titleLen": 40,
+      "description": "Consulta las políticas de reservación, cancelación, pagos y estancia en Azúcar Hotel Tulum para planear tu visita con claridad.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/politicas",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Pol&iacute;ticas",
+        "Pol&iacute;ticas del Hotel"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": null,
+      "imgs": 3,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 85
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/referrer.html",
+      "bytes": 152626,
+      "lang": "es",
+      "title": "Azúcar | Hotel Boutique Frente al Mar en la Zona Hotelera de Tulum",
+      "titleLen": 66,
+      "description": "Descubre un hotel boutique frente al mar en Tulum, donde la arquitectura, la naturaleza y el Caribe crean experiencias para recordar.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/dmPageNotFound",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": null,
+      "imgs": 1,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 22,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/restaurantef587.html",
+      "bytes": 192932,
+      "lang": "es",
+      "title": "Restaurante Frente al Mar en Tulum | Azúcar Hotel",
+      "titleLen": 49,
+      "description": "Explora la arquitectura, la playa, las villas y los espacios que hacen de Azúcar Hotel una experiencia única en Tulum.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/restaurante",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Restaurante"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 5,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 18
+    },
+    {
+      "ruta": "webbuilder.resnexus.com/site/38e233bb/terminos-y-condicionesf587.html",
+      "bytes": 320483,
+      "lang": "es",
+      "title": "Términos y Condiciones | Azúcar Hotel Tulum",
+      "titleLen": 43,
+      "description": "Consulta nuestras políticas de reservación, pagos, cancelaciones y estancia en Azúcar Hotel Tulum.",
+      "canonical": "http://13855-azucar-hotel-tulum.resnexuswebsites.com/terminos-y-condiciones",
+      "hreflang": [],
+      "robots": "noindex",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Terminos y Condiciones"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 1,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 25,
+      "estilosInline": 179
+    }
+  ],
+  "forms": [
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "action": "#",
+      "method": "POST",
+      "campos": [
+        "dmform-0",
+        "label-dmform-0",
+        "dmform-1",
+        "label-dmform-1",
+        "dmform-2",
+        "label-dmform-2",
+        "dmform-3",
+        "label-dmform-3",
+        "submit",
+        "dmformsendto",
+        "action",
+        "dmformsubject",
+        "dmformfrom",
+        "dmformautoreplyenabled",
+        "dmformautoreplyfrom",
+        "dmformautoreplysubject",
+        "dmformautoreplymsg",
+        "dmformautoreplyincludeformcopy",
+        "dmformsubmitparams",
+        "page_uuid"
+      ],
+      "labels": 4
+    }
+  ],
+  "jsonld": [
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "tipos": [
+        "FAQPage",
+        "Question",
+        "Answer"
+      ]
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "tipos": [
+        "Hotel",
+        "PostalAddress",
+        "GeoCoordinates"
+      ]
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "tipos": [
+        "FAQPage",
+        "Question",
+        "Answer"
+      ]
+    }
+  ],
+  "enlacesReserva": [
+    {
+      "pagina": "index.html",
+      "href": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "texto": "webbuilder.resnexus.com/site/38e233bb/indexf587.html"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/contactof587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Aqu&iacute;"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/experienciasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/experienciasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/experienciasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/galeriaf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/galeriaf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/galeriaf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver m&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver m&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver m&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/habitacionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver m&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602/?NewSearch=1&amp;unit=2",
+      "texto": "Ver M&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602/?NewSearch=1&amp;unit=1",
+      "texto": "Ver M&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602/?NewSearch=1&amp;unit=8",
+      "texto": "Ver M&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/indexf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver M&aacute;s"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Aqu&iacute;"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/nosotrosf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/path=/index.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/path=/index.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/politica-de-privacidadf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/politica-de-privacidadf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/politicasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/politicasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/politicasf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/referrer.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/referrer.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/restaurantef587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/restaurantef587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/restaurantef587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Ver Disponibilidad"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/terminos-y-condicionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "Reserva Ahora"
+    },
+    {
+      "pagina": "webbuilder.resnexus.com/site/38e233bb/terminos-y-condicionesf587.html",
+      "href": "https://resnexus.com/resnexus/reservations/book/18DC254A-5D17-46EB-B1CF-6EAA4EB76602",
+      "texto": "RESERVAR"
+    }
+  ],
+  "redirecciones": [],
+  "tiposSchema": [
+    "FAQPage",
+    "Question",
+    "Answer",
+    "Hotel",
+    "PostalAddress",
+    "GeoCoordinates"
+  ],
+  "dominiosExternos": [
+    {
+      "dominio": "irp.cdn-website.com",
+      "n": 188,
+      "ctx": [
+        "src",
+        "link"
+      ]
+    },
+    {
+      "dominio": "google.com",
+      "n": 2,
+      "ctx": [
+        "src",
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "static.cdn-website.com",
+      "n": 37,
+      "ctx": [
+        "src",
+        "link"
+      ]
+    },
+    {
+      "dominio": "webbuilder.resnexus.com",
+      "n": 34,
+      "ctx": [
+        "src",
+        "link"
+      ]
+    },
+    {
+      "dominio": "ms-cdn.multiscreensite.com",
+      "n": 2,
+      "ctx": [
+        "src"
+      ]
+    },
+    {
+      "dominio": "cdn.userway.org",
+      "n": 12,
+      "ctx": [
+        "src"
+      ]
+    },
+    {
+      "dominio": "13855-azucar-hotel-tulum.resnexuswebsites.com",
+      "n": 12,
+      "ctx": [
+        "link"
+      ]
+    },
+    {
+      "dominio": "resnexus.com",
+      "n": 43,
+      "ctx": [
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "facebook.com",
+      "n": 1,
+      "ctx": [
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "instagram.com",
+      "n": 1,
+      "ctx": [
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "api.whatsapp.com",
+      "n": 1,
+      "ctx": [
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "wa.me",
+      "n": 12,
+      "ctx": [
+        "enlace"
+      ]
+    }
+  ],
+  "imagenes": [
+    {
+      "f": "backblue.gif",
+      "b": 4243
+    },
+    {
+      "f": "fade.gif",
+      "b": 828
+    }
+  ],
+  "pesoPorExtension": {
+    ".gif": {
+      "n": 2,
+      "bytes": 5071
+    },
+    ".txt": {
+      "n": 2,
+      "bytes": 2235
+    },
+    ".html": {
+      "n": 13,
+      "bytes": 2904727
+    }
+  }
+}

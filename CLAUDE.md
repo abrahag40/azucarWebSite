@@ -84,7 +84,7 @@ sin cerrar la anterior.
 | # | Fase | Entregable | Estado |
 |---|---|---|---|
 | 0 | Fundación del proyecto | Repo, CLAUDE.md, estructura `docs/`, ADR-0001 | ✅ |
-| 1 | Descubrimiento / auditoría | Auditoría técnica y de contenido del sitio actual + propuesta ResNexus + plantilla | 🔄 Sitio actual ✅ · faltan ResNexus y Cappa |
+| 1 | Descubrimiento / auditoría | Auditoría del sitio actual + propuesta ResNexus + plantilla Cappa | ✅ Completa |
 | 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | 🔄 Banco de preguntas listo |
 | 3 | Arquitectura de información | Sitemap, wireframes, mapa de contenido | ⬜ |
 | 4 | Diseño / adaptación de plantilla | Design system sobre Cappa | ⬜ |
@@ -189,8 +189,10 @@ Detalle en [`auditoria-sitio-actual.md`](docs/01-descubrimiento/auditoria-sitio-
 con paridad ES/EN, 244 imágenes WebP de 2025 bien dimensionadas, sin analítica, schema.org
 genérico sin tipos hoteleros, **8 tipos de alojamiento confirmados con sus nombres**.
 
-**Bloqueante:** faltan por ingerir las capturas de ResNexus y Cappa. Sin ellas siguen
-detenidas la historia 0.7 (análisis de la plantilla) y el análisis competitivo.
+**Hecho también:** análisis competitivo de la propuesta ResNexus (construida sobre Duda;
+la agencia **provisionó una propiedad real en el motor** — ver R-16) y análisis de la
+plantilla Cappa (historia 0.7): 19 archivos JS y 8.2 MB de tipografías que se descartan;
+se extraen tokens y se reconstruyen componentes.
 
 **Listo para arrancar sin esperar:** el sprint 1 sólo necesita el visto bueno de ADR-0004
 y los accesos. La estructura del proyecto Astro no depende del mirror.
@@ -225,5 +227,9 @@ y los accesos. La estructura del proyecto Astro no depende del mirror.
 | `docs/02-requerimientos/plan-de-desarrollo.md` | **Plan fijado: 6 sprints con criterios de aceptación** |
 | `docs/decisiones/ADR-0002-…` | Marco de trabajo iterativo (Scrum adaptado) |
 | `docs/decisiones/ADR-0003-…` | Arquitectura de reserva sin PMS |
+| `docs/01-descubrimiento/auditoria-sitio-actual.md` | Auditoría técnica del sitio vigente |
+| `docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md` | Aviso al cliente + acuse de decisión |
+| `docs/01-descubrimiento/analisis-propuesta-resnexus.md` | Inteligencia competitiva |
+| `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
 | `docs/decisiones/ADR-0004-…` | Stack técnico (Astro estático) |
 | `docs/decisiones/bitacora-aprendizaje.md` | Lecciones acumuladas + riesgos abiertos |

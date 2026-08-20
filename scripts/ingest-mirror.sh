@@ -235,15 +235,30 @@ fi
 cd "$REPO"
 git add investigacion/mirrors
 if git diff --cached --quiet; then
-  echo
-  echo "  ✗ NO HAY NADA QUE PUBLICAR: git no ve cambios."
-  echo "     Revisa exclusiones:  git check-ignore -v investigacion/mirrors/*/archivos/*"
-  exit 1
-fi
-git commit -q -m "chore: capturas HTTrack ingeridas ($(echo $OK_LIST | tr ' ' ','))
+  # Dos causas distintas con el mismo sintoma. Distinguirlas importa: una es exito
+  # (idempotencia) y la otra es fallo. Reportarlas igual asusta sin motivo.
+  if git ls-files --error-unmatch investigacion/mirrors >/dev/null 2>&1; then
+    echo
+    echo "  ✓ Sin cambios: las capturas ya estaban publicadas e identicas."
+    git fetch -q origin "$BRANCH" 2>/dev/null || true
+    if [ -n "$(git log --oneline "origin/$BRANCH..HEAD" 2>/dev/null)" ]; then
+      echo "    Hay commits locales sin publicar; empujando..."
+    else
+      echo "    Nada pendiente. Todo esta en el remoto."
+      exit 0
+    fi
+  else
+    echo
+    echo "  ✗ NO HAY NADA QUE PUBLICAR: la ingesta produjo archivos pero git no los ve."
+    echo "     Revisa exclusiones:  git check-ignore -v investigacion/mirrors/*/archivos/*"
+    exit 1
+  fi
+else
+  git commit -q -m "chore: capturas HTTrack ingeridas ($(echo $OK_LIST | tr ' ' ','))
 
 Generado por scripts/ingest-mirror.sh. Incluye manifiesto con el tamano de todos
 los archivos del original y resumen por extension de cada captura."
+fi
 
 echo "Publicando en $BRANCH ..."
 for intento in 1 2 3 4; do
