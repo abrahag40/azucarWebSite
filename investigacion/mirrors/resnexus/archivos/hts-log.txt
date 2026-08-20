@@ -1,0 +1,17 @@
+HTTrack3.49-2 launched on Wed, 19 Aug 2026 14:57:29 at https://webbuilder.resnexus.com/site/38e233bb/?preview=true ^
+(httrack https://webbuilder.resnexus.com/site/38e233bb/?preview=true ^ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+14:57:42	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/robots.txt (from primary/primary)
+14:57:42	Warning: 	Retry after error -5 (Unable to get server's address: nodename nor servname provided, or not known) at link ^/ (from primary/primary)
+14:57:42	Error: 	"Not Found" (404) at link https://webbuilder.resnexus.com/site/38e233bb/path=/ (from https://webbuilder.resnexus.com/site/38e233bb/?preview=true)
+14:57:42	Error: 	"Not Found" (404) at link https://webbuilder.resnexus.com/site/38e233bb/referrer (from https://webbuilder.resnexus.com/site/38e233bb/?preview=true)
+14:57:42	Warning: 	Retry after error -5 (Unable to get server's address: unknown error) at link ^/ (from primary/primary)
+14:57:42	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/ (from primary/primary)
+
+HTTrack Website Copier/3.49-2 mirror complete in 13 seconds : 17 links scanned, 10 files written (2589972 bytes overall) [470782 bytes received at 36214 bytes/sec], 2895400 bytes transferred using HTTP compression in 13 files, ratio 15%
+(4 errors, 2 warnings, 0 messages)

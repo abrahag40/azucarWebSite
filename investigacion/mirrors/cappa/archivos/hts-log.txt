@@ -1,0 +1,23 @@
+HTTrack3.49-2 launched on Wed, 19 Aug 2026 14:58:30 at https://duruthemes.com/demo/html/cappa/demo1-light/index11.html ^
+(httrack https://duruthemes.com/demo/html/cappa/demo1-light/index11.html ^ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+15:00:02	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/robots.txt (from primary/primary)
+15:00:02	Warning: 	Retry after error -5 (Unable to get server's address: nodename nor servname provided, or not known) at link ^/ (from primary/primary)
+15:00:31	Warning: 	Retry after error -4 (No data (connection closed)) at link https://duruthemes.com/demo/html/cappa/demo1-light/img/team/4.jpg (from https://duruthemes.com/demo/html/cappa/demo1-light/index11.html)
+15:00:31	Warning: 	Retry after error -4 (No data (connection closed)) at link https://duruthemes.com/demo/html/cappa/demo1-light/img/team/1.jpg (from https://duruthemes.com/demo/html/cappa/demo1-light/index11.html)
+15:00:31	Warning: 	Retry after error -4 (No data (connection closed)) at link https://duruthemes.com/demo/html/cappa/demo1-light/img/spa/3.jpg (from https://duruthemes.com/demo/html/cappa/demo1-light/index11.html)
+15:00:31	Warning: 	Retry after error -5 (Unable to get server's address: unknown error) at link ^/ (from primary/primary)
+15:01:00	Error: 	"Not Found" (404) at link https://duruthemes.com/demo/html/cappa/demo1-light/post2.html (from https://duruthemes.com/demo/html/cappa/demo1-light/spa-wellness.html)
+15:01:00	Error: 	"Not Found" (404) at link https://duruthemes.com/demo/html/cappa/demo1-light/blog2.html (from https://duruthemes.com/demo/html/cappa/demo1-light/news2.html)
+15:01:00	Error: 	"Not Found" (404) at link https://duruthemes.com/demo/html/cappa/demo1-light/post3.html (from https://duruthemes.com/demo/html/cappa/demo1-light/post.html)
+15:01:00	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link ^/ (from primary/primary)
+15:01:00	Error: 	"Not Found" (404) at link https://duruthemes.com/demo/html/cappa/demo1-light/css/plugins/owl.video.play.png (from https://duruthemes.com/demo/html/cappa/demo1-light/css/plugins/owl.carousel.min.css)
+15:01:00	Error: 	"Not Found" (404) at link https://duruthemes.com/demo/html/cappa/demo1-light/css/plugins/Flaticon.svg (from https://duruthemes.com/demo/html/cappa/demo1-light/css/plugins/flaticon.css)
+
+HTTrack Website Copier/3.49-2 mirror complete in 2 minutes 32 seconds : 154 links scanned, 141 files written (18970339 bytes overall) [16229052 bytes received at 106770 bytes/sec], 3482305 bytes transferred using HTTP compression in 70 files, ratio 19%, 7.5 requests per connection
+(7 errors, 5 warnings, 0 messages)

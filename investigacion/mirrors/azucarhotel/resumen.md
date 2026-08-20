@@ -4,7 +4,7 @@
 |---|---|
 | Archivos en el original | 434 |
 | Archivos versionados | 430 |
-| Peso del original |  25M |
+| Peso del original |  24M |
 | Peso versionado (sin hts-cache) |  21M |
 
 ## Por extensión
