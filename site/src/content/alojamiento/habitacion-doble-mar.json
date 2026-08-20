@@ -1,0 +1,46 @@
+{
+  "nombre": {
+    "es": "Habitación Doble · Vista al mar",
+    "en": "Double Room · Ocean view"
+  },
+  "categoria": "habitacion",
+  "orden": 7,
+  "unidades": 5,
+  "capacidadMaxima": 4,
+  "camas": {
+    "es": "2 camas matrimoniales",
+    "en": "2 double beds"
+  },
+  "vista": {
+    "es": "Vistas parciales al mar y al jardín",
+    "en": "Partial ocean and garden views"
+  },
+  "descripcionCorta": {
+    "es": "Dos camas con vistas parciales al mar.",
+    "en": "Two beds with partial ocean views."
+  },
+  "descripcion": {
+    "es": "Habitación con dos camas y vistas parciales al mar y al jardín del hotel.",
+    "en": "Room with two beds and partial views of the ocean and the hotel garden."
+  },
+  "amenidades": [
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

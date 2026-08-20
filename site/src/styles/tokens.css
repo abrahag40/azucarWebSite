@@ -1,0 +1,83 @@
+/* ============================================================================
+   Design tokens — Azúcar Hotel Tulum
+   Extraídos de la plantilla Cappa (demo1-light) y corregidos por accesibilidad.
+   Análisis de origen: docs/04-diseno/analisis-plantilla-cappa.md
+   ============================================================================ */
+
+:root {
+  /* --- Color -------------------------------------------------------------
+     El oro de Cappa (#aa8453) da 3.42:1 sobre blanco: suficiente para
+     elementos grandes y de interfaz (WCAG 1.4.11, 3:1) pero INSUFICIENTE
+     para texto normal (WCAG 1.4.3, 4.5:1).
+     Por eso hay dos tokens de acento: el original para superficies, bordes e
+     iconos; y una variante oscurecida —mismo tono 34°, misma saturación—
+     para cualquier acento que lleve texto. La marca no cambia; el contraste sí. */
+  --color-accent:        #aa8453;  /* 3.42:1 — decorativo, bordes, iconos, fondos */
+  --color-accent-text:   #8f6f46;  /* 4.64:1 — texto y enlaces en color de acento */
+  --color-accent-hover:  #735938;  /* 6.53:1 — estado hover/focus */
+
+  --color-ink:           #222222;  /* 15.91:1 — texto principal */
+  --color-ink-muted:     #666666;  /*  5.74:1 — texto secundario, cumple AA */
+
+  --color-surface:       #ffffff;
+  --color-surface-warm:  #f8f5f0;  /* superficie cálida de sección */
+  --color-surface-alt:   #f1eeeb;
+  --color-border:        #e4dfd8;
+
+  /* #adadad y #999 de Cappa se descartan como color de texto: 2.24:1 y 2.85:1.
+     Sólo sobreviven como bordes, donde no hay requisito de contraste de texto. */
+
+  /* --- Tipografía --------------------------------------------------------
+     Las tres familias son de Google Fonts con licencia abierta (SIL OFL), así
+     que NO forman parte del riesgo de licencia de la plantilla (R-01).       */
+  --font-display: 'Gilda Display', Georgia, 'Times New Roman', serif;
+  --font-ui:      'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-body:    'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala modular anclada en 16px. Cappa usaba 15px de base; se sube a 16
+     porque es el tamaño por defecto del navegador, y respetarlo evita que
+     quien tenga configurado un zoom de texto lo pierda. */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.25rem;   /* 20px */
+  --text-xl:   1.5rem;    /* 24px */
+  --text-2xl:  1.875rem;  /* 30px */
+  --text-3xl:  2.5rem;    /* 40px */
+  --text-4xl:  3rem;      /* 48px */
+  /* Título de héroe fluido: crece con el viewport sin media queries */
+  --text-hero: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+
+  --leading-tight: 1.15;
+  --leading-snug:  1.35;
+  --leading-body:  1.65;
+  --tracking-wide: 0.12em;
+
+  /* --- Espaciado — escala de 4px ---------------------------------------- */
+  --space-1: 0.25rem;  --space-2: 0.5rem;   --space-3: 0.75rem;
+  --space-4: 1rem;     --space-5: 1.5rem;   --space-6: 2rem;
+  --space-7: 3rem;     --space-8: 4rem;     --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* --- Disposición ------------------------------------------------------- */
+  --container:      75rem;   /* 1200px */
+  --container-text: 42rem;   /* medida de lectura: 60-75 caracteres */
+  --gutter: clamp(1rem, 4vw, 3rem);
+
+  --radius-sm: 2px;
+  --radius:    4px;
+
+  /* --- Movimiento -------------------------------------------------------- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur:  240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0.01ms; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

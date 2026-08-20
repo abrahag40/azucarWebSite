@@ -88,7 +88,7 @@ sin cerrar la anterior.
 | 2 | Levantamiento de requerimientos | Brief pre-llenado + entrevista + backlog priorizado | 🔄 Banco de preguntas listo |
 | 3 | Arquitectura de información | Sitemap, wireframes, mapa de contenido | ⬜ |
 | 4 | Diseño / adaptación de plantilla | Design system sobre Cappa | ⬜ |
-| 5 | Implementación | Sitio | ⬜ |
+| 5 | Implementación | Sitio | 🔄 Sprint 1 en curso |
 | 6 | QA, performance, SEO, accesibilidad | Checklist de salida | ⬜ |
 | 7 | Despliegue y traspaso | Runbook + capacitación | ⬜ |
 
@@ -169,7 +169,7 @@ Decisión y justificación pieza por pieza en
 | Sprint | Foco | Demo — lo que el cliente abre en su navegador |
 |---|---|---|
 | **0** 🔄 | Fundación, auditoría, inventario de contenido, mapeo de URLs, backlog | Informe de auditoría + backlog aprobado |
-| **1** | Astro + i18n + CI/CD + design tokens + componentes base + **analítica** | **Home** navegable bilingüe, CWV verdes |
+| **1** 🔄 | Astro + i18n + CI/CD + design tokens + componentes base + **analítica** | **Home** navegable bilingüe, CWV verdes |
 | **2** | Alojamiento: listado, detalle, galería, `schema.org` | Catálogo completo ES/EN |
 | **3** 🔴 | **Solicitud de reserva** end-to-end, cotización con impuestos, WhatsApp, aviso de privacidad | El manager recibe una solicitud real en su teléfono |
 | **4** | Servicios, restaurante, spa, galería, ubicación, contacto, políticas, legales | Sitio completo navegable |
@@ -194,12 +194,21 @@ la agencia **provisionó una propiedad real en el motor** — ver R-16) y análi
 plantilla Cappa (historia 0.7): 19 archivos JS y 8.2 MB de tipografías que se descartan;
 se extraen tokens y se reconstruyen componentes.
 
-**Listo para arrancar sin esperar:** el sprint 1 sólo necesita el visto bueno de ADR-0004
-y los accesos. La estructura del proyecto Astro no depende del mirror.
+**Sprint 1 en curso.** Hecho: proyecto Astro con i18n ES/EN (1.1), design tokens extraídos
+de Cappa con corrección de contraste (1.3), componentes base accesibles (1.4), esquema de
+alojamiento validado en compilación con los 8 tipos reales (1.5), home bilingüe (1.6),
+componente de analítica listo para activarse (1.7) y CI con guardias de la DoD (1.2).
+El sitio compila con **0 archivos JS y 56 KB**, y el mismo auditor que encontró 21 hallazgos
+en el sitio vigente encuentra **0** en el nuevo. Código en `site/`.
+
+**Ojo — datos sin verificar:** unidades, capacidad y camas de cada tipo son estimaciones
+nuestras, no datos del cliente (sólo nombre, vista y descripción salen del sitio real).
+`npm run build:prod` **falla** mientras sigan sin confirmarse. Es la pregunta C1 del brief.
 
 **Pendientes de Abraham (fuera del carril de software):**
-1. Visto bueno a ADR-0003 y ADR-0004.
-2. Licencia de Cappa (R-01) — bloquea assets en producción.
+1. Visto bueno a ADR-0003. **ADR-0004 aprobado 2026-08-20.**
+2. Licencia de Cappa (R-01) — reducida: las 3 tipografías son Google Fonts (SIL OFL) y
+   quedan fuera. Sigue pendiente por iconos e imágenes del demo.
 3. Accesos: dominio, hosting, Analytics, Search Console (R-06, R-07).
 4. Enviar el brief `.docx` al cliente y agendar la entrevista.
 
@@ -231,5 +240,6 @@ y los accesos. La estructura del proyecto Astro no depende del mirror.
 | `docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md` | Aviso al cliente + acuse de decisión |
 | `docs/01-descubrimiento/analisis-propuesta-resnexus.md` | Inteligencia competitiva |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
+| `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | `docs/decisiones/ADR-0004-…` | Stack técnico (Astro estático) |
 | `docs/decisiones/bitacora-aprendizaje.md` | Lecciones acumuladas + riesgos abiertos |

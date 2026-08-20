@@ -1,0 +1,32 @@
+---
+/**
+ * Historia 1.7 — analítica.
+ *
+ * El cliente NO tiene datos comparativos de canal ni línea base (pregunta A2),
+ * y la auditoría confirmó que el sitio actual no tiene analítica instalada.
+ * Cada semana sin instrumentar es una semana de datos que no existirá jamás:
+ * el pasado no se puede medir retroactivamente.
+ *
+ * Por eso esto va en el sprint 1 y no al final. Queda inerte hasta que la
+ * variable PUBLIC_GA4_ID exista, de modo que el componente ya esté integrado
+ * el día que lleguen los accesos, sin tocar código.
+ *
+ * No se carga en desarrollo: contaminar las métricas con nuestras propias
+ * visitas es el primer error clásico de una instalación de analítica.
+ */
+const ID = import.meta.env.PUBLIC_GA4_ID;
+const activo = Boolean(ID) && import.meta.env.PROD;
+---
+{activo && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ID}`}></script>
+    <script is:inline define:vars={{ ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      // anonymize_ip: minimización de datos. Buena práctica, y coherente con el
+      // aviso de privacidad que exige la LFPDPPP.
+      gtag('config', ID, { anonymize_ip: true });
+    </script>
+  </>
+)}

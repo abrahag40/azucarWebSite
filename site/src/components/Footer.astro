@@ -1,0 +1,58 @@
+---
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+const anio = new Date().getFullYear();
+---
+<footer class="pie">
+  <div class="contenedor pie__rejilla">
+    <div>
+      <p class="pie__marca">Azúcar Hotel Tulum</p>
+      <address class="pie__direccion">{t('footer.direccion')}</address>
+    </div>
+    <nav class="pie__nav" aria-label="Legal">
+      <ul>
+        <li><a href={ruta(idioma, 'politicas')}>{t('footer.politicas')}</a></li>
+        <li><a href={ruta(idioma, 'aviso-de-privacidad')}>{t('footer.privacidad')}</a></li>
+        <li><a href={ruta(idioma, 'terminos')}>{t('footer.terminos')}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="contenedor pie__legal">
+    <p>© {anio} Azúcar Hotel Tulum. {t('footer.derechos')}</p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    background: var(--color-surface-alt);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-7) var(--space-5);
+    margin-top: var(--space-8);
+  }
+  .pie__rejilla { display: grid; gap: var(--space-6); }
+  .pie__marca {
+    font-family: var(--font-display); font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+  .pie__direccion {
+    font-style: normal; color: var(--color-ink-muted);
+    max-width: 32ch; line-height: var(--leading-snug);
+  }
+  .pie__nav ul { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+  .pie__nav a {
+    font-family: var(--font-ui); letter-spacing: 0.04em;
+    color: var(--color-ink); text-decoration: none;
+  }
+  .pie__nav a:hover { color: var(--color-accent-text); text-decoration: underline; }
+  .pie__legal {
+    margin-top: var(--space-6); padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm); color: var(--color-ink-muted);
+  }
+  @media (min-width: 48rem) {
+    .pie__rejilla { grid-template-columns: 1fr auto; align-items: start; }
+    .pie__nav ul { grid-auto-flow: row; }
+  }
+</style>

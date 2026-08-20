@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import TarjetaAlojamiento from './TarjetaAlojamiento.astro';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma; limite?: number }
+const { idioma, limite } = Astro.props;
+const t = usarT(idioma);
+
+// Una sola fuente de verdad: los mismos datos alimentan esta sección, la
+// página de detalle y el selector del formulario de solicitud (ADR-0004).
+const todos = (await getCollection('alojamiento', ({ data }) => data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden);
+const entradas = limite ? todos.slice(0, limite) : todos;
+---
+<section class="seccion seccion--calida" aria-labelledby="alojamiento-titulo">
+  <div class="contenedor">
+    <header class="encabezado">
+      <p class="antetitulo">{t('alojamiento.titulo')}</p>
+      <h2 id="alojamiento-titulo">{t('alojamiento.entrada')}</h2>
+    </header>
+    <ul class="rejilla" role="list">
+      {entradas.map((entrada) => (
+        <li><TarjetaAlojamiento entrada={entrada} idioma={idioma} /></li>
+      ))}
+    </ul>
+    {limite && todos.length > limite && (
+      <p class="mas">
+        <a class="boton boton--secundario" href={ruta(idioma, 'alojamiento')}>
+          {t('alojamiento.ver')}
+        </a>
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .encabezado { max-width: var(--container-text); margin-bottom: var(--space-7); }
+  .encabezado h2 { font-size: var(--text-2xl); margin-top: var(--space-2); }
+  /* auto-fit + minmax: se adapta sin una sola media query, y sin Bootstrap */
+  .rejilla {
+    list-style: none; padding: 0; display: grid; gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  }
+  .mas { margin-top: var(--space-7); text-align: center; }
+</style>

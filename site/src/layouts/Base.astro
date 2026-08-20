@@ -1,0 +1,90 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Analitica from '../components/Analitica.astro';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  idioma: Idioma;
+  /** Ruta sin prefijo de idioma, p. ej. 'alojamiento'. Vacía = portada. */
+  rutaActual?: string;
+}
+const { titulo, descripcion, idioma, rutaActual = '' } = Astro.props;
+const t = usarT(idioma);
+
+const canonical = new URL(ruta(idioma, rutaActual), Astro.site).toString();
+const alternos = [
+  { hreflang: 'es', href: new URL(ruta('es', rutaActual), Astro.site).toString() },
+  { hreflang: 'en', href: new URL(ruta('en', rutaActual), Astro.site).toString() },
+  { hreflang: 'x-default', href: new URL(ruta('es', rutaActual), Astro.site).toString() },
+];
+
+// schema.org/Hotel — el hueco competitivo detectado en la auditoría: ni el sitio
+// actual ni la propuesta de ResNexus lo tienen. Sin esto Google no puede mostrar
+// ubicación ni categoría en resultados.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Hotel',
+  name: 'Azúcar Hotel Tulum',
+  url: Astro.site?.toString(),
+  description: descripcion,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Carretera a Boca Paila km 7.5, Zona Hotelera',
+    addressLocality: 'Tulum',
+    addressRegion: 'Quintana Roo',
+    addressCountry: 'MX',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 20.1489, longitude: -87.4483 },
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Beachfront', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Outdoor pool', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Restaurant', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Free Wi-Fi', value: true },
+  ],
+  // No se declara priceRange ni AggregateRating: no tenemos el dato confirmado
+  // y schema.org inventado es peor que schema.org ausente.
+};
+---
+<!doctype html>
+<html lang={idioma}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonical} />
+    {alternos.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={idioma === 'es' ? 'es_MX' : 'en_US'} />
+
+    <!-- Fuentes: preconnect para adelantar el handshake TLS, y display=swap
+         para que el texto sea legible desde el primer frame en vez de quedar
+         invisible mientras carga la fuente. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@300;400&family=Gilda+Display&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analitica />
+  </head>
+  <body>
+    <a class="sr-only saltar" href="#contenido">{t('nav.saltar')}</a>
+    <Header idioma={idioma} rutaActual={rutaActual} />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer idioma={idioma} />
+  </body>
+</html>

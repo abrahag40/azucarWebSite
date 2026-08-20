@@ -1,0 +1,46 @@
+{
+  "nombre": {
+    "es": "Habitación Doble · Vista a la selva",
+    "en": "Double Room · Jungle view"
+  },
+  "categoria": "habitacion",
+  "orden": 8,
+  "unidades": 5,
+  "capacidadMaxima": 4,
+  "camas": {
+    "es": "2 camas matrimoniales",
+    "en": "2 double beds"
+  },
+  "vista": {
+    "es": "Vistas a la avenida principal y a la selva",
+    "en": "Main-road and jungle views"
+  },
+  "descripcionCorta": {
+    "es": "Dos camas con vistas a la selva.",
+    "en": "Two beds with jungle views."
+  },
+  "descripcion": {
+    "es": "Habitación con dos camas y vistas a la avenida principal de la zona hotelera de Tulum, rodeada por icónicas boutiques y comercios, y a la gran selva.",
+    "en": "Room with two beds and views of Tulum's main hotel-zone road, lined with iconic boutiques and shops, and of the surrounding jungle."
+  },
+  "amenidades": [
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

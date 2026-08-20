@@ -1,0 +1,54 @@
+name: Sitio — build y verificación
+
+# La verificación corre en cada push y en cada PR. Que la Definition of Done sea
+# automática es lo que impide que se negocie a la baja bajo presión de fecha.
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths: ['site/**', '.github/workflows/site.yml']
+  pull_request:
+    paths: ['site/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run: { working-directory: site }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: site/package-lock.json }
+
+      - run: npm ci
+      - name: Verificar datos de alojamiento
+        run: npm run datos
+      - name: Comprobación de tipos
+        run: npm run check
+      - name: Build
+        run: npm run build
+
+      # Guardias de la DoD, verificados sobre el HTML realmente generado.
+      # No es teatro: son las mismas comprobaciones que la auditoría aplicó al
+      # sitio viejo, ahora aplicadas al nuestro en cada commit.
+      - name: Guardias de la Definition of Done
+        run: |
+          set -e
+          fallos=0
+          for f in $(find dist -name '*.html'); do
+            grep -q 'name="viewport"'   "$f" || { echo "✗ sin viewport: $f"; fallos=1; }
+            grep -q '<html lang='       "$f" || { echo "✗ sin lang: $f";     fallos=1; }
+            grep -q 'rel="canonical"'   "$f" || { echo "✗ sin canonical: $f"; fallos=1; }
+            grep -q 'hreflang='         "$f" || { echo "✗ sin hreflang: $f";  fallos=1; }
+            grep -q 'name="description"' "$f" || { echo "✗ sin description: $f"; fallos=1; }
+            grep -cE '<h1' "$f" | grep -qx 1 || { echo "✗ no hay exactamente un h1: $f"; fallos=1; }
+            grep -oE '<img[^>]*>' "$f" | grep -v 'alt=' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
+          done
+          # ADR-0003 regla 1: la interfaz nunca promete una reserva confirmada.
+          if grep -rniE 'reserva confirmada|booking confirmed' dist --include='*.html' -q; then
+            echo "✗ La interfaz promete una reserva confirmada. Prohibido por ADR-0003."; fallos=1
+          fi
+          [ "$fallos" -eq 0 ] && echo "✓ Todas las guardias de la DoD pasan"
+          exit $fallos
+
+      - name: Informe de auditoría del build
+        run: node ../scripts/audit-mirror.mjs dist && cat dist/informe.md >> $GITHUB_STEP_SUMMARY

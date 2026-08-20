@@ -1,0 +1,54 @@
+{
+  "nombre": {
+    "es": "Suite Mar",
+    "en": "Suite Mar"
+  },
+  "categoria": "suite",
+  "orden": 1,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vista frontal al mar y a la alberca infinita",
+    "en": "Ocean front view and infinity pool view"
+  },
+  "descripcionCorta": {
+    "es": "Jacuzzi privado con vista frontal al Caribe.",
+    "en": "Private jacuzzi with Caribbean ocean front view."
+  },
+  "descripcion": {
+    "es": "Suite con jacuzzi privado y vista frontal al mar y a la alberca infinita. Despiertas con el Caribe delante y el sonido del oleaje como única alarma.",
+    "en": "Suite with private jacuzzi and front view of the ocean and the infinity pool. You wake up facing the Caribbean, with the surf as your only alarm clock."
+  },
+  "amenidades": [
+    {
+      "es": "Jacuzzi privado",
+      "en": "Private jacuzzi"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "diferenciador": {
+    "es": "Vista frontal al mar y jacuzzi privado en la terraza.",
+    "en": "Ocean front view and private jacuzzi on the terrace."
+  },
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

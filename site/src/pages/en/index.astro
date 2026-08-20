@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import SeccionAlojamiento from '../../components/SeccionAlojamiento.astro';
+const idioma = 'en' as const;
+---
+<Base
+  idioma={idioma}
+  titulo="Beachfront Boutique Hotel in Tulum | Azúcar Hotel Tulum"
+  descripcion="Boutique hotel on the Caribbean in Tulum's Hotel Zone. Suites with private jacuzzi, infinity pool and beach. Request your reservation directly with us."
+>
+  <Hero idioma={idioma} />
+  <SeccionAlojamiento idioma={idioma} limite={3} />
+</Base>

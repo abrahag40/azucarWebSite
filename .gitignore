@@ -5,6 +5,9 @@ node_modules/
 
 # Build
 dist/
+site/dist/
+site/.astro/
+site/node_modules/
 build/
 .cache/
 .parcel-cache/

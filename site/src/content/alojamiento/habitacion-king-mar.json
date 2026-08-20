@@ -1,0 +1,46 @@
+{
+  "nombre": {
+    "es": "Habitación King · Vista al mar",
+    "en": "King Room · Ocean view"
+  },
+  "categoria": "habitacion",
+  "orden": 5,
+  "unidades": 4,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vistas parciales al mar y al jardín",
+    "en": "Partial ocean and garden views"
+  },
+  "descripcionCorta": {
+    "es": "Cama king con vistas parciales al mar.",
+    "en": "King bed with partial ocean views."
+  },
+  "descripcion": {
+    "es": "Habitación con cama king size y vistas parciales al mar y al jardín del hotel.",
+    "en": "Room with a king size bed and partial views of the ocean and the hotel garden."
+  },
+  "amenidades": [
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

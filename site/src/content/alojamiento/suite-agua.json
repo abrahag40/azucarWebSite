@@ -1,0 +1,50 @@
+{
+  "nombre": {
+    "es": "Suite Agua",
+    "en": "Suite Agua"
+  },
+  "categoria": "suite",
+  "orden": 3,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vista al mar y a otras áreas del hotel",
+    "en": "Ocean view and hotel grounds view"
+  },
+  "descripcionCorta": {
+    "es": "Jacuzzi privado con vista al mar.",
+    "en": "Private jacuzzi with ocean view."
+  },
+  "descripcion": {
+    "es": "Suite con jacuzzi privado y vista al mar y a otras hermosas áreas del hotel.",
+    "en": "Suite with private jacuzzi, ocean view and views over other beautiful areas of the hotel."
+  },
+  "amenidades": [
+    {
+      "es": "Jacuzzi privado",
+      "en": "Private jacuzzi"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

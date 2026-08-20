@@ -1,0 +1,58 @@
+{
+  "nombre": {
+    "es": "Suite Aire",
+    "en": "Suite Aire"
+  },
+  "categoria": "suite",
+  "orden": 4,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vista panorámica al mar y a la alberca infinita",
+    "en": "Panoramic ocean and infinity pool view"
+  },
+  "descripcionCorta": {
+    "es": "Vista panorámica y jacuzzi en roof top.",
+    "en": "Panoramic view and roof top jacuzzi."
+  },
+  "descripcion": {
+    "es": "Vista panorámica al mar y a la alberca infinita, con jacuzzi privado en un impresionante y amplio roof top propio de la suite.",
+    "en": "Panoramic view of the ocean and the infinity pool, with a private jacuzzi on the suite's own spacious roof top."
+  },
+  "amenidades": [
+    {
+      "es": "Roof top privado",
+      "en": "Private roof top"
+    },
+    {
+      "es": "Jacuzzi privado",
+      "en": "Private jacuzzi"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "diferenciador": {
+    "es": "La vista es panorámica, no frontal.",
+    "en": "The view is panoramic rather than straight-on."
+  },
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "nombre": {
+    "es": "Habitación King · Vista a la selva",
+    "en": "King Room · Jungle view"
+  },
+  "categoria": "habitacion",
+  "orden": 6,
+  "unidades": 4,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vistas a la selva y a la zona hotelera",
+    "en": "Jungle and hotel-zone views"
+  },
+  "descripcionCorta": {
+    "es": "Cama king con vistas a la selva.",
+    "en": "King bed with jungle views."
+  },
+  "descripcion": {
+    "es": "Habitación con cama king size y vistas a la selva y a la famosa calle de la zona hotelera, rodeada de comercios y boutiques.",
+    "en": "Room with a king size bed and views of the jungle and the well-known hotel-zone road, lined with shops and boutiques."
+  },
+  "amenidades": [
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

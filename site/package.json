@@ -1,0 +1,17 @@
+{
+  "name": "azucar-hotel-tulum",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/check-datos.mjs && astro build",
+    "build:prod": "node scripts/check-datos.mjs --estricto && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "datos": "node scripts/check-datos.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.2.4"
+  }
+}

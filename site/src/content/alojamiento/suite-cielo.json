@@ -1,0 +1,58 @@
+{
+  "nombre": {
+    "es": "Suite Cielo",
+    "en": "Suite Cielo"
+  },
+  "categoria": "suite",
+  "orden": 2,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama king size",
+    "en": "1 king size bed"
+  },
+  "vista": {
+    "es": "Vista frontal al mar y a la alberca infinita",
+    "en": "Ocean front view and infinity pool view"
+  },
+  "descripcionCorta": {
+    "es": "Jacuzzi privado en un amplio roof top.",
+    "en": "Private jacuzzi on a spacious roof top."
+  },
+  "descripcion": {
+    "es": "Vista frontal al mar y a la alberca infinita, con jacuzzi privado en un impresionante y amplio roof top propio de la suite.",
+    "en": "Front view of the ocean and the infinity pool, with a private jacuzzi on the suite's own spacious roof top."
+  },
+  "amenidades": [
+    {
+      "es": "Roof top privado",
+      "en": "Private roof top"
+    },
+    {
+      "es": "Jacuzzi privado",
+      "en": "Private jacuzzi"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini bar"
+    },
+    {
+      "es": "Wi-Fi",
+      "en": "Wi-Fi"
+    }
+  ],
+  "diferenciador": {
+    "es": "El jacuzzi está en un roof top privado, no en la terraza.",
+    "en": "The jacuzzi sits on a private roof top rather than the terrace."
+  },
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "vista",
+    "descripcion"
+  ]
+}

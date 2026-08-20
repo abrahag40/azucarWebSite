@@ -1,0 +1,54 @@
+---
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<section class="hero">
+  <div class="contenedor hero__contenido">
+    <p class="hero__antetitulo">{t('hero.eyebrow')}</p>
+    <h1 class="hero__titulo">{t('hero.titulo')}</h1>
+    <p class="hero__entrada">{t('hero.entrada')}</p>
+    <div class="hero__acciones">
+      <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
+      <a class="boton boton--secundario" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
+    </div>
+    {/* ADR-0003, regla 1: la promesa de confirmación se hace explícita desde el
+        primer contacto, no escondida al final del formulario. */}
+    <p class="hero__aviso">{t('reserva.aviso')}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid; align-items: center;
+    min-height: min(78svh, 46rem);
+    padding-block: var(--space-8);
+    background: linear-gradient(160deg, var(--color-surface-warm) 0%, var(--color-surface-alt) 100%);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .hero__contenido { max-width: var(--container-text); }
+  .hero__antetitulo {
+    font-family: var(--font-ui); font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide); text-transform: uppercase;
+    color: var(--color-accent-text);
+    margin-bottom: var(--space-4);
+  }
+  .hero__titulo {
+    font-size: var(--text-hero);
+    line-height: 1.05;
+    margin-bottom: var(--space-5);
+  }
+  .hero__entrada {
+    font-size: var(--text-lg);
+    color: var(--color-ink-muted);
+    max-width: 46ch;
+    margin-bottom: var(--space-6);
+  }
+  .hero__acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .hero__aviso {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+</style>
