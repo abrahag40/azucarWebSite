@@ -352,6 +352,32 @@ asesoría.
 
 ---
 
+## L-021 — En un proceso por lotes, cada elemento se aísla
+
+**Lección.** El script de ingesta procesaba tres capturas en un bucle con `set -e`. La
+primera salió bien; algo falló en la segunda y **el script murió llevándose la tercera por
+delante**. Resultado: una captura de tres, y dos rondas más de ida y vuelta.
+
+**Por qué.** `set -e` es correcto para un proceso lineal donde cada paso depende del
+anterior. En un lote de elementos **independientes** es exactamente lo contrario de lo que
+quieres: un fallo local se convierte en fallo total. Cada elemento va en su propio subshell,
+se recoge su código de salida, y al final se reporta qué salió y qué no — y se publica lo
+que sí salió.
+
+**Detalle técnico que costó una prueba descubrir:** en bash, `set +e` **no silencia el trap
+`ERR`**. Son mecanismos independientes. El trap seguía gritando "error inesperado" en un
+fallo que ya estaba manejado. Se suprime poniendo el comando en contexto de condición
+(`if ( ... ); then`), donde bash no dispara `ERR` por diseño.
+
+**Antipatrón evitado:** *all-or-nothing batch*. Y su síntoma característico: el usuario cree
+que el lote falló entero cuando en realidad falló un elemento, o —peor, que es lo que nos
+pasó— cree que salió entero cuando salió sólo el primero.
+
+**Segundo efecto, igual de importante:** ahora todo queda en `investigacion/ingest.log`. La
+próxima vez no habrá que deducir qué pasó: estará escrito.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
