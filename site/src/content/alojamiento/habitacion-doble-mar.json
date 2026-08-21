@@ -16,12 +16,12 @@
     "en": "Partial ocean and garden views"
   },
   "descripcionCorta": {
-    "es": "Dos camas con vistas parciales al mar.",
-    "en": "Two beds with partial ocean views."
+    "es": "Dos camas, con vista parcial al mar.",
+    "en": "Two beds, with a partial sea view."
   },
   "descripcion": {
-    "es": "Habitación con dos camas y vistas parciales al mar y al jardín del hotel.",
-    "en": "Room with two beds and partial views of the ocean and the hotel garden."
+    "es": "Dos camas y la misma orientación al mar que la King, con el jardín del hotel de por medio.",
+    "en": "Two beds and the same orientation to the sea as the King, with the hotel garden in between."
   },
   "amenidades": [
     {
@@ -41,7 +41,10 @@
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
-  ]
+    "vista"
+  ],
+  "diferenciador": {
+    "es": "Dos camas en lugar de una king, con la misma vista.",
+    "en": "Two beds instead of one king, with the same view."
+  }
 }

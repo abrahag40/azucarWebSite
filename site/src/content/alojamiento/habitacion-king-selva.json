@@ -16,12 +16,12 @@
     "en": "Jungle and hotel-zone views"
   },
   "descripcionCorta": {
-    "es": "Cama king con vistas a la selva.",
-    "en": "King bed with jungle views."
+    "es": "Cama king, con la selva enfrente.",
+    "en": "King bed, with the jungle ahead."
   },
   "descripcion": {
-    "es": "Habitación con cama king size y vistas a la selva y a la famosa calle de la zona hotelera, rodeada de comercios y boutiques.",
-    "en": "Room with a king size bed and views of the jungle and the well-known hotel-zone road, lined with shops and boutiques."
+    "es": "Cama king size orientada a la selva y a la calle de la zona hotelera, con sus boutiques y comercios.",
+    "en": "A king size bed facing the jungle and the hotel-zone road, with its boutiques and small shops."
   },
   "amenidades": [
     {
@@ -41,7 +41,10 @@
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
-  ]
+    "vista"
+  ],
+  "diferenciador": {
+    "es": "La habitación king orientada a la selva, no al mar.",
+    "en": "The king room facing the jungle rather than the sea."
+  }
 }

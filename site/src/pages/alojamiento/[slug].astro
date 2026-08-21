@@ -1,0 +1,62 @@
+---
+/**
+ * Ficha de detalle, una por tipo publicado. Las rutas se generan desde los
+ * datos: añadir un tipo al directorio de contenido crea su página sin tocar
+ * ninguna plantilla, que es el criterio de aceptación de H2.1.
+ *
+ * `anterior` y `siguiente` salen del mismo orden que el listado, para que el
+ * huésped pueda recorrer el catálogo sin volver atrás (criterio de H2.2).
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BannerPagina from '../../components/BannerPagina.astro';
+import FichaAlojamiento from '../../components/FichaAlojamiento.astro';
+import { usarT } from '../../i18n/ui';
+
+const IDIOMA = 'es' as const;
+
+export async function getStaticPaths() {
+  const todos = (await getCollection('alojamiento', ({ data }) => data.publicado))
+    .sort((a, b) => a.data.orden - b.data.orden);
+  return todos.map((entrada, i) => ({
+    params: { slug: entrada.id },
+    props: { entrada, anterior: todos[i - 1], siguiente: todos[i + 1] },
+  }));
+}
+
+interface Props {
+  entrada: CollectionEntry<'alojamiento'>;
+  anterior?: CollectionEntry<'alojamiento'>;
+  siguiente?: CollectionEntry<'alojamiento'>;
+}
+const { entrada, anterior, siguiente } = Astro.props;
+const { data } = entrada;
+const t = usarT(IDIOMA);
+
+// schema.org/HotelRoom enlazado al Hotel (historia H2.4). No se declara precio
+// ni disponibilidad: no tenemos el dato confirmado y schema.org inventado es
+// peor que schema.org ausente.
+const schemaHabitacion = {
+  '@context': 'https://schema.org',
+  '@type': 'HotelRoom',
+  name: data.nombre[IDIOMA],
+  description: data.descripcion[IDIOMA],
+  bed: { '@type': 'BedDetails', typeOfBed: data.camas[IDIOMA] },
+  occupancy: { '@type': 'QuantitativeValue', maxValue: data.capacidadMaxima },
+  containedInPlace: { '@type': 'Hotel', name: 'Azúcar Hotel Tulum' },
+};
+---
+<Base
+  idioma={IDIOMA}
+  rutaActual={`alojamiento/${entrada.id}`}
+  titulo={`${data.nombre[IDIOMA]} | Azúcar Hotel Tulum`}
+  descripcion={data.descripcion[IDIOMA]}
+>
+  <BannerPagina
+    imagen={data.imagenPrincipal!}
+    antetitulo={data.categoria === 'suite' ? t('alojamiento.suites') : t('alojamiento.habitaciones')}
+    titulo={data.nombre[IDIOMA]}
+  />
+  <FichaAlojamiento entrada={entrada} anterior={anterior} siguiente={siguiente} idioma={IDIOMA} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaHabitacion)} />
+</Base>

@@ -26,7 +26,6 @@
 | 🚨 | PCI-DSS / Seguridad | `azucarhotel.com/en/cc-payment-authorization/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o1` |
 | 🚨 | PCI-DSS / Seguridad | `azucarhotel.com/en/cc-payment-authorization/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o2` |
 | 🔴 | SEO | 1 página(s) sin <title> |
-| 🔴 | SEO | 1 <title> duplicado(s): "Azucar Hotel Tulum" ×2 |
 | 🔴 | i18n | 4 página(s) sin hreflang pese a existir versión EN |
 | 🔴 | Móvil | 4 página(s) sin meta viewport → no responsivo |
 | 🔴 | A11y | 468 <img> sin atributo alt (WCAG 1.1.1) |
@@ -39,6 +38,7 @@
 | 🟡 | Rendimiento | 24 <img> sin width/height → provoca CLS |
 | 🟡 | i18n | Desequilibrio ES/EN: 14 páginas ES vs 12 EN — hay contenido sin traducir |
 | 🟡 | A11y | 20 página(s) con salto en la jerarquía de encabezados (ej. h1 → h4 en `azucarhotel.com/amenidades-y-facilidades/index.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1) |
+| ℹ️ | i18n | 1 <title> que coincide(n) entre la version ES y la EN: "Azucar Hotel Tulum" x2. No es duplicado real —hreflang los declara alternativos— pero conviene revisar si falta traducir |
 | ℹ️ | Captura | 20 stub(s) de redirección de HTTrack excluidos del análisis · el mapa de destinos alimenta las 301 del relanzamiento |
 | ℹ️ | Stack | WordPress detectado · temas: Divi, Divi-child · 3 plugins |
 | ℹ️ | SEO | 2 <title> de más de 60 caracteres: Google los trunca en resultados |

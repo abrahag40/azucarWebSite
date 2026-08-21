@@ -1,0 +1,95 @@
+---
+/**
+ * Banner de página interior — el `banner-header` de Cappa.
+ *
+ * Más bajo que el héroe de la portada a propósito: en una página interior el
+ * huésped ya sabe dónde está y viene a leer, no a ser seducido. Ocupar toda la
+ * pantalla con una foto le obliga a un scroll de peaje antes del contenido.
+ *
+ * MÓVIL. La altura se fija en `min()` contra `svh` para que la barra del
+ * navegador no recorte, y el título usa un `clamp` con techo bajo: en un
+ * teléfono de 360 px un título de 40 px parte palabras y desequilibra la
+ * composición. Aquí el tope es 34 px hasta los 600 px de ancho.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  titulo: string;
+  antetitulo?: string;
+  imagen: ImageMetadata;
+  /** Encuadre vertical. Las fotos verticales suelen querer el tercio superior. */
+  encuadre?: string;
+}
+const { titulo, antetitulo, imagen, encuadre = 'center 45%' } = Astro.props;
+---
+<section class="banner">
+  <Image
+    class="banner__fondo"
+    src={imagen}
+    alt=""
+    widths={[640, 1024, 1600]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    quality={70}
+    style={`object-position: ${encuadre}`}
+  />
+  <div class="banner__velo" aria-hidden="true"></div>
+  <div class="contenedor banner__contenido">
+    {antetitulo && <p class="banner__antetitulo">{antetitulo}</p>}
+    <h1 class="banner__titulo">{titulo}</h1>
+  </div>
+</section>
+
+<style>
+  .banner {
+    position: relative;
+    display: grid;
+    place-items: center;
+    /* Alto contenido: deja ver el contenido de abajo sin scroll en un teléfono. */
+    min-height: min(46svh, 22rem);
+    padding-block: var(--space-9) var(--space-8);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .banner__fondo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  /* Velo plano y generoso: aquí la foto es fondo, no información. 0.60 deja el
+     blanco por encima de 6:1 sobre el píxel más claro de cualquiera de las fotos
+     del hotel, que fue el peor caso medido en la franja de la portada. */
+  .banner__velo {
+    position: absolute; inset: 0; z-index: -1;
+    background: rgb(0 0 0 / 0.60);
+  }
+  .banner__contenido {
+    text-align: center;
+    color: #fff;
+    /* min-width: 0 impide que una palabra larga ensanche la caja y saque la
+       página del viewport. Es el defecto de rejilla más común en móvil. */
+    min-width: 0;
+  }
+  .banner__antetitulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+  .banner__titulo {
+    /* Techo bajo a propósito: 34 px en móvil, 56 px sólo cuando hay sitio. */
+    font-size: clamp(1.75rem, 1.1rem + 2.8vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    /* Corta palabras muy largas antes de romper la caja, no después. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+</style>

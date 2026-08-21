@@ -1,0 +1,284 @@
+---
+/**
+ * Ficha de detalle de un tipo de alojamiento (H2.2).
+ *
+ * ORDEN EN MÓVIL — es la decisión de diseño que más pesa aquí.
+ * En escritorio el resumen va en una columna lateral, a la derecha. En móvil no
+ * existe "a la derecha": todo se apila, y hay que elegir qué va antes. Va
+ * primero la descripción y después el resumen, no al revés, porque el huésped
+ * que abre una ficha viene a saber CÓMO ES, no a auditar una tabla; los datos
+ * los consulta cuando ya le interesa. La llamada a la acción se repite al final
+ * del resumen para no obligar a subir.
+ *
+ * El orden del marcado y el visual coinciden en los dos tamaños: no se reordena
+ * con `order`, que rompe la correspondencia entre lo que se ve y lo que recorre
+ * el teclado o el lector de pantalla (WCAG 1.3.2 y 2.4.3).
+ *
+ * DATOS SIN CONFIRMAR. Capacidad, camas y metros son estimaciones nuestras
+ * mientras el cliente no responda C1. En vez de esconderlo, se marcan en la
+ * propia ficha: así el cliente lo ve en la demo y sabe exactamente qué tiene que
+ * confirmar, en lugar de que el aviso viva sólo en la consola.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props {
+  entrada: CollectionEntry<'alojamiento'>;
+  anterior?: CollectionEntry<'alojamiento'>;
+  siguiente?: CollectionEntry<'alojamiento'>;
+  idioma: Idioma;
+}
+const { entrada, anterior, siguiente, idioma } = Astro.props;
+const { data } = entrada;
+const t = usarT(idioma);
+
+/** Las mismas claves que usa `verificado` en el esquema del contenido. */
+type Marca = NonNullable<typeof data.verificado>[number];
+const verificado = new Set<Marca>(data.verificado ?? []);
+const datos: { clave: Marca; etiqueta: string; valor: string }[] = [
+  { clave: 'capacidad', etiqueta: t('ficha.capacidad'), valor: t('alojamiento.capacidad', { n: data.capacidadMaxima }) },
+  { clave: 'camas',     etiqueta: t('ficha.camas'),     valor: data.camas[idioma] },
+  { clave: 'vista',     etiqueta: t('ficha.vista'),     valor: data.vista[idioma] },
+  ...(data.metrosCuadrados
+    ? [{ clave: 'metros', etiqueta: t('ficha.metros'), valor: `${data.metrosCuadrados} m²` }]
+    : []),
+];
+---
+<div class="seccion ficha">
+  <div class="contenedor ficha__rejilla">
+    {/* NO se repiten aquí el nombre ni la categoría: los dos están ya en el
+        banner, a dos centímetros por encima. Cappa los duplica —`banner-header`
+        y luego `section-title`— y se ve raro: el ojo lee «SUITES / SUITE CIELO»
+        y vuelve a leer «Suites / Suite Cielo» sin haber avanzado nada. El
+        cuerpo entra directo por la descripción, que es lo que el huésped abrió
+        la página para leer. */}
+    <div class="ficha__cuerpo">
+      <p class="ficha__descripcion">{data.descripcion[idioma]}</p>
+
+      {data.diferenciador && (
+        <div class="distingue">
+          <p class="distingue__etiqueta">{t('ficha.diferencia')}</p>
+          <p class="distingue__texto">{data.diferenciador[idioma]}</p>
+        </div>
+      )}
+    </div>
+
+    <aside class="resumen" aria-labelledby="resumen-titulo">
+      <h2 id="resumen-titulo" class="resumen__titulo">{t('ficha.resumen')}</h2>
+      <dl class="resumen__lista">
+        {datos.map((d) => (
+          <div class="resumen__fila">
+            <dt>{d.etiqueta}</dt>
+            <dd>
+              {d.valor}
+              {!verificado.has(d.clave) && (
+                <span class="porconfirmar" title={t('ficha.porConfirmar')}>
+                  <span aria-hidden="true">*</span>
+                  <span class="sr-only">{t('ficha.porConfirmar')}</span>
+                </span>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      {data.amenidades.length > 0 && (
+        <>
+          <h2 class="resumen__titulo resumen__titulo--sep">{t('ficha.amenidades')}</h2>
+          <ul class="amenidades-lista" role="list">
+            {data.amenidades.map((a) => <li>{a[idioma]}</li>)}
+          </ul>
+        </>
+      )}
+
+      {/* El tipo va preseleccionado en la solicitud (criterio de H2.2). */}
+      <a class="boton boton--primario resumen__cta" href={`${ruta(idioma, 'reservar')}?tipo=${entrada.id}`}>
+        {t('reserva.cta')}
+      </a>
+      <p class="resumen__aviso">{t('reserva.aviso')}</p>
+    </aside>
+  </div>
+
+  {(anterior || siguiente) && (
+    <nav class="contenedor vecinas" aria-label={t('ficha.otras')}>
+      {anterior ? (
+        <a class="vecina vecina--anterior" href={ruta(idioma, `alojamiento/${anterior.id}`)}>
+          <span class="vecina__etiqueta">{t('ficha.anterior')}</span>
+          <span class="vecina__nombre">{anterior.data.nombre[idioma]}</span>
+        </a>
+      ) : <span></span>}
+      {siguiente && (
+        <a class="vecina vecina--siguiente" href={ruta(idioma, `alojamiento/${siguiente.id}`)}>
+          <span class="vecina__etiqueta">{t('ficha.siguiente')}</span>
+          <span class="vecina__nombre">{siguiente.data.nombre[idioma]}</span>
+        </a>
+      )}
+    </nav>
+  )}
+</div>
+
+<style>
+  /* --- Rejilla ------------------------------------------------------------
+     Móvil: una columna. Escritorio: contenido y resumen lado a lado, con el
+     resumen pegado arriba mientras se lee la descripción.
+     `minmax(0, …)` en las dos columnas: sin él, una palabra larga en la lista
+     de amenidades ensancharía la columna y sacaría la página del viewport. */
+  .ficha__rejilla {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .ficha__cuerpo, .resumen { min-width: 0; }
+
+  .ficha__descripcion {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--color-ink-muted);
+    max-width: 60ch;
+  }
+
+  .distingue {
+    margin-top: var(--space-6);
+    padding: var(--space-5);
+    background: var(--color-surface-warm);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+  }
+  .distingue__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-2);
+  }
+  .distingue__texto { line-height: var(--leading-snug); }
+
+  /* --- Resumen ------------------------------------------------------------ */
+  .resumen {
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+  .resumen__titulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-4);
+  }
+  .resumen__titulo--sep {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .resumen__lista { margin: 0; }
+  .resumen__fila {
+    display: grid;
+    /* Etiqueta estrecha y valor flexible: las filas quedan alineadas entre sí,
+       que es lo que permite compararlas de un vistazo, y no se apilan, porque
+       apilarlas duplicaría el alto del bloque.
+       El ancho de la etiqueta NO es fijo: con 8.5rem fijos, en una pantalla de
+       320 px el valor se quedaba con 90 px y «Vista frontal al mar y a la
+       alberca infinita» se partía en seis líneas. Medido, no supuesto. */
+    grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr);
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .resumen__fila:last-child { border-bottom: 0; }
+  .resumen__fila dt {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .resumen__fila dd {
+    margin: 0;
+    line-height: var(--leading-snug);
+    overflow-wrap: break-word;
+  }
+  .porconfirmar { color: var(--color-accent-text); font-weight: 500; }
+
+  .amenidades-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .amenidades-lista li {
+    position: relative;
+    padding-left: var(--space-5);
+    line-height: var(--leading-snug);
+  }
+  .amenidades-lista li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 6px; height: 6px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  .resumen__cta {
+    display: block;
+    width: 100%;
+    margin-top: var(--space-6);
+    text-align: center;
+  }
+  .resumen__aviso {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    text-align: center;
+  }
+
+  /* --- Anterior / siguiente ----------------------------------------------- */
+  .vecinas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .vecina {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    min-width: 0;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .vecina:hover { border-color: var(--color-accent); }
+  .vecina__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .vecina__nombre {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-ink);
+    overflow-wrap: break-word;
+  }
+  .vecina--siguiente { text-align: right; }
+
+  /* A partir de 26rem (416 px) ya sobra ancho para una etiqueta más holgada. */
+  @media (min-width: 26rem) {
+    .resumen__fila { grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr); }
+  }
+  @media (min-width: 62rem) {
+    .ficha__rejilla { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--space-8); }
+    .vecinas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

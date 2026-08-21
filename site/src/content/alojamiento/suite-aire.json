@@ -16,12 +16,12 @@
     "en": "Panoramic ocean and infinity pool view"
   },
   "descripcionCorta": {
-    "es": "Vista panorámica y jacuzzi en roof top.",
-    "en": "Panoramic view and roof top jacuzzi."
+    "es": "Vista panorámica desde un roof top propio.",
+    "en": "Panoramic view from a private roof top."
   },
   "descripcion": {
-    "es": "Vista panorámica al mar y a la alberca infinita, con jacuzzi privado en un impresionante y amplio roof top propio de la suite.",
-    "en": "Panoramic view of the ocean and the infinity pool, with a private jacuzzi on the suite's own spacious roof top."
+    "es": "Desde el roof top propio se abarca el mar y la alberca infinita de extremo a extremo. El jacuzzi privado está arriba.",
+    "en": "From its own roof top the sea and the infinity pool open up end to end. The private jacuzzi is up there too."
   },
   "amenidades": [
     {
@@ -46,14 +46,13 @@
     }
   ],
   "diferenciador": {
-    "es": "La vista es panorámica, no frontal.",
-    "en": "The view is panoramic rather than straight-on."
+    "es": "La vista es panorámica, no frontal: se ve de extremo a extremo.",
+    "en": "The view is panoramic, not head-on: it opens end to end."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-aire.webp",
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
+    "vista"
   ]
 }

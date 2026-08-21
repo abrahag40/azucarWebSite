@@ -41,7 +41,12 @@ const anio = new Date().getFullYear();
     max-width: 32ch; line-height: var(--leading-snug);
   }
   .pie__nav ul { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+  /* `inline-block` + padding vertical para llegar a 24 px de alto. Sin esto el
+     enlace medía 19 px y no alcanzaba el minimo de WCAG 2.2 AA 2.5.8 (Target
+     Size Minimum), que aplica al dedo tanto como al puntero impreciso. */
   .pie__nav a {
+    display: inline-block;
+    padding-block: var(--space-1);
     font-family: var(--font-ui); letter-spacing: 0.04em;
     color: var(--color-ink); text-decoration: none;
   }

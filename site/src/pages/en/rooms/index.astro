@@ -1,0 +1,22 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BannerPagina from '../../../components/BannerPagina.astro';
+import ListadoAlojamiento from '../../../components/ListadoAlojamiento.astro';
+import { usarT } from '../../../i18n/ui';
+import banner from '../../../assets/franja-habitacion.webp';
+const idioma = 'en' as const;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="alojamiento"
+  titulo={`${t('alojamiento.pagTitulo')} | Azúcar Hotel Tulum`}
+  descripcion={t('alojamiento.pagMeta')}
+>
+  <BannerPagina
+    imagen={banner}
+    antetitulo={t('alojamiento.pagAntetitulo')}
+    titulo={t('alojamiento.pagTitulo')}
+  />
+  <ListadoAlojamiento idioma={idioma} />
+</Base>

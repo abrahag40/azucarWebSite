@@ -34,11 +34,6 @@
     },
     {
       "sev": "alta",
-      "tema": "SEO",
-      "det": "1 <title> duplicado(s): \"Azucar Hotel Tulum\" ×2"
-    },
-    {
-      "sev": "alta",
       "tema": "i18n",
       "det": "4 página(s) sin hreflang pese a existir versión EN"
     },
@@ -96,6 +91,11 @@
       "sev": "media",
       "tema": "A11y",
       "det": "20 página(s) con salto en la jerarquía de encabezados (ej. h1 → h4 en `azucarhotel.com/amenidades-y-facilidades/index.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)"
+    },
+    {
+      "sev": "info",
+      "tema": "i18n",
+      "det": "1 <title> que coincide(n) entre la version ES y la EN: \"Azucar Hotel Tulum\" x2. No es duplicado real —hreflang los declara alternativos— pero conviene revisar si falta traducir"
     },
     {
       "sev": "info",

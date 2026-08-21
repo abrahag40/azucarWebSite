@@ -102,7 +102,7 @@ formulario de **Contact Form 7** que captura:
 | A-3 | **4 páginas sin `hreflang`** pese a existir versión EN | Google no relaciona las versiones ES y EN: se canibalizan entre sí en resultados |
 | A-4 | 4 páginas sin `meta viewport` | No responsivas. Más del 60 % del tráfico hotelero es móvil |
 | A-5 | 3 páginas sin atributo `lang` en `<html>` | Falla WCAG 3.1.1: el lector de pantalla no sabe en qué idioma leer |
-| A-6 | 1 página sin `<title>` y un `<title>` duplicado (`Azucar Hotel Tulum` ×2) | Página sin identidad en resultados de búsqueda |
+| A-6 | 1 página sin `<title>` | Página sin identidad en resultados de búsqueda |
 
 ### 🟡 Medios
 
@@ -116,6 +116,13 @@ formulario de **Contact Form 7** que captura:
 | M-6 | Desequilibrio ES/EN: 14 páginas ES vs 12 EN | Contenido sin traducir |
 
 ### ℹ️ Observaciones
+
+- **Corrección (2026-08-20).** Este documento contaba entre los hallazgos altos un
+  `<title>` duplicado, `Azucar Hotel Tulum` ×2. Al construir el catálogo del sitio nuevo se
+  revisó la regla: las dos páginas son `/feed/` y `/en/feed/`, es decir **la versión española
+  y la inglesa del mismo recurso**, y `hreflang` las declara alternativas. No es un duplicado
+  de SEO. El auditor las reporta ahora como observación de i18n y no como defecto alto. El
+  total de hallazgos se mantiene en 21.
 
 - La home en inglés vive en `/en/home/` en lugar de `/en/`. Es una URL peor: más larga,
   menos memorable y desalineada con la de español.

@@ -16,12 +16,12 @@
     "en": "Ocean view and hotel grounds view"
   },
   "descripcionCorta": {
-    "es": "Jacuzzi privado con vista al mar.",
-    "en": "Private jacuzzi with ocean view."
+    "es": "Jacuzzi privado y vista lateral al mar.",
+    "en": "Private jacuzzi and side view of the sea."
   },
   "descripcion": {
-    "es": "Suite con jacuzzi privado y vista al mar y a otras hermosas áreas del hotel.",
-    "en": "Suite with private jacuzzi, ocean view and views over other beautiful areas of the hotel."
+    "es": "El mar se ve de lado, y con él los jardines y la alberca del hotel. Conserva el jacuzzi privado de la categoría suite.",
+    "en": "The sea shows from the side, along with the hotel gardens and pool. It keeps the private jacuzzi of the suite category."
   },
   "amenidades": [
     {
@@ -45,7 +45,10 @@
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
-  ]
+    "vista"
+  ],
+  "diferenciador": {
+    "es": "Vista lateral al mar, con el jacuzzi privado de las suites.",
+    "en": "Side sea view, with the private jacuzzi of the suites."
+  }
 }

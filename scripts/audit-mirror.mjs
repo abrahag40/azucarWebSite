@@ -226,7 +226,21 @@ const indexables = pages.filter(p => !esError(p));
 
 const sinTitle = pages.filter(p => !p.title);
 const sinDesc = pages.filter(p => !p.description);
-const titleDup = dup(pages.map(p => p.title));
+// Los duplicados se buscan DENTRO de cada idioma, no entre idiomas.
+// `/alojamiento/suite-agua` y `/en/rooms/suite-agua` comparten titulo porque
+// "Suite Agua" es un nombre propio y no se traduce; no son duplicados, son
+// versiones declaradas como alternativas por hreflang, y Google las trata como
+// tales. Contarlas como duplicado marcaba como fallo el marcado correcto.
+const porIdioma = new Map();
+for (const p of pages) {
+  const k = /(^|\/)en\//.test(p.ruta) ? 'en' : 'es';
+  (porIdioma.get(k) ?? porIdioma.set(k, []).get(k)).push(p);
+}
+const titleDup = [...porIdioma.values()].flatMap(ps => dup(ps.map(p => p.title)));
+// Y aparte, los que coinciden ENTRE idiomas. No son un defecto de SEO —hreflang
+// ya los declara alternativos— pero si una señal util: o es un nombre propio que
+// no se traduce, o hay contenido sin localizar. Se reporta como informacion.
+const titleDupIdiomas = dup(pages.map(p => p.title)).filter(([t]) => !titleDup.some(([d]) => d === t));
 const h1Mal = pages.filter(p => p.nH1 !== 1);
 const sinCanon = indexables.filter(p => !p.canonical);
 const sinHreflang = indexables.filter(p => p.hreflang.length === 0);
@@ -238,6 +252,7 @@ const modernas = imgs.filter(i => /\.(webp|avif)$/i.test(i.f)).length;
 
 if (sinTitle.length) F('alta', 'SEO', `${sinTitle.length} página(s) sin <title>`);
 if (titleDup.length) F('alta', 'SEO', `${titleDup.length} <title> duplicado(s): ${titleDup.slice(0,3).map(([t,n])=>`"${t?.slice(0,45)}" ×${n}`).join(' · ')}`);
+if (titleDupIdiomas.length) F('info', 'i18n', `${titleDupIdiomas.length} <title> que coincide(n) entre la version ES y la EN: ${titleDupIdiomas.slice(0,3).map(([t,n])=>`"${t?.slice(0,40)}" x${n}`).join(' · ')}. No es duplicado real —hreflang los declara alternativos— pero conviene revisar si falta traducir`);
 if (sinDesc.length) F('media', 'SEO', `${sinDesc.length} de ${pages.length} páginas sin meta description`);
 if (h1Mal.length) F('media', 'SEO/A11y', `${h1Mal.length} página(s) sin exactamente un <h1>`);
 if (sinCanon.length) F('media', 'SEO', `${sinCanon.length} página(s) sin canonical`);

@@ -1,0 +1,105 @@
+---
+/**
+ * Listado completo del alojamiento (H2.1).
+ *
+ * Agrupa por categoría —suites primero, habitaciones después— porque la
+ * auditoría encontró que los cuatro tipos de habitación son dos pares casi
+ * idénticos: presentarlos mezclados con las suites obliga al huésped a
+ * distinguir ocho cosas a la vez. Agrupados, la decisión se parte en dos:
+ * primero qué categoría, después cuál dentro de ella.
+ *
+ * REJILLA. Mobile-first: una columna, y sólo se añaden columnas cuando hay
+ * ancho para que la tarjeta siga siendo legible. Los tramos usan
+ * `minmax(0, 1fr)` y no `1fr`: `1fr` equivale a `minmax(auto, 1fr)`, y ese
+ * `auto` impide que el tramo se encoja por debajo de su contenido — es lo que
+ * provoca el scroll horizontal en móvil cuando aparece una palabra larga.
+ */
+import { getCollection } from 'astro:content';
+import TarjetaAlojamiento from './TarjetaAlojamiento.astro';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+const todos = (await getCollection('alojamiento', ({ data }) => data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden);
+
+const grupos = [
+  { clave: 'suite' as const, titulo: t('alojamiento.suites') },
+  { clave: 'habitacion' as const, titulo: t('alojamiento.habitaciones') },
+].map((g) => ({ ...g, entradas: todos.filter((e) => e.data.categoria === g.clave) }))
+ .filter((g) => g.entradas.length > 0);
+---
+<div class="listado">
+  {grupos.map((g) => (
+    <section class="seccion grupo" aria-labelledby={`grupo-${g.clave}`}>
+      <div class="contenedor">
+        <header class="grupo__encabezado">
+          <h2 id={`grupo-${g.clave}`} class="grupo__titulo">{g.titulo}</h2>
+          <p class="grupo__cuenta">{t('alojamiento.tipos', { n: g.entradas.length })}</p>
+        </header>
+        <ul class="rejilla" role="list">
+          {g.entradas.map((entrada) => (
+            <li class="rejilla__celda">
+              <TarjetaAlojamiento entrada={entrada} idioma={idioma} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  /* El segundo grupo lleva fondo cálido para separar visualmente las dos
+     categorías sin necesidad de una línea divisoria. */
+  .grupo:nth-child(even) { background: var(--color-surface-warm); }
+
+  .grupo__encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .grupo__titulo {
+    font-size: var(--text-2xl);
+    /* Sin techo alto: en el listado el protagonista es la foto, no el rótulo. */
+    line-height: 1.15;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+  .grupo__cuenta {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .rejilla {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-5);
+    /* Móvil: una sola columna. */
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* `min-width: 0` en la celda por la misma razón que en el tramo: un elemento
+     de rejilla también arranca con `min-width: auto`. */
+  .rejilla__celda { min-width: 0; }
+
+  /* 34rem ≈ 544 px. Por debajo, dos columnas dejarían la foto demasiado pequeña
+     para juzgar una habitación, que es justo para lo que está la foto. */
+  @media (min-width: 34rem) {
+    .rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+  }
+  @media (min-width: 62rem) {
+    .rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  }
+</style>

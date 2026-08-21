@@ -39,6 +39,22 @@ export const ui = {
     'alojamiento.suites': 'Suites',
     'alojamiento.habitaciones': 'Habitaciones',
     'alojamiento.capacidad': 'Hasta {n} personas',
+    'alojamiento.tipos': '{n} tipos',
+    'alojamiento.pagTitulo': 'Alojamiento',
+    'alojamiento.pagAntetitulo': 'Suites y habitaciones',
+    'alojamiento.pagMeta': 'Ocho tipos de alojamiento frente al Caribe en Tulum: suites con jacuzzi privado y habitaciones con vista al mar o a la selva.',
+
+    'ficha.resumen': 'De un vistazo',
+    'ficha.capacidad': 'Capacidad',
+    'ficha.camas': 'Camas',
+    'ficha.vista': 'Vista',
+    'ficha.metros': 'Superficie',
+    'ficha.amenidades': 'Incluye',
+    'ficha.diferencia': 'Qué la distingue',
+    'ficha.anterior': 'Anterior',
+    'ficha.siguiente': 'Siguiente',
+    'ficha.otras': 'Otros tipos de alojamiento',
+    'ficha.porConfirmar': 'Dato por confirmar con el hotel',
 
     'footer.derechos': 'Todos los derechos reservados.',
     'footer.privacidad': 'Aviso de privacidad',
@@ -82,6 +98,22 @@ export const ui = {
     'alojamiento.suites': 'Suites',
     'alojamiento.habitaciones': 'Rooms',
     'alojamiento.capacidad': 'Up to {n} guests',
+    'alojamiento.tipos': '{n} types',
+    'alojamiento.pagTitulo': 'Rooms & Suites',
+    'alojamiento.pagAntetitulo': 'Suites and rooms',
+    'alojamiento.pagMeta': 'Eight types of accommodation facing the Caribbean in Tulum: suites with a private jacuzzi and rooms with sea or jungle views.',
+
+    'ficha.resumen': 'At a glance',
+    'ficha.capacidad': 'Capacity',
+    'ficha.camas': 'Beds',
+    'ficha.vista': 'View',
+    'ficha.metros': 'Floor area',
+    'ficha.amenidades': 'Includes',
+    'ficha.diferencia': 'What sets it apart',
+    'ficha.anterior': 'Previous',
+    'ficha.siguiente': 'Next',
+    'ficha.otras': 'Other room types',
+    'ficha.porConfirmar': 'Detail pending confirmation by the hotel',
 
     'footer.derechos': 'All rights reserved.',
     'footer.privacidad': 'Privacy notice',
@@ -108,9 +140,42 @@ export function usarT(idioma: Idioma) {
   };
 }
 
-/** Prefija una ruta con el idioma. El español no lleva prefijo. */
+/**
+ * Segmentos de URL traducidos.
+ *
+ * Las URLs en inglés no son las españolas con prefijo: son las que YA EXISTEN en
+ * producción y acumulan enlaces y posicionamiento desde 2008. `/en/rooms/` tiene
+ * 301 vigentes detrás —la captura HTTrack registró `?p=445 → /en/rooms/`— y
+ * publicar `/en/alojamiento` las tiraría a la basura.
+ *
+ * Es también criterio de aceptación de la historia H2.1.
+ */
+export const segmentos = {
+  alojamiento: { es: 'alojamiento', en: 'rooms' },
+  servicios:   { es: 'servicios',   en: 'services' },
+  restaurante: { es: 'restaurante', en: 'restaurant' },
+  galeria:     { es: 'galeria',     en: 'gallery' },
+  ubicacion:   { es: 'ubicacion',   en: 'location' },
+  contacto:    { es: 'contacto',    en: 'contact' },
+  reservar:    { es: 'reservar',    en: 'booking' },
+  politicas:   { es: 'politicas',   en: 'policies' },
+  terminos:    { es: 'terminos',    en: 'terms' },
+  'aviso-de-privacidad': { es: 'aviso-de-privacidad', en: 'privacy-policy' },
+} as const;
+
+export type ClaveRuta = keyof typeof segmentos;
+
+/**
+ * Prefija una ruta con el idioma y traduce sus segmentos. El español no lleva
+ * prefijo. Acepta rutas compuestas: `alojamiento/suite-mar` traduce el primer
+ * segmento y deja el identificador intacto, porque el identificador es la
+ * llave del dato y no cambia entre idiomas.
+ */
 export function ruta(idioma: Idioma, path = '') {
   const limpio = path.replace(/^\/+/, '');
   const base = idioma === IDIOMA_POR_DEFECTO ? '/' : `/${idioma}/`;
-  return limpio ? `${base}${limpio}` : base;
+  if (!limpio) return base;
+  const [primero, ...resto] = limpio.split('/');
+  const traducido = (segmentos as Record<string, Record<Idioma, string>>)[primero]?.[idioma] ?? primero;
+  return `${base}${[traducido, ...resto].join('/')}`;
 }

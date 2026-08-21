@@ -16,12 +16,12 @@
     "en": "Ocean front view and infinity pool view"
   },
   "descripcionCorta": {
-    "es": "Jacuzzi privado con vista frontal al Caribe.",
-    "en": "Private jacuzzi with Caribbean ocean front view."
+    "es": "Jacuzzi en la terraza, frente al mar.",
+    "en": "Terrace jacuzzi, facing the sea."
   },
   "descripcion": {
-    "es": "Suite con jacuzzi privado y vista frontal al mar y a la alberca infinita. Despiertas con el Caribe delante y el sonido del oleaje como única alarma.",
-    "en": "Suite with private jacuzzi and front view of the ocean and the infinity pool. You wake up facing the Caribbean, with the surf as your only alarm clock."
+    "es": "El mar queda enfrente, sin nada en medio. El jacuzzi privado está en la terraza de la suite, a unos pasos de la cama.",
+    "en": "The sea is straight ahead, with nothing in between. The private jacuzzi sits on the terrace, a few steps from the bed."
   },
   "amenidades": [
     {
@@ -42,14 +42,13 @@
     }
   ],
   "diferenciador": {
-    "es": "Vista frontal al mar y jacuzzi privado en la terraza.",
-    "en": "Ocean front view and private jacuzzi on the terrace."
+    "es": "El mar de frente y el jacuzzi en la propia terraza.",
+    "en": "Sea straight ahead, jacuzzi on the terrace itself."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-mar.webp",
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
+    "vista"
   ]
 }

@@ -16,12 +16,12 @@
     "en": "Ocean front view and infinity pool view"
   },
   "descripcionCorta": {
-    "es": "Jacuzzi privado en un amplio roof top.",
-    "en": "Private jacuzzi on a spacious roof top."
+    "es": "Roof top propio con jacuzzi privado.",
+    "en": "Private roof top with its own jacuzzi."
   },
   "descripcion": {
-    "es": "Vista frontal al mar y a la alberca infinita, con jacuzzi privado en un impresionante y amplio roof top propio de la suite.",
-    "en": "Front view of the ocean and the infinity pool, with a private jacuzzi on the suite's own spacious roof top."
+    "es": "El jacuzzi sube a un roof top propio de la suite, con la alberca infinita y el Caribe al frente. Arriba no hay nadie más.",
+    "en": "The jacuzzi moves up to the suite’s own roof top, with the infinity pool and the Caribbean ahead. Nobody else goes up there."
   },
   "amenidades": [
     {
@@ -46,14 +46,13 @@
     }
   ],
   "diferenciador": {
-    "es": "El jacuzzi está en un roof top privado, no en la terraza.",
-    "en": "The jacuzzi sits on a private roof top rather than the terrace."
+    "es": "El jacuzzi está en un roof top propio, no en la terraza.",
+    "en": "The jacuzzi is on a private roof top, not the terrace."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-cielo.webp",
   "publicado": true,
   "verificado": [
     "nombre",
-    "vista",
-    "descripcion"
+    "vista"
   ]
 }
