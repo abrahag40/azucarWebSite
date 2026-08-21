@@ -1,0 +1,47 @@
+# Redirecciones 301 del relanzamiento — historia H5.3
+#
+# Formato de Cloudflare Pages: <origen> <destino> <código>
+# Documentación y razonamiento: docs/05-despliegue/mapa-301.md
+# Verificación automatizada:    node scripts/verificar-301.mjs <dist|url>
+#
+# ── POR QUÉ ESTE ARCHIVO SE ESCRIBE HOY Y NO EN EL SPRINT 5 ──────────────────
+# El inventario de URLs del sitio vigente sólo existe mientras exista la captura
+# HTTrack. En cuanto el sitio viejo se apague, se pierde: no hay forma de
+# reconstruir qué URLs tenía ni qué redirecciones ya estaban activas. Construirlo
+# el día del lanzamiento significa improvisarlo, y romper una cadena de
+# redirecciones que acumula posicionamiento desde 2008 no se nota hasta semanas
+# después, cuando el tráfico ya cayó.
+#
+# ── LO QUE NO ESTÁ AQUÍ, Y ES DELIBERADO ────────────────────────────────────
+# /autorizacion-de-pago-con-tdc/ y /en/cc-payment-authorization/ NO se
+# redirigen. Son las páginas que capturan número de tarjeta y CVV. Redirigirlas
+# las mantendría vivas como URL; dejarlas caer en 404 le dice a Google que
+# desaparecieron. Es el único caso del proyecto en el que perder posicionamiento
+# es exactamente lo que queremos.
+
+# ── Español ─────────────────────────────────────────────────────────────────
+# El esquema de URLs se conservó a propósito (ADR-0004), así que la mayoría
+# redirigen a sí mismas y no hacen falta. Sólo se listan las que cambian.
+/habitaciones/               /alojamiento/          301
+/amenidades-y-facilidades/   /servicios/            301
+/nosotros/                   /                      301
+/reservaciones/              /reservar/             301
+/politica-de-privacidad/     /aviso-de-privacidad/  301
+
+# ── Inglés ──────────────────────────────────────────────────────────────────
+# /en/rooms/, /en/services/, /en/frequent-questions/, /en/policies/ y
+# /en/contact/ se conservan idénticas: no necesitan regla.
+/en/home/                    /en/                   301
+/en/amenities-facilities/    /en/services/          301
+/en/about-us/                /en/                   301
+/en/reservations/            /en/booking/           301
+# /en/privacy-policy/ conserva su URL: no necesita regla. La página está
+# pendiente (H4.8), igual que su equivalente en español.
+
+# ── Artefactos de WordPress ─────────────────────────────────────────────────
+# Los feeds RSS y la API REST no tienen equivalente en un sitio estático.
+# Se mandan a la portada en vez de dejarlos en 404 porque algún agregador
+# puede seguir apuntando a ellos.
+/feed/                       /                      301
+/en/feed/                    /en/                   301
+/wp-json/*                   /                      301
