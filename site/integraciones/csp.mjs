@@ -85,13 +85,26 @@ export default function csp() {
           `upgrade-insecure-requests`,
         ];
 
+        // Todas las cabeceras de seguridad van en UN SOLO bloque `/*`.
+        // Estaban repartidas en dos —unas en `public/_headers` y la CSP aquí— y
+        // Cloudflare aplicó unas y descartó `X-Frame-Options` sin avisar. Con dos
+        // bloques que empiezan igual no hay forma de saber cuál gana leyendo los
+        // archivos: una sola fuente lo vuelve verificable.
+        //
+        // `X-Frame-Options` NO vuelve: `frame-ancestors 'none'` hace lo mismo y
+        // es MÁS estricto que el `SAMEORIGIN` que había, y los navegadores
+        // modernos le dan prioridad. Mantener las dos habría dejado dos
+        // afirmaciones distintas sobre la misma política.
         const cabeceras = [
           '',
-          '# ── Política de seguridad de contenido ──────────────────────────────',
-          '# GENERADA EN CADA BUILD por integraciones/csp.mjs. No editar a mano:',
-          '# los hashes cambian con cada cambio del código en línea.',
+          '# ── Cabeceras de seguridad ──────────────────────────────────────────',
+          '# GENERADAS EN CADA BUILD por integraciones/csp.mjs. No editar a mano:',
+          '# los hashes de la CSP cambian con cada cambio del código en línea.',
           '/*',
           `  Content-Security-Policy: ${directivas.join('; ')}`,
+          '  X-Content-Type-Options: nosniff',
+          '  Referrer-Policy: strict-origin-when-cross-origin',
+          '  Cross-Origin-Opener-Policy: same-origin',
           '',
         ].join('\n');
 

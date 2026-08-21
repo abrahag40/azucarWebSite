@@ -17,10 +17,3 @@
 
 /fuentes/*
   Cache-Control: public, max-age=31536000, immutable
-
-# Cabeceras de seguridad básicas. No sustituyen a la revisión del sprint 5
-# (H5.5), pero no hay motivo para no tenerlas desde ya.
-/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  X-Frame-Options: SAMEORIGIN
