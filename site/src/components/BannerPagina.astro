@@ -18,10 +18,8 @@ interface Props {
   titulo: string;
   antetitulo?: string;
   imagen: ImageMetadata;
-  /** Encuadre vertical. Las fotos verticales suelen querer el tercio superior. */
-  encuadre?: string;
 }
-const { titulo, antetitulo, imagen, encuadre = 'center 45%' } = Astro.props;
+const { titulo, antetitulo, imagen } = Astro.props;
 ---
 <section class="banner">
   <Image
@@ -33,7 +31,6 @@ const { titulo, antetitulo, imagen, encuadre = 'center 45%' } = Astro.props;
     loading="eager"
     fetchpriority="high"
     quality={50}
-    style={`object-position: ${encuadre}`}
   />
   <div class="banner__velo" aria-hidden="true"></div>
   <div class="contenedor banner__contenido">
@@ -53,10 +50,17 @@ const { titulo, antetitulo, imagen, encuadre = 'center 45%' } = Astro.props;
     isolation: isolate;
     overflow: hidden;
   }
+  /* El encuadre vive AQUÍ y no en un atributo `style` del marcado. Había una
+     prop `encuadre` que nadie usaba —las siete páginas tomaban el valor por
+     defecto— y su único efecto era emitir el único `style=` del sitio, que
+     obliga a abrir la política de seguridad con `style-src-attr 'unsafe-inline'`.
+     No se conserva flexibilidad que nadie ejerce a cambio de debilitar la CSP.
+     Si algún día una foto necesita otro encuadre, se añade una clase modificadora. */
   .banner__fondo {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
+    object-position: center 45%;
     z-index: -2;
   }
   /* Velo plano y generoso: aquí la foto es fondo, no información. 0.60 deja el

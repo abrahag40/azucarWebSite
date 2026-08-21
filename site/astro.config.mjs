@@ -1,7 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import csp from './integraciones/csp.mjs';
 
 export default defineConfig({
+  // Genera la CSP con los hashes reales del build. Ver integraciones/csp.mjs.
+  integrations: [csp()],
   site: 'https://azucarhotel.com',
 
   // i18n nativo: el español no lleva prefijo (/), el inglés sí (/en/).
@@ -14,6 +17,15 @@ export default defineConfig({
   },
 
   build: {
+    /* Se mantiene 'auto' —CSS pequeño incrustado— y NO se pasa a 'never', pese a
+       que 'never' dejaría la CSP sin hashes de estilo y 539 bytes más corta.
+       Medido sobre la portada:
+         'auto'   39 871 B en 2 peticiones de CSS
+         'never'  40 060 B en 5 peticiones de CSS
+       Los bytes son los mismos; las peticiones no. Tres viajes de ida y vuelta
+       menos en el camino crítico pesan mucho más que media cabecera, que además
+       viaja comprimida por HPACK en HTTP/2 y es casi gratis tras la primera
+       respuesta. */
     inlineStylesheets: 'auto',
     // 'preserve' respeta la estructura de src/pages en la salida. Con el valor
     // por defecto ('directory'), `en/404.astro` se emite como `en/404/index.html`
