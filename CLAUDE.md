@@ -192,13 +192,22 @@ R-16— y análisis de Cappa: 19 archivos JS y 8.2 MB de tipografías que se des
 
 ### Sprint 1 — en curso
 
-Hecho: proyecto Astro con i18n (H1.1), design tokens con corrección de contraste (H1.3),
-componentes base accesibles (H1.4), esquema de alojamiento validado en compilación con los
-8 tipos reales (H1.5), home bilingüe con `schema.org/Hotel` (H1.6), componente de analítica
-integrado e inerte (H1.7) y CI con guardias de la DoD (H1.2, falta la cuenta).
+**🌐 Staging en vivo: https://azucar-hotel-tulum.pages.dev**
 
-**El sitio compila con 0 archivos JS y 21 KB por página**, y el mismo auditor que encontró 21 hallazgos
-en el sitio vigente encuentra **0** en el nuevo.
+Cloudflare Pages conectado al repositorio, rama de producción
+`claude/hotel-tulum-web-audit-0yly29`, raíz `site`, comando `npm run build`, salida `dist`.
+Node fijado en `site/.nvmrc`. Despliegue automático en cada push. Configuración y las
+tres correcciones que hicieron falta: `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
+
+Hecho: proyecto Astro con i18n (H1.1), CI y despliegue con guardias de la DoD (H1.2),
+design tokens con corrección de contraste (H1.3), componentes base accesibles (H1.4),
+esquema de alojamiento validado en compilación con los 8 tipos reales (H1.5), home bilingüe
+con `schema.org/Hotel` (H1.6), componente de analítica integrado e inerte (H1.7, falta el
+`G-…`), y páginas 404 reales en ES y EN con `noindex`.
+
+**Cada página pesa 21 KB y carga 0 archivos JavaScript.** El auditor encuentra 21 hallazgos
+en el sitio vigente y, en el nuevo, sólo los enlaces a las páginas que aún no existen —que
+es trabajo pendiente declarado, no un defecto.
 
 ### ⚠️ Datos sin verificar
 
@@ -209,9 +218,11 @@ cliente responda la pregunta **C1**.
 
 ### Bloqueantes para cerrar el sprint 1
 
-1. **Cuenta de Cloudflare Pages conectada** → sin URL de staging no hay demo (H1.2)
+1. ~~Cuenta de Cloudflare Pages~~ ✅ **resuelto el 2026-08-20**
 2. **ID de medición de GA4** (`G-…`) → activa H1.7
 3. **Respuesta a C1** → desbloquea `build:prod`
+4. **Core Web Vitals medidos** → el criterio de salida dice *medidos*; hay que pasar la URL
+   de staging por PageSpeed Insights y registrar las tres cifras
 
 ### Pendientes de Abraham, fuera del carril de software
 
