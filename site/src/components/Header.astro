@@ -61,9 +61,20 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
       </ul>
     </nav>
 
-    <!-- El <details> da un menú desplegable accesible sin una línea de JS:
-         el navegador gestiona el estado, el teclado y el anuncio del estado
-         expandido al lector de pantalla. Cappa usaba jQuery para esto. -->
+    {/* El <details> da un menú desplegable accesible sin una línea de JS: el
+        navegador gestiona el estado, el teclado y el anuncio del estado
+        expandido al lector de pantalla. Cappa usaba jQuery para esto.
+
+        Este comentario usa la sintaxis de llaves y NO la de HTML: Astro
+        descarta la primera al compilar y conserva la segunda. Éste era el único
+        comentario HTML del proyecto y viajaba en las 38 páginas — 8.5 KB de
+        notas internas enviadas a cada visitante. Nadie lo iba a ver salvo quien
+        mirase el código fuente, que es justo el motivo de que llevara tanto
+        tiempo ahí.
+
+        Y cuidado al reescribir esta nota: una secuencia de cierre de comentario
+        dentro del propio texto lo termina antes de tiempo y rompe el build.
+        Pasó exactamente al escribirla. */}
     <details class="menu">
       <summary class="menu__boton" aria-label={t('nav.menu')}>
         <span aria-hidden="true" class="menu__icono"></span>

@@ -30,7 +30,7 @@ export const ui = {
     // vista la versión inglesa se perdió sin que nada avisara. El texto va en el
     // diccionario, siempre: es la regla 6 de CLAUDE.md y esto fue el recordatorio.
     'home.titulo': 'Hotel Boutique Frente al Mar en Tulum | Azúcar Hotel Tulum',
-    'home.meta': 'Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Suites con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directamente con nosotros.',
+    'home.meta': 'Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Suites con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directa.',
     'reserva.cta': 'Solicitar reserva',
     // ── Página de solicitud (H3.1, H3.2) ────────────────────────────────────
     'reserva.pagMeta': 'Envía tu solicitud de reserva a Azúcar Hotel Tulum. El hotel confirma disponibilidad y te responde con el total, impuestos incluidos.',

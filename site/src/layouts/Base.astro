@@ -1,4 +1,7 @@
 ---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import heroPorDefecto from '../assets/hero-roof-top.webp';
 import '../styles/fuentes.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -22,8 +25,69 @@ interface Props {
    * a Google señales contradictorias.
    */
   indexable?: boolean;
+  /**
+   * Imagen para la previsualización al compartir el enlace. Por defecto, la
+   * fotografía del héroe.
+   *
+   * NO es un adorno: hasta ahora **ninguna** página declaraba `og:image`, así
+   * que cada vez que alguien pegaba un enlace del hotel en WhatsApp, iMessage o
+   * Facebook salía una tarjeta de texto sin foto. Para un hotel frente al mar,
+   * la fotografía ES el argumento; una tarjeta sin imagen ocupa la mitad de
+   * espacio en el chat y se ignora. Es de las pocas cosas de esta lista con
+   * efecto comercial medible.
+   */
+  imagenSocial?: ImageMetadata;
 }
-const { titulo, descripcion, idioma, rutaActual = '', indexable = true, sobreHero = false } = Astro.props;
+const { titulo, descripcion, idioma, rutaActual = '', indexable = true, sobreHero = false,
+        imagenSocial } = Astro.props;
+
+/**
+ * Derivada de 1200×630 para la tarjeta social.
+ *
+ * Ese tamaño no es capricho: es el que documentan Facebook y X para la tarjeta
+ * grande, y con otra proporción los servicios recortan por su cuenta y sin
+ * criterio. `fit: 'cover'` recorta de 4:3 a 1.91:1 desde el centro.
+ *
+ * La URL tiene que ser **absoluta**: los rastreadores de redes sociales no
+ * resuelven rutas relativas, y una `/imagen.webp` a secas se descarta en
+ * silencio — el fallo más habitual de este metadato, y no da ningún error.
+ *
+ * Formato JPEG y no WebP: WhatsApp y varios clientes de correo siguen sin
+ * previsualizar WebP en 2026. Aquí no se optimiza el peso, se optimiza que la
+ * imagen aparezca.
+ */
+/**
+ * 🔴 La imagen sólo se usa si el ORIGINAL tiene al menos 1200 px de ancho.
+ *
+ * Sharp no amplía por encima del original. Se probó pasar la foto de cada tipo
+ * de alojamiento —530 × 700 px— y el archivo salió de **529 × 630**, mientras el
+ * metadato seguía declarando `og:image:width = 1200`. Dos fallos de un tiro:
+ *   · El metadato mentía, y un rastreador que compara acaba descartando la imagen.
+ *   · Facebook no monta la tarjeta grande por debajo de 600 px de ancho: habría
+ *     salido la miniatura pequeña, justo lo que se quería evitar.
+ *
+ * Las fotos de habitación del hotel son todas verticales y pequeñas, así que
+ * ninguna sirve. Se usa el héroe —1600 × 1200— en todas las páginas: la misma
+ * imagen con títulos distintos es mucho mejor tarjeta que una imagen recortada
+ * a una franja o rechazada por pequeña.
+ *
+ * Si algún día llegan fotografías grandes y apaisadas, basta pasarlas por
+ * `imagenSocial` y este guardián las dejará pasar solo.
+ */
+const ANCHO_SOCIAL = 1200;
+const ALTO_SOCIAL = 630;
+const fuenteSocial =
+  imagenSocial && imagenSocial.width >= ANCHO_SOCIAL ? imagenSocial : heroPorDefecto;
+const social = await getImage({
+  src: fuenteSocial,
+  width: ANCHO_SOCIAL,
+  height: ALTO_SOCIAL,
+  fit: 'cover',
+  position: 'center',
+  format: 'jpeg',
+  quality: 72,
+});
+const urlSocial = new URL(social.src, Astro.site).href;
 const t = usarT(idioma);
 
 const canonical = new URL(ruta(idioma, rutaActual), Astro.site).toString();
@@ -84,6 +148,13 @@ const schema = {
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descripcion} />
     <meta property="og:locale" content={idioma === 'es' ? 'es_MX' : 'en_US'} />
+    <meta property="og:site_name" content="Azúcar Hotel Tulum" />
+    <meta property="og:image" content={urlSocial} />
+    <meta property="og:image:width" content={String(ANCHO_SOCIAL)} />
+    <meta property="og:image:height" content={String(ALTO_SOCIAL)} />
+    <meta property="og:image:alt" content={titulo} />
+    {/* Sin `twitter:card` la tarjeta sale pequeña y con la foto en miniatura. */}
+    <meta name="twitter:card" content="summary_large_image" />
 
     {/* ── Iconos ──────────────────────────────────────────────────────────
         Sin esto el navegador pide `/favicon.ico` por su cuenta, recibe un 404 y

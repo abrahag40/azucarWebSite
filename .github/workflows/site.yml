@@ -26,6 +26,9 @@ jobs:
         run: npm run check
       - name: Pruebas unitarias
         run: npm test
+      - name: Verificación completa
+        working-directory: .
+        run: bash scripts/verificar-todo.sh
       - name: Build
         run: npm run build
 

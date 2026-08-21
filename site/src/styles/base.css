@@ -150,3 +150,68 @@ a:hover { color: var(--color-accent-hover); }
    por los paréntesis, cosa que el guion duro no resolvería. Regla compartida y
    no copiada en cada componente (L-046). */
 .telefono { white-space: nowrap; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   IMPRESIÓN
+
+   Quién imprime un sitio de hotel: quien va a llegar en coche y quiere las
+   indicaciones en papel, y quien quiere las políticas de cancelación por
+   escrito antes de pagar. Son exactamente las dos páginas donde el huésped
+   necesita el dato **sin batería y sin señal**, que en la carretera de Boca
+   Paila no es una hipótesis.
+
+   Sin esta hoja, lo que sale de la impresora es un banner fotográfico a sangre
+   —tinta— , un menú de navegación que en papel no se puede pulsar, y enlaces
+   cuyo destino es invisible.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media print {
+  /* Tinta: fondo blanco y texto negro. `print-color-adjust: exact` NO se usa a
+     propósito — se quiere justo lo contrario. */
+  :root {
+    --color-ink: #000;
+    --color-ink-muted: #333;
+    --color-surface: #fff;
+    --color-surface-warm: #fff;
+    --color-surface-alt: #fff;
+    --color-border: #999;
+  }
+  body { background: #fff; color: #000; }
+
+  /* Lo que en papel no sirve para nada: no se puede pulsar. */
+  .cabecera, .menu, .nav, .saltar, .hero__acciones, .boton,
+  .pie__nav, .galeria__rejilla, .visor, .hero__indicador { display: none !important; }
+
+  /* El banner deja de ser una fotografía a sangre y pasa a ser un título. */
+  .banner, .hero {
+    min-height: 0 !important;
+    padding: 0 0 1rem !important;
+    background: none !important;
+  }
+  .banner__fondo, .banner__velo, .hero__fondo, .hero__velo { display: none !important; }
+  .banner__contenido, .hero__contenido { color: #000 !important; }
+  .banner__contenido::before, .hero__contenido::before { display: none !important; }
+  .banner__titulo, .hero__titulo { font-size: 20pt !important; }
+
+  .seccion { padding-block: 0.6rem !important; }
+
+  /* El destino de un enlace es invisible en papel: se imprime al lado.
+     Sólo los internos y los externos — no los `mailto:` ni los `tel:`, cuyo
+     texto YA es la dirección o el número, y repetirlo sería ruido. */
+  main a[href^="/"]::after,
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+    word-break: break-all;
+  }
+  main a[href^="/"]::after { content: " (azucarhotel.com" attr(href) ")"; }
+
+  /* Nada se parte por la mitad entre dos hojas. */
+  h1, h2, h3 { break-after: avoid-page; }
+  li, .tarjeta, .acordeon__item, .legal__titulo { break-inside: avoid-page; }
+  img { max-width: 100% !important; }
+
+  /* El pie conserva los datos de contacto: en papel es lo único que permite
+     llamar al hotel si las indicaciones no bastan. */
+  .pie { border-top: 1px solid #999; padding-top: 0.6rem; }
+}

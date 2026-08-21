@@ -21,16 +21,16 @@
   },
   "descripcionCorta": {
     "es": "Roof top propio con jacuzzi privado.",
-    "en": "Private roof top with its own jacuzzi."
+    "en": "Private rooftop with its own jacuzzi."
   },
   "descripcion": {
     "es": "El jacuzzi sube a un roof top propio de la suite, con la alberca infinita y el Caribe al frente. Arriba no hay nadie más.",
-    "en": "The jacuzzi moves up to the suite’s own roof top, with the infinity pool and the Caribbean ahead. Nobody else goes up there."
+    "en": "The jacuzzi moves up to the suite’s own rooftop, with the infinity pool and the Caribbean ahead. Nobody else goes up there."
   },
   "amenidades": [
     {
       "es": "Roof top privado",
-      "en": "Private roof top"
+      "en": "Private rooftop"
     },
     {
       "es": "Jacuzzi privado",
@@ -51,7 +51,7 @@
   ],
   "diferenciador": {
     "es": "El jacuzzi está en un roof top propio, no en la terraza.",
-    "en": "The jacuzzi is on a private roof top, not the terrace."
+    "en": "The jacuzzi is on a private rooftop, not the terrace."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-cielo.webp",
   "galeria": [

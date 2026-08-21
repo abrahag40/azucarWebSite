@@ -1154,6 +1154,75 @@ metido `min-height` a trece enlaces que ya median 57 px.
 
 ---
 
+## L-053 — Un filtro que sólo reconoce el éxito no distingue «no falló» de «no se ejecutó»
+
+**Lección.** Tercera vez en este proyecto, y la más tonta de las tres.
+
+Verifiqué tres builds seguidos con `npm run build 2>&1 | grep -E "page\(s\)"`. Las tres
+veces la salida fue **vacía**, y las tres veces la leí como que todo iba bien. El build
+estaba **roto**: un `CompilerError` en `Header.astro`. `dist/` se quedó del build anterior y
+seguí comprobando cosas sobre un directorio obsoleto durante tres comandos, sacando
+conclusiones sobre un HTML que ya no se generaba.
+
+La causa raíz del error, además, es de manual: escribí un comentario `{/* … */}` que
+**contenía la propia secuencia de cierre** dentro del texto —estaba explicando la diferencia
+entre las dos sintaxis de comentario— y eso lo terminó antes de tiempo.
+
+**El patrón, que ya tiene tres casos:**
+
+| Cuándo | Filtro | Qué escondió |
+|---|---|---|
+| L-040 | `npm run check \| tail -3` | La línea de errores quedaba fuera del recorte: CI en rojo trece commits |
+| L-041 | El informe listaba 6 destinos rotos de 18 | Un 404 real, detrás del ruido conocido |
+| L-053 | `npm run build \| grep "page(s)"` | Que el build **ni siquiera terminó** |
+
+Siempre lo mismo: **un filtro que sólo sabe reconocer la forma del éxito interpreta el
+silencio como éxito**. Y el silencio es justo lo que produce un fallo grave.
+
+**La corrección, y esta vez es estructural.** `scripts/verificar-todo.sh`: una sola orden que
+corre las diez comprobaciones y mira el **código de salida**, que no se puede confundir con
+nada. Imprime ✓ o ✗ por comprobación y las últimas doce líneas de la que falle.
+
+Y se **calibró rompiendo algo a propósito** —un comentario HTML metido en el pie— antes de
+darla por buena: un verificador que sólo se ha probado contra un estado sano no prueba nada
+(L-035). Cazó el fallo, dio código 1, y volvió a verde al restaurar.
+
+**Antipatrón evitado:** verificar con `grep` de lo que se espera ver. Si se filtra, hay que
+filtrar buscando el **fallo**, nunca el éxito — o mejor, no filtrar y mirar el código de
+salida.
+
+---
+
+## L-054 — Nadie había mirado cómo se ve el sitio cuando se comparte, ni cuando se imprime
+
+**Lección.** Después de dos sesiones de pulido, con Lighthouse en 99, accesibilidad 100 y
+cero violaciones de axe, quedaban dos huecos que **ninguna herramienta puntúa** porque no
+ocurren dentro del navegador:
+
+**1. Ninguna página declaraba `og:image`.** Cada vez que alguien pegaba un enlace del hotel
+en WhatsApp, iMessage o Facebook, salía una tarjeta de **texto sin fotografía**. Para un
+hotel frente al mar, la fotografía *es* el argumento; una tarjeta sin imagen ocupa la mitad
+de espacio en el chat y se pasa de largo. Es probablemente el hallazgo con más efecto
+comercial de todo el pulido, y ningún auditor lo puntúa.
+
+Al implementarlo apareció una trampa: se probó usar la foto de cada tipo de alojamiento y
+salió un archivo de **529 × 630** mientras el metadato declaraba 1200 × 630. Sharp no amplía
+por encima del original —las fotos de habitación son 530 × 700—, así que el metadato mentía
+**y** Facebook habría rechazado la tarjeta grande, que exige 600 px de ancho. Se añadió un
+guardián: si el original no llega a 1200 px, se usa el héroe.
+
+**2. No había hoja de impresión.** Quien imprime un sitio de hotel es quien va a llegar en
+coche con las indicaciones en papel, o quien quiere las políticas de cancelación por escrito
+antes de pagar. Justo las dos páginas donde el dato hace falta **sin batería y sin señal**,
+que en la carretera de Boca Paila no es una hipótesis. Lo que salía era un banner
+fotográfico a sangre, un menú que en papel no se puede pulsar, y enlaces sin destino visible.
+
+**La generalización:** las herramientas miden el sitio **dentro del navegador**. Compartir un
+enlace y imprimir una página ocurren **fuera**, y por eso ninguna puntuación los cubre. Al
+hacer la lista de qué falta, conviene preguntarse dónde acaba el sitio y empieza el mundo.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

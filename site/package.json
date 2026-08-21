@@ -13,7 +13,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "datos": "node scripts/check-datos.mjs",
-    "test": "node --test \"src/**/*.test.mjs\""
+    "test": "node --test \"src/**/*.test.mjs\"",
+    "verificar": "bash ../scripts/verificar-todo.sh"
   },
   "dependencies": {
     "astro": "^7.2.4"
