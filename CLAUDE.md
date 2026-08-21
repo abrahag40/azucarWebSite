@@ -308,7 +308,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **32 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **37 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 
@@ -327,6 +327,9 @@ npm run build:prod   # build de producción (FALLA si hay datos sin verificar)
 # Auditoría — misma vara para el sitio viejo y para el nuevo
 node scripts/audit-mirror.mjs investigacion/mirrors/azucarhotel
 node scripts/audit-mirror.mjs site/dist
+
+# Accesibilidad sobre el marcado — las 34 páginas
+node scripts/auditar-accesibilidad.mjs site/dist
 
 # Redirecciones del relanzamiento — contra el build o contra una URL real
 node scripts/verificar-301.mjs site/dist

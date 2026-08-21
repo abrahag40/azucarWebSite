@@ -622,6 +622,116 @@ es no cambiar la URL.**
 
 ---
 
+## L-033 — Un color de texto se valida contra el fondo más desfavorable, no contra blanco
+
+**Lección.** El token `--color-accent-text` se eligió midiendo su contraste **sobre blanco**:
+4.64:1, por encima del 4.5:1 que exige WCAG 1.4.3. Pero el sitio pinta ese color también
+sobre las superficies cálidas, que son más oscuras, y ahí caía a **4.26:1 y 4.01:1**. Estuvo
+incumpliendo desde el sprint 1, en todos los antetítulos de la portada y de `/servicios/`.
+
+**Por qué se cuela.** Al definir un sistema de color se piensa en pares —tinta sobre papel— y
+el papel por defecto es blanco. Las superficies alternas se añaden después, para dar ritmo, y
+nadie vuelve a comprobar los textos que van encima. El comentario del token incluso decía
+«4.64:1», lo que daba una falsa sensación de estar verificado.
+
+**Regla que queda.** Un token de TEXTO se valida contra **todos** los fondos en los que la
+hoja de estilos permita usarlo, y se documenta con el peor de ellos. El valor corregido
+conserva matiz (34°) y saturación (51%) —la marca no cambia— y cumple en las tres
+superficies: 5.23 · 4.81 · 4.53.
+
+**Antipatrón evitado:** *verificar el caso fácil*. Medir la combinación más favorable y
+apuntarla como prueba de conformidad.
+
+---
+
+## L-034 — El padding vertical no existe en un elemento en línea
+
+**Lección.** Un `<a>` con `padding: 8px` y 14 px de texto mide **23 px de alto**, no 39. En un
+elemento `inline` el padding vertical se pinta pero **no aumenta la caja**, así que no cuenta
+para el mínimo de 24 px de objetivo táctil de WCAG 2.2 AA 2.5.8. Se arregla con
+`inline-block`, `inline-flex` o `min-height`.
+
+**Lo importante no es el dato, es que apareció DOS VECES.** Primero en los enlaces del pie, se
+corrigió, y semanas después el mismo defecto estaba en el selector de idioma de la cabecera.
+Un defecto que reaparece en otro sitio significa que **la corrección fue local y la causa era
+sistémica**: no se buscó el resto de casos ni se añadió una comprobación que lo impidiera.
+
+**Corolario operativo.** Al corregir un defecto, la pregunta no es «¿está arreglado?» sino
+«¿dónde más vive esto, y qué impide que vuelva?». La segunda vez se añadió la comprobación de
+objetivos táctiles a la auditoría automatizada.
+
+**Antipatrón evitado:** *bug fixing* sin *root cause* — tapar la instancia y dejar la clase.
+
+---
+
+## L-035 — Una herramienta que no encuentra nada hay que probarla contra algo roto
+
+**Lección.** La auditoría de accesibilidad recién escrita devolvió **cero hallazgos** en las 34
+páginas. Ese resultado es indistinguible de que el script no funcione. Antes de creerlo se
+pasó por el sitio vigente, donde había violaciones conocidas: devolvió **680 fallos en 25
+tipos**, coherentes con lo que la auditoría del sprint 0 había encontrado por otra vía.
+
+**Por qué importa.** Un verde falso es peor que no medir: no sólo no detecta el problema, sino
+que **fabrica confianza**. Y cuanto más se automatiza, más caro sale — nadie vuelve a mirar a
+mano lo que «ya comprueba el script».
+
+**Regla que queda.** Todo comprobador nuevo se calibra contra una entrada que **debe** fallar,
+antes de usarse como evidencia. En este proyecto hay una a mano y gratis: la captura del sitio
+vigente, que está llena de defectos reales y documentados.
+
+**Nombre de la técnica:** *test the test* — en pruebas de mutación es el principio de que una
+suite que pasa con el código roto no prueba nada.
+
+---
+
+## L-036 — Una optimización a medias puede no optimizar nada
+
+**Lección.** Se autoalojaron las tipografías para sacar dos dominios de terceros del camino
+crítico del render: menos DNS, menos TLS, ninguna hoja externa que bloquee el pintado. Bien.
+Pero al verificar en producción, Cloudflare devolvía `max-age=0, must-revalidate` en esos
+archivos, porque aplica esa política a todo lo que sale de `public/` —nombres estables, no
+puede saber si cambiaron—. **Las cinco tipografías se revalidaban en cada navegación.**
+
+**Por qué.** Se habían cambiado dos handshakes de terceros por cinco viajes de ida y vuelta
+propios en cada página. En una conexión móvil eso es latencia sobre el mismo camino crítico
+que se venía a liberar.
+
+**Regla que queda.** Una optimización no está hecha cuando el código está escrito, sino cuando
+se ha medido **el resultado en el entorno real**. Aquí bastó un `curl -I` a un archivo de
+fuente. El propio `_headers` documenta la disciplina que hace válida la caché inmutable: si
+alguna vez hay que sustituir una tipografía, se cambia el nombre del archivo.
+
+**Antipatrón evitado:** *declarar victoria en el commit* — dar por buena una mejora de
+rendimiento porque el cambio parece correcto, sin comprobar qué hace el servidor con él.
+
+---
+
+## L-037 — Conocer los límites del instrumento antes de reportar la medida
+
+**Lección.** El navegador de esta sesión no puede medir Core Web Vitals. La primera vez se
+intentó con la API de PageSpeed y devolvió *quota exceeded*, lo que parecía un problema
+pasajero. La segunda se midió en el propio navegador y dio **LCP de 5 796 ms con la página
+cargada en 632 ms** — una cifra imposible. Al instrumentar apareció la causa:
+`visibilityState: "hidden"`. La pestaña nunca es visible para el motor, así que **las métricas
+de pintado no disparan**, y ese 5 796 era ruido de una pestaña estrangulada.
+
+**Por qué importa.** Una cifra absurda es fácil de descartar. El peligro son las plausibles:
+si el LCP hubiera salido 2 100 ms se habría reportado como bueno y se habría cerrado el
+criterio de salida del sprint con un dato inventado por el instrumento.
+
+**Regla que queda.** Antes de reportar una medición, comprobar que **el instrumento podía
+medirla**. La señal barata aquí era `visibilityState`, y una comprobación de coherencia
+—LCP mayor que el tiempo de carga completa es imposible— habría bastado.
+
+**Consecuencia práctica y honesta:** LCP, INP y CLS los tiene que medir Abraham desde su
+navegador. Lo que sí se pudo afirmar con base —TTFB, peso, número de peticiones, orígenes de
+terceros, contraste, tamaño de los objetivos táctiles— se midió y se reportó por separado.
+
+**Antipatrón evitado:** *instrumento silencioso* — confiar en una herramienta que devuelve un
+número aunque no esté en condiciones de producirlo.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

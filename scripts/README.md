@@ -13,6 +13,44 @@ Se ejecuta en la máquina local porque el entorno remoto de Claude no tiene acce
 sistema de archivos del equipo. No es una limitación del método: el mirror versionado es
 el artefacto correcto de todos modos (ADR-0001).
 
+## `auditar-accesibilidad.mjs` — WCAG sobre el marcado
+
+```bash
+node scripts/auditar-accesibilidad.mjs site/dist
+```
+
+Recorre todas las páginas del build y comprueba lo que se puede afirmar **leyendo el
+HTML**: jerarquía de encabezados (1.3.1), landmarks y salto al contenido (2.4.1), nombres
+accesibles de los enlaces (2.4.4), idioma del documento (3.1.1) y de los fragmentos que
+cambian de idioma (3.1.2), identificadores duplicados (4.1.1), etiquetas de formulario
+(4.1.2), `tabindex` positivos (2.4.3) y `alt` (1.1.1). Sale con código 1 si hay fallos.
+
+**Qué NO comprueba, y por qué está escrito en el propio script:** contraste real, tamaño de
+los objetivos táctiles y visibilidad del foco necesitan estilos calculados, así que se miden
+en el navegador sobre una página representativa de cada tipo de componente. Dar un informe
+en verde sobre algo que no se ha mirado sería peor que no comprobarlo.
+
+> **Calíbralo antes de creerle.** Si devuelve cero hallazgos, pásalo por la captura del
+> sitio vigente —`investigacion/mirrors/azucarhotel/archivos`—, que tiene violaciones
+> reales y documentadas: debe encontrar unas 680 en 25 tipos. Un comprobador que pasa sin
+> haber demostrado que sabe fallar no es evidencia de nada (L-035).
+
+## `verificar-301.mjs` — redirecciones del relanzamiento
+
+```bash
+node scripts/verificar-301.mjs site/dist
+node scripts/verificar-301.mjs https://azucar-hotel-tulum.pages.dev
+```
+
+Comprueba que **toda URL que existía en el sitio vigente** —lista tomada de la captura, que
+es la única fuente de verdad mientras el sitio viejo siga en pie— tiene destino y que ese
+destino responde. Detecta cadenas y bucles, distingue «pendiente de construir» de «roto», y
+**falla si alguna de las dos páginas de datos de tarjeta llega a resolver**: ésas deben caer
+en 404 a propósito.
+
+Contra una URL real comprueba además que el código sea 301 y no 302. El mapa y su
+razonamiento están en `docs/05-despliegue/mapa-301.md`.
+
 ## `audit-mirror.mjs` — auditoría automatizada sobre una captura
 
 ```bash
