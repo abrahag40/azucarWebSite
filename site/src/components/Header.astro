@@ -248,7 +248,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   .cabecera__fila {
     display: flex; align-items: center; justify-content: space-between;
     gap: var(--space-5);
-    min-height: 88px;
+    min-height: var(--alto-cabecera);
   }
   .marca {
     display: flex; flex-direction: column; line-height: 1;

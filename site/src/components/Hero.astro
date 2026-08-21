@@ -98,7 +98,15 @@ const t = usarT(idioma);
     <p class="hero__aviso">{t('reserva.aviso')}</p>
   </div>
 
-  <a class="hero__bajar" href="#alojamiento-titulo" aria-label={t('hero.bajar')}>
+  {/* Apunta a la sección INMEDIATAMENTE siguiente, no a la tercera.
+       Antes iba a `#alojamiento-titulo`, que hoy es la tercera sección: la
+       flecha se saltaba la presentación entera. Y al apuntar a un TÍTULO en vez
+       de a la sección, el salto se comía los 96 px de aire superior y dejaba el
+       encabezado pegado al borde de la ventana.
+
+       Una flecha «hacia abajo» promete enseñar lo que viene justo debajo. Si
+       salta dos secciones, el gesto y el resultado no coinciden. */}
+    <a class="hero__bajar" href="#presentacion" aria-label={t('hero.bajar')}>
     <span aria-hidden="true"></span>
   </a>
 </section>

@@ -1421,6 +1421,55 @@ primaria no es el número de fila.
 
 ---
 
+## L-062 — Una queja pequeña destapó un fallo grave en otra página
+
+**Lección.** Abraham dijo que la flecha del héroe «no es muy precisa». Tres cosas, y la
+tercera no estaba en el héroe:
+
+**1. Apuntaba a la tercera sección.** El `href` era `#alojamiento-titulo`, escrito cuando el
+alojamiento iba justo después del héroe. Al añadir la presentación en medio, la flecha empezó
+a saltársela entera. Una flecha «hacia abajo» promete enseñar lo que viene **justo** debajo;
+si salta dos secciones, el gesto y el resultado no coinciden.
+
+**2. Apuntaba a un TÍTULO, no a la sección.** El salto se comía los 96 px de aire superior y
+dejaba el encabezado pegado al borde de la ventana.
+
+**3. Y lo que importaba de verdad: no existía `scroll-padding-top` en todo el sitio.** La
+cabecera es `sticky` en 37 de las 38 páginas, así que **cualquier** salto a un ancla dejaba el
+destino debajo de ella. Medido en `/reservar/`: al enviar el formulario con un error, el
+enlace del resumen —«Indica la fecha de llegada»— llevaba a un campo de 56 px que la cabecera
+tapaba **por completo** (89 px). Quien lo pulsaba saltaba a un campo que no podía ver, en el
+formulario más importante del sitio.
+
+Ese fallo llevaba ahí desde que se construyó el formulario. No lo vio `axe`, ni el auditor de
+marcado, ni html-validate, ni Lighthouse: todos comprueban el documento, y esto sólo existe
+**en movimiento**, después de un salto.
+
+**La regla:** una queja sobre un detalle visible merece revisar la *clase* de problema, no
+sólo el caso. «La flecha aterriza mal» y «los enlaces de error aterrizan mal» son el mismo
+defecto; sólo uno de los dos se notaba a simple vista.
+
+---
+
+## L-063 — `scroll-margin` y `scroll-padding` se suman; no se cancelan
+
+**Lección.** Con el `scroll-padding-top` global puesto, la portada quedó mal: la cabecera ahí
+es `absolute` —se va con el héroe— así que no tapa nada, y el desplazamiento dejaba la flecha
+**104 px corta**, con una franja de héroe arriba que se lee como un salto a medias.
+
+El primer intento fue `scroll-margin-top: 0` en el destino. **No funciona.** La posición final
+es `destino − scroll-padding − scroll-margin`: con margen 0 el desplazamiento del contenedor
+sigue entero. Para neutralizarlo hace falta un margen **negativo del mismo valor**.
+
+Y ahí está el detalle que evita el próximo error: si el desplazamiento y su anulación son dos
+números sueltos, el día que uno cambie el otro deja de cuadrar y el salto se queda corto **sin
+que nada lo señale**. Por eso hay un token, `--desplazamiento-ancla`, y la anulación es
+`calc(-1 * var(--desplazamiento-ancla))`. Un solo número, dos usos, imposible que diverjan.
+
+**Antipatrón evitado:** compensar una constante con otra constante escrita a mano.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

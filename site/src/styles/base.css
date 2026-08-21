@@ -4,7 +4,23 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; 
+  /* ── Saltos a anclas: no aterrizar debajo de la cabecera ──────────────────
+     La cabecera es `sticky` en 37 de las 38 páginas, así que CUALQUIER salto a
+     un ancla dejaba el destino tapado. No era teórico:
+
+       · El enlace «saltar al contenido» llevaba el foco bajo la cabecera.
+       · Y lo grave: en `/reservar/`, al enviar el formulario con un error, el
+         enlace del resumen —«Indica la fecha de llegada»— llevaba a un campo de
+         56 px que la cabecera tapaba **por completo** (89 px). Quien lo pulsaba
+         saltaba a un campo que no podía ver, en el formulario más importante
+         del sitio.
+
+     `scroll-padding-top` en el contenedor de scroll lo resuelve para todos los
+     casos de una vez: anclas, `scrollIntoView` y `:target`. Un `scroll-margin`
+     por destino habría que recordarlo en cada uno. */
+  scroll-padding-top: var(--desplazamiento-ancla);
+}
 
 body {
   font-family: var(--font-body);

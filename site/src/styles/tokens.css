@@ -91,6 +91,20 @@
 
   /* --- Disposición ------------------------------------------------------- */
   --container:      75rem;   /* 1200px */
+  /* Alto de la cabecera: `min-height` de su fila en `Header.astro` y base del
+     desplazamiento de los saltos a anclas, que antes lo adivinaba.
+     Es la altura del CONTENIDO; la cabecera mide un píxel más por su borde
+     inferior. No se compensa aquí porque el `--space-4` del desplazamiento ya
+     deja 15 px de aire, medidos, y añadir un `+1px` haría el token más difícil
+     de leer que exacto. */
+  --alto-cabecera: 88px;
+  /* Cuánto se adelanta un salto a un ancla para que la cabecera pegajosa no
+     tape el destino. Es un token y no un número suelto porque hay que poder
+     ANULARLO con exactitud: `scroll-margin` y `scroll-padding` se suman, no se
+     cancelan, así que la única forma de neutralizarlo es un margen negativo del
+     mismo valor. Con dos números sueltos, el día que uno cambie el otro deja de
+     cuadrar y el salto se queda corto sin que nada lo señale. */
+  --desplazamiento-ancla: calc(var(--alto-cabecera) + var(--space-4));
   --container-text: 42rem;   /* medida de lectura: 60-75 caracteres */
   --gutter: clamp(1rem, 4vw, 3rem);
 

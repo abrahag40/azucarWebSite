@@ -22,7 +22,7 @@ interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 ---
-<section class="seccion presentacion" aria-labelledby="presentacion-titulo">
+<section id="presentacion" class="seccion presentacion" aria-labelledby="presentacion-titulo">
   <div class="contenedor presentacion__rejilla">
     <div class="presentacion__texto">
       <p class="antetitulo">{presentacion.antetitulo[idioma]}</p>
@@ -47,6 +47,14 @@ const t = usarT(idioma);
 </section>
 
 <style>
+  /* Destino de la flecha del héroe. `scroll-margin-top: 0` ANULA el
+     `scroll-padding-top` global: ese desplazamiento existe para que la cabecera
+     pegajosa no tape el destino, y en la portada la cabecera es `absolute` —se
+     va con el héroe— así que aquí no tapa nada. Sin esto la flecha se quedaría
+     104 px corta y dejaría una franja del héroe arriba, que se lee como un
+     salto a medias. */
+  .presentacion { scroll-margin-top: calc(-1 * var(--desplazamiento-ancla)); }
+
   .presentacion__rejilla {
     display: grid;
     gap: var(--space-8);
