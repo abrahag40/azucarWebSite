@@ -104,6 +104,30 @@ la misma habitación. ¿Lo revisamos después del lanzamiento?
 > El **contenido es la ruta crítica** de todo proyecto web de hotel, no el código. Este
 > bloque se entrega junto con una carpeta de Drive para subir archivos.
 
+**C0. 🔴 ¿Hay restaurante, bar y spa? (URGENTE — su propio sitio se contradice.)**
+> Al construir el catálogo se encontró que el contenido publicado hoy en
+> `azucarhotel.com` se contradice a sí mismo:
+>
+> | Página | Qué dice |
+> |---|---|
+> | `/servicios/` | Lista «Restaurante.» y «Spa.» |
+> | `/amenidades-y-facilidades/` | «Restaurante y Bar "Blanc" nuestro icónico Roof Top frente al mar» y «Spa» |
+> | `/preguntas-frecuentes/` | **«¿Tienen restaurante o bar? Por ahora no tenemos servicio de restaurante o bar»** |
+>
+> Además, `/restaurante/` y `/spa/` **no existen como páginas** pese a figurar en el menú, y
+> el roof top aparece con dos nombres distintos: «Blanc» en amenidades y **«Selvamar»** en el
+> FAQ.
+>
+> **Qué se hizo mientras tanto.** Se han retirado del sitio nuevo las dos amenidades y se ha
+> eliminado `Restaurant` de los datos estructurados de `schema.org`, que se estaban emitiendo
+> a Google en 20 páginas. Anunciar un restaurante que quizá no existe es la promesa
+> incumplida que este proyecto viene a corregir, y la regla 7 es explícita: dato sin
+> confirmar, dato que no se publica.
+>
+> **Qué hace falta:** ¿hay hoy restaurante, bar y spa, sí o no? Si los hay, ¿con qué nombre y
+> horario? Si no, hay que corregir `/servicios/` y `/amenidades/` **del sitio vigente**, que
+> llevan la afirmación publicada ahora mismo.
+
 **C1. Inventario de alojamiento (tabla a llenar).** Para cada tipo:
 nombre oficial · nº de unidades · capacidad máx · configuración de camas · m² ·
 vista · amenidades diferenciadoras · qué lo distingue del inmediato inferior.

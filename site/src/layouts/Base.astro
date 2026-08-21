@@ -52,8 +52,11 @@ const schema = {
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Beachfront', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Outdoor pool', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Restaurant', value: true },
+    // NO se declara `Restaurant`. Estaba declarado y se retira: el FAQ del propio
+    // hotel dice que no hay servicio de restaurante ni bar. Era una afirmación
+    // falsa emitida a Google en 20 páginas.
     { '@type': 'LocationFeatureSpecification', name: 'Free Wi-Fi', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Free parking', value: true },
   ],
   // No se declara priceRange ni AggregateRating: no tenemos el dato confirmado
   // y schema.org inventado es peor que schema.org ausente.

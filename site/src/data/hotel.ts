@@ -80,20 +80,34 @@ export const amenidades: { icono: string; titulo: Texto; texto: Texto }[] = [
       en: 'Extra-large heated jacuzzi on the shared rooftop, with panoramic views of the ocean and the jungle.',
     },
   },
+  // ⚠️ AQUÍ IBAN «Restaurante y Bar Blanc» y «Spa», y se retiran.
+  //
+  // El contenido del propio cliente se contradice. `/servicios/` y
+  // `/amenidades-y-facilidades/` los anuncian; `/preguntas-frecuentes/` dice
+  // literalmente: «¿Tienen restaurante o bar? Por ahora no tenemos servicio de
+  // restaurante o bar». Ni `/restaurante/` ni `/spa/` existen como página, pese
+  // a estar en el menú del sitio vigente.
+  //
+  // Publicar un restaurante que quizá no exista es exactamente la promesa
+  // incumplida que este proyecto viene a corregir. Regla 7: dato sin confirmar,
+  // dato que no se publica. Vuelven en cuanto el cliente responda la pregunta
+  // C-REST del banco de preguntas.
+  //
+  // En su lugar van dos que el FAQ del hotel confirma sin ambigüedad.
   {
-    icono: 'restaurante',
-    titulo: { es: 'Restaurante y Bar Blanc', en: 'Restaurant & Bar Blanc' },
+    icono: 'wifi',
+    titulo: { es: 'Wi-Fi y estacionamiento', en: 'Wi-Fi and parking' },
     texto: {
-      es: 'Nuestro icónico roof top frente al mar, con mirador.',
-      en: 'Our iconic oceanfront rooftop, with a viewing platform.',
+      es: 'Los dos gratuitos para huéspedes. El estacionamiento, sujeto a disponibilidad.',
+      en: 'Both free for guests. Parking is subject to availability.',
     },
   },
   {
-    icono: 'spa',
-    titulo: { es: 'Spa', en: 'Spa' },
+    icono: 'cafe',
+    titulo: { es: 'Cortesía de la mañana', en: 'Morning courtesy' },
     texto: {
-      es: 'Spa y hermosos jardines para alargar el descanso.',
-      en: 'Spa and beautiful gardens to make the rest last longer.',
+      es: 'Fruta, café y pan cada mañana en el área de snack, entre las habitaciones.',
+      en: 'Fruit, coffee and bread every morning in the snack area, between the rooms.',
     },
   },
   {
