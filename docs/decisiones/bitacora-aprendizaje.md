@@ -764,6 +764,38 @@ es peor que el roto.
 
 ---
 
+## L-039 — Ensayar una reversión enseña lo que el manual no dice
+
+**Lección.** El plan de reversión estaba escrito, razonado y con los tiempos de cada capa. Al
+ensayarlo de verdad —desplegando una rotura deliberada a staging y revirtiendo desde el
+panel— aparecieron dos cosas que no estaban en el plan y que sólo se aprenden haciéndolo.
+
+**Primera, y es la que puede costar el lanzamiento.** Cloudflare avisa en el propio diálogo de
+confirmación: *«With automatic deployments enabled, your next commit will update your
+Production environment»*. **La reversión es temporal.** El siguiente push a la rama de
+producción la deshace y vuelve a publicar el código roto. Un plan que terminara en «revertir
+desde el panel» habría dejado el sitio roto otra vez al primer push, probablemente sin que
+nadie relacionara ambas cosas. El paso que faltaba —arreglar el código o deshacer el commit
+culpable *antes* de que nadie más empuje— ahora es el punto 5 del procedimiento.
+
+**Segunda: Cloudflare marcó el despliegue roto con un ✓ verde.** Y tenía razón: el build pasó
+sin errores. El sitio estaba roto igualmente. **Un build en verde no es un sitio sano**, y por
+eso el criterio de reversión se comprueba contra la URL servida y no contra el resultado del
+build.
+
+**Lo que sí confirmó el ensayo.** La reversión tardó **6 segundos** desde el clic hasta que el
+sitio volvió a estar sano, y el verificador pasó de 5 fallos con código de salida 1 a 36
+comprobaciones en verde con código 0. La capa 1 hace lo que el plan decía.
+
+**Regla que queda.** Un procedimiento de emergencia que no se ha ejecutado nunca no es un
+procedimiento: es una hipótesis. Y el momento de descubrir sus huecos no es durante la
+emergencia. Ensayarlo costó veinte minutos.
+
+**Nombre de la técnica:** *game day* — ejecutar el fallo a propósito, en un entorno
+controlado, para validar la respuesta antes de necesitarla.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

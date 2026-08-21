@@ -1,6 +1,6 @@
 # Plan de reversión del lanzamiento — historia H5.6
 
-> **Fecha:** 2026-08-21 · **Estado:** escrito y parcialmente ensayado
+> **Fecha:** 2026-08-21 · **Estado:** escrito y **ENSAYADO** — capa 1 verificada de extremo a extremo
 > **Verificación:** `node scripts/verificar-despliegue.mjs <url>`
 > **Mapa de URLs:** [`mapa-301.md`](mapa-301.md)
 
@@ -97,9 +97,12 @@ los despliegues.
 2. Localizar el último despliegue con la verificación en verde
 3. **⋯ → Rollback to this deployment**
 4. `node scripts/verificar-despliegue.mjs https://azucarhotel.com`
+5. 🔴 **Arreglar el código o deshacer el commit culpable en git, AHORA.** La reversión es
+   temporal: el siguiente push a la rama de producción la deshace y vuelve a publicar lo roto.
+   Si el arreglo va a tardar, desactivar antes los despliegues automáticos en *Settings*.
 
 Cubre la inmensa mayoría de los casos: un build malo, un enlace roto, una regresión. **No
-requiere tocar DNS.**
+requiere tocar DNS**, y en el ensayo tardó **6 segundos**.
 
 ### Capa 2 — Devolver el DNS al sitio viejo · 5 minutos con TTL 300
 
@@ -129,16 +132,43 @@ debería hacer falta nunca: la fase 1 ya se verificó por separado.
 |---|---|
 | El verificador detecta un despliegue sano | ✅ 36 comprobaciones en verde sobre staging |
 | El verificador detecta un despliegue enfermo | ✅ **calibrado contra el sitio vigente: 19 fallos**, incluidas las dos páginas de tarjeta |
-| Volver a un despliegue anterior (capa 1) | ⬜ Requiere el panel de Cloudflare. **Ensayar en staging antes del lanzamiento** |
+| **Volver a un despliegue anterior (capa 1)** | ✅ **ENSAYADO EL 2026-08-21 · reversión efectiva en ~6 s** |
 | Cambio de registro DNS (capa 2) | ⬜ No se puede ensayar sin el dominio conectado |
+
+### El ensayo de la capa 1, paso a paso y con lo que enseñó
+
+Se desplegó a staging una rotura deliberada —`indexable={false}` en la portada, que emite
+`noindex` y suprime canonical, hreflang y `schema.org`—, que es el accidente realista de
+dejarse puesta una bandera de pruebas.
+
+| | |
+|---|---|
+| El verificador la cazó | **5 fallos**, código de salida 1, incluido `🚨 Portada con noindex` |
+| Reversión desde el panel | Deployments → `⋯` → **Rollback to this deployment** |
+| Tiempo hasta que el sitio volvió a estar sano | **~6 segundos** |
+| Verificación posterior | 36 comprobaciones en verde, código de salida 0 |
+
+**Lo que sólo se aprende haciéndolo, y va a lo alto de la lista:**
+
+> 🔴 **Cloudflare avisa: «With automatic deployments enabled, your next commit will update
+> your Production environment».** La reversión de la capa 1 **es temporal**. El siguiente
+> push a la rama de producción la deshace y vuelve a publicar el código roto.
+>
+> Por eso, después de revertir, **el paso siguiente no es celebrar: es arreglar el código o
+> deshacer el commit culpable en git**, antes de que nadie más empuje. Y si el arreglo va a
+> tardar, hay que **desactivar los despliegues automáticos** en Settings mientras tanto.
+>
+> Un plan que se detuviera en «revertir desde el panel» habría dejado el sitio roto otra vez
+> al primer push, y probablemente sin que nadie relacionara ambas cosas.
+
+**Y un detalle que conviene tener presente:** Cloudflare marcó el despliegue roto con ✓ verde.
+El build pasó; el sitio estaba roto. **Un build en verde no es un sitio sano**, y es
+exactamente por eso que el criterio de reversión se comprueba contra la URL servida y no
+contra el resultado del build.
 
 > **Sobre la calibración.** Un verificador que sólo se ha probado contra un sitio sano no
 > prueba nada: no se sabe si sabe fallar. Pasarlo por el sitio vigente costó un minuto y
 > confirmó que detecta lo que debe (L-035).
-
-**El ensayo pendiente de la capa 1 es el importante**, y es barato: hacer un despliegue
-deliberadamente roto en staging, comprobar que el verificador lo caza, revertir desde el panel
-y comprobar que vuelve a verde. Media hora, y convierte el plan en algo probado.
 
 ---
 
