@@ -35,6 +35,29 @@ en verde sobre algo que no se ha mirado sería peor que no comprobarlo.
 > reales y documentadas: debe encontrar unas 680 en 25 tipos. Un comprobador que pasa sin
 > haber demostrado que sabe fallar no es evidencia de nada (L-035).
 
+## `verificar-despliegue.mjs` — ¿está sano este despliegue?
+
+```bash
+node scripts/verificar-despliegue.mjs https://azucar-hotel-tulum.pages.dev
+node scripts/verificar-despliegue.mjs https://azucarhotel.com
+```
+
+Responde de forma binaria si un despliegue cumple el **criterio de reversión** de
+`docs/05-despliegue/plan-de-reversion.md`. Se corre antes del cambio, justo después, y a
+los 15 min, 1 h, 6 h, 24 h y 72 h de la vigilancia posterior.
+
+Distingue a propósito entre **fallo** —página caída, redirección rota o mal dirigida, señal
+de SEO perdida, portada con `noindex`, la interfaz prometiendo «reserva confirmada»— y
+**aviso**, que hay que arreglar pero no justifica revertir. Confundir las dos categorías es
+lo que lleva a revertir por algo cosmético o a no revertir por algo grave.
+
+> 🚨 **Una salida cambia el procedimiento entero.** Si aparece «Página de datos de tarjeta
+> viva», **NO se revierte**: revertir restauraría justo el sitio que captura tarjetas y CVV.
+> Se despublican esas rutas y se sigue adelante.
+
+Calibrado contra el sitio vigente, donde debe encontrar 19 fallos. Sale con código 1 si
+alguno se cumple.
+
 ## `verificar-301.mjs` — redirecciones del relanzamiento
 
 ```bash

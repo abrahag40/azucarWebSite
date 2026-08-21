@@ -732,6 +732,38 @@ número aunque no esté en condiciones de producirlo.
 
 ---
 
+## L-038 — Un plan de reversión empieza por el criterio, no por el procedimiento
+
+**Lección.** Revertir un lanzamiento son dos clics. Lo difícil es **decidir revertir**: a las
+once de la noche, con el cliente escribiendo y sin umbral fijado de antemano, la discusión se
+vuelve sobre sensaciones —«se ve raro», «a mí me carga bien»— y se acaba revirtiendo por algo
+cosmético o, peor, no revirtiendo por algo grave.
+
+**Por eso el plan se escribe al revés de como suele hacerse.** Primero un verificador que
+responde de forma binaria, y sólo después el procedimiento. Y la distinción que más importa no
+es cómo revertir, sino **qué cuenta como fallo**: una página caída o una redirección rota lo
+son; una cabecera de seguridad ausente no. Confundirlas es lo que produce las dos malas
+decisiones.
+
+**El dato que gobierna todo el plan resultó ser uno solo, y estaba a un `dig` de distancia:**
+el TTL del dominio es de 14 400 segundos. Cuatro horas. Esa cifra *es* la velocidad de la
+reversión, y bajarla a 300 antes del cambio es lo que convierte una reversión de cuatro horas
+en una de cinco minutos. Sin ese preparativo, el resto del plan es decorativo.
+
+**Corolario sobre el orden de los cambios.** Mudar los nameservers y cambiar el sitio el mismo
+día encadena dos reversiones, y la de los nameservers tarda hasta 48 horas. Separadas —mudanza
+primero, copiando los registros tal cual, y el cambio de sitio días después— la reversión pasa
+a ser un registro con TTL bajo bajo nuestro control. *Técnica: decoupling de cambios de
+infraestructura, mover una variable por vez.*
+
+**Y una excepción que sólo aparece si se piensa el caso concreto:** en este proyecto hay un
+escenario en el que revertir es la decisión INCORRECTA. Si el verificador detecta que las
+páginas de captura de tarjeta volvieron a estar vivas, revertir restauraría justo el sitio que
+las sirve. Un plan de reversión genérico no habría contemplado que a veces el sitio anterior
+es peor que el roto.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

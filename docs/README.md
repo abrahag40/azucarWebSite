@@ -41,6 +41,7 @@ Mapa de la documentación. El contexto general y las reglas de trabajo viven en
 - [Mapeo Cappa → sitio](04-diseno/mapeo-cappa-a-sitio.md) — qué sección de la plantilla alimenta cada página
 - [Runbook de accesos y despliegue](05-despliegue/runbook-accesos-y-despliegue.md)
 - [Mapa de redirecciones 301](05-despliegue/mapa-301.md) — y su prueba automatizada
+- [Plan de reversión del lanzamiento](05-despliegue/plan-de-reversion.md) — criterio, capas y ensayos
 
 ### Decisiones
 - [ADR-0001 — Descubrimiento antes de requerimientos](decisiones/ADR-0001-descubrimiento-antes-de-requerimientos.md)
