@@ -15,6 +15,10 @@
     "es": "Vista al mar y a otras áreas del hotel",
     "en": "Ocean view and hotel grounds view"
   },
+  "vistaCorta": {
+    "es": "Vista al mar",
+    "en": "Ocean view"
+  },
   "descripcionCorta": {
     "es": "Jacuzzi privado y vista lateral al mar.",
     "en": "Private jacuzzi and side view of the sea."

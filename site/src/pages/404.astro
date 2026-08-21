@@ -1,27 +1,4 @@
 ---
-/**
- * Página de error 404 en español.
- *
- * Cloudflare Pages busca un `404.html` en el directorio pedido y va subiendo
- * hasta la raíz. Sin este archivo servía `index.html` con HTTP 200, de modo que
- * TODA ruta inexistente devolvía la portada como si existiera: un *soft 404*.
- * Para Google eso son URLs duplicadas infinitas, y además anulaba la utilidad de
- * la regla de enlaces rotos del auditor, porque todo respondía 200.
- *
- * `indexable={false}` emite `noindex, follow` y omite canonical, hreflang y
- * `schema.org/Hotel`: una página de error no tiene URL canónica ni es un hotel.
- */
-import Base from '../layouts/Base.astro';
-import Error404 from '../components/Error404.astro';
-import { usarT } from '../i18n/ui';
-const idioma = 'es' as const;
-const t = usarT(idioma);
+import NoEncontrada from '../views/NoEncontrada.astro';
 ---
-<Base
-  idioma={idioma}
-  indexable={false}
-  titulo={`${t('error404.titulo')} | Azúcar Hotel Tulum`}
-  descripcion={t('error404.meta')}
->
-  <Error404 idioma={idioma} />
-</Base>
+<NoEncontrada idioma="es" />

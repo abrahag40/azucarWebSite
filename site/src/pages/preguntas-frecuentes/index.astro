@@ -1,22 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import BannerPagina from '../../components/BannerPagina.astro';
-import Acordeon from '../../components/Acordeon.astro';
-import { usarT } from '../../i18n/ui';
-import banner from '../../assets/nosotros-2.webp';
-const idioma = 'es' as const;
-const t = usarT(idioma);
+import PreguntasFrecuentes from '../../views/PreguntasFrecuentes.astro';
 ---
-<Base
-  idioma={idioma}
-  rutaActual="preguntas-frecuentes"
-  titulo={`${t('faq.titulo')} | Azúcar Hotel Tulum`}
-  descripcion={t('faq.meta')}
->
-  <BannerPagina imagen={banner} titulo={t('faq.titulo')} />
-  <section class="seccion">
-    <div class="contenedor">
-      <Acordeon idioma={idioma} />
-    </div>
-  </section>
-</Base>
+<PreguntasFrecuentes idioma="es" />

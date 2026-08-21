@@ -1,18 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import BannerPagina from '../../components/BannerPagina.astro';
-import SeccionAmenidades from '../../components/SeccionAmenidades.astro';
-import { usarT } from '../../i18n/ui';
-import banner from '../../assets/hero-roof-top.webp';
-const idioma = 'es' as const;
-const t = usarT(idioma);
+import Servicios from '../../views/Servicios.astro';
 ---
-<Base
-  idioma={idioma}
-  rutaActual="servicios"
-  titulo={`${t('servicios.titulo')} | Azúcar Hotel Tulum`}
-  descripcion={t('servicios.meta')}
->
-  <BannerPagina imagen={banner} titulo={t('servicios.titulo')} />
-  <SeccionAmenidades idioma={idioma} />
-</Base>
+<Servicios idioma="es" />

@@ -1,22 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import BannerPagina from '../../components/BannerPagina.astro';
-import ListaPoliticas from '../../components/ListaPoliticas.astro';
-import { usarT } from '../../i18n/ui';
-import banner from '../../assets/franja-habitacion.webp';
-const idioma = 'es' as const;
-const t = usarT(idioma);
+import Politicas from '../../views/Politicas.astro';
 ---
-<Base
-  idioma={idioma}
-  rutaActual="politicas"
-  titulo={`${t('politicas.titulo')} | Azúcar Hotel Tulum`}
-  descripcion={t('politicas.meta')}
->
-  <BannerPagina imagen={banner} titulo={t('politicas.titulo')} />
-  <section class="seccion">
-    <div class="contenedor">
-      <ListaPoliticas idioma={idioma} />
-    </div>
-  </section>
-</Base>
+<Politicas idioma="es" />

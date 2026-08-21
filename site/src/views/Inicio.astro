@@ -1,0 +1,24 @@
+---
+import { usarT, type Idioma } from '../i18n/ui';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import SeccionPresentacion from '../components/SeccionPresentacion.astro';
+import SeccionAlojamiento from '../components/SeccionAlojamiento.astro';
+import FranjaImagen from '../components/FranjaImagen.astro';
+import SeccionAmenidades from '../components/SeccionAmenidades.astro';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  sobreHero
+  titulo={t('home.titulo')}
+  descripcion={t('home.meta')}
+>
+  <Hero idioma={idioma} />
+  <SeccionPresentacion idioma={idioma} />
+  <SeccionAlojamiento idioma={idioma} limite={3} />
+  <FranjaImagen idioma={idioma} />
+  <SeccionAmenidades idioma={idioma} />
+</Base>

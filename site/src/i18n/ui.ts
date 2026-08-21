@@ -24,6 +24,12 @@ export const ui = {
     'nav.saltar': 'Saltar al contenido',
 
     // ADR-0003, regla 1: nunca "reservar" ni "confirmada". Siempre solicitud.
+    // Metadatos de la portada. Estaban ESCRITOS A MANO en la plantilla, uno en
+    // cada archivo de idioma, y por eso al unificar las dos portadas en una sola
+    // vista la versión inglesa se perdió sin que nada avisara. El texto va en el
+    // diccionario, siempre: es la regla 6 de CLAUDE.md y esto fue el recordatorio.
+    'home.titulo': 'Hotel Boutique Frente al Mar en Tulum | Azúcar Hotel Tulum',
+    'home.meta': 'Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Suites con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directamente con nosotros.',
     'reserva.cta': 'Solicitar reserva',
     // ── Página de solicitud (H3.1, H3.2) ────────────────────────────────────
     'reserva.pagMeta': 'Envía tu solicitud de reserva a Azúcar Hotel Tulum. El hotel confirma disponibilidad y te responde con el total, impuestos incluidos.',
@@ -162,6 +168,8 @@ export const ui = {
     'nav.cerrar': 'Close menu',
     'nav.saltar': 'Skip to content',
 
+    'home.titulo': 'Beachfront Boutique Hotel in Tulum | Azúcar Hotel Tulum',
+    'home.meta': 'Boutique hotel on the Caribbean in Tulum\u2019s Hotel Zone. Suites with private jacuzzi, infinity pool and beach. Request your reservation directly with us.',
     'reserva.cta': 'Request a reservation',
     // ── Request page (H3.1, H3.2) ───────────────────────────────────────────
     'reserva.pagMeta': 'Send your reservation request to Azúcar Hotel Tulum. The hotel checks availability and replies with the total, taxes included.',

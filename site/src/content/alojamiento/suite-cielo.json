@@ -15,6 +15,10 @@
     "es": "Vista frontal al mar y a la alberca infinita",
     "en": "Ocean front view and infinity pool view"
   },
+  "vistaCorta": {
+    "es": "Vista frontal al mar",
+    "en": "Ocean front view"
+  },
   "descripcionCorta": {
     "es": "Roof top propio con jacuzzi privado.",
     "en": "Private roof top with its own jacuzzi."

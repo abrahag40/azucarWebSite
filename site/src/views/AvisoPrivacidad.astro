@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import TextoLegal from '../components/TextoLegal.astro';
+import { avisoPrivacidad, vigenciaDesde } from '../data/privacidad';
+import { usarT, type Idioma } from '../i18n/ui';
+import banner from '../assets/nosotros-2.webp';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+// El formato de fecha se deriva del idioma. Estaba escrito a mano —`es-MX` en un
+// archivo y `en-US` en el otro— y al unificar las dos páginas en una sola vista
+// se habría quedado en español para las dos. Lo cazó la comprobación de
+// contenido perdido; a ojo no se veía.
+const fecha = new Date(vigenciaDesde).toLocaleDateString(idioma === 'en' ? 'en-US' : 'es-MX', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<Base
+  idioma={idioma}
+  rutaActual="aviso-de-privacidad"
+  titulo={`${t('privacidad.titulo')} | Azúcar Hotel Tulum`}
+  descripcion={t('privacidad.meta')}
+>
+  <BannerPagina imagen={banner} titulo={t('privacidad.titulo')} />
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="vigencia">{t('privacidad.vigencia', { fecha })}</p>
+      <TextoLegal apartados={avisoPrivacidad} idioma={idioma} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .vigencia {
+    max-width: 42rem;
+    margin-bottom: var(--space-6);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+  }
+</style>

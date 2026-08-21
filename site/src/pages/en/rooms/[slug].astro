@@ -32,6 +32,19 @@ interface Props {
 }
 const { entrada, anterior, siguiente } = Astro.props;
 const { data } = entrada;
+
+/**
+ * El <title> lleva la vista corta cuando el nombre no la trae ya dentro.
+ *
+ * Las cuatro suites se llaman igual en español y en inglés —«Suite Agua» es un
+ * NOMBRE PROPIO y traducirlo sería el error—, así que sus dos fichas tenían el
+ * mismo <title>. Y además no decía nada: «Suite Agua» a secas no posiciona para
+ * nada. Las cuatro habitaciones no lo necesitan porque su nombre ya termina en
+ * «· Vista al mar» o «· Vista a la selva».
+ */
+const tituloSeo = data.vistaCorta
+  ? `${data.nombre[IDIOMA]} · ${data.vistaCorta[IDIOMA]} | Azúcar Hotel Tulum`
+  : `${data.nombre[IDIOMA]} | Azúcar Hotel Tulum`;
 const t = usarT(IDIOMA);
 
 // schema.org/HotelRoom enlazado al Hotel (historia H2.4). No se declara precio
@@ -50,7 +63,7 @@ const schemaHabitacion = {
 <Base
   idioma={IDIOMA}
   rutaActual={`alojamiento/${entrada.id}`}
-  titulo={`${data.nombre[IDIOMA]} | Azúcar Hotel Tulum`}
+  titulo={tituloSeo}
   descripcion={data.descripcion[IDIOMA]}
 >
   <BannerPagina

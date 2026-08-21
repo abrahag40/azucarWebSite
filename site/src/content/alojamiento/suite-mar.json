@@ -15,6 +15,10 @@
     "es": "Vista frontal al mar y a la alberca infinita",
     "en": "Ocean front view and infinity pool view"
   },
+  "vistaCorta": {
+    "es": "Vista frontal al mar",
+    "en": "Ocean front view"
+  },
   "descripcionCorta": {
     "es": "Jacuzzi en la terraza, frente al mar.",
     "en": "Terrace jacuzzi, facing the sea."

@@ -1,22 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import BannerPagina from '../../components/BannerPagina.astro';
-import DatosContacto from '../../components/DatosContacto.astro';
-import { usarT } from '../../i18n/ui';
-import banner from '../../assets/franja-habitacion.webp';
-const idioma = 'es' as const;
-const t = usarT(idioma);
+import Contacto from '../../views/Contacto.astro';
 ---
-<Base
-  idioma={idioma}
-  rutaActual="contacto"
-  titulo={`${t('contacto.titulo')} | Azúcar Hotel Tulum`}
-  descripcion={t('contacto.meta')}
->
-  <BannerPagina imagen={banner} titulo={t('contacto.titulo')} />
-  <section class="seccion">
-    <div class="contenedor">
-      <DatosContacto idioma={idioma} conMapa={false} />
-    </div>
-  </section>
-</Base>
+<Contacto idioma="es" />

@@ -34,6 +34,21 @@ const alojamiento = defineCollection({
       camas: texto,
       metrosCuadrados: z.number().positive().optional(),
       vista: texto,
+      /**
+       * Versión corta de `vista`, para el <title> y poco más.
+       *
+       * Existe porque los cuatro nombres de suite son NOMBRES PROPIOS —«Suite
+       * Agua» se llama igual en inglés— y traducirlos sería el error. El
+       * resultado era que el <title> de la ficha ES y el de la EN eran
+       * idénticos, y además no decían nada: «Suite Agua» a secas no posiciona
+       * para nada. Las cuatro habitaciones no tienen el problema porque su
+       * nombre ya lleva la vista dentro.
+       *
+       * No es un dato nuevo del cliente: es `vista` recortada, y `vista` sí
+       * está verificada. Por eso no entra en `verificado` — la redacción corta
+       * es nuestra— pero tampoco afirma nada que el cliente no haya dicho.
+       */
+      vistaCorta: texto.optional(),
 
       // Contenido
       descripcionCorta: texto,
