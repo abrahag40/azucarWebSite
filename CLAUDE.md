@@ -163,11 +163,11 @@ historias con criterios de aceptación en
 | Sprint | Sprint Goal | Demo |
 |---|---|---|
 | **0** ✅ | Entender el terreno con evidencia reproducible | Auditoría + backlog aprobado |
-| **1** 🔄 | Home bilingüe en URL real, rápida y accesible, sobre cimientos definitivos | Home en staging, CWV verdes, 0 JS |
-| **2** | Que el huésped recorra los 8 tipos y elija uno | Catálogo completo ES/EN |
-| **3** 🔴 | Que el manager reciba una solicitud real en su teléfono | Flujo de reserva de extremo a extremo |
-| **4** | Que el sitio responda todo lo que el huésped pregunta | Sitio completo navegable |
-| **5** | Producción sin perder posicionamiento y con reversión probada | Sitio en producción |
+| **1** ✅ | Home bilingüe en URL real, rápida y accesible | Falta el `G-…` de GA4 y medir los CWV |
+| **2** ✅ | Que el huésped recorra los 8 tipos y elija uno | Hecho salvo H2.6 (decisión del cliente) |
+| **3** 🔴 | Que el manager reciba una solicitud real en su teléfono | **En cero. Bloqueado por C3 y B1–B4** |
+| **4** ✅ | Que el sitio responda todo lo que el huésped pregunta | Hecho salvo H4.4 y el aviso legal conforme |
+| **5** 🔄 | Producción sin perder posicionamiento y con reversión probada | H5.3 adelantado: 301 construidas y verificadas |
 
 ---
 
@@ -190,48 +190,100 @@ bien dimensionadas, sin analítica, schema.org genérico sin tipos hoteleros, 46
 ResNexus —construido sobre Duda; la agencia **provisionó una propiedad real en el motor**,
 R-16— y análisis de Cappa: 19 archivos JS y 8.2 MB de tipografías que se descartan.
 
-### Sprint 1 — en curso
+### Sprint 1 — cerrado salvo dos accesos
 
 **🌐 Staging en vivo: https://azucar-hotel-tulum.pages.dev**
 
 Cloudflare Pages conectado al repositorio, rama de producción
 `claude/hotel-tulum-web-audit-0yly29`, raíz `site`, comando `npm run build`, salida `dist`.
 Node fijado en `site/.nvmrc`. Despliegue automático en cada push. Configuración y las
-tres correcciones que hicieron falta: `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
+**tres correcciones** que el runbook necesitaba —rama inexistente, comando que falla a
+propósito, versión de Node— en `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
 
-Hecho: proyecto Astro con i18n (H1.1), CI y despliegue con guardias de la DoD (H1.2),
-design tokens con corrección de contraste (H1.3), componentes base accesibles (H1.4),
-esquema de alojamiento validado en compilación con los 8 tipos reales (H1.5), home bilingüe
-con `schema.org/Hotel` (H1.6), componente de analítica integrado e inerte (H1.7, falta el
-`G-…`), y páginas 404 reales en ES y EN con `noindex`.
+H1.1 a H1.6 hechas. H1.2 verde: el CI fallaba porque `@astrojs/check` y `typescript` no
+estaban declarados y no existía `tsconfig.json`. **Falta sólo el `G-…` de GA4 (H1.7) y medir
+los Core Web Vitals.**
 
-**Cada página pesa 21 KB y carga 0 archivos JavaScript.** El auditor encuentra 21 hallazgos
-en el sitio vigente y, en el nuevo, sólo los enlaces a las páginas que aún no existen —que
-es trabajo pendiente declarado, no un defecto.
+### Sprint 2 — catálogo, hecho salvo decisión del cliente
+
+Los **8 tipos** con listado y ficha en ES y EN, rutas generadas desde los datos (H2.1, H2.2),
+galería con visor accesible sobre `<dialog>` (H2.3) y `schema.org/HotelRoom` (H2.4).
+
+**H2.5 — AVIF evaluado y DESCARTADO con medición**: gana en 22 de 44 imágenes y pierde en las
+otras 22. Lo que sí ganó fue bajar la calidad de 72 a 50: **−20 % de peso**. Ver ADR-0005 y
+L-026/L-027. **H2.6** requiere decisión del cliente.
+
+Las 24 cadenas de las fichas se **reescribieron** aplicando una norma editorial medida:
+longitudes en dos bandas por categoría, apertura paralela y `diferenciador` en las ocho. Por
+eso `descripcion` **salió de `verificado`**: ya no es texto del cliente.
+
+### Sprint 4 — contenido institucional, hecho salvo legal
+
+Servicios, ubicación, contacto, preguntas frecuentes y políticas en los dos idiomas, más
+`sitemap.xml` y `robots.txt` (H4.1, H4.5, H4.6, H4.7, H4.9). Contenido **literal del sitio
+vigente, traducciones incluidas**. Aviso de privacidad publicado con sus carencias declaradas
+(H4.8 parcial). Queda **H4.4**, la galería general.
+
+### Sprint 5 — adelantado lo que caducaba
+
+**Mapa de 301 construido y verificado** (H5.3), porque el inventario de URLs sólo existe
+mientras exista la captura del sitio viejo. 25 URLs cubiertas, 0 fallos, y **11 conservan su
+dirección exacta**. Las dos páginas de datos de tarjeta se dejan morir en 404 a propósito.
+Ver `docs/05-despliegue/mapa-301.md` y L-032.
+
+### Estado medido del sitio
+
+| | |
+|---|---|
+| Páginas | **34** (ES + EN) |
+| Archivos JavaScript externos | **0** · 897 bytes en línea sólo en las 16 fichas con galería |
+| Portada | 22 KB de HTML + 21 KB de CSS compartido |
+| Imágenes | 182 WebP · 4 226 KB |
+| Auditor propio | 3 hallazgos: 1 real (enlaces a `/reservar/`, sprint 3) + 2 informativos |
+| Redirecciones | 12 reglas · 25 URLs · 0 fallos |
+
+### 🔴 Contradicción en el contenido del cliente — pregunta C0
+
+`/servicios/` y `/amenidades/` del sitio vigente anuncian **restaurante y spa**; su propio
+`/preguntas-frecuentes/` dice *«Por ahora no tenemos servicio de restaurante o bar»*. Ninguna
+de las dos páginas existe. **Lo habíamos publicado**: una tarjeta en la portada y
+`amenityFeature: Restaurant = true` en el `schema.org` de 20 páginas. Retirado. Ver L-031.
 
 ### ⚠️ Datos sin verificar
 
-De cada tipo de alojamiento, sólo **nombre, vista y descripción** provienen del sitio real.
-**Unidades, capacidad y camas son estimaciones nuestras** y suman 22 contra las 21
-reportadas. Están marcadas como no verificadas y `npm run build:prod` **falla** hasta que el
-cliente responda la pregunta **C1**.
+De cada tipo, sólo **nombre y vista** provienen del sitio real. **Unidades, capacidad y camas
+son estimaciones nuestras** y suman 22 contra las 21 reportadas. `npm run build:prod` **falla**
+hasta que el cliente responda **C1**. En las fichas se marcan con asterisco visible, para que
+el cliente vea en la demo exactamente qué debe confirmar.
 
-### Bloqueantes para cerrar el sprint 1
+### Bloqueantes vigentes — todos del cliente
 
-1. ~~Cuenta de Cloudflare Pages~~ ✅ **resuelto el 2026-08-20**
-2. **ID de medición de GA4** (`G-…`) → activa H1.7
-3. **Respuesta a C1** → desbloquea `build:prod`
-4. **Core Web Vitals medidos** → el criterio de salida dice *medidos*; hay que pasar la URL
-   de staging por PageSpeed Insights y registrar las tres cifras
+| # | Qué | Bloquea |
+|---|---|---|
+| **C0** | ¿Hay restaurante, bar y spa? | Contenido publicado hoy en SU sitio |
+| **C1** | Tabla de los 8 tipos | `build:prod` |
+| **C3** | Desglose fiscal | **Sprint 3 completo** |
+| **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
+| **E-PRIV** | Aviso de privacidad conforme a LFPDPPP | Requisito de **entrada** del sprint 3 |
+| **R-01** | Licencia de iconos de Cappa | Sustituibles por un set libre |
+| — | ID de GA4 (`G-…`) | H1.7 |
+| — | Core Web Vitals por PageSpeed | Criterio de salida del sprint 1 |
 
 ### Pendientes de Abraham, fuera del carril de software
 
-1. Enviar el aviso de datos de tarjeta al cliente. **Es lo primero.**
-2. Visto bueno a ADR-0003. *(ADR-0004 aprobado el 2026-08-20.)*
-3. Licencia de Cappa (R-01) — **reducida**: las tres tipografías son Google Fonts con
-   licencia SIL OFL y quedan fuera. Sigue pendiente por iconos e imágenes del demo.
-4. Accesos de `docs/05-despliegue/runbook-accesos-y-despliegue.md`.
-5. Enviar el brief `.docx` y agendar la entrevista.
+1. **Enviar el mensaje consolidado.** Está escrito y listo:
+   [`mensaje-cliente-desbloqueo.md`](docs/02-requerimientos/mensaje-cliente-desbloqueo.md).
+   Incluye el aviso de datos de tarjeta —que **sigue publicado y sin enviar desde el sprint
+   0**— y las cuatro decisiones que desbloquean el sprint 3. **Es lo primero.**
+2. Visto bueno a ADR-0003. *(ADR-0004 y ADR-0005 vigentes.)*
+3. Licencia de Cappa (R-01), reducida a iconos e imágenes del demo.
+4. Pasar la URL por PageSpeed y registrar las tres cifras.
+
+> ⚠️ **Riesgo de método, dicho en voz alta.** Hay 34 páginas construidas y el **sprint 3 sigue
+> en cero**, porque depende de respuestas que aún no se han pedido. Cada iteración de «sigamos
+> con la siguiente historia» aumenta el activo construido sin acercar una sola reserva
+> directa, que es el motivo del proyecto. Se está acumulando inventario sin validar con el
+> cliente. **La siguiente acción de valor no es código: es el correo.**
 
 ---
 
@@ -252,8 +304,11 @@ cliente responda la pregunta **C1**.
 | `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
 | `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
-| `docs/decisiones/ADR-0001..0004` | Decisiones con consecuencias |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **22 lecciones acumuladas + riesgos abiertos** |
+| `docs/decisiones/ADR-0001..0005` | Decisiones con consecuencias |
+| **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
+| `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
+| `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **32 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 
@@ -272,4 +327,8 @@ npm run build:prod   # build de producción (FALLA si hay datos sin verificar)
 # Auditoría — misma vara para el sitio viejo y para el nuevo
 node scripts/audit-mirror.mjs investigacion/mirrors/azucarhotel
 node scripts/audit-mirror.mjs site/dist
+
+# Redirecciones del relanzamiento — contra el build o contra una URL real
+node scripts/verificar-301.mjs site/dist
+node scripts/verificar-301.mjs https://azucar-hotel-tulum.pages.dev
 ```

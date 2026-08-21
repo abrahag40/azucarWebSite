@@ -469,6 +469,159 @@ cumplir, y nadie la lee. Aquí se escribe durante, y se lee al empezar cada sesi
 
 ---
 
+## L-026 — Medir antes de adoptar: AVIF no siempre gana
+
+**Lección.** Una historia del backlog pedía servir las imágenes en AVIF. Se implementó, se
+midió sobre las 44 imágenes reales del proyecto y **se descartó**: AVIF gana en 22 y **pierde
+en 22**, con un ahorro neto del 5 % y un peor caso de **+39 %**.
+
+**Por qué.** Las fuentes ya son WebP con pérdida, comprimidas por WordPress. Recodificar de
+*lossy* a *lossy* no recupera información, y la ventaja de AVIF necesita originales de
+calidad. Además el navegador elige AVIF **a ciegas** cuando se le ofrece: en la mitad de las
+imágenes eso no es una mejora opcional, es servir un archivo más pesado. Y el build pasaba de
+2 s a 63 s: veinte veces más CI por un 5 %.
+
+**Antipatrón evitado:** *cargo cult performance* — adoptar la técnica que la industria
+recomienda sin comprobar que aplica a tu material. «Usa AVIF» es un buen consejo general y
+una mala decisión concreta aquí.
+
+**Queda abierto, no cerrado:** si el cliente entrega la fotografía original, AVIF debe
+reevaluarse. Con originales suele ganar entre un 30 y un 50 %.
+
+---
+
+## L-027 — Los números de calidad no son comparables entre códecs
+
+**Lección.** La primera medición de AVIF dio **+52 %** y llevó a la conclusión de que no
+servía. Era falsa: comparaba `quality: 72` en AVIF contra `quality: 72` en WebP, y esas dos
+cifras **no significan lo mismo**. AVIF `q50` equivale perceptualmente a WebP `q72` y pesa un
+27 % menos.
+
+**Por qué.** «Quality» es un parámetro interno de cada codificador, no una unidad. Compararlo
+entre formatos es como comparar dos termómetros con escalas distintas porque los dos marcan
+72.
+
+**Cómo se comprueba bien.** Se fija una calidad *percibida* —comparando recortes al 100 %— y
+sólo entonces se comparan los bytes.
+
+**Y el hallazgo colateral fue el que valió:** al buscar el punto de equivalencia se descubrió
+que la calidad del proyecto estaba en 70-72 y sobraba. Bajarla a 50 quitó un **20 %** del peso
+sin diferencia visible. La ganancia no vino del formato nuevo, sino de haber mirado.
+
+**Antipatrón evitado:** *benchmark de una sola variable* — cambiar el códec dejando fijo un
+número que no es equivalente entre ellos.
+
+---
+
+## L-028 — El reset moderno de CSS rompe el centrado de `<dialog>`
+
+**Lección.** El visor de la galería aparecía en la esquina superior izquierda con dos de sus
+tres botones fuera de pantalla. La causa no estaba en el visor: el navegador centra los
+`<dialog>` modales con `inset: 0` más `margin: auto`, y el reset del proyecto abre con
+`* { margin: 0 }` —el idioma habitual de los resets modernos—, que pisa ese `auto`.
+
+**Por qué importa más allá del caso.** Un reset global no es neutral: **desactiva
+comportamientos nativos que no se ven en el marcado**. El elemento parece roto y el CSS que
+lo rompe está a cien líneas de distancia, en un archivo que nadie sospecha.
+
+**Corolario.** Cuando una primitiva nativa se comporta raro, el primer sospechoso es el reset,
+no la primitiva. Antes de esto se culpó a un `position: relative` propio y se retiró por la
+razón equivocada: la corrección estaba bien, el diagnóstico no.
+
+**Antipatrón evitado:** *depurar hacia adelante* — seguir añadiendo CSS al elemento que falla
+en vez de buscar qué se lo está quitando.
+
+---
+
+## L-029 — No construir sobre un evento sin comprobar que dispara
+
+**Lección.** La restauración del foco al cerrar el visor colgaba del evento `close` de
+`<dialog>`. **Ese evento no se dispara** en el motor probado al llamar a `close()`, así que el
+manejador nunca corría y el foco se quedaba siempre en la miniatura de entrada. Se descubrió
+instrumentando los eventos, no leyendo el código: el código era correcto según la
+especificación.
+
+**Por qué.** Entre la especificación y el motor hay una distancia que sólo se ve ejecutando.
+La solución no fue pelearse con el evento, sino **no depender de él**: se restaura el foco
+explícitamente en cada una de las tres vías de cierre —botón, fondo y `Esc`—, que son las que
+controlamos.
+
+**Corolario sobre `requestAnimationFrame`:** se usó primero para aplazar el foco y colgó la
+propia prueba, porque **rAF no corre con la pestaña en segundo plano**. Para algo tan sensible
+como devolver el foco, `setTimeout`.
+
+**Antipatrón evitado:** *programar contra la especificación* sin verificar el comportamiento
+real. La accesibilidad es justo donde más caro sale: el fallo es invisible para quien no
+navega con teclado.
+
+---
+
+## L-030 — `1fr` no es `minmax(0, 1fr)`, y esa diferencia es el scroll horizontal en móvil
+
+**Lección.** En CSS Grid, `1fr` equivale a `minmax(auto, 1fr)`. Ese `auto` impide que el tramo
+se encoja por debajo de su contenido, así que una palabra larga, una URL o una imagen ancha
+ensanchan la columna y sacan la página del viewport. La forma correcta en una rejilla
+responsive es `minmax(0, 1fr)`, y los elementos de la rejilla necesitan además `min-width: 0`
+por el mismo motivo.
+
+**Por qué se pasa por alto.** En escritorio nunca se ve. Aparece sólo en pantallas estrechas y
+con contenido concreto, que es exactamente la combinación que no se prueba.
+
+**Cómo se comprueba.** No a ojo: recorriendo el DOM y comparando cada caja contra el ancho del
+viewport, a 320, 375, 768 y 1280 px. Ese barrido encontró además dos defectos reales —enlaces
+del pie de 19 px, por debajo del mínimo de 24 px de WCAG 2.2 AA 2.5.8, y una etiqueta de
+`8.5rem` fijos que a 320 px dejaba al valor 90 px.
+
+**Antipatrón evitado:** *responsive por inspección visual* — mirar la ventana estrecha y
+declararla bien. Lo que no se mide, no está verificado.
+
+---
+
+## L-031 — El contenido del cliente puede contradecirse a sí mismo
+
+**Lección.** Al reunir el contenido del sprint 4 apareció que el sitio del hotel se desmiente:
+`/servicios/` y `/amenidades/` anuncian «Restaurante y Bar Blanc» y «Spa»; su
+`/preguntas-frecuentes/` dice literalmente *«Por ahora no tenemos servicio de restaurante o
+bar»*. Ninguna de las dos páginas existe, y el roof top aparece con dos nombres distintos.
+
+**Lo grave es que ya lo habíamos publicado.** Habíamos tomado la versión de amenidades y
+estaba en línea: una tarjeta en la portada y, peor, `amenityFeature: Restaurant = true` en el
+`schema.org` de veinte páginas — una afirmación falsa emitida directamente a Google.
+
+**Por qué.** El contenido heredado se trata como fuente, y una fuente se **coteja**. Bastó
+cruzar tres páginas del mismo sitio para encontrarlo. Nadie lo había hecho porque cada página
+se lee por separado.
+
+**Regla que queda.** Antes de publicar un dato heredado, buscarlo en el resto del material. Si
+dos páginas del cliente no coinciden, **gana la más específica y la más reciente** —aquí, el
+FAQ—, y se pregunta antes de publicar.
+
+**Antipatrón evitado:** *garbage in, gospel out* — tratar el contenido existente como
+verificado por el hecho de estar publicado.
+
+---
+
+## L-032 — Los insumos de una migración caducan; el resto puede esperar
+
+**Lección.** El mapa de redirecciones 301 vive en el sprint 5, pero se construyó en el 4. El
+motivo no es adelantar trabajo: el **inventario de URLs sólo existe mientras exista la captura
+del sitio viejo**. Cuando se apague, no hay forma de reconstruir qué URLs tenía ni qué
+redirecciones ya estaban activas.
+
+**Por qué importa el orden.** Una 301 perdida no avisa. Un enlace roto se ve; el tráfico
+orgánico que deja de llegar se nota semanas después, cuando ya nadie sabe atribuirlo.
+
+**El criterio general.** En un plan por sprints, adelantar trabajo es normalmente un error
+—rompe el foco—. La excepción es el trabajo cuyo **insumo caduca**. Ahí el coste de esperar no
+es la demora: es que la tarea se vuelva imposible.
+
+**Dividendo inesperado.** El mapa reveló que 11 de las 22 URLs conservan su dirección exacta,
+gracias a dos decisiones anteriores: ADR-0004 conservó el esquema en español, y en el sprint 2
+se corrigió la ruta inglesa a `/en/rooms/`. **La forma más barata de no perder posicionamiento
+es no cambiar la URL.**
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -480,6 +633,9 @@ cumplir, y nadie la lee. Aquí se escribe durante, y se lee al empezar cada sesi
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
+| R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |
+| R-18 | **El aviso de privacidad no cumple la LFPDPPP** y su versión inglesa no está traducida en el sitio vigente. Faltan domicilio del responsable, derechos ARCO y revocación del consentimiento | Alto | Requisito de **entrada** del sprint 3, que es cuando empezamos a tratar datos. Pregunta **E-PRIV** |
+| R-19 | **El sprint 3 lleva 34 páginas de retraso.** Todo el valor del proyecto —la reserva directa— depende de cuatro respuestas que aún no se han pedido | Alto | Mensaje consolidado escrito y listo. Depende del envío |
 | R-08 | Cliente no cumple el SLA de 48 h y la cadencia quincenal se rompe | Alto | SLA escrito en contrato + pendientes del cliente visibles en cada demo |
 | R-09 | Catálogo posiblemente sobre-segmentado (8 tipos para 21 unidades) reduce la conversión | Medio | Validar inventario real y proponer agrupación comercial |
 | R-10 | Sobreventa si alguna vez se activa confirmación instantánea sin channel manager | Muy alto | Prohibido por ADR-0003. La interfaz nunca dice "confirmada" |
