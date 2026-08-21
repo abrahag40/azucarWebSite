@@ -1,0 +1,76 @@
+---
+/**
+ * Acordeón de preguntas frecuentes, sin JavaScript.
+ *
+ * `<details>`/`<summary>` dan gratis lo que un acordeón hecho a mano suele
+ * hacer mal: estado gestionado por el navegador, apertura con teclado, anuncio
+ * correcto de «contraído/expandido» al lector de pantalla y —lo que casi nadie
+ * implementa— que el buscador del navegador (Ctrl+F) encuentre texto dentro de
+ * una respuesta cerrada y la abra sola.
+ *
+ * No se agrupan con `name=` para que se cierren entre sí: en un FAQ es normal
+ * querer comparar dos respuestas a la vez.
+ */
+import { faq } from '../data/faq';
+import type { Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+---
+<ul class="faq" role="list">
+  {faq.map((f) => (
+    <li>
+      <details class="faq__item">
+        <summary class="faq__pregunta">
+          <span>{f.p[idioma]}</span>
+          <span class="faq__signo" aria-hidden="true"></span>
+        </summary>
+        <p class="faq__respuesta">{f.r[idioma]}</p>
+      </details>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .faq { list-style: none; padding: 0; margin: 0; max-width: 46rem; }
+  .faq__item { border-bottom: 1px solid var(--color-border); }
+
+  .faq__pregunta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24px;
+    align-items: center;
+    gap: var(--space-4);
+    /* 48 px de alto efectivo: objetivo táctil holgado (WCAG 2.2 AA 2.5.8). */
+    padding-block: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+  }
+  .faq__pregunta::-webkit-details-marker { display: none; }
+  .faq__pregunta:hover { color: var(--color-accent-text); }
+
+  /* Signo + / − dibujado con dos barras: sin icono, sin fuente, sin licencia. */
+  .faq__signo {
+    position: relative;
+    width: 16px; height: 16px;
+    justify-self: end;
+  }
+  .faq__signo::before, .faq__signo::after {
+    content: '';
+    position: absolute; inset: 50% 0 auto 0;
+    height: 1.5px;
+    background: var(--color-accent-text);
+    transition: rotate var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  }
+  .faq__signo::after { rotate: 90deg; }
+  .faq__item[open] .faq__signo::after { rotate: 0deg; opacity: 0; }
+
+  .faq__respuesta {
+    padding-bottom: var(--space-5);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    max-width: 62ch;
+  }
+</style>

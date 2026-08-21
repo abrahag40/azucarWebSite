@@ -1,0 +1,91 @@
+---
+/**
+ * Datos de contacto y ubicación (H4.5 y H4.6).
+ *
+ * El teléfono y el correo van como enlaces `tel:` y `mailto:` reales: en un
+ * teléfono, un número que no se puede pulsar obliga a copiarlo a mano, y ése es
+ * el punto exacto donde se pierde una reserva.
+ *
+ * El mapa NO se incrusta. Un iframe de Google Maps son ~700 KB, JavaScript de
+ * terceros y cookies de seguimiento antes de que el huésped haya consentido
+ * nada. Se enlaza, que es lo que la gente hace de todas formas: abrir su propia
+ * app de mapas. Cuando exista aviso de cookies se podrá reconsiderar.
+ */
+import { usarT, type Idioma } from '../i18n/ui';
+import { contacto } from '../data/hotel';
+
+interface Props { idioma: Idioma; conMapa?: boolean }
+const { idioma, conMapa = false } = Astro.props;
+const t = usarT(idioma);
+const tel = (n: string) => n.replace(/[^+\d]/g, '');
+const MAPA = 'https://www.google.com/maps/search/?api=1&query=20.1489,-87.4483';
+---
+<div class="datos">
+  <div class="datos__bloque">
+    <h2 class="datos__titulo">{t('ubicacion.direccion')}</h2>
+    <address class="datos__direccion">{t('footer.direccion')}</address>
+    {conMapa && (
+      <p><a class="boton boton--secundario" href={MAPA} rel="noopener noreferrer" target="_blank">
+        {t('ubicacion.mapa')}
+      </a></p>
+    )}
+  </div>
+
+  <div class="datos__bloque">
+    <h2 class="datos__titulo">{t('contacto.telefono')}</h2>
+    <ul class="datos__lista" role="list">
+      {contacto.telefonos.map((n) => (
+        <li><a class="datos__enlace" href={`tel:${tel(n)}`}>{n}</a></li>
+      ))}
+    </ul>
+    <h2 class="datos__titulo datos__titulo--sep">{t('contacto.correo')}</h2>
+    <p><a class="datos__enlace" href={`mailto:${contacto.correo}`}>{contacto.correo}</a></p>
+    <p class="datos__nota">{t('contacto.horario')}</p>
+  </div>
+</div>
+
+<style>
+  .datos {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 52rem;
+  }
+  .datos__bloque { min-width: 0; }
+  .datos__titulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-3);
+  }
+  .datos__titulo--sep { margin-top: var(--space-6); }
+  .datos__direccion {
+    font-style: normal;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-5);
+  }
+  .datos__lista { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+  .datos__enlace {
+    display: inline-block;
+    /* Alto efectivo por encima de 24 px: es un objetivo que se pulsa con el
+       pulgar y con prisa (WCAG 2.2 AA 2.5.8). */
+    padding-block: var(--space-1);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent-text);
+    text-decoration: none;
+    overflow-wrap: break-word;
+  }
+  .datos__enlace:hover { text-decoration: underline; }
+  .datos__nota {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+  @media (min-width: 48rem) {
+    .datos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); }
+  }
+</style>

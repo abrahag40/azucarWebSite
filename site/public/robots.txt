@@ -1,0 +1,12 @@
+# Azúcar Hotel Tulum
+#
+# Este archivo permite el rastreo completo porque está pensado para el dominio
+# de producción. En el dominio de staging (*.pages.dev) NO es lo que queremos:
+# lo que evita hoy que se indexe la versión de pruebas es que todas sus páginas
+# declaran `canonical` apuntando a azucarhotel.com. Bloquear staging de forma
+# explícita es tarea del sprint 5, cuando se conecte el dominio real, porque un
+# mismo archivo estático no puede decir cosas distintas en los dos sitios.
+User-agent: *
+Allow: /
+
+Sitemap: https://azucarhotel.com/sitemap.xml

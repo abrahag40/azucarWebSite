@@ -13,9 +13,12 @@ const anio = new Date().getFullYear();
     </div>
     <nav class="pie__nav" aria-label="Legal">
       <ul>
+        {/* Sólo lo que existe. «Aviso de privacidad» y «Términos» eran enlaces a
+            páginas sin construir —son la historia H4.8— y «Términos» no existe
+            siquiera en el sitio vigente: lo inventamos nosotros al maquetar el
+            pie. Vuelven cuando haya texto legal revisado, no antes. */}
         <li><a href={ruta(idioma, 'politicas')}>{t('footer.politicas')}</a></li>
-        <li><a href={ruta(idioma, 'aviso-de-privacidad')}>{t('footer.privacidad')}</a></li>
-        <li><a href={ruta(idioma, 'terminos')}>{t('footer.terminos')}</a></li>
+        <li><a href={ruta(idioma, 'preguntas-frecuentes')}>{t('nav.faq')}</a></li>
       </ul>
     </nav>
   </div>
