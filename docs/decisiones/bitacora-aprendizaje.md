@@ -1587,6 +1587,61 @@ segunda cosecha no es opcional: si se publica sin limpiarla, la herramienta nace
 
 ---
 
+## L-069 — Un selector `a` no alcanza a un `<summary>`, aunque se vean igual de "enlace"
+
+**Lección.** «Alojamiento» era el único apartado de la barra de navegación que no vestía la
+tipografía de la plantilla —mayúsculas, `--font-ui`, tracking de 0.16em—: se veía en minúsculas
+y con la fuente por defecto del navegador. Lo señaló Abraham desde una captura.
+
+La causa no estaba en el desplegable en sí, sino en el elemento que lo dispara. Los otros seis
+apartados son `<a>` y reciben su tipografía de `.nav__lista > li > a`. «Alojamiento» es un
+`<details>` con un `<summary>` — semánticamente correcto (es lo que da teclado, foco y anuncio
+de "contraído/expandido" gratis, ver L-059) pero un `<summary>` **no es un `<a>`**, y el
+selector, escrito para alcanzar enlaces, simplemente no lo tocaba. El navegador lo pintaba con
+su hoja de estilos por defecto y nada en el proyecto lo corregía.
+
+**Lo que enseña:** cuando dos elementos se ven equivalentes en el diseño pero son etiquetas
+HTML distintas, un selector pensado para uno no cubre al otro aunque ambos vivan en la misma
+lista. La revisión visual de "¿tienen la misma clase de estilos?" hay que hacerla elemento por
+elemento, no asumiendo que "es un ítem de menú más" implica "el mismo selector lo alcanza".
+
+**La corrección:** las mismas cinco declaraciones de `.nav__lista > li > a`, copiadas
+literalmente a `.desplegable__disparador` — y el estado de acento en `:hover` y `[open]` que
+tampoco existía, porque nadie lo había echado en falta hasta ver el contraste con sus hermanos.
+
+---
+
+## L-070 — Una bandera no es un idioma, y la plantilla nunca usó ninguna
+
+**Lección.** Se pidió sustituir el selector de idioma —«ENGLISH» en texto completo, la palabra
+más larga de toda la cabecera— por banderas. Antes de dibujar iconos de país, se revisó qué
+hace Cappa: su selector de idioma —en el pie, no en la cabecera— es un `<select>` con un icono
+de **globo** (`ti-world`, Themify), nunca una bandera. En las dos capturas del proyecto,
+`investigacion/mirrors/cappa` y `investigacion/mirrors/azucarhotel`, no hay un solo archivo de
+bandera.
+
+Construir banderas habría sido **inventar** una pieza de interfaz ausente de la plantilla —lo
+que el propio proyecto prohíbe— y además reproducir un antipatrón documentado por el propio
+W3C Internationalization Working Group: *"flags do not represent languages, they represent
+countries and regions"*. El español no es de un solo país y el inglés tampoco; una bandera de
+México junto a una de Estados Unidos o Reino Unido implica una equivalencia que no existe y
+que, en un hotel que recibe huéspedes de toda Latinoamérica, es la lectura más fácil de ofender
+sin querer.
+
+**La resolución:** se dibujó un icono de mundo a mano —mismo mecanismo que los otros seis
+iconos del proyecto (ver comentario de cabecera en `Icono.astro`, motivado por R-01)— y se
+sustituyó el texto completo del idioma por su código ISO 639-1 de dos letras (EN / ES), que es
+exactamente la abreviatura que ya usan la mayoría de los selectores de idioma sin banderas. El
+nombre completo no desaparece: sigue siendo el nombre accesible del enlace vía `aria-label`, así
+que un lector de pantalla sigue anunciando «English», no «E, N».
+
+**El patrón:** cuando una instrucción explícita choca con la regla más repetida del proyecto —
+"no inventes nada, la plantilla es la fuente"— la salida no es discutir la instrucción ni
+ignorarla, sino resolver el problema de fondo (la etiqueta era demasiado larga) con el
+mecanismo que la plantilla sí usa para ese problema.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

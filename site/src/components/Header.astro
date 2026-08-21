@@ -16,6 +16,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import logo from '../assets/logo-azucar.webp';
+import Icono from './Icono.astro';
 import { usarT, ruta, idiomas, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
@@ -190,8 +191,15 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
           ))}
         </ul>
         <div class="menu__pie">
-          <a class="menu__idioma" href={ruta(otro, rutaActual)} lang={otro} hreflang={otro}>
-            {idiomas[otro]}
+          <a
+            class="menu__idioma"
+            href={ruta(otro, rutaActual)}
+            lang={otro}
+            hreflang={otro}
+            aria-label={idiomas[otro]}
+          >
+            <Icono nombre="mundo" tam={18} />
+            <span aria-hidden="true">{otro.toUpperCase()}</span>
           </a>
           <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
         </div>
@@ -199,8 +207,23 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     </details>
 
     <div class="cabecera__acciones">
-      <a class="cabecera__idioma" href={ruta(otro, rutaActual)} lang={otro} hreflang={otro}>
-        {idiomas[otro]}
+      {/* Antes decía «ENGLISH» / «ESPAÑOL» en texto completo: la palabra más
+          larga de toda la cabecera, y con más peso visual que «Alojamiento» o
+          «Preguntas frecuentes» a su lado. Se reduce al código de dos letras
+          —EN / ES, norma ISO 639-1— más el mismo glifo de mundo que usa Cappa
+          en su propio selector (`ti-world`, sin ninguna bandera en la
+          plantilla). El nombre completo del idioma no desaparece: sigue siendo
+          el nombre accesible del enlace, vía `aria-label` (WCAG 2.4.4, el
+          propósito del enlace determinado por su texto). */}
+      <a
+        class="cabecera__idioma"
+        href={ruta(otro, rutaActual)}
+        lang={otro}
+        hreflang={otro}
+        aria-label={idiomas[otro]}
+      >
+        <Icono nombre="mundo" tam={16} />
+        <span aria-hidden="true">{otro.toUpperCase()}</span>
       </a>
       <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
     </div>
@@ -315,12 +338,25 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
      bastó para que «Solicitar reserva» pasara a dos renglones. Ocho píxeles.
      La cabecera iba al límite y nadie lo sabía porque nunca se había medido. */
   .cabecera__acciones .boton { white-space: nowrap; }
+  /* Más pequeño que `.boton` en cualquier otro sitio del sitio —del héroe al
+     pie—, y SÓLO aquí: en la barra comparte fila con enlaces de texto de
+     14 px, y a 44 px de alto con relleno de `--space-6` se veía más grande que
+     el propio logotipo. Se reduce a 40 px: sigue por encima del mínimo de
+     24 px de WCAG 2.5.8 —no es un objetivo táctil de móvil, es un puntero fino
+     en escritorio, donde vive esta barra— y dos tallas de relleno, no una: si
+     sólo bajara el alto sin bajar el relleno lateral la etiqueta seguiría
+     leyéndose desproporcionada frente a «Contacto» o «Alojamiento» de al lado. */
+  .cabecera__acciones .boton {
+    min-height: 40px;
+    padding: var(--space-2) var(--space-5);
+    font-size: var(--text-sm);
+  }
   /* `inline-flex` y no el `inline` por defecto: en un <a> inline el padding
      vertical NO cuenta para la altura de la caja, así que el enlace medía 23 px
      y no llegaba al mínimo de 24 px de WCAG 2.2 AA 2.5.8. Es el mismo defecto
      que ya apareció en el pie, y sigue siendo invisible a ojo. */
   .cabecera__idioma {
-    display: inline-flex; align-items: center;
+    display: inline-flex; align-items: center; gap: var(--space-2);
     min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
     letter-spacing: var(--tracking-nav); text-transform: uppercase;
@@ -410,7 +446,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     border-top: 1px solid var(--color-border);
   }
   .menu__idioma {
-    display: inline-flex; align-items: center;
+    display: inline-flex; align-items: center; gap: var(--space-2);
     min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
     letter-spacing: var(--tracking-nav); text-transform: uppercase;
@@ -445,8 +481,20 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   .desplegable { position: relative; }
 
   .desplegable__disparador {
+    /* Un <summary> no es un <a>: el selector `.nav__lista > li > a` no lo
+       alcanza, así que se quedaba con la tipografía por defecto del navegador
+       —tamaño de párrafo, sin versalitas ni tracking— mientras sus seis
+       hermanos llevaban la tipografía de `--font-ui` en mayúsculas espaciadas.
+       «Alojamiento» era el único enlace de la barra que no vestía igual que
+       los demás. Mismas cinco declaraciones que `.nav__lista > li > a`, línea
+       por línea. */
     display: inline-flex; align-items: center; gap: var(--space-2);
     cursor: pointer; list-style: none;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink);
     /* la altura mínima es del enlace de al lado; ver `.nav__lista a` */
   }
   .desplegable__disparador::-webkit-details-marker { display: none; }
@@ -502,6 +550,11 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   /* Abierto por CLIC o teclado — el estado nativo del <details>. */
   .desplegable[open] > .desplegable__panel { opacity: 1; visibility: visible; translate: 0; }
   .desplegable[open] .desplegable__flecha { rotate: 180deg; }
+  /* Mismo color de acento que `.nav__lista > li > a:hover`: sin esto,
+     «Alojamiento» era el único disparador que no cambiaba de color al pasar el
+     ratón ni al abrirse, aunque ya compartiera su tipografía. */
+  .desplegable__disparador:hover,
+  .desplegable[open] > .desplegable__disparador { color: var(--color-accent-text); }
 
   /* Abierto por HOVER — sólo en dispositivos con puntero fino.
      Sin esta condición, una pantalla táctil deja el panel «pegado» tras la

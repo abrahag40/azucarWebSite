@@ -11,8 +11,8 @@
  * y un lector de pantalla que anuncie "imagen" antes de cada título sólo añade
  * ruido (WCAG 1.1.1, icono decorativo acompañado de texto).
  */
-interface Props { nombre: string }
-const { nombre } = Astro.props;
+interface Props { nombre: string; tam?: number }
+const { nombre, tam = 34 } = Astro.props;
 
 const trazos: Record<string, string> = {
   // Olas del mar
@@ -37,6 +37,12 @@ const trazos: Record<string, string> = {
     correo: 'M3 6h18v12H3zM3 6.5l9 6.5 9-6.5',
     // Alfiler de mapa: dirección
     mapa: 'M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+    /* Mundo: selector de idioma. Es el mismo glifo que usa Cappa —`ti-world`,
+       de Themify— en su propio selector de idioma del pie de página (línea 764
+       de `index11.html`). No hay ninguna bandera en toda la plantilla: Cappa
+       resuelve el cambio de idioma con este globo y un <select> de texto, nunca
+       con iconografía de país. */
+    mundo: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3 12h18M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18',
 };
 const d = trazos[nombre];
 ---
@@ -44,8 +50,8 @@ const d = trazos[nombre];
   <svg
     class="icono"
     viewBox="0 0 24 24"
-    width="34"
-    height="34"
+    width={tam}
+    height={tam}
     fill="none"
     stroke="currentColor"
     stroke-width="1.25"
