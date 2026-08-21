@@ -21,7 +21,8 @@ export const GET: APIRoute = async () => {
     .sort((a, b) => a.data.orden - b.data.orden);
 
   const secciones = [
-    '', 'alojamiento', 'servicios', 'ubicacion', 'preguntas-frecuentes', 'politicas', 'contacto',
+    '', 'alojamiento', 'servicios', 'ubicacion', 'preguntas-frecuentes', 'politicas',
+    'contacto', 'aviso-de-privacidad',
   ];
   const fichas = alojamiento.map((e) => `alojamiento/${e.id}`);
   const rutas = [...secciones, ...fichas];

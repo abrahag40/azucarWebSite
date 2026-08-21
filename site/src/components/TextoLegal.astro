@@ -1,0 +1,62 @@
+---
+/**
+ * Cuerpo de una página legal: apartados con párrafos y listas.
+ *
+ * Medida de lectura acotada a 42rem y jerarquía de encabezados real, para que un
+ * texto legal se pueda recorrer por encabezados con lector de pantalla en vez de
+ * ser un muro. Es la diferencia entre publicarlo y que se pueda leer.
+ */
+import type { Apartado } from '../data/privacidad';
+import type { Idioma } from '../i18n/ui';
+
+interface Props { apartados: Apartado[]; idioma: Idioma }
+const { apartados, idioma } = Astro.props;
+---
+<div class="legal">
+  {apartados.map((a) => (
+    <section class="legal__apartado">
+      <h2 class="legal__titulo">{a.titulo[idioma]}</h2>
+      {a.parrafos.map((p) => <p class="legal__parrafo">{p[idioma]}</p>)}
+      {a.lista && (
+        <ul class="legal__lista" role="list">
+          {a.lista.map((l) => <li>{l[idioma]}</li>)}
+        </ul>
+      )}
+    </section>
+  ))}
+</div>
+
+<style>
+  .legal { display: grid; gap: var(--space-7); max-width: 42rem; }
+  .legal__titulo {
+    font-size: var(--text-xl);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .legal__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-4);
+    overflow-wrap: break-word;
+  }
+  .legal__parrafo:last-child { margin-bottom: 0; }
+  .legal__lista {
+    list-style: none; padding: 0;
+    display: grid; gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .legal__lista li {
+    position: relative;
+    padding-left: var(--space-5);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+  }
+  .legal__lista li::before {
+    content: '';
+    position: absolute; left: 0; top: 0.62em;
+    width: 6px; height: 6px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+</style>

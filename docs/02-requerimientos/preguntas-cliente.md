@@ -180,6 +180,37 @@ justifica evaluar francés y portugués)
 ---
 
 ## BLOQUE E — Legal, accesos y activos digitales · BRIEF ASÍNCRONO
+
+**E-PRIV. 🔴 El aviso de privacidad actual no cumple la LFPDPPP.** *(Requisito de entrada
+del sprint 3.)*
+> El sitio vigente publica en `/politica-de-privacidad/` una **plantilla genérica de política
+> de privacidad**, vigente desde el 1 de enero de 2022. No es un aviso de privacidad conforme
+> a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares. Le
+> faltan, al menos:
+>
+> - Identidad y **domicilio del responsable**
+> - Los **derechos ARCO** nombrados —acceso, rectificación, cancelación, oposición— y el
+>   procedimiento para ejercerlos
+> - El **mecanismo para revocar el consentimiento**
+> - La distinción entre **finalidades primarias y secundarias**, y cómo oponerse a las segundas
+>
+> Además, la versión inglesa `/en/privacy-policy/` **sirve el texto en español sin traducir**,
+> y el aviso remite a `info@azucarhotel.com` mientras el resto del sitio usa
+> `contacto@azucarhotel.com`. Conviene unificar: es la dirección donde alguien ejerce sus
+> derechos.
+>
+> **Qué se hizo mientras tanto.** El texto se ha trasladado al sitio nuevo —traducido de
+> verdad al inglés— porque es mejor que no tener nada y porque arreglaba un enlace roto. **No
+> se publica como si cumpliera.**
+>
+> **Por qué el plazo es el sprint 3 y no el lanzamiento:** hoy el sitio nuevo **no recoge
+> ningún dato personal**, porque todavía no hay formulario. En el sprint 3 empieza a
+> tratarlos, y ahí el aviso conforme deja de ser recomendable y pasa a ser obligatorio.
+>
+> **Qué hace falta:** un aviso redactado o revisado por abogado. No es trabajo que podamos
+> hacer nosotros.
+
+
 > Bloque aburrido y el que más proyectos descarrila en la semana del lanzamiento.
 
 **E1.** Razón social, RFC y domicilio fiscal.

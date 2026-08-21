@@ -81,6 +81,10 @@ export const ui = {
     'contacto.correo': 'Correo',
     'contacto.horario': 'Recepción las 24 horas, todos los días.',
 
+    'privacidad.titulo': 'Aviso de privacidad',
+    'privacidad.meta': 'Cómo Azúcar Hotel Tulum recopila, usa y protege la información personal que facilitas a través de este sitio web.',
+    'privacidad.vigencia': 'Vigente desde el {fecha}.',
+
     'footer.derechos': 'Todos los derechos reservados.',
     'footer.privacidad': 'Aviso de privacidad',
     'footer.terminos': 'Términos y condiciones',
@@ -164,6 +168,10 @@ export const ui = {
     'contacto.telefono': 'Phone',
     'contacto.correo': 'Email',
     'contacto.horario': 'Reception is open 24 hours, every day.',
+
+    'privacidad.titulo': 'Privacy notice',
+    'privacidad.meta': 'How Azúcar Hotel Tulum collects, uses and protects the personal information you provide through this website.',
+    'privacidad.vigencia': 'In effect since {fecha}.',
 
     'footer.derechos': 'All rights reserved.',
     'footer.privacidad': 'Privacy notice',
