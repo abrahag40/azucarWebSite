@@ -12,8 +12,15 @@ interface Props {
   idioma: Idioma;
   /** Ruta sin prefijo de idioma, p. ej. 'alojamiento'. Vacía = portada. */
   rutaActual?: string;
+  /**
+   * Falso sólo para páginas que no representan contenido real —hoy, el 404—.
+   * Emite `noindex` y omite canonical, hreflang y datos estructurados: una
+   * página de error no tiene URL canónica ni es un Hotel, y declararlo manda
+   * a Google señales contradictorias.
+   */
+  indexable?: boolean;
 }
-const { titulo, descripcion, idioma, rutaActual = '' } = Astro.props;
+const { titulo, descripcion, idioma, rutaActual = '', indexable = true } = Astro.props;
 const t = usarT(idioma);
 
 const canonical = new URL(ruta(idioma, rutaActual), Astro.site).toString();
@@ -57,13 +64,19 @@ const schema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titulo}</title>
     <meta name="description" content={descripcion} />
-    <link rel="canonical" href={canonical} />
-    {alternos.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    {indexable ? (
+      <>
+        <link rel="canonical" href={canonical} />
+        {alternos.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+        <meta property="og:url" content={canonical} />
+      </>
+    ) : (
+      <meta name="robots" content="noindex, follow" />
+    )}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descripcion} />
-    <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={idioma === 'es' ? 'es_MX' : 'en_US'} />
 
     <!-- Fuentes: preconnect para adelantar el handshake TLS, y display=swap
@@ -78,7 +91,9 @@ const schema = {
 
     {/* is:inline — no es un script de cliente: es metadato que debe quedar
         literal en el HTML. Sin la directiva, Astro intenta procesarlo. */}
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {indexable && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )}
     <Analitica />
   </head>
   <body>

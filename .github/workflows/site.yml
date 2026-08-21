@@ -35,13 +35,24 @@ jobs:
           set -e
           fallos=0
           for f in $(find dist -name '*.html'); do
-            grep -q 'name="viewport"'   "$f" || { echo "✗ sin viewport: $f"; fallos=1; }
-            grep -q '<html lang='       "$f" || { echo "✗ sin lang: $f";     fallos=1; }
-            grep -q 'rel="canonical"'   "$f" || { echo "✗ sin canonical: $f"; fallos=1; }
-            grep -q 'hreflang='         "$f" || { echo "✗ sin hreflang: $f";  fallos=1; }
+            # Exigible a TODA página, incluidas las de error.
+            grep -q 'name="viewport"'    "$f" || { echo "✗ sin viewport: $f"; fallos=1; }
+            grep -q '<html lang='        "$f" || { echo "✗ sin lang: $f";     fallos=1; }
             grep -q 'name="description"' "$f" || { echo "✗ sin description: $f"; fallos=1; }
             grep -cE '<h1' "$f" | grep -qx 1 || { echo "✗ no hay exactamente un h1: $f"; fallos=1; }
             grep -oE '<img[^>]*>' "$f" | grep -v 'alt=' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
+
+            # Las páginas de error no son contenido indexable: no tienen URL
+            # canónica ni versión en otro idioma que ofrecer a Google. En vez de
+            # eximirlas sin más, se les exige lo contrario — que declaren noindex.
+            if [ "$(basename "$f")" = "404.html" ]; then
+              grep -q 'name="robots"[^>]*noindex' "$f" || { echo "✗ 404 sin noindex: $f"; fallos=1; }
+              grep -q 'rel="canonical"'           "$f" && { echo "✗ 404 con canonical: $f"; fallos=1; } || true
+              grep -q 'schema.org'                "$f" && { echo "✗ 404 con datos estructurados: $f"; fallos=1; } || true
+            else
+              grep -q 'rel="canonical"'      "$f" || { echo "✗ sin canonical: $f"; fallos=1; }
+              grep -q 'rel="alternate"'      "$f" || { echo "✗ sin hreflang: $f";  fallos=1; }
+            fi
           done
           # ADR-0003 regla 1: la interfaz nunca promete una reserva confirmada.
           if grep -rniE 'reserva confirmada|booking confirmed' dist --include='*.html' -q; then

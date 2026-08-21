@@ -40,7 +40,7 @@
     {
       "sev": "media",
       "tema": "SEO",
-      "det": "41 página(s) sin canonical"
+      "det": "40 página(s) sin canonical"
     },
     {
       "sev": "media",
@@ -56,6 +56,11 @@
       "sev": "media",
       "tema": "A11y",
       "det": "35 página(s) con salto en la jerarquía de encabezados (ej. h2 → h5 en `duruthemes.com/demo/html/cappa/demo1-light/about.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)"
+    },
+    {
+      "sev": "info",
+      "tema": "Errores",
+      "det": "1 pagina(s) de error 404 (`duruthemes.com/demo/html/cappa/demo1-light/404.html`) — excluidas de las reglas de SEO indexable, como corresponde"
     }
   ],
   "huella": {

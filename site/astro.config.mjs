@@ -13,7 +13,19 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
 
-  build: { inlineStylesheets: 'auto' },
+  build: {
+    inlineStylesheets: 'auto',
+    // 'preserve' respeta la estructura de src/pages en la salida. Con el valor
+    // por defecto ('directory'), `en/404.astro` se emite como `en/404/index.html`
+    // y Cloudflare Pages nunca lo encuentra: busca un `404.html` en el directorio
+    // pedido y va subiendo. Sin esto, una ruta inexistente bajo /en/ caeria en el
+    // 404 en espanol.
+    //
+    // No cambia ninguna URL actual. Consecuencia para las paginas futuras: se
+    // crean como `alojamiento/index.astro`, no como `alojamiento.astro`, para
+    // seguir sirviendo /alojamiento/ y no /alojamiento.html.
+    format: 'preserve',
+  },
 
   // La plantilla Cappa cargaba 715 <img> sin dimensiones. Aquí el servicio de
   // imagen de Astro las escribe siempre, que es lo que mantiene el CLS en cero.

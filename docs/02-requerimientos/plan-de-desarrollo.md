@@ -95,7 +95,7 @@ cimientos que no haya que rehacer.*
 2. Recorrer la home en español; cambiar a inglés con el selector.
 3. Navegar el menú completo **sólo con el teclado**, mostrando el foco.
 4. Mostrar PageSpeed móvil con los tres Core Web Vitals en verde.
-5. Mostrar que el sitio pesa 30 KB y carga **0 archivos JavaScript**.
+5. Mostrar que cada página pesa 21 KB y carga **0 archivos JavaScript**.
 
 **Criterio de salida:** URL de staging pública, CWV verdes medidos, cero hallazgos del
 auditor propio.

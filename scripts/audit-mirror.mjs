@@ -215,12 +215,18 @@ const restApi = files.filter(f => /wp-json/.test(f)).length;
 if (restApi) F('media', 'Seguridad', `API REST de WordPress accesible sin autenticación (${restApi} respuestas capturadas en \`/wp-json/\`) — expone estructura, contenido y usuarios`);
 
 
+// Las paginas de error no son contenido indexable: no tienen URL canonica, no
+// tienen version en otro idioma que ofrecer, y DEBEN llevar noindex. Aplicarles
+// las reglas de SEO produce tres falsos positivos por cada una.
+const esError = p => /(^|\/)404\.html$/.test(p.ruta);
+const indexables = pages.filter(p => !esError(p));
+
 const sinTitle = pages.filter(p => !p.title);
 const sinDesc = pages.filter(p => !p.description);
 const titleDup = dup(pages.map(p => p.title));
 const h1Mal = pages.filter(p => p.nH1 !== 1);
-const sinCanon = pages.filter(p => !p.canonical);
-const sinHreflang = pages.filter(p => p.hreflang.length === 0);
+const sinCanon = indexables.filter(p => !p.canonical);
+const sinHreflang = indexables.filter(p => p.hreflang.length === 0);
 const sinViewport = pages.filter(p => !p.viewport);
 const totalAlt = pages.reduce((a, p) => a + p.imgsSinAlt, 0);
 const totalDim = pages.reduce((a, p) => a + p.imgsSinDim, 0);
@@ -253,7 +259,7 @@ const saltos = pages.filter(p => p.saltoJerarquia);
 if (saltos.length) F('media', 'A11y', `${saltos.length} página(s) con salto en la jerarquía de encabezados (ej. ${saltos[0].saltoJerarquia} en \`${saltos[0].ruta}\`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)`);
 const sinLang = pages.filter(p => !p.lang);
 if (sinLang.length) F('alta', 'A11y', `${sinLang.length} página(s) sin atributo lang en <html> (WCAG 3.1.1)`);
-const noindex = pages.filter(p => /noindex/i.test(p.robots ?? ''));
+const noindex = indexables.filter(p => /noindex/i.test(p.robots ?? ''));
 if (noindex.length) F('alta', 'SEO', `${noindex.length} página(s) con meta robots noindex — invisibles para Google`);
 // ---------- enlaces internos rotos ----------
 // Ninguna otra regla mira si un enlace lleva a alguna parte. En un sitio estatico
@@ -289,6 +295,9 @@ if (rotos.length) {
     + `(${porDestino.length} destino(s) distintos): ${porDestino.slice(0, 6).map(h => `\`${h}\``).join(' · ')}`
     + (porDestino.length > 6 ? ` y ${porDestino.length - 6} mas` : ''));
 }
+
+const paginasError = pages.filter(esError);
+if (paginasError.length) F('info', 'Errores', `${paginasError.length} pagina(s) de error 404 (\`${paginasError.map(p=>p.ruta).join('`, `')}\`) — excluidas de las reglas de SEO indexable, como corresponde`);
 
 const titleLargo = pages.filter(p => p.titleLen > 60);
 if (titleLargo.length) F('info', 'SEO', `${titleLargo.length} <title> de más de 60 caracteres: Google los trunca en resultados`);

@@ -197,7 +197,7 @@ componentes base accesibles (H1.4), esquema de alojamiento validado en compilaci
 8 tipos reales (H1.5), home bilingüe con `schema.org/Hotel` (H1.6), componente de analítica
 integrado e inerte (H1.7) y CI con guardias de la DoD (H1.2, falta la cuenta).
 
-**El sitio compila con 0 archivos JS y 30 KB**, y el mismo auditor que encontró 21 hallazgos
+**El sitio compila con 0 archivos JS y 21 KB por página**, y el mismo auditor que encontró 21 hallazgos
 en el sitio vigente encuentra **0** en el nuevo.
 
 ### ⚠️ Datos sin verificar

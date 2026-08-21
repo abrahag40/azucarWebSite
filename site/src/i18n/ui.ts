@@ -44,6 +44,11 @@ export const ui = {
     'footer.terminos': 'Términos y condiciones',
     'footer.politicas': 'Políticas del hotel',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
+
+    'error404.titulo': 'Esta página no existe',
+    'error404.entrada': 'El enlace que seguiste puede estar roto, o la página se movió. Desde aquí puedes volver.',
+    'error404.inicio': 'Ir al inicio',
+    'error404.meta': 'La página que buscas no existe. Vuelve al inicio de Azúcar Hotel Tulum o consulta nuestro alojamiento.',
   },
   en: {
     'nav.inicio': 'Home',
@@ -78,6 +83,11 @@ export const ui = {
     'footer.terminos': 'Terms and conditions',
     'footer.politicas': 'Hotel policies',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
+
+    'error404.titulo': 'This page does not exist',
+    'error404.entrada': 'The link you followed may be broken, or the page may have moved. You can head back from here.',
+    'error404.inicio': 'Go to the homepage',
+    'error404.meta': 'The page you are looking for does not exist. Return to the Azúcar Hotel Tulum homepage or browse our rooms.',
   },
 } as const;
 

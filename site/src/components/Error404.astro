@@ -1,0 +1,68 @@
+---
+/**
+ * Cuerpo de la página de error 404, compartido por ES y EN.
+ *
+ * Vive en un componente y no duplicado en las dos páginas porque el marcado y
+ * los estilos son idénticos: lo único que cambia es el idioma de las cadenas.
+ * Duplicarlo es el defecto que ADR-0004 evita en todo el proyecto.
+ */
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+  <section class="error">
+    <div class="contenedor error__contenido">
+      <p class="error__codigo" aria-hidden="true">404</p>
+      <h1 class="error__titulo">{t('error404.titulo')}</h1>
+      <p class="error__entrada">{t('error404.entrada')}</p>
+      <div class="error__acciones">
+        <a class="boton boton--primario" href={ruta(idioma)}>{t('error404.inicio')}</a>
+        <a class="boton boton--secundario" href={ruta(idioma, 'alojamiento')}>
+          {t('alojamiento.ver')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+<style>
+  .error {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+    padding-block: var(--space-9);
+    background: var(--color-surface-warm);
+  }
+  .error__contenido {
+    text-align: center;
+    max-width: var(--container-text);
+  }
+  /* Decorativo y aria-hidden: el código repetido en voz alta no aporta nada a
+     quien usa lector de pantalla, que ya oye el título. */
+  .error__codigo {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: 1;
+    color: var(--color-accent);
+    margin: 0;
+  }
+  .error__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    line-height: var(--leading-tight);
+    margin: var(--space-4) 0 0;
+  }
+  .error__entrada {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin: var(--space-4) auto 0;
+  }
+  .error__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
+</style>

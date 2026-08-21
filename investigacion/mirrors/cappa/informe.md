@@ -27,10 +27,11 @@
 | 🔴 | A11y | 5 página(s) sin atributo lang en <html> (WCAG 3.1.1) |
 | 🟡 | SEO | 5 de 41 páginas sin meta description |
 | 🟡 | SEO/A11y | 13 página(s) sin exactamente un <h1> |
-| 🟡 | SEO | 41 página(s) sin canonical |
+| 🟡 | SEO | 40 página(s) sin canonical |
 | 🟡 | Rendimiento | 715 <img> sin width/height → provoca CLS |
 | 🟡 | Rendimiento | 0 de 52 imágenes en formato moderno (WebP/AVIF) |
 | 🟡 | A11y | 35 página(s) con salto en la jerarquía de encabezados (ej. h2 → h5 en `duruthemes.com/demo/html/cappa/demo1-light/about.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1) |
+| ℹ️ | Errores | 1 pagina(s) de error 404 (`duruthemes.com/demo/html/cappa/demo1-light/404.html`) — excluidas de las reglas de SEO indexable, como corresponde |
 
 ## Huella tecnológica
 
