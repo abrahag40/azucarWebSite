@@ -43,10 +43,37 @@ teléfono grande en color de acento al final.
 
 ---
 
-## 2. Lo que falta, y por qué
+## 2. Densidad — medido contra el sitio EN VIVO, no contra la captura
 
-La portada de Cappa mide **9 371 px**; la nuestra, **4 068 px**. No es que esté a medias:
-es que **cuatro de sus diez secciones no pueden existir en este proyecto**.
+Abraham señaló que la portada tenía menos que el original y pasó la URL real. Se midieron
+las dos con la misma vara, a 1280 px:
+
+| | Cappa en vivo | Azúcar |
+|---|---|---|
+| Alto de la portada | **9 231 px** | **9 134 px** |
+| Secciones | 10 + pie | 10 + pie |
+
+**97 píxeles de diferencia, un 1 %.** La captura HTTrack, por cierto, era fiel: daba 9 371.
+
+Para llegar ahí hicieron falta dos cambios que no eran de maquetación sino de **densidad**:
+
+| | Antes | Ahora | Cappa |
+|---|---|---|---|
+| Tipos de alojamiento en portada | 3 | **6** | 5 |
+| Sección de experiencias | 809 px, 3 columnas | **1 538 px, filas alternadas** | 1 760 px |
+
+La sección `services` de Cappa mide 1 760 px porque son **cuatro filas de 380 px a media
+pantalla** —foto en un lado, texto en el otro, alternando el lado— y no tres columnas. En
+tres columnas lo mismo ocupa la mitad y se lee como un pie de foto. Se reprodujo el reparto
+exacto.
+
+> **La lección:** la diferencia no estaba en cuántas secciones había, sino en **cuánto pesa
+> cada una**. Contar secciones daba 10 contra 10 desde hacía rato, y aun así el original se
+> veía el doble de sustancioso.
+
+## 3. Lo que falta, y por qué
+
+Cuatro de las diez secciones de Cappa **no pueden existir en este proyecto**.
 
 | Sección de Cappa | Alto | Estado | Motivo |
 |---|---|---|---|
@@ -65,7 +92,7 @@ es que **cuatro de sus diez secciones no pueden existir en este proyecto**.
 
 ---
 
-## 3. Lo que era distinto sin buena razón, y se corrigió
+## 4. Lo que era distinto sin buena razón, y se corrigió
 
 Aquí es donde la comparación medida sirvió de algo. La **separación entre letras** es la
 firma tipográfica más característica de esta plantilla, y la teníamos muy por debajo:
@@ -92,7 +119,7 @@ al límite y nadie lo sabía porque nunca se había medido. Corregido con `white
 
 ---
 
-## 4. Lo que es distinto a propósito, y no se va a cambiar
+## 5. Lo que es distinto a propósito, y no se va a cambiar
 
 | Diferencia | Por qué |
 |---|---|
@@ -105,7 +132,7 @@ al límite y nadie lo sabía porque nunca se había medido. Corregido con `white
 
 ---
 
-## 5. Y el asterisco que hay que decir en voz alta
+## 6. Y el asterisco que hay que decir en voz alta
 
 La fidelidad visual está donde puede estar **con las fotografías que hay**. Cappa se
 fotografía como un catálogo: interiores oscuros, luz controlada, encuadres amplios. El

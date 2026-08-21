@@ -43,7 +43,10 @@ const t = usarT(idioma);
       visual de la plantilla y la razón de que el recorrido no se haga plano. */}
   <Hero idioma={idioma} />
   <SeccionPresentacion idioma={idioma} />
-  <SeccionAlojamiento idioma={idioma} limite={3} />
+  {/* Seis de los ocho tipos, no tres. Cappa muestra cinco en su carrusel de
+      `rooms1`; con tres, la sección se leía como una muestra y no como un
+      catálogo. Los ocho harían la portada más larga que la página de listado. */}
+  <SeccionAlojamiento idioma={idioma} limite={6} />
   <FranjaLlamada idioma={idioma} />
   <FranjaImagen idioma={idioma} />
   <SeccionAmenidades idioma={idioma} />

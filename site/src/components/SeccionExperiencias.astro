@@ -54,35 +54,45 @@ const tarjetas = [
 ].filter((x) => x.dato);
 ---
 {tarjetas.length > 0 && (
-  <section class="seccion experiencias" aria-labelledby="exp-titulo">
+  <section class="experiencias" aria-labelledby="exp-titulo">
     <div class="contenedor">
       <header class="encabezado encabezado--centrado">
         <p class="antetitulo">{t('exp.antetitulo')}</p>
         <h2 id="exp-titulo">{t('exp.titulo')}</h2>
       </header>
+    </div>
 
-      <ul class="experiencias__rejilla" role="list">
-        {tarjetas.map(({ dato, imagen, etiqueta }) => (
-          <li class="experiencia">
-            <div class="experiencia__medio">
-              <Image
-                src={imagen}
-                alt=""
-                widths={[360, 540, 720]}
-                sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 92vw"
-                loading="lazy"
-                quality={50}
-              />
+    {/* Cada experiencia es una FILA a media pantalla: fotografía en un lado,
+        texto sobre fondo cálido en el otro, alternando el lado en cada fila.
+        Es el reparto exacto de la sección `services` de Cappa —cuatro filas de
+        380 px, imagen izquierda, derecha, izquierda, derecha— y es lo que le da
+        a esa sección su peso: en tres columnas, lo mismo ocupa la mitad y se lee
+        como un pie de foto. */}
+    <ul class="experiencias__filas" role="list">
+      {tarjetas.map(({ dato, imagen, etiqueta }, i) => (
+        <li class:list={['exp-fila', i % 2 === 1 && 'exp-fila--invertida']}>
+          <div class="exp-fila__medio">
+            <Image
+              src={imagen}
+              alt=""
+              widths={[640, 960, 1280]}
+              sizes="(min-width: 56rem) 50vw, 100vw"
+              loading="lazy"
+              quality={50}
+            />
+          </div>
+          <div class="exp-fila__cuerpo">
+            <div class="exp-fila__texto">
+              <p class="antetitulo">{etiqueta}</p>
+              <h3 class="exp-fila__titulo">{dato!.titulo[idioma]}</h3>
+              <p class="exp-fila__parrafo">{dato!.texto[idioma]}</p>
             </div>
-            <div class="experiencia__cuerpo">
-              <p class="antetitulo experiencia__etiqueta">{etiqueta}</p>
-              <h3 class="experiencia__titulo">{dato!.titulo[idioma]}</h3>
-              <p class="experiencia__texto">{dato!.texto[idioma]}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+          </div>
+        </li>
+      ))}
+    </ul>
 
+    <div class="contenedor">
       <p class="experiencias__accion">
         <a class="boton boton--secundario" href={ruta(idioma, 'servicios')}>{t('exp.ver')}</a>
       </p>
@@ -91,37 +101,43 @@ const tarjetas = [
 )}
 
 <style>
-  .experiencias__rejilla {
-    list-style: none; padding: 0; margin: var(--space-7) 0 0;
-    display: grid; gap: var(--space-6);
-    grid-template-columns: minmax(0, 1fr);
-  }
-  @media (min-width: 48rem) {
-    .experiencias__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); }
-  }
-  .experiencia { min-width: 0; }
+  .experiencias { padding-block: clamp(var(--space-7), 8vw, var(--space-9)); }
 
-  .experiencia__medio {
-    overflow: hidden;
-    border-radius: var(--radius-sm);
-    aspect-ratio: 4 / 3;
-    background: var(--color-surface-alt);
-    margin-bottom: var(--space-5);
-  }
-  .experiencia__medio :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .experiencias__filas { list-style: none; padding: 0; margin: var(--space-7) 0 0; }
 
-  /* La fotografía es decorativa: su `alt` va vacío a propósito. Lo que describe
-     la tarjeta es el título y el párrafo que van justo debajo, y repetirlo en el
-     `alt` haría que un lector de pantalla dijera lo mismo dos veces seguidas. */
-  .experiencia__etiqueta { margin-bottom: var(--space-2); }
-  .experiencia__titulo {
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-3);
+  /* A partir de 56 rem, dos mitades exactas. Por debajo, la foto arriba y el
+     texto debajo: partir 380 px en dos columnas a 320 px deja ambas ilegibles. */
+  .exp-fila { display: grid; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 56rem) {
+    .exp-fila { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 380px; }
+    /* La inversión se hace con `order` y sólo aquí: en móvil el orden del
+       marcado —foto, luego texto— ya es el correcto y reordenar separaría el
+       orden visual del orden de lectura. */
+    .exp-fila--invertida .exp-fila__medio { order: 2; }
   }
-  .experiencia__texto {
+
+  .exp-fila__medio { position: relative; min-height: 260px; background: var(--color-surface-alt); }
+  .exp-fila__medio :global(img) {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .exp-fila__cuerpo {
+    display: grid; align-items: center;
+    background: var(--color-surface-warm);
+    padding: clamp(var(--space-6), 5vw, var(--space-8));
+  }
+  .exp-fila__texto { max-width: 34rem; }
+  .exp-fila__titulo {
+    font-size: clamp(var(--text-xl), 2.4vw, var(--text-2xl));
+    margin-block: var(--space-2) var(--space-4);
+  }
+  .exp-fila__parrafo {
     color: var(--color-ink-muted);
     line-height: var(--leading-body);
     margin: 0;
   }
+
   .experiencias__accion { margin: var(--space-7) 0 0; text-align: center; }
 </style>
