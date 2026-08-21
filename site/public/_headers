@@ -1,0 +1,26 @@
+# Cabeceras de Cloudflare Pages — Azúcar Hotel Tulum
+#
+# POR QUÉ HACE FALTA ESTE ARCHIVO
+# Cloudflare Pages aplica `max-age=0, must-revalidate` a todo lo que sale de
+# `public/`, y con razón: son archivos de nombre estable, así que no puede
+# saber si cambiaron. Los de `_astro/` sí llevan hash en el nombre y reciben
+# caché larga automáticamente.
+#
+# El efecto medido en producción era que las CINCO tipografías se revalidaban en
+# cada navegación: cinco viajes de ida y vuelta por página, aunque devuelvan 304.
+# En una conexión móvil de Tulum eso es latencia pura sobre el camino crítico
+# del texto, que es justo lo que acabábamos de optimizar autoalojándolas.
+#
+# `immutable` es seguro aquí porque el contenido de estos archivos NO cambia: si
+# alguna vez hubiera que sustituir una tipografía, se cambia el nombre del
+# archivo, que es la disciplina que hace válida esta cabecera.
+
+/fuentes/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cabeceras de seguridad básicas. No sustituyen a la revisión del sprint 5
+# (H5.5), pero no hay motivo para no tenerlas desde ya.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
