@@ -34,6 +34,7 @@ p { text-wrap: pretty; }
    <img> sin dimensiones; ese defecto no se hereda. */
 img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 
+
 input, button, textarea, select { font: inherit; color: inherit; }
 
 a { color: var(--color-accent-text); text-underline-offset: 0.2em; }

@@ -44,6 +44,14 @@ jobs:
             # emite asi cuando el valor es "". Exigir `alt=` marcaba como fallo el
             # marcado bien hecho.
             grep -oE '<img[^>]*>' "$f" | grep -vE 'alt(=|[[:space:]>/])' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
+            # width/height en toda imagen: es lo que mantiene el CLS en cero y
+            # está en la DoD, pero no se comprobaba. Se excluye el contenido de
+            # los <dialog> cerrados —el hueco del visor de la galería— porque no
+            # participa del layout y se rellena en ejecución con fotos de
+            # dimensiones distintas cada vez. Mismo criterio que el auditor.
+            perl -0777 -pe 's/<dialog\b(?![^>]*\bopen\b)[^>]*>.*?<\/dialog>//gs' "$f" \
+              | grep -oE '<img[^>]*>' | grep -v 'width=' | grep -q . \
+              && { echo "✗ <img> sin width/height: $f"; fallos=1; } || true
 
             # Las páginas de error no son contenido indexable: no tienen URL
             # canónica ni versión en otro idioma que ofrecer a Google. En vez de
