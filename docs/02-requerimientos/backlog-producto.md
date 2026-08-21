@@ -116,7 +116,7 @@
 **Sprint 2. Objetivo del sprint:** *que el huésped pueda recorrer los ocho tipos, entender
 qué los distingue y elegir uno.*
 
-### H2.1 — Listado de alojamiento · `M`
+### H2.1 — Listado de alojamiento · `M` · ✅
 > Como **huésped potencial**, quiero ver todos los tipos en una página, para comparar.
 
 - **Dado** que entro en `/alojamiento/`, **entonces** veo todas las fichas publicadas ordenadas por `orden`.
@@ -124,7 +124,7 @@ qué los distingue y elegir uno.*
 - **Entonces** cada tarjeta muestra nombre, vista, capacidad, camas y qué la distingue.
 - **Y** existe en `/alojamiento/` y en `/en/rooms/`, enlazadas por `hreflang`.
 
-### H2.2 — Ficha de detalle · `M`
+### H2.2 — Ficha de detalle · `M` · ✅ *8 fichas ES + 8 EN; datos sin verificar marcados con asterisco (C1)*
 > Como **huésped potencial**, quiero ver una habitación en detalle, para saber exactamente
 > qué incluye antes de solicitarla.
 
@@ -133,7 +133,7 @@ qué los distingue y elegir uno.*
 - **Y** ofrece "Solicitar reserva" con el tipo **preseleccionado**.
 - **Y** enlaza a la ficha siguiente y anterior, para no dejar al huésped en un callejón sin salida.
 
-### H2.3 — Galería accesible · `M`
+### H2.3 — Galería accesible · `M` · ✅
 > Como **huésped potencial**, quiero ampliar las fotos, porque la foto es el producto.
 
 - **Dado** el visor abierto, **cuando** pulso `Esc`, **entonces** se cierra y el foco vuelve al disparador.
@@ -141,7 +141,7 @@ qué los distingue y elegir uno.*
 - **Entonces** se navega con flechas y con botones visibles.
 - **Y** funciona sin JavaScript en modo degradado: las imágenes son enlaces a sí mismas.
 
-### H2.4 — Datos estructurados de hotelería · `S`
+### H2.4 — Datos estructurados de hotelería · `S` · ✅
 > Como **Cliente-Decisor**, quiero aparecer en Google con la información enriquecida que hoy
 > sólo muestran las OTAs.
 
@@ -149,7 +149,7 @@ qué los distingue y elegir uno.*
 - **Y** valida sin errores ni advertencias en Rich Results Test.
 - **Y** **no** se declara `priceRange` ni `AggregateRating` mientras el dato no esté confirmado.
 
-### H2.5 — Imágenes optimizadas · `S`
+### H2.5 — Imágenes optimizadas · `S` · ✅ *AVIF medido y descartado (ADR-0005); calidad 50, −20 %*
 > Como **huésped potencial** en 4G, quiero que las fotos carguen rápido, para no abandonar.
 
 - **Entonces** toda imagen se sirve en AVIF/WebP con `srcset` y respaldo.
@@ -188,7 +188,7 @@ completa y con el precio total, enviada desde el sitio.*
 - **Dado** un campo inválido, **entonces** el error se anuncia al lector de pantalla y el foco va al campo.
 - **Y** en ninguna pantalla aparece la palabra "confirmada".
 
-### H3.3 — 🔴 Cotización con impuestos desglosados · `M`
+### H3.3 — 🔴 Cotización con impuestos desglosados · `M` · 🔴 *bloqueada por C3*
 > Como **huésped potencial**, quiero ver el total real antes de enviar, para que no me
 > sorprendan al llegar.
 
@@ -200,7 +200,7 @@ completa y con el precio total, enviada desde el sitio.*
 > Ataca directamente la queja recurrente de "me cobraron más de lo publicado" documentada
 > en la auditoría. **Es el diferenciador frente a las OTAs.**
 
-### H3.4 — Endpoint de recepción · `M`
+### H3.4 — Endpoint de recepción · `M` · 🔴 *bloqueada por B1–B4 y E-PRIV*
 > Como **manager**, quiero que las solicitudes lleguen íntegras y sin basura.
 
 - **Entonces** la validación se repite en servidor, nunca sólo en cliente.
@@ -208,13 +208,13 @@ completa y con el precio total, enviada desde el sitio.*
 - **Y** hay límite de tasa por IP.
 - **Y** **no se captura ningún dato de tarjeta** (ADR-0003). Lo verifica el CI.
 
-### H3.5 — Acuse inmediato al huésped · `S`
+### H3.5 — Acuse inmediato al huésped · `S` · 🔴 *bloqueada por H3.4*
 > Como **huésped potencial**, quiero saber que mi solicitud llegó, para no irme a Booking.
 
 - **Dado** que envío, **entonces** en menos de 30 segundos recibo correo con resumen, cotización y compromiso de respuesta.
 - **Y** la pantalla de confirmación dice "solicitud recibida", nunca "reserva confirmada".
 
-### H3.6 — Notificación al manager · `S`
+### H3.6 — Notificación al manager · `S` · 🔴 *bloqueada por B1–B4*
 > Como **manager**, quiero recibirla en el teléfono con todo lo necesario para responder sin
 > repreguntar.
 
@@ -227,7 +227,7 @@ completa y con el precio total, enviada desde el sitio.*
 - **Entonces** hay acceso visible en todas las páginas.
 - **Y** el mensaje llega pre-llenado con el contexto de la página desde la que se escribió.
 
-### H3.8 — Aviso de privacidad y consentimiento · `S`
+### H3.8 — Aviso de privacidad y consentimiento · `S` · 🔄 *aviso publicado con sus carencias declaradas; el consentimiento entra con H3.4 (E-PRIV)*
 > Como **huésped potencial**, quiero saber qué hacen con mis datos, y como **hotel**,
 > cumplir la ley.
 
@@ -242,17 +242,17 @@ completa y con el precio total, enviada desde el sitio.*
 **Sprint 4. Objetivo del sprint:** *que el sitio responda, sin que el huésped tenga que
 escribir, todo lo que pregunta antes de decidir.*
 
-| # | Historia | Talla |
-|---|---|---|
-| H4.1 | Servicios y amenidades | `M` |
-| H4.2 | Restaurante y bar | `S` |
-| H4.3 | Spa y experiencias | `S` |
-| H4.4 | Galería general | `S` |
-| H4.5 | **Ubicación y cómo llegar** | `M` |
-| H4.6 | Contacto | `S` |
-| H4.7 | Políticas y preguntas frecuentes | `M` |
-| H4.8 | Páginas legales | `S` |
-| H4.9 | 404 útil, `sitemap.xml`, `robots.txt` | `S` |
+| # | Historia | Talla | Estado |
+|---|---|---|---|
+| H4.1 | Servicios y amenidades | `M` | ✅ |
+| H4.2 | Restaurante y bar | `S` | 🔴 **C0** — el propio cliente se contradice: no se publica |
+| H4.3 | Spa y experiencias | `S` | 🔴 **C0** — igual que H4.2 |
+| H4.4 | Galería general | `S` | ✅ 8 fotografías con alternativas propias |
+| H4.5 | **Ubicación y cómo llegar** | `M` | ✅ |
+| H4.6 | Contacto | `S` | ✅ |
+| H4.7 | Políticas y preguntas frecuentes | `M` | ✅ 16 preguntas + 6 grupos de políticas |
+| H4.8 | Páginas legales | `S` | 🔄 publicado con sus carencias declaradas (**E-PRIV**) |
+| H4.9 | 404 útil, `sitemap.xml`, `robots.txt` | `S` | ✅ |
 
 ### H4.5 merece detalle
 > Como **huésped potencial que ya reservó o está por hacerlo**, quiero saber exactamente
@@ -274,7 +274,7 @@ escribir, todo lo que pregunta antes de decidir.*
 **Sprint 5. Objetivo del sprint:** *que el sitio esté en producción, sin perder
 posicionamiento y con vuelta atrás probada.*
 
-### H5.1 — Auditoría WCAG 2.2 AA · `M`
+### H5.1 — Auditoría WCAG 2.2 AA · `M` · 🔄 *marcado auditado y en cero; contraste, foco y objetivos táctiles medidos en navegador. Falta H5.4*
 - **Entonces** recorrido completo por teclado sin trampas de foco.
 - **Y** recorrido con lector de pantalla real, no sólo con herramienta automática.
 - **Y** todo contraste ≥ 4.5:1 verificado.
@@ -283,11 +283,11 @@ posicionamiento y con vuelta atrás probada.*
 > Las herramientas automáticas detectan alrededor de un tercio de los problemas reales de
 > accesibilidad. Por eso la revisión manual es requisito, no adorno.
 
-### H5.2 — Core Web Vitals · `M`
+### H5.2 — Core Web Vitals · `M` · 🔴 *requiere PageSpeed desde un navegador real (Abraham)*
 - **Entonces** en móvil con red 4G simulada: **LCP < 2.5 s · INP < 200 ms · CLS < 0.1**.
 - **Y** la medición queda registrada como evidencia con fecha.
 
-### H5.3 — 🔴 Redirecciones 301 · `M`
+### H5.3 — 🔴 Redirecciones 301 · `M` · ✅ *12 reglas, 25 URLs, 0 fallos, con prueba automatizada*
 - **Entonces** toda URL indexada del sitio antiguo resuelve con **301** a su equivalente.
 - **Y** también las 20 redirecciones `?p=<id>` ya vigentes detectadas en la auditoría.
 - **Y** ninguna cadena de redirección tiene más de un salto.
@@ -296,23 +296,23 @@ posicionamiento y con vuelta atrás probada.*
 > Sin esto, el rediseño destruye el posicionamiento acumulado desde 2008. **El mapa sólo se
 > puede construir mientras exista el mirror**, por eso se levantó en el sprint 0.
 
-### H5.4 — Pruebas en dispositivos reales · `S`
+### H5.4 — Pruebas en dispositivos reales · `S` · 🔴 *requiere hardware y lector de pantalla (Abraham)*
 - Chrome, Safari y Firefox · iOS y Android físicos, no sólo emulador.
 
-### H5.5 — Revisión de seguridad · `S`
+### H5.5 — Revisión de seguridad · `S` · ✅ *CSP estricta generada por hash en cada build*
 - Cabeceras de seguridad y CSP · endpoint del formulario revisado · **cero secretos en el repositorio**.
 
-### H5.6 — 🔴 Plan de reversión probado · `S`
+### H5.6 — 🔴 Plan de reversión probado · `S` · ✅ *capa 1 ENSAYADA: reversión efectiva en ~6 s*
 - **Dado** un fallo en producción, **cuando** se ejecuta la reversión, **entonces** el sitio anterior vuelve en **menos de 15 minutos**.
 - **Y** el procedimiento se **ensaya antes** del lanzamiento, no se documenta y ya.
 
 > El hotel vende 24/7. Un lanzamiento sin vuelta atrás convierte cualquier error en pérdida
 > de reservas reales. **No se lanza en temporada alta** (pregunta A4).
 
-### H5.7 — Lanzamiento y monitoreo · `S`
+### H5.7 — Lanzamiento y monitoreo · `S` · ⬜ *depende del dominio y de las respuestas del cliente*
 - 72 horas de vigilancia · Search Console sin errores de rastreo · comprobación de las 301 en producción.
 
-### H5.8 — Traspaso · `M`
+### H5.8 — Traspaso · `M` · ⬜ *sin empezar. Es la última historia sin bloqueo que queda*
 - **Entonces** el manager sabe atender una solicitud de principio a fin.
 - **Y** existe runbook operativo escrito.
 - **Y** la sesión de capacitación queda grabada.
@@ -321,12 +321,12 @@ posicionamiento y con vuelta atrás probada.*
 
 # ÉPICA E6 — Medición *(transversal)*
 
-| # | Historia | Sprint |
-|---|---|---|
-| H6.1 | GA4 con medición de canal de origen | 1 |
-| H6.2 | Search Console verificado y sitemap enviado | 5 |
-| H6.3 | Eventos de embudo: ver alojamiento → iniciar solicitud → enviar | 3 |
-| H6.4 | Panel simple de reservas directas para el cliente | 5 |
+| # | Historia | Sprint | Estado |
+|---|---|---|---|
+| H6.1 | GA4 con medición de canal de origen | 1 | 🔴 falta el ID `G-…` |
+| H6.2 | Search Console verificado y sitemap enviado | 5 | 🔴 requiere la cuenta de Abraham |
+| H6.3 | Eventos de embudo: ver alojamiento → iniciar solicitud → enviar | 3 | 🔴 depende de H6.1 |
+| H6.4 | Panel simple de reservas directas para el cliente | 5 | ⬜ depende de H3.4 |
 
 > **Por qué es transversal y arranca en el sprint 1:** el cliente no tiene datos
 > comparativos. Sin línea base no se puede demostrar mejora, sólo opinar que se ve mejor.
