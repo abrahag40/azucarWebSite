@@ -43,6 +43,14 @@ Mapa de la documentación. El contexto general y las reglas de trabajo viven en
 - [Mapa de redirecciones 301](05-despliegue/mapa-301.md) — y su prueba automatizada
 - [Plan de reversión del lanzamiento](05-despliegue/plan-de-reversion.md) — criterio, capas y ensayos
 
+### Traspaso
+
+| Documento | Contenido |
+|---|---|
+| [`06-traspaso/runbook-operativo-solicitudes.md`](06-traspaso/runbook-operativo-solicitudes.md) | **Para el hotel.** Cómo atender una solicitud de principio a fin |
+| [`06-traspaso/traspaso-tecnico.md`](06-traspaso/traspaso-tecnico.md) | Para quien mantenga el sitio. Incluye **lo que sólo vive en la cabeza de Abraham** |
+| [`06-traspaso/guion-capacitacion.md`](06-traspaso/guion-capacitacion.md) | Guion de la sesión de 45 minutos, para grabar |
+
 ### Decisiones
 - [ADR-0001 — Descubrimiento antes de requerimientos](decisiones/ADR-0001-descubrimiento-antes-de-requerimientos.md)
 - [ADR-0002 — Marco de trabajo iterativo](decisiones/ADR-0002-marco-de-trabajo-iterativo.md)

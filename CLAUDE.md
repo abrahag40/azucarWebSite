@@ -237,6 +237,21 @@ pura con **9 pruebas unitarias** —las primeras del proyecto—, porque el cál
 Siguen bloqueadas H3.3 (C3), H3.4 a H3.6 (B1–B4) y el consentimiento de H3.8 (E-PRIV).
 **H3.7 se descubre bloqueada por un dato nuevo: el sitio vigente no publica ningún WhatsApp.**
 
+### Traspaso — H5.8, escrito salvo la sesión
+
+Tres documentos para tres lectores distintos, en `docs/06-traspaso/`: el **runbook operativo
+del hotel** —cómo atender una solicitud, con la prohibición de pedir datos de tarjeta arriba
+del todo—, el **traspaso técnico** y el **guion de la capacitación**.
+
+Lo que el traspaso técnico aporta y no estaba en ningún sitio es la tabla de **lo que sólo
+vive en la cabeza de Abraham**: cuenta de Cloudflare, titularidad del dominio —desconocida,
+R-06—, accesos al hosting actual, licencia de Cappa, derechos de las fotografías y la
+propiedad viva en ResNexus. Un traspaso sin credenciales transferidas no es un traspaso.
+
+El runbook lleva **huecos visibles** —tiempo de respuesta (B2), impuestos (C3), responsable
+(B1)— que se rellenan en la propia sesión con el hotel delante. **La sesión y su grabación
+no son software**: el guion está listo, la da Abraham.
+
 ### Sprint 4 — contenido institucional, hecho salvo legal
 
 Servicios, ubicación, contacto, preguntas frecuentes y políticas en los dos idiomas, más
@@ -343,6 +358,9 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
 | **`docs/05-despliegue/plan-de-reversion.md`** | **Criterio de reversión, tres capas y preparativos de DNS** |
+| **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
+| `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
+| `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
 | **`docs/decisiones/bitacora-aprendizaje.md`** | **46 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |

@@ -312,7 +312,7 @@ posicionamiento y con vuelta atrás probada.*
 ### H5.7 — Lanzamiento y monitoreo · `S` · ⬜ *depende del dominio y de las respuestas del cliente*
 - 72 horas de vigilancia · Search Console sin errores de rastreo · comprobación de las 301 en producción.
 
-### H5.8 — Traspaso · `M` · ⬜ *sin empezar. Es la última historia sin bloqueo que queda*
+### H5.8 — Traspaso · `M` · 🔄 *runbook operativo, traspaso técnico y guion escritos; la sesión grabada la da Abraham*
 - **Entonces** el manager sabe atender una solicitud de principio a fin.
 - **Y** existe runbook operativo escrito.
 - **Y** la sesión de capacitación queda grabada.
