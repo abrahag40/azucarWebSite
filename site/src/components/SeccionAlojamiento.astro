@@ -15,11 +15,11 @@ const entradas = limite ? todos.slice(0, limite) : todos;
 ---
 <section class="seccion seccion--calida" aria-labelledby="alojamiento-titulo">
   <div class="contenedor">
-    <header class="encabezado">
+    <header class="encabezado encabezado--centrado">
       <p class="antetitulo">{t('alojamiento.titulo')}</p>
       <h2 id="alojamiento-titulo">{t('alojamiento.entrada')}</h2>
     </header>
-    <ul class="rejilla" role="list">
+    <ul class="rejilla-destacados" role="list">
       {entradas.map((entrada) => (
         <li><TarjetaAlojamiento entrada={entrada} idioma={idioma} /></li>
       ))}
@@ -35,10 +35,14 @@ const entradas = limite ? todos.slice(0, limite) : todos;
 </section>
 
 <style>
-  .encabezado { max-width: var(--container-text); margin-bottom: var(--space-7); }
-  .encabezado h2 { font-size: var(--text-2xl); margin-top: var(--space-2); }
   /* auto-fit + minmax: se adapta sin una sola media query, y sin Bootstrap */
-  .rejilla {
+  /* Nombre propio y no `.rejilla` a secas: `ListadoAlojamiento` define OTRA
+     `.rejilla` con tres puntos de ruptura explícitos. Las dos funcionan —cada
+     estilo está limitado a su componente— pero el mismo nombre con dos
+     comportamientos distintos es una trampa para quien lea el código y suponga
+     que se parecen. `auto-fit` aquí porque la portada muestra un número variable
+     de tipos y no debe cuadrarse a mano. */
+  .rejilla-destacados {
     list-style: none; padding: 0; display: grid; gap: var(--space-5);
     grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
   }

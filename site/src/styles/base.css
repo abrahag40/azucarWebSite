@@ -227,12 +227,15 @@ a:hover { color: var(--color-accent-hover); }
 
    Es el mismo defecto que el ancho máximo del acordeón: un patrón compartido
    escondido dentro del ámbito de un componente. Si lo usan varios, vive aquí. */
-.encabezado--centrado {
+.encabezado {
   max-width: var(--container-text);
-  margin-inline: auto;
-  text-align: center;
+  margin-bottom: var(--space-7);
 }
-.encabezado--centrado h2 {
+.encabezado h2 {
   font-size: var(--text-2xl);
   margin-top: var(--space-2);
+}
+.encabezado--centrado {
+  margin-inline: auto;
+  text-align: center;
 }

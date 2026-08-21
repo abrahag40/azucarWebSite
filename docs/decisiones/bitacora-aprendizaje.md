@@ -1276,6 +1276,42 @@ sin las restricciones que la sostienen.
 
 ---
 
+## L-057 — Al segundo caso, escribe el detector; te enseñará casos que no sabías
+
+**Lección.** `.encabezado--centrado` escondida en el ámbito de un componente fue L-055.
+Abraham pidió revisar el resto de las secciones «por el mismo defecto». Se podía hacer a ojo
+con un `grep`; se escribió un detector — `scripts/verificar-estilos.mjs`— y esa diferencia se
+pagó tres veces en el mismo rato:
+
+**1. El defecto era mayor de lo que yo creía.** Yo había arreglado el modificador
+`--centrado` y me quedé tranquilo. El detector encontró que **la clase base `.encabezado`
+tenía el mismo problema**: definida sólo en `SeccionAlojamiento` y usada por **cinco**
+componentes. Los otros cuatro se quedaban sin su `margin-bottom` y sin el tamaño del `<h2>`.
+Arreglé el síntoma y dejé la enfermedad.
+
+**2. Encontró una familia de problemas que no buscaba.** Al listar dónde se define cada
+clase salieron **seis nombres duplicados en componentes distintos** —`.rejilla`, `.grupo`,
+`.resumen`, `.datos`…—. No están rotos: cada estilo vive en su ámbito y funciona. Pero
+`.rejilla` significaba dos cosas distintas —`auto-fit` en una, tres puntos de ruptura
+explícitos en la otra— y eso engaña a quien lea el código suponiendo que se parecen.
+
+**3. Se delató a sí mismo.** El detector leía los COMENTARIOS del CSS, así que un comentario
+que menciona `.rejilla` para explicar por qué NO se usa ese nombre contaba como definición.
+El aviso resultante decía exactamente lo contrario de la verdad. Se arregló ignorando los
+comentarios antes de leer los selectores.
+
+**La regla, y ya con varios casos detrás:** un `grep` responde la pregunta que haces; un
+detector responde también las que no sabías hacer. El umbral para escribirlo es **la segunda
+aparición** del mismo defecto, no la quinta.
+
+**Y el detalle que lo mantiene útil:** trece clases se usan a propósito sin estilos
+—envoltorios de rejilla, nombres de sección, ganchos para pruebas—. Están declaradas en una
+lista **con su motivo escrito**, para que el informe pueda quedar en **cero**. Un verificador
+que siempre devuelve trece avisos se deja de leer, y entonces el aviso número catorce pasa
+desapercibido (L-047). Si el motivo no se puede escribir, no era intencional.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

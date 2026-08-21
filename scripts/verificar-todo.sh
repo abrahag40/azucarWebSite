@@ -54,6 +54,7 @@ paso "build"                        npm --prefix site run build
 paso "accesibilidad del marcado"    node scripts/auditar-accesibilidad.mjs site/dist
 paso "auditoría del build"          node scripts/audit-mirror.mjs site/dist
 paso "redirecciones 301"            node scripts/verificar-301.mjs site/dist
+paso "clases con ámbito"            node scripts/verificar-estilos.mjs
 
 # Comprobaciones baratas que no tienen script propio y han fallado alguna vez.
 paso "sin comentarios HTML en el build" bash -c '

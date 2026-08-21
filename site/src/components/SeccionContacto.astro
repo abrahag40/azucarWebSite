@@ -38,28 +38,28 @@ const tel = (n: string) => n.replace(/[^+\d]/g, '');
       </p>
     </div>
 
-    <ul class="datos" role="list">
-      <li class="dato">
-        <span class="dato__icono" aria-hidden="true"><Icono nombre="telefono" /></span>
+    <ul class="contacto-home__datos" role="list">
+      <li class="contacto-home__dato">
+        <span class="icono-caja" aria-hidden="true"><Icono nombre="telefono" /></span>
         <div>
-          <p class="dato__etiqueta">{t('contactoHome.telefono')}</p>
+          <p class="etiqueta">{t('contactoHome.telefono')}</p>
           {contacto.telefonos.map((n) => (
-            <a class="dato__valor telefono" href={`tel:${tel(n)}`}>{n}</a>
+            <a class="valor telefono" href={`tel:${tel(n)}`}>{n}</a>
           ))}
         </div>
       </li>
-      <li class="dato">
-        <span class="dato__icono" aria-hidden="true"><Icono nombre="correo" /></span>
+      <li class="contacto-home__dato">
+        <span class="icono-caja" aria-hidden="true"><Icono nombre="correo" /></span>
         <div>
-          <p class="dato__etiqueta">{t('contactoHome.correo')}</p>
-          <a class="dato__valor" href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+          <p class="etiqueta">{t('contactoHome.correo')}</p>
+          <a class="valor" href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
         </div>
       </li>
-      <li class="dato">
-        <span class="dato__icono" aria-hidden="true"><Icono nombre="mapa" /></span>
+      <li class="contacto-home__dato">
+        <span class="icono-caja" aria-hidden="true"><Icono nombre="mapa" /></span>
         <div>
-          <p class="dato__etiqueta">{t('contactoHome.direccion')}</p>
-          <p class="dato__valor dato__valor--texto">{t('footer.direccion')}</p>
+          <p class="etiqueta">{t('contactoHome.direccion')}</p>
+          <p class="valor valor--texto">{t('footer.direccion')}</p>
         </div>
       </li>
     </ul>
@@ -79,16 +79,16 @@ const tel = (n: string) => n.replace(/[^+\d]/g, '');
   }
   .contacto-home__accion { margin: 0; }
 
-  .datos { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-5); }
-  .dato { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-4); align-items: start; }
-  .dato__icono {
+  .contacto-home__datos { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-5); }
+  .contacto-home__dato { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+  .contacto-home__dato .icono-caja {
     display: grid; place-items: center;
     width: 48px; height: 48px;
     border-radius: 50%;
     background: var(--color-surface);
     color: var(--color-accent-text);
   }
-  .dato__etiqueta {
+  .contacto-home__dato .etiqueta {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
     letter-spacing: var(--tracking-antetitulo);
@@ -99,13 +99,13 @@ const tel = (n: string) => n.replace(/[^+\d]/g, '');
   /* `block` con altura mínima: un <a> en línea no suma su relleno vertical a la
      caja y se queda por debajo de los 24 px de WCAG 2.5.8. Cuarta vez en el
      proyecto; por eso el auditor ya avisa del patrón. */
-  .dato__valor {
+  .contacto-home__dato .valor {
     display: block;
     min-height: 32px;
     line-height: 32px;
     color: var(--color-ink);
     text-decoration: none;
   }
-  .dato__valor:hover { color: var(--color-accent-text); }
-  .dato__valor--texto { line-height: var(--leading-body); min-height: 0; margin: 0; }
+  .contacto-home__dato .valor:hover { color: var(--color-accent-text); }
+  .contacto-home__dato .valor--texto { line-height: var(--leading-body); min-height: 0; margin: 0; }
 </style>
