@@ -99,14 +99,43 @@ gratuito generoso, red global y vistas previas por rama.)*
 
 | Campo | Valor |
 |---|---|
-| Production branch | `main` |
+| Production branch | `claude/hotel-tulum-web-audit-0yly29` |
 | Framework preset | `Astro` |
-| Build command | `npm run build:prod` |
+| Build command | `npm run build` |
 | Build output directory | `dist` |
 | **Root directory** | `site` ← **el que más se olvida** |
 
-4. **Environment variables** → añadir `PUBLIC_GA4_ID` con el `G-…` del paso 2.
+4. **Environment variables** → dos, y las dos importan:
+
+| Variable | Valor | Por qué |
+|---|---|---|
+| `PUBLIC_GA4_ID` | el `G-…` del paso 2 | Activa la analítica (H1.7). Sin ella el componente queda inerte, que es su estado por defecto |
+
+**La versión de Node ya no se configura aquí.** Está fijada en el repositorio, en
+`site/.nvmrc` (`22.12.0`) y en `engines.node` de `package.json`. Cloudflare Pages lee
+`.nvmrc` de la carpeta raíz del proyecto. Es preferible a una variable de entorno: la
+configuración vive versionada junto al código y no se pierde si alguien recrea el proyecto
+en el panel.
+
 5. Guardar y desplegar.
+
+> ### ⚠️ Tres correcciones sobre la versión anterior de este runbook
+>
+> Verificadas contra el repositorio el 2026-08-20. Las tres impedían que el primer
+> despliegue funcionara:
+>
+> 1. **`Production branch` no es `main`.** Ese nombre estaba escrito por costumbre y **la
+>    rama no existe** en el remoto (`git ls-remote --heads origin main` no devuelve nada).
+>    Con esa configuración Cloudflare no compila nada y no da ningún error: simplemente
+>    nunca hay despliegue. La rama real es la de trabajo.
+> 2. **`Build command` no puede ser `build:prod` todavía.** Ese comando falla a propósito
+>    mientras C1 siga sin respuesta — ver más abajo. Configurarlo hoy garantiza que **no
+>    haya URL de staging**, y sin URL no hay demo ni cierre del sprint 1. Se usa
+>    `npm run build`, que avisa y compila. **Se cambia a `build:prod` en el sprint 5**, que
+>    es cuando corresponde exigirlo.
+> 3. **Faltaba fijar la versión de Node.** Astro 7.2.4 declara `engines.node >= 22.12.0` y
+>    Cloudflare Pages arranca con Node 18: el build falla y el mensaje de error no dice que
+>    la causa sea la versión. Resuelto en el repositorio con `site/.nvmrc`, no en el panel.
 
 ### Qué se obtiene
 
@@ -114,16 +143,22 @@ gratuito generoso, red global y vistas previas por rama.)*
 - **Una URL por rama**, que es la que se manda al cliente en cada Review
 - Despliegue automático en cada push
 
-### Si el build falla
+### Sobre `build` y `build:prod`
 
-Es esperado y **es correcto**: `npm run build:prod` falla a propósito mientras haya datos de
-alojamiento sin confirmar por el cliente (pregunta **C1**). No es un error de configuración,
-es la guardia haciendo su trabajo.
+Son dos comandos con dos propósitos, y confundirlos es lo que rompía este runbook.
 
-Para desbloquear la primera demo hay dos caminos legítimos:
-- **Recomendado:** conseguir la respuesta a C1 y marcar los datos como verificados.
-- **Provisional:** cambiar el comando a `npm run build`, que avisa pero no bloquea.
-  Si se toma este camino, **se registra como deuda con fecha**, no se olvida.
+| Comando | Datos sin verificar | Uso |
+|---|---|---|
+| `npm run build` | **Avisa** y compila | Staging, sprints 1 a 4 |
+| `npm run build:prod` | **Falla** y no compila | Producción, sprint 5 |
+
+Que `build:prod` falle no es un error de configuración: es la regla 7 —*datos sin confirmar
+por el cliente no se publican*— haciendo su trabajo. Hoy fallaría por **C1**: las unidades,
+la capacidad y las camas de los 8 tipos son estimaciones nuestras y suman 22 contra las 21
+que el hotel reporta.
+
+**Deuda registrada:** el cambio de `build` a `build:prod` es criterio de entrada del
+sprint 5 y está en su lista. No se olvida porque está escrito en los dos sitios.
 
 ---
 
