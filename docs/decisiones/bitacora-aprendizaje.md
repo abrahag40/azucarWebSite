@@ -896,6 +896,92 @@ compilación: dan un 404 el día del lanzamiento.
 
 ---
 
+## L-044 — Cuando falta un dato, hay tres salidas y sólo una es honesta
+
+**Lección.** El formulario de solicitud se topó con tres huecos a la vez: no sabemos a quién
+notificar (**B1–B4**), no sabemos los impuestos (**C3**) y el aviso de privacidad no cumple la
+LFPDPPP (**E-PRIV**). Ante cada uno había tres salidas:
+
+| Salida | Qué habría pasado |
+|---|---|
+| **Inventar** un valor plausible — un «desde $4 500» sin impuestos | Reproduce exactamente la queja de «me cobraron más» que este proyecto existe para curar |
+| **Bloquear** la historia entera hasta tener respuesta | Los 90 enlaces rotos a `/reservar/` siguen rotos meses más |
+| **Construir hasta donde llega lo que sabemos** y decir en pantalla dónde se acaba | Lo que se hizo |
+
+Así que el formulario existe, valida, compone el mensaje… y **no lo envía a ningún servidor
+nuestro**: se lo entrega al huésped para que lo mande desde su propio correo. Y no muestra
+**ninguna cifra**, con una línea que dice que el hotel responde con el total con impuestos.
+
+**El detalle que lo convierte en decisión de arquitectura y no en un apaño:** mientras el
+mensaje se componga y se envíe desde el dispositivo del huésped, **nosotros no tratamos ningún
+dato personal**. No hay endpoint, no hay base de datos, no hay registro. El hueco de E-PRIV no
+se rodea: se respeta, colocando la frontera del sistema justo antes de donde empezaría el
+incumplimiento.
+
+**Antipatrón evitado:** el *placeholder* que se queda. Un `TODO: poner el correo real` o un
+precio de ejemplo sobreviven al sprint, pasan la revisión porque «ya se cambiará» y acaban en
+producción. Aquí no hay nada que reemplazar: hay una frontera dibujada a propósito.
+
+**La generalización.** Ante un dato que falta, la pregunta no es «¿qué pongo mientras tanto?»
+sino **«¿hasta dónde puedo llegar sin él, y cómo lo digo?»**. Casi siempre se puede llegar
+mucho más lejos de lo que parece, y decirlo en voz alta cuesta una frase.
+
+---
+
+## L-045 — Una función pura es lo que hace que valga la pena probar
+
+**Lección.** Este proyecto no tiene pruebas unitarias, y está bien: son páginas estáticas cuya
+corrección se ve mirándolas y con los auditores. Montar un framework para comprobar que un
+`<h1>` dice lo que dice sería ceremonia sin beneficio.
+
+El cálculo de noches entre dos fechas es distinto, por un motivo preciso: **es la única
+aritmética del sitio que puede equivocarse en silencio**. No lanza excepción, no rompe el
+build, no lo ve el auditor, no se nota mirando la página. Lo descubre el huésped al llegar.
+
+Se escribió como función pura —sin red, sin reloj, sin DOM— y por eso probarla costó minutos y
+cero dependencias: `node --test` viene en Node. Dos de los nueve casos son husos con horario de
+verano, donde `new Date('2026-03-08')` interpretado en hora local hace que una de las dos
+medianoches dure 23 horas: la resta da **2.96 noches y se redondea a 2**. Se ancla a las 12:00
+UTC, que deja doce horas de margen por lado.
+
+**La regla de dónde poner pruebas, que es lo que vale:** donde haya **lógica que pueda estar
+mal sin parecerlo**. Ni más ni menos. Y si esa lógica está enredada con el DOM o con la red,
+el problema no es la falta de pruebas: es que no se puede probar, y eso ya es un defecto de
+diseño.
+
+**Antipatrón evitado:** la cobertura por decreto —«todo módulo lleva pruebas»— que produce
+cientos de comprobaciones de que un `getter` devuelve lo que se le puso, y ni una del cálculo
+que se puede equivocar.
+
+---
+
+## L-046 — Un patrón copiado propaga el defecto más rápido que la corrección
+
+**Lección.** El párrafo de entradilla de la galería salía a `--text-lg` y ocupaba **cuatro
+renglones a 320 px**. Se corrigió: cuerpo en móvil, `lg` a partir de 40 rem. Media hora
+después, la página de solicitud salía con **el mismo defecto**, porque copié el bloque de
+estilo de la galería tal como estaba antes de arreglarlo.
+
+Mismo error, misma sesión, misma persona, dos páginas.
+
+**La causa no es despiste.** Es que la regla vivía **duplicada en cuatro archivos** —dos
+idiomas por dos páginas— en lugar de en un sitio. Una regla duplicada tiene tantas
+oportunidades de divergir como copias existan, y las copias se hacen del original, no de la
+versión corregida.
+
+Se extrajo a `.entrada-pagina` en `base.css`, con el porqué escrito al lado. **Una regla
+compartida no se puede copiar mal.**
+
+**Antipatrón evitado:** *copy-paste programming*, en su variante más engañosa: no la de
+duplicar código feo, sino la de duplicar código que **acaba de dejar de ser correcto**. El
+original sigue ahí, sigue pareciendo bueno, y no hay nada que avise de que se corrigió.
+
+**Cómo se aplica.** Al arreglar algo que existe en más de un sitio, la corrección no está
+completa hasta que **queda un solo sitio**. Si no, sólo se ha arreglado una de las copias y se
+ha dejado la trampa armada para la siguiente.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -918,5 +1004,6 @@ compilación: dan un 404 el día del lanzamiento.
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
+| R-21 | **El hotel no publica ningún WhatsApp.** Se buscó en toda la captura del sitio vigente: cero enlaces `wa.me`. H3.7 pide «acceso visible en todas las páginas» y no hay número que poner | Medio | Pregunta **B3**, que ya estaba, pero ahora se sabe que la respuesta no existe hoy: hay que pedir que lo creen o retirar H3.7 |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

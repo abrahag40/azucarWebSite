@@ -165,7 +165,7 @@ historias con criterios de aceptación en
 | **0** ✅ | Entender el terreno con evidencia reproducible | Auditoría + backlog aprobado |
 | **1** ✅ | Home bilingüe en URL real, rápida y accesible | Falta el `G-…` de GA4 y medir los CWV |
 | **2** ✅ | Que el huésped recorra los 8 tipos y elija uno | Hecho salvo H2.6 (decisión del cliente) |
-| **3** 🔴 | Que el manager reciba una solicitud real en su teléfono | **En cero. Bloqueado por C3 y B1–B4** |
+| **3** 🔄 | Que el manager reciba una solicitud real en su teléfono | H3.1 y H3.2 hechas. **El envío sigue bloqueado por C3, B1–B4 y E-PRIV** |
 | **4** ✅ | Que el sitio responda todo lo que el huésped pregunta | Hecho salvo H4.4 y el aviso legal conforme |
 | **5** 🔄 | Producción sin perder posicionamiento y con reversión probada | H5.3 adelantado: 301 construidas y verificadas |
 
@@ -217,6 +217,26 @@ Las 24 cadenas de las fichas se **reescribieron** aplicando una norma editorial 
 longitudes en dos bandas por categoría, apertura paralela y `diferenciador` en las ocho. Por
 eso `descripcion` **salió de `verificado`**: ya no es texto del cliente.
 
+### Sprint 3 — la mitad que no dependía del cliente
+
+`/reservar/` y `/en/booking/` existen (H3.1, H3.2). Eran **90 enlaces rotos**: cada botón
+«Solicitar reserva» del sitio llevaba a un 404. El auditor baja a **cero hallazgos rojos por
+primera vez en el proyecto**.
+
+El módulo `src/booking/` tiene frontera documentada y su lógica de composición es una función
+pura con **9 pruebas unitarias** —las primeras del proyecto—, porque el cálculo de noches es la
+única aritmética que puede equivocarse en silencio.
+
+> 🔴 **El formulario NO envía nada a ningún servidor nuestro.** Compone el mensaje en el
+> navegador del huésped y se lo entrega para que lo mande por correo. No es una limitación
+> técnica: montar hoy un endpoint que reciba nombre, correo y teléfono iniciaría un tratamiento
+> de datos personales **sin aviso conforme a la LFPDPPP** (E-PRIV abierto) — el mismo
+> incumplimiento que le señalamos al cliente. Y no aparece **ninguna cifra**, porque C3 sigue
+> sin respuesta y un «desde $X» sin impuestos reproduciría la queja que este proyecto cura.
+
+Siguen bloqueadas H3.3 (C3), H3.4 a H3.6 (B1–B4) y el consentimiento de H3.8 (E-PRIV).
+**H3.7 se descubre bloqueada por un dato nuevo: el sitio vigente no publica ningún WhatsApp.**
+
 ### Sprint 4 — contenido institucional, hecho salvo legal
 
 Servicios, ubicación, contacto, preguntas frecuentes y políticas en los dos idiomas, más
@@ -245,13 +265,14 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **36** (ES + EN) |
-| Archivos JavaScript externos | **0** · 897 bytes en línea sólo en las 17 páginas con galería |
+| Páginas | **38** (ES + EN) |
+| Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
-| Auditor propio | 3 hallazgos: 1 real (enlaces a `/reservar/`, sprint 3) + 2 informativos |
+| Auditor propio | **2 hallazgos, ninguno rojo.** Los 90 enlaces a `/reservar/` ya resuelven |
 | Redirecciones | 12 reglas · 25 URLs · 0 fallos |
-| CI | ✅ **verde**, tras trece commits en rojo que nadie vio (L-040) |
+| CI | ✅ **verde**, tras trece commits en rojo que nadie vio (L-040). Ahora también corre `npm test` |
+| Pruebas unitarias | 9 casos sobre `componerSolicitud` · 0 dependencias nuevas |
 
 ### 🔴 Contradicción en el contenido del cliente — pregunta C0
 
@@ -290,11 +311,13 @@ el cliente vea en la demo exactamente qué debe confirmar.
 3. Licencia de Cappa (R-01), reducida a iconos e imágenes del demo.
 4. Pasar la URL por PageSpeed y registrar las tres cifras.
 
-> ⚠️ **Riesgo de método, dicho en voz alta.** Hay 34 páginas construidas y el **sprint 3 sigue
-> en cero**, porque depende de respuestas que aún no se han pedido. Cada iteración de «sigamos
-> con la siguiente historia» aumenta el activo construido sin acercar una sola reserva
-> directa, que es el motivo del proyecto. Se está acumulando inventario sin validar con el
-> cliente. **La siguiente acción de valor no es código: es el correo.**
+> ⚠️ **Riesgo de método, dicho en voz alta.** Hay 38 páginas construidas. El sprint 3 ya no
+> está en cero —el formulario existe y los 90 enlaces rotos se cerraron—, pero **no puede
+> recibir una sola solicitud en el teléfono del manager** hasta que lleguen C3, B1–B4 y E-PRIV.
+> Lo construido llega exactamente hasta donde termina lo que sabemos.
+>
+> **La siguiente acción de valor sigue sin ser código: es el correo.** Y ahora es más barata de
+> justificar, porque hay una demo que enseñar mientras se piden las respuestas.
 
 ---
 
@@ -320,8 +343,9 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
 | **`docs/05-despliegue/plan-de-reversion.md`** | **Criterio de reversión, tres capas y preparativos de DNS** |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **43 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **46 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
+| **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 
 ---
@@ -335,6 +359,7 @@ npm run dev          # desarrollo
 npm run datos        # ¿qué datos de alojamiento siguen sin verificar?
 npm run build        # build (avisa)
 npm run build:prod   # build de producción (FALLA si hay datos sin verificar)
+npm test             # pruebas de la lógica de solicitud (9 casos)
 
 # Auditoría — misma vara para el sitio viejo y para el nuevo
 node scripts/audit-mirror.mjs investigacion/mirrors/azucarhotel

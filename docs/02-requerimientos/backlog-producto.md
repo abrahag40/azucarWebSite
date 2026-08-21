@@ -172,7 +172,7 @@ completa y con el precio total, enviada desde el sitio.*
 > Es el corazón del proyecto y la épica con más riesgo. Arquitectura y justificación en
 > [ADR-0003](../decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md).
 
-### H3.1 — Módulo aislado de reserva · `S`
+### H3.1 — Módulo aislado de reserva · `S` · ✅
 > Como **mantenedor**, quiero el flujo de reserva detrás de una frontera, para poder
 > cambiarlo por un motor SaaS sin reescribir el sitio.
 
@@ -180,7 +180,7 @@ completa y con el precio total, enviada desde el sitio.*
 - **Y** existe una interfaz documentada de entrada y salida.
 - **Y** queda escrito en el propio módulo que es una solución provisional y por qué.
 
-### H3.2 — Formulario por pasos · `M`
+### H3.2 — Formulario por pasos · `M` · 🔄 *hecho salvo el envío a servidor, que depende de B1–B4 y E-PRIV*
 > Como **huésped potencial**, quiero pedir una reserva sin sentir que lleno un trámite.
 
 - **Entonces** los pasos son: fechas → alojamiento → huéspedes → contacto.
@@ -221,7 +221,7 @@ completa y con el precio total, enviada desde el sitio.*
 - **Entonces** llega por correo **y** WhatsApp.
 - **Y** contiene fechas, tipo, huéspedes, contacto, cotización y comentarios.
 
-### H3.7 — WhatsApp como canal paralelo · `S`
+### H3.7 — WhatsApp como canal paralelo · `S` · 🔴 *bloqueada: el sitio vigente **no publica ningún WhatsApp**. No hay número (B3)*
 > Como **huésped potencial**, quiero preguntar por WhatsApp si no quiero llenar un formulario.
 
 - **Entonces** hay acceso visible en todas las páginas.
