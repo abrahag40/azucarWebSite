@@ -1312,6 +1312,62 @@ desapercibido (L-047). Si el motivo no se puede escribir, no era intencional.
 
 ---
 
+## L-058 — Los desplegables de una plantilla suelen ser andamiaje, no arquitectura
+
+**Lección.** Cappa tiene cuatro menús desplegables. Al abrirlos uno a uno:
+
+| Desplegable | Qué contiene |
+|---|---|
+| **Home ▾** | 15 portadas alternativas de la propia plantilla |
+| **Rooms & Suites ▾** | 3 maquetas distintas de la MISMA página, más una ficha |
+| **Pages ▾** | Services, Facilities, Gallery, Team, Pricing, Careers, FAQs, «Other Pages» |
+| **News ▾** | 3 formatos de blog |
+
+**Ninguno es arquitectura de información.** Existen para enseñarle variantes a quien compra
+la plantilla. Copiarlos literalmente habría producido un menú con quince portadas de un sitio
+que tiene una, y tres maquetas de una página que existe una vez.
+
+Lo que sí es reutilizable es el **mecanismo**, y sólo hay un sitio donde gana algo: los ocho
+tipos de alojamiento, que ya existen y estaban a dos clics. Es lo que «Rooms & Suites» sería
+si la plantilla no fuera una demo.
+
+**La regla al copiar de una plantilla:** separar el *mecanismo* del *contenido de ejemplo*.
+El mecanismo casi siempre vale; el contenido casi nunca. Y si un mecanismo no encuentra
+contenido real donde aplicarse, la conclusión no es inventar contenido: es que ese mecanismo
+no hacía falta.
+
+**Antipatrón evitado:** menú de navegación diseñado desde la plantilla hacia el contenido, en
+lugar de desde el contenido hacia la plantilla.
+
+---
+
+## L-059 — Tres mediciones correctas y una captura: sólo la captura vio el fallo
+
+**Lección.** Al montar el desplegable, todo lo medible salía bien:
+
+* el panel existía y tenía 292 × 436 px;
+* sus nueve enlaces medían 44 px de alto, cumpliendo WCAG 2.5.8;
+* el contraste calculado del texto daba **15.91:1**;
+* `axe-core` no reportaba ni una violación.
+
+Y el panel se veía **completamente en blanco**. Los nueve enlaces eran blancos sobre fondo
+blanco, porque la regla `.cabecera--sobre-hero .nav__lista a { color: #fff }` —escrita para
+los enlaces de primer nivel sobre la fotografía del héroe— alcanzaba también a los del panel
+desplegable, que no existía cuando se escribió.
+
+**Ninguna medición podía verlo**, y no por casualidad: yo comparaba el color del texto contra
+el fondo *declarado del panel*, y el panel sí es blanco… igual que el texto. El cálculo era
+correcto sobre los datos equivocados.
+
+Lo enseñó una **captura de pantalla**, en cuanto miré la página en lugar de consultarla.
+
+**La regla:** las mediciones responden preguntas concretas; una captura enseña lo que no
+sabías preguntar. En una interfaz nueva, mirarla es un paso del método, no una comprobación
+opcional al final. Corolario: `.nav__lista a` pasó a `.nav__lista > li > a` — un selector
+descendente escrito antes de que existieran los descendientes es una bomba de relojería.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

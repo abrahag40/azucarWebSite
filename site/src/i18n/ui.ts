@@ -21,6 +21,7 @@ export const ui = {
     'nav.contacto': 'Contacto',
     'nav.menu': 'Menú',
     'nav.principal': 'Navegación principal',
+    'nav.verTodo': 'Ver todo el alojamiento',
     'nav.cerrar': 'Cerrar menú',
     'nav.saltar': 'Saltar al contenido',
 
@@ -195,6 +196,7 @@ export const ui = {
     'nav.contacto': 'Contact',
     'nav.menu': 'Menu',
     'nav.principal': 'Main navigation',
+    'nav.verTodo': 'See all rooms',
     'nav.cerrar': 'Close menu',
     'nav.saltar': 'Skip to content',
 

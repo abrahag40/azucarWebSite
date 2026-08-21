@@ -13,6 +13,7 @@
  * La alternativa —fija y translúcida— dejaría texto blanco sobre el contenido
  * claro de abajo, que es un fallo de contraste, no una decisión estética.
  */
+import { getCollection } from 'astro:content';
 import { usarT, ruta, idiomas, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
@@ -23,15 +24,37 @@ const t = usarT(idioma);
 // construida (H4.4). «Restaurante» sigue fuera: está bloqueado por la pregunta
 // C0 —el propio hotel dice en su FAQ que no tiene— y un menú que promete
 // páginas inexistentes es la primera grieta de confianza.
-const enlaces = [
-  { clave: 'nav.alojamiento', path: 'alojamiento' },
+const enlaces: { clave: string; path: string; submenu?: boolean }[] = [
+  { clave: 'nav.alojamiento', path: 'alojamiento', submenu: true },
   { clave: 'nav.servicios',   path: 'servicios' },
   { clave: 'nav.galeria',     path: 'galeria' },
   { clave: 'nav.ubicacion',   path: 'ubicacion' },
   { clave: 'nav.faq',         path: 'preguntas-frecuentes' },
   { clave: 'nav.contacto',    path: 'contacto' },
-] as const;
+];
+/* El alias vive aquí y no en la plantilla: dentro del marcado, `<typeof t>` lo
+   interpreta el compilador de Astro como una ETIQUETA y rompe el análisis. */
+type ClaveUI = Parameters<typeof t>[0];
 const otro: Idioma = idioma === 'es' ? 'en' : 'es';
+
+/**
+ * Submenú de «Alojamiento» — los ocho tipos reales.
+ *
+ * ── POR QUÉ ÉSTE Y NINGÚN OTRO ──────────────────────────────────────────────
+ * Cappa tiene cuatro desplegables: «Home» con quince portadas alternativas,
+ * «Rooms & Suites» con tres maquetas distintas de la misma página, «Pages» con
+ * un cajón de sastre y «News» con tres formatos de blog. **Los cuatro son
+ * andamiaje de demo**, no arquitectura de información: existen para enseñar
+ * variantes al comprador de la plantilla.
+ *
+ * Copiarlos literalmente sería copiar el andamio. Lo que sí es real es el
+ * MECANISMO —un desplegable en la navegación— y aquí hay exactamente un sitio
+ * donde gana algo: los ocho tipos de alojamiento, que ya existen y que de otro
+ * modo están a dos clics. Es lo que «Rooms & Suites» sería si la plantilla no
+ * fuera una demo.
+ */
+const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden);
 ---
 <header class:list={['cabecera', sobreHero && 'cabecera--sobre-hero']}>
   <div class="contenedor cabecera__fila">
@@ -52,10 +75,39 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
       <ul class="nav__lista">
         {enlaces.map((e) => (
           <li>
-            <a
-              href={ruta(idioma, e.path)}
-              aria-current={rutaActual === e.path ? 'page' : undefined}
-            >{t(e.clave)}</a>
+            {e.submenu ? (
+              /* <details> y no un <button> con JavaScript: el navegador ya
+                 gestiona el estado, el teclado —Enter y Espacio— y anuncia
+                 «contraído / expandido» al lector de pantalla sin sincronizar un
+                 `aria-expanded` a mano. Cappa deja ese atributo fijo en «false»
+                 y no lo actualiza nunca: quien use lector de pantalla oye
+                 «contraído» también con el menú abierto. */
+              <details class="desplegable">
+                <summary class="desplegable__disparador">
+                  <span>{t(e.clave as ClaveUI)}</span>
+                  <span class="desplegable__flecha" aria-hidden="true"></span>
+                </summary>
+                <ul class="desplegable__panel">
+                  <li>
+                    <a
+                      class="desplegable__todos"
+                      href={ruta(idioma, e.path)}
+                      aria-current={rutaActual === e.path ? 'page' : undefined}
+                    >{t('nav.verTodo')}</a>
+                  </li>
+                  {tipos.map((x) => (
+                    <li>
+                      <a href={ruta(idioma, `alojamiento/${x.id}`)}>{x.data.nombre[idioma]}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : (
+              <a
+                href={ruta(idioma, e.path)}
+                aria-current={rutaActual === e.path ? 'page' : undefined}
+              >{t(e.clave as ClaveUI)}</a>
+            )}
           </li>
         ))}
       </ul>
@@ -84,10 +136,36 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
         <ul class="menu__lista">
           {enlaces.map((e) => (
             <li>
-              <a
-                href={ruta(idioma, e.path)}
-                aria-current={rutaActual === e.path ? 'page' : undefined}
-              >{t(e.clave)}</a>
+              {e.submenu ? (
+                /* En el cajón el mismo submenú es un acordeón ANIDADO, no un
+                   panel flotante: es lo que hace Cappa en móvil —su submenú pasa
+                   a `position: static`— y es lo correcto, porque un panel
+                   absoluto dentro de un cajón que ya scrollea se sale de la
+                   pantalla. Aquí no hay hover: en una pantalla táctil no existe,
+                   y dejarlo produce el «hover pegajoso» de la primera pulsación. */
+                <details class="submenu">
+                  <summary class="submenu__disparador">
+                    <span>{t(e.clave as ClaveUI)}</span>
+                    <span class="submenu__flecha" aria-hidden="true"></span>
+                  </summary>
+                  <ul class="submenu__lista">
+                    <li>
+                      <a
+                        href={ruta(idioma, e.path)}
+                        aria-current={rutaActual === e.path ? 'page' : undefined}
+                      >{t('nav.verTodo')}</a>
+                    </li>
+                    {tipos.map((x) => (
+                      <li><a href={ruta(idioma, `alojamiento/${x.id}`)}>{x.data.nombre[idioma]}</a></li>
+                    ))}
+                  </ul>
+                </details>
+              ) : (
+                <a
+                  href={ruta(idioma, e.path)}
+                  aria-current={rutaActual === e.path ? 'page' : undefined}
+                >{t(e.clave as ClaveUI)}</a>
+              )}
             </li>
           ))}
         </ul>
@@ -108,6 +186,47 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     </div>
   </div>
 </header>
+
+<script>
+  /**
+   * Cerrar el menú con `Esc` — WCAG 2.2 AA, criterio 1.4.13 «Content on Hover
+   * or Focus», apartado *Dismissible*.
+   *
+   * ── POR QUÉ HACE FALTA JAVASCRIPT AQUÍ, CON LO CELOSOS QUE SOMOS ────────────
+   * El desplegable se abre al pasar el ratón y tapa contenido de la página. El
+   * criterio exige poder descartarlo **sin mover el puntero ni el foco**, y eso
+   * es exactamente lo único que el CSS no puede hacer: un estado `:hover` sólo
+   * se retira moviendo el ratón.
+   *
+   * Todo lo demás —abrir, cerrar, teclado, anuncio de contraído/expandido— lo
+   * resuelve `<details>` sin una línea de código. Esto son 22 líneas para cubrir
+   * el hueco, no un gestor de menús.
+   *
+   * De paso cierra el cajón móvil con `Esc`, que antes tampoco se cerraba, y
+   * devuelve el foco a su disparador para no dejarlo en un elemento oculto.
+   */
+  const cabecera = document.querySelector('header.cabecera');
+  if (cabecera) {
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Escape') return;
+      const abiertos = [...cabecera.querySelectorAll<HTMLDetailsElement>('details[open]')];
+      if (!abiertos.length) return;
+      // Del más interno al más externo: `Esc` cierra un nivel por pulsación, que
+      // es lo que espera quien tiene un submenú abierto dentro del cajón.
+      const objetivo = abiertos[abiertos.length - 1];
+      objetivo.open = false;
+      objetivo.querySelector<HTMLElement>('summary')?.focus();
+    });
+
+    // Un clic fuera cierra el desplegable de escritorio. Sin esto queda abierto
+    // tras pulsarlo, porque `<details>` sólo se cierra con su propio disparador.
+    document.addEventListener('click', (ev) => {
+      for (const d of cabecera.querySelectorAll<HTMLDetailsElement>('.desplegable[open]')) {
+        if (!d.contains(ev.target as Node)) d.open = false;
+      }
+    });
+  }
+</script>
 
 <style>
   .cabecera {
@@ -155,7 +274,14 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     display: flex; align-items: center; gap: var(--space-5);
     list-style: none; padding: 0; margin: 0;
   }
-  .nav__lista a {
+  /* `> li > a`: SÓLO los enlaces de primer nivel.
+     Escrito como `.nav__lista a` alcanzaba también los del panel desplegable, y
+     sobre el héroe —donde estos van en blanco— el panel quedaba con nueve
+     enlaces blancos sobre fondo blanco. No lo vio ninguna medición: el panel
+     estaba ahí, con su altura y sus 44 px por enlace, y `getComputedStyle`
+     decía «blanco» sin que nada dijera que debajo también era blanco. Lo enseñó
+     una captura de pantalla. */
+  .nav__lista > li > a {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
     letter-spacing: 0.16em;
@@ -166,8 +292,8 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     border-bottom: 1px solid transparent;
     white-space: nowrap;
   }
-  .nav__lista a:hover,
-  .nav__lista a[aria-current='page'] {
+  .nav__lista > li > a:hover,
+  .nav__lista > li > a[aria-current='page'] {
     color: var(--color-accent-text);
     border-bottom-color: var(--color-accent);
   }
@@ -214,10 +340,10 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
      propio a la cabecera, a costa de la composición de Cappa. */
   .cabecera--sobre-hero .marca,
   .cabecera--sobre-hero .marca__sub,
-  .cabecera--sobre-hero .nav__lista a,
+  .cabecera--sobre-hero .nav__lista > li > a,
   .cabecera--sobre-hero .cabecera__idioma { color: #fff; }
-  .cabecera--sobre-hero .nav__lista a:hover,
-  .cabecera--sobre-hero .nav__lista a[aria-current='page'] {
+  .cabecera--sobre-hero .nav__lista > li > a:hover,
+  .cabecera--sobre-hero .nav__lista > li > a[aria-current='page'] {
     color: #fff;
     border-bottom-color: var(--color-accent);
   }
@@ -277,4 +403,143 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     .nav { display: block; }
     .cabecera__acciones { display: flex; }
   }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     DESPLEGABLE DE ESCRITORIO — patrón `.dropdown` de Cappa
+
+     Medido sobre `demo1-light/index11.html`: panel blanco de 190 px, `padding:
+     15px`, `box-shadow: 0 16px 50px rgb(0 0 0 / .07)`, sin borde, revelado con
+     `opacity` y `visibility` (no con `display`, para que pueda animarse).
+
+     ── POR QUÉ `<details>` Y NO UN `<button>` CON JAVASCRIPT ────────────────
+     El navegador ya gestiona el estado, el teclado —Enter y Espacio— y anuncia
+     «contraído / expandido» sin sincronizar nada a mano. Cappa deja
+     `aria-expanded="false"` fijo en el disparador y nunca lo actualiza: quien
+     use lector de pantalla oye «contraído» también con el menú abierto.
+
+     El truco que lo hace posible: un `<details>` cerrado oculta su contenido
+     con la hoja del navegador, y `display: block` lo anula. Comprobado en el
+     motor antes de construirlo. Así el panel puede existir siempre y sólo
+     cambiar de opacidad. */
+  .desplegable { position: relative; }
+
+  .desplegable__disparador {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    cursor: pointer; list-style: none;
+    /* la altura mínima es del enlace de al lado; ver `.nav__lista a` */
+  }
+  .desplegable__disparador::-webkit-details-marker { display: none; }
+  .desplegable__flecha {
+    width: 0; height: 0;
+    border-inline: 3.5px solid transparent;
+    border-top: 4px solid currentColor;
+    transition: rotate var(--dur) var(--ease);
+  }
+
+  .desplegable__panel {
+    position: absolute; top: 100%; left: 0; z-index: 60;
+    min-width: 15rem;
+    list-style: none; margin: 0;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 16px 50px rgb(0 0 0 / 0.07);
+    /* Sin `display: none`: se oculta con visibilidad para poder animarlo, y
+       `visibility: hidden` —a diferencia de `opacity: 0` sola— lo saca del
+       recorrido de tabulación, que es lo que impide tabular a enlaces que no
+       se ven. */
+    opacity: 0; visibility: hidden;
+    translate: 0 6px;
+    transition: opacity var(--dur) var(--ease), visibility var(--dur), translate var(--dur) var(--ease);
+  }
+  /* Anula el ocultado que aplica el navegador a un <details> cerrado. */
+  .desplegable:not([open]) > .desplegable__panel { display: block; }
+
+  .desplegable__panel a {
+    display: block;
+    min-height: 44px;            /* objetivo táctil, WCAG 2.5.8 */
+    padding: var(--space-2) var(--space-3);
+    line-height: 1.5;
+    display: flex; align-items: center;
+    font-family: var(--font-ui); font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ink); text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+  .desplegable__panel a:hover,
+  .desplegable__panel a[aria-current='page'] {
+    background: var(--color-surface-warm);
+    color: var(--color-accent-text);
+  }
+  .desplegable__todos {
+    font-weight: 500;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0 !important;
+    margin-bottom: var(--space-2);
+  }
+
+  /* Abierto por CLIC o teclado — el estado nativo del <details>. */
+  .desplegable[open] > .desplegable__panel { opacity: 1; visibility: visible; translate: 0; }
+  .desplegable[open] .desplegable__flecha { rotate: 180deg; }
+
+  /* Abierto por HOVER — sólo en dispositivos con puntero fino.
+     Sin esta condición, una pantalla táctil deja el panel «pegado» tras la
+     primera pulsación, porque el navegador simula un hover que no se retira
+     hasta que se toca otra cosa. Es el defecto clásico de los menús de hover
+     portados a móvil, y la razón de que muchos se sientan rotos en el teléfono. */
+  @media (hover: hover) and (pointer: fine) {
+    .desplegable:hover > .desplegable__panel,
+    .desplegable:focus-within > .desplegable__panel {
+      opacity: 1; visibility: visible; translate: 0;
+    }
+    .desplegable:hover .desplegable__flecha,
+    .desplegable:focus-within .desplegable__flecha { rotate: 180deg; }
+  }
+
+  .cabecera--sobre-hero .desplegable__disparador { color: #fff; }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     SUBMENÚ DEL CAJÓN MÓVIL — acordeón anidado
+
+     En móvil Cappa pasa su submenú a `position: static` y lo abre con un clic.
+     Se hace igual: un panel absoluto dentro de un cajón que ya scrollea acaba
+     fuera de la pantalla. Y **sin hover**, por lo dicho arriba. */
+  .submenu { border: 0; }
+  .submenu__disparador {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 56px;            /* holgado: es el objetivo principal del pulgar */
+    cursor: pointer; list-style: none;
+    font-family: var(--font-ui); font-size: var(--text-lg);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .submenu__disparador::-webkit-details-marker { display: none; }
+  .submenu__disparador:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+  .submenu__flecha {
+    width: 0; height: 0; flex: none;
+    border-inline: 5px solid transparent;
+    border-top: 6px solid var(--color-accent);
+    transition: rotate var(--dur) var(--ease);
+  }
+  .submenu[open] .submenu__flecha { rotate: 180deg; }
+
+  .submenu__lista {
+    list-style: none;
+    margin: 0 0 var(--space-3);
+    /* Sangría y línea a la izquierda: sin una señal de jerarquía, los ocho tipos
+       se leen como ocho entradas más del menú principal. */
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--color-border);
+  }
+  .submenu__lista a {
+    display: flex; align-items: center;
+    min-height: 48px;
+    font-family: var(--font-ui); font-size: var(--text-base);
+    letter-spacing: 0.04em; text-transform: none;
+    color: var(--color-ink-muted); text-decoration: none;
+  }
+  .submenu__lista a:hover,
+  .submenu__lista a[aria-current='page'] { color: var(--color-accent-text); }
 </style>
