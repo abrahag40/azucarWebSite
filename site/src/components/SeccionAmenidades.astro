@@ -1,0 +1,76 @@
+---
+/**
+ * Amenidades y facilidades — equivale a `facilties` de Cappa `index11`:
+ * antetítulo, título y una rejilla de tres columnas con icono, encabezado y
+ * texto en cada celda.
+ *
+ * Contenido: literal de `/servicios/` y `/amenidades-y-facilidades/` del sitio
+ * vigente, en `src/data/hotel.ts`. Iconos: SVG propio, ver `Icono.astro`.
+ */
+import { usarT, type Idioma } from '../i18n/ui';
+import { amenidades } from '../data/hotel';
+import Icono from './Icono.astro';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<section class="seccion seccion--calida" aria-labelledby="amenidades-titulo">
+  <div class="contenedor">
+    <header class="encabezado encabezado--centrado">
+      <p class="antetitulo">{t('amenidades.antetitulo')}</p>
+      <h2 id="amenidades-titulo">{t('amenidades.titulo')}</h2>
+    </header>
+
+    <ul class="amenidades" role="list">
+      {amenidades.map((a) => (
+        <li class="amenidad">
+          <span class="amenidad__icono"><Icono nombre={a.icono} /></span>
+          <h3 class="amenidad__titulo">{a.titulo[idioma]}</h3>
+          <p class="amenidad__texto">{a.texto[idioma]}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .encabezado--centrado {
+    max-width: var(--container-text);
+    margin-inline: auto;
+    text-align: center;
+  }
+  .encabezado--centrado h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-2);
+  }
+
+  .amenidades {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-7) var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  }
+  .amenidad { text-align: center; }
+  .amenidad__icono {
+    display: inline-grid;
+    place-items: center;
+    width: 72px; height: 72px;
+    margin-bottom: var(--space-4);
+    color: var(--color-accent-text);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+  }
+  .amenidad__titulo {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+  .amenidad__texto {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    max-width: 34ch;
+    margin-inline: auto;
+  }
+</style>

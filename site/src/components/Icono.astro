@@ -1,0 +1,49 @@
+---
+/**
+ * Iconos como SVG propio, dibujados a mano con trazo uniforme.
+ *
+ * Cappa usa tres familias de iconos —Flaticon, Themify y Font Awesome Pro—, que
+ * suman 8.1 MB de tipografías y son recursos LICENCIADOS: siguen bloqueados por
+ * el riesgo R-01. En vez de esperar a esa decisión o de añadir una dependencia,
+ * se dibujan los seis que hacen falta.
+ *
+ * Van marcados `aria-hidden`: el significado lo lleva el encabezado de al lado,
+ * y un lector de pantalla que anuncie "imagen" antes de cada título sólo añade
+ * ruido (WCAG 1.1.1, icono decorativo acompañado de texto).
+ */
+interface Props { nombre: string }
+const { nombre } = Astro.props;
+
+const trazos: Record<string, string> = {
+  // Olas del mar
+  ola: 'M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2',
+  // Alberca: superficie de agua con escalera
+  alberca: 'M2 18c2.2 0 2.2-1.6 4.4-1.6S8.6 18 10.8 18s2.2-1.6 4.4-1.6S17.4 18 19.6 18M7 14V5a2 2 0 0 1 4 0M14 14V5a2 2 0 0 1 4 0M7 8h4m3 0h4',
+  // Jacuzzi: tina con burbujas
+  jacuzzi: 'M3 11h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-3ZM6 11V6a2 2 0 0 1 4 0M9 3.5v.01M13 5v.01M16 3v.01',
+  // Restaurante: cubiertos
+  restaurante: 'M6 3v8a2 2 0 0 0 4 0V3M8 11v10M16 3c-1.5 1-2 2.5-2 4.5S15 11 16 11v10',
+  // Spa: flor de loto
+  spa: 'M12 20c-4 0-7-2.5-7-6 0 0 2.5.4 4 1.8M12 20c4 0 7-2.5 7-6 0 0-2.5.4-4 1.8M12 20c0-5 1.6-8 4-10-3 .3-4 2-4 2s-1-1.7-4-2c2.4 2 4 5 4 10Z',
+  // Reloj: atención 24 h
+  reloj: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3 2',
+};
+const d = trazos[nombre];
+---
+{d && (
+  <svg
+    class="icono"
+    viewBox="0 0 24 24"
+    width="34"
+    height="34"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d={d} />
+  </svg>
+)}

@@ -1,0 +1,111 @@
+---
+/**
+ * Sección de presentación — equivale a `about` de Cappa `index11`.
+ *
+ * Composición de la plantilla: a la izquierda antetítulo, título, dos párrafos y
+ * un bloque de contacto; a la derecha un par de fotografías desfasadas en
+ * vertical. Se conserva tal cual.
+ *
+ * Lo que NO se copia: Cappa abre la sección con cinco estrellas doradas. Son una
+ * categoría hotelera y no tenemos ninguna confirmada por el cliente. Publicar
+ * cinco estrellas porque la plantilla las trae sería inventar una clasificación
+ * —regla 7—. El texto sí dice, porque es cierto y está publicado, que el hotel
+ * ha ganado premios y es un Small Luxury Hotel.
+ */
+import { Image } from 'astro:assets';
+import { usarT, type Idioma } from '../i18n/ui';
+import { presentacion, contacto } from '../data/hotel';
+import foto1 from '../assets/nosotros-1.webp';
+import foto2 from '../assets/nosotros-2.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<section class="seccion presentacion" aria-labelledby="presentacion-titulo">
+  <div class="contenedor presentacion__rejilla">
+    <div class="presentacion__texto">
+      <p class="antetitulo">{presentacion.antetitulo[idioma]}</p>
+      <h2 id="presentacion-titulo">{presentacion.titulo[idioma]}</h2>
+      {presentacion.parrafos.map((p) => <p class="presentacion__parrafo">{p[idioma]}</p>)}
+
+      <div class="presentacion__contacto">
+        <p class="presentacion__etiqueta">{t('reserva.cta')}</p>
+        <a class="presentacion__tel" href={`tel:${contacto.telefonos[0].replace(/[^+\d]/g, '')}`}>
+          {contacto.telefonos[0]}
+        </a>
+      </div>
+    </div>
+
+    <div class="presentacion__fotos">
+      <Image class="presentacion__foto presentacion__foto--alta" src={foto1} alt=""
+        widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={72} />
+      <Image class="presentacion__foto" src={foto2} alt=""
+        widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={72} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .presentacion__rejilla {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+  .presentacion__texto { max-width: var(--container-text); }
+  .presentacion__texto h2 {
+    font-size: var(--text-3xl);
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+  .presentacion__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-4);
+  }
+  .presentacion__contacto {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .presentacion__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .presentacion__tel {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent-text);
+    text-decoration: none;
+  }
+  .presentacion__tel:hover { text-decoration: underline; }
+
+  .presentacion__fotos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .presentacion__foto {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  /* El desfase vertical del par es lo que da el ritmo de Cappa. Se aplica sólo
+     donde hay sitio: en móvil las dos fotos van a la misma altura. */
+  @media (min-width: 48rem) {
+    .presentacion__foto--alta { margin-top: var(--space-9); }
+  }
+  @media (min-width: 60rem) {
+    .presentacion__rejilla { grid-template-columns: 1fr 1fr; gap: var(--space-9); }
+  }
+</style>

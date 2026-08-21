@@ -1,7 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import SeccionPresentacion from '../components/SeccionPresentacion.astro';
 import SeccionAlojamiento from '../components/SeccionAlojamiento.astro';
+import FranjaImagen from '../components/FranjaImagen.astro';
+import SeccionAmenidades from '../components/SeccionAmenidades.astro';
 const idioma = 'es' as const;
 ---
 <Base
@@ -11,5 +14,8 @@ const idioma = 'es' as const;
   descripcion="Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Suites con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directamente con nosotros."
 >
   <Hero idioma={idioma} />
+  <SeccionPresentacion idioma={idioma} />
   <SeccionAlojamiento idioma={idioma} limite={3} />
+  <FranjaImagen idioma={idioma} />
+  <SeccionAmenidades idioma={idioma} />
 </Base>

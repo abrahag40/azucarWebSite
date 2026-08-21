@@ -1,0 +1,66 @@
+---
+/**
+ * Franja de imagen a sangre con el lema — ocupa el lugar de la sección
+ * `video-wrapper` de Cappa `index11`.
+ *
+ * Cappa la resuelve con `background-attachment: fixed` (parallax vía
+ * jquery.stellar) y un vídeo de fondo. Se descartan las dos cosas:
+ *
+ * - El parallax obliga al navegador a repintar la capa en cada scroll. En móvil
+ *   es de los patrones que más castigan el INP, que está en la DoD.
+ * - El vídeo de fondo del demo pesa por sí solo más que todo nuestro sitio.
+ *
+ * Queda el efecto que sí aporta: una imagen ancha que corta el ritmo de la
+ * página con una frase encima. El velo aquí puede ser plano y generoso porque no
+ * hay nada que mirar al detalle: la fotografía es textura, no información.
+ */
+import { Image } from 'astro:assets';
+import { type Idioma } from '../i18n/ui';
+import { lema } from '../data/hotel';
+import fondo from '../assets/franja-habitacion.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+---
+<section class="franja" aria-label={lema[idioma]}>
+  <Image class="franja__fondo" src={fondo} alt=""
+    widths={[768, 1280, 1600]} sizes="100vw" loading="lazy" quality={70} />
+  <div class="franja__velo" aria-hidden="true"></div>
+  <p class="contenedor franja__lema">{lema[idioma]}</p>
+</section>
+
+<style>
+  .franja {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: min(52svh, 30rem);
+    padding-block: var(--space-9);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .franja__fondo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 55%;
+    z-index: -2;
+  }
+  /* Medido sobre el píxel más claro de esta foto con velo 0.62: 6.23:1 con
+     texto blanco, por encima del 4.5:1 de WCAG 1.4.3. */
+  .franja__velo {
+    position: absolute; inset: 0; z-index: -1;
+    background: rgb(0 0 0 / 0.62);
+  }
+  .franja__lema {
+    text-align: center;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1rem + 3vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    max-width: 24ch;
+  }
+</style>

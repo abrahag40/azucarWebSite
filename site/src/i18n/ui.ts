@@ -46,6 +46,9 @@ export const ui = {
     'footer.politicas': 'Políticas del hotel',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
 
+    'amenidades.antetitulo': 'Servicios',
+    'amenidades.titulo': 'Todo lo que el hotel pone a tu alcance',
+
     'error404.titulo': 'Esta página no existe',
     'error404.entrada': 'El enlace que seguiste puede estar roto, o la página se movió. Desde aquí puedes volver.',
     'error404.inicio': 'Ir al inicio',
@@ -85,6 +88,9 @@ export const ui = {
     'footer.terminos': 'Terms and conditions',
     'footer.politicas': 'Hotel policies',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
+
+    'amenidades.antetitulo': 'Our services',
+    'amenidades.titulo': 'Everything the hotel puts within your reach',
 
     'error404.titulo': 'This page does not exist',
     'error404.entrada': 'The link you followed may be broken, or the page may have moved. You can head back from here.',
