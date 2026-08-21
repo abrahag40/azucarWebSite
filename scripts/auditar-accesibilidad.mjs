@@ -71,12 +71,24 @@ for (const f of paginas) {
     if (n === 0) F(pag, criterio, `falta <${etiqueta}>`);
     if (etiqueta === 'main' && n > 1) F(pag, criterio, `${n} elementos <main>; debe haber uno`);
   }
-  // Varias <nav> en la misma página necesitan nombre para distinguirse
+  // Varias <nav> en la misma página necesitan nombre, y que sea DISTINTO.
+  //
+  // Esta regla pedía sólo que lo tuvieran. Pasaba en verde con las dos <nav> de
+  // la cabecera etiquetadas igual —«Menú» las dos—, que es exactamente el caso
+  // que la regla existe para evitar: dos landmarks del mismo tipo con el mismo
+  // nombre no se distinguen, que es como no tener nombre. Lo encontró
+  // `html-validate`; ver docs/05-despliegue/validacion-html.md.
   const navs = all(/<nav\b([^>]*)>/gi, doc);
   if (navs.length > 1) {
     const sinNombre = navs.filter((m) => !/aria-label|aria-labelledby/i.test(m[1]));
     if (sinNombre.length)
       F(pag, 'WCAG 1.3.1', `${sinNombre.length} de ${navs.length} <nav> sin aria-label; con varias no se distinguen`);
+    const nombres = navs
+      .map((m) => /aria-label\s*=\s*["']([^"']+)["']/i.exec(m[1])?.[1])
+      .filter(Boolean);
+    const repes = [...new Set(nombres.filter((x, i) => nombres.indexOf(x) !== i))];
+    if (repes.length)
+      F(pag, 'WCAG 1.3.1', `${repes.length} nombre(s) de <nav> repetido(s): ${repes.join(', ')}; con el mismo nombre no se distinguen`);
   }
 
   // ── 3.1.1 Idioma ─────────────────────────────────────────────────────────

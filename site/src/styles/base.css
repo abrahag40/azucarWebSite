@@ -135,3 +135,18 @@ a:hover { color: var(--color-accent-hover); }
 @media (min-width: 40rem) {
   .entrada-pagina { font-size: var(--text-lg); }
 }
+
+/* ── Número de teléfono ─────────────────────────────────────────────────────
+   Un teléfono partido a mitad de línea —«+52 (984)» arriba, «210-0057» abajo—
+   se lee mal y se copia peor.
+
+   `html-validate` propone caracteres duros: espacio duro (U+00A0) para los
+   espacios y guion duro (U+2011) para el guion. Los espacios sí van así, en
+   `data/hotel.ts`. El GUION no: U+2011 es un carácter poco común y no hay
+   garantía de que sobreviva al subconjunto latino de Barlow. Si no está en el
+   archivo, el navegador NO cae a otra fuente: dibuja un cuadrado.
+
+   `white-space: nowrap` no depende de ningún glifo, y además impide que rompa
+   por los paréntesis, cosa que el guion duro no resolvería. Regla compartida y
+   no copiada en cada componente (L-046). */
+.telefono { white-space: nowrap; }

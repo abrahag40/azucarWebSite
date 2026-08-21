@@ -18,10 +18,18 @@ import type { Idioma } from '../i18n/ui';
 
 type Texto = Record<Idioma, string>;
 
-/** Datos de contacto. Tomados del encabezado del sitio vigente. */
+/**
+ * Datos de contacto. Tomados del encabezado del sitio vigente.
+ *
+ * Los espacios de los teléfonos son **espacios duros** (U+00A0), no espacios
+ * normales. Un número de teléfono partido a mitad de línea —«+52 (984)» arriba
+ * y «210-0057» abajo— se lee mal y se copia peor. Lo señaló `html-validate` con
+ * su regla `tel-non-breaking`, y es de esas cosas que sólo se ven cuando el
+ * ancho es justo el que parte el número.
+ */
 export const contacto = {
   correo: 'contacto@azucarhotel.com',
-  telefonos: ['+52 (984) 210-0057', '+52 (81) 1380-2176'],
+  telefonos: ['+52\u00A0(984)\u00A0210-0057', '+52\u00A0(81)\u00A01380-2176'],
 } as const;
 
 /** Presentación. Fuente: `/nosotros/` y `/en/about-us/`. */

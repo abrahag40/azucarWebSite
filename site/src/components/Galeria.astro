@@ -135,7 +135,16 @@ const grandes = await Promise.all(
         descargan ocho imágenes grandes que quizá nadie mire. */}
     <dialog class="visor" aria-label={t('galeria.visor')}>
       <div class="visor__marco">
-        <img class="visor__imagen" alt="" />
+        {/* `src` con un GIF transparente de 1×1 en `data:`. Un <img> SIN
+            atributo `src` es HTML inválido —lo marca `html-validate`— y algunos
+            navegadores llegan a resolverlo contra la URL de la página, pidiendo
+            el documento entero como si fuera una imagen. El `data:` no genera
+            petición y la CSP ya permite `img-src data:`. */}
+        <img
+          class="visor__imagen"
+          alt=""
+          src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+        />
         <p class="visor__pie" aria-live="polite"></p>
       </div>
       <button type="button" class="visor__boton visor__boton--anterior" data-accion="anterior">

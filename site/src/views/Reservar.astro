@@ -63,7 +63,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
           <ul class="contactos">
             <li><a href={`mailto:${contacto.correo}`}>{contacto.correo}</a></li>
             {contacto.telefonos.map((tel) => (
-              <li><a href={`tel:${tel.replace(/[^+\d]/g, '')}`}>{tel}</a></li>
+              <li><a class="telefono" href={`tel:${tel.replace(/[^+\d]/g, '')}`}>{tel}</a></li>
             ))}
           </ul>
           <p class="tarjeta__nota">

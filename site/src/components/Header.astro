@@ -42,7 +42,13 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     {/* Navegación horizontal, sólo en escritorio. Es la pieza que más distingue
         visualmente a Cappa y la que faltaba: antes el escritorio sólo mostraba
         idioma y botón, lo que dejaba la cabecera vacía. */}
-    <nav class="nav" aria-label={t('nav.menu')}>
+    {/* Los dos <nav> de la cabecera —el horizontal de escritorio y el del cajón
+      móvil— llevaban la MISMA etiqueta, «Menú». Sólo uno se renderiza a la vez,
+      así que en la práctica no molestaba a nadie; aun así, dos landmarks del
+      mismo tipo con nombre idéntico son ambiguos por definición y no cuesta
+      nada distinguirlos. Lo encontró `html-validate`; mi propio auditor pedía
+      que las <nav> tuvieran nombre, no que fuera ÚNICO. */}
+  <nav class="nav" aria-label={t('nav.principal')}>
       <ul class="nav__lista">
         {enlaces.map((e) => (
           <li>

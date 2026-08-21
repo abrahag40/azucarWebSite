@@ -35,7 +35,7 @@ const MAPA = 'https://www.google.com/maps/search/?api=1&query=20.1489,-87.4483';
     <h2 class="datos__titulo">{t('contacto.telefono')}</h2>
     <ul class="datos__lista" role="list">
       {contacto.telefonos.map((n) => (
-        <li><a class="datos__enlace" href={`tel:${tel(n)}`}>{n}</a></li>
+        <li><a class="datos__enlace telefono" href={`tel:${tel(n)}`}>{n}</a></li>
       ))}
     </ul>
     <h2 class="datos__titulo datos__titulo--sep">{t('contacto.correo')}</h2>

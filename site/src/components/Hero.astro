@@ -22,14 +22,53 @@
  *    en móvil provoca repintados en cada scroll y castiga el INP, que está en la
  *    Definition of Done.
  */
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 import fondo from '../assets/hero-roof-top.webp';
+
+/**
+ * Precarga de la fotografía del héroe — es el elemento LCP de la portada.
+ *
+ * ── EL PROBLEMA, MEDIDO ─────────────────────────────────────────────────────
+ * Lighthouse desglosó el LCP de la portada así:
+ *
+ *     time to first byte      255 ms
+ *     resource load delay     655 ms   ← aquí no pasa nada útil
+ *     resource load duration  ...
+ *
+ * Esos 655 ms son el hueco entre que llega el HTML y que el navegador **pide**
+ * la imagen. No es lentitud de red: es que la imagen está en el cuerpo del
+ * documento y el navegador no la descubre hasta haber procesado las hojas de
+ * estilo que bloquean el render. `fetchpriority="high"` sube su prioridad, pero
+ * no adelanta el momento en que se entera de que existe.
+ *
+ * Un `<link rel="preload" as="image">` en el `<head>` sí: el analizador de
+ * precarga lo ve en el primer barrido, antes que el CSS.
+ *
+ * ── POR QUÉ CON `imagesrcset` Y NO CON UN `href` A SECAS ─────────────────────
+ * Precargar una URL concreta serviría el archivo equivocado a casi todo el
+ * mundo: la imagen es responsiva y el `<img>` elige entre 768, 1280 y 1600 px.
+ * Un `preload` con `href` fijo descargaría ESE tamaño y después el `<img>`
+ * pediría otro: dos descargas y el LCP peor que antes. Con `imagesrcset` e
+ * `imagesizes` idénticos a los del `<img>`, el navegador resuelve el mismo
+ * candidato y la petición se reutiliza.
+ */
+const anchos = [768, 1280, 1600];
+const derivadas = await Promise.all(
+  anchos.map((width) => getImage({ src: fondo, width, format: 'webp', quality: 50 })),
+);
+const heroSrcset = derivadas.map((d, i) => `${d.src} ${anchos[i]}w`).join(', ');
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 ---
+{/* Astro mueve al <head> lo que se declara aquí con `is:inline` dentro de
+    <head>… pero un componente no puede escribir en el <head> del layout. Se
+    emite en su sitio: un <link rel="preload"> es válido en el cuerpo y el
+    analizador de precarga lo lee igual, porque va antes que el <img>. */}
+<link rel="preload" as="image" imagesrcset={heroSrcset} imagesizes="100vw" fetchpriority="high" />
+
 <section class="hero">
   {/* alt vacío a propósito: la imagen es ambiente, y su contenido ya lo dice el
       texto que va encima. Describirla obligaría al lector de pantalla a leer
