@@ -45,6 +45,7 @@
     "es": "Vista frontal al mar y jacuzzi privado en la terraza.",
     "en": "Ocean front view and private jacuzzi on the terrace."
   },
+  "imagenPrincipal": "../../assets/alojamiento/suite-mar.webp",
   "publicado": true,
   "verificado": [
     "nombre",

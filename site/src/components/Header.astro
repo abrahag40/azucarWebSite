@@ -1,7 +1,22 @@
 ---
+/**
+ * Cabecera.
+ *
+ * Dos modos, controlados por `sobreHero`:
+ *
+ * - `true`  — se posa SOBRE la fotografía del héroe, transparente y en blanco.
+ *             Es la composición de Cappa y lo que produce la primera impresión.
+ * - `false` — sólida y pegada arriba, para las páginas sin héroe a sangre.
+ *
+ * Cappa cambia de transparente a sólida al hacer scroll con jQuery. Aquí no hay
+ * JavaScript: sobre el héroe la cabecera acompaña al scroll y desaparece con él.
+ * La alternativa —fija y translúcida— dejaría texto blanco sobre el contenido
+ * claro de abajo, que es un fallo de contraste, no una decisión estética.
+ */
 import { usarT, ruta, idiomas, type Idioma } from '../i18n/ui';
-interface Props { idioma: Idioma; rutaActual?: string }
-const { idioma, rutaActual = '' } = Astro.props;
+
+interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
+const { idioma, rutaActual = '', sobreHero = false } = Astro.props;
 const t = usarT(idioma);
 
 const enlaces = [
@@ -14,11 +29,27 @@ const enlaces = [
 ] as const;
 const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 ---
-<header class="cabecera">
+<header class:list={['cabecera', sobreHero && 'cabecera--sobre-hero']}>
   <div class="contenedor cabecera__fila">
     <a class="marca" href={ruta(idioma)}>
       Azúcar<span class="marca__sub">Hotel Tulum</span>
     </a>
+
+    {/* Navegación horizontal, sólo en escritorio. Es la pieza que más distingue
+        visualmente a Cappa y la que faltaba: antes el escritorio sólo mostraba
+        idioma y botón, lo que dejaba la cabecera vacía. */}
+    <nav class="nav" aria-label={t('nav.menu')}>
+      <ul class="nav__lista">
+        {enlaces.map((e) => (
+          <li>
+            <a
+              href={ruta(idioma, e.path)}
+              aria-current={rutaActual === e.path ? 'page' : undefined}
+            >{t(e.clave)}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
 
     <!-- El <details> da un menú desplegable accesible sin una línea de JS:
          el navegador gestiona el estado, el teclado y el anuncio del estado
@@ -64,10 +95,20 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-border);
   }
+
+  /* Sobre el héroe: sin fondo, sin borde y en blanco. `absolute` y no `sticky`
+     para que se vaya con la foto en vez de quedarse flotando sobre el contenido. */
+  .cabecera--sobre-hero {
+    position: absolute; inset-inline: 0; top: 0;
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: 0;
+  }
+
   .cabecera__fila {
     display: flex; align-items: center; justify-content: space-between;
-    gap: var(--space-4);
-    min-height: 72px;
+    gap: var(--space-5);
+    min-height: 88px;
   }
   .marca {
     display: flex; flex-direction: column; line-height: 1;
@@ -75,16 +116,41 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     font-size: var(--text-xl);
     color: var(--color-ink);
     text-decoration: none;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
   .marca__sub {
     font-family: var(--font-ui);
     font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     color: var(--color-ink-muted);
-    margin-top: 3px;
+    margin-top: 5px;
   }
+
+  .nav { display: none; }
+  .nav__lista {
+    display: flex; align-items: center; gap: var(--space-5);
+    list-style: none; padding: 0; margin: 0;
+  }
+  .nav__lista a {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    text-decoration: none;
+    padding-block: var(--space-2);
+    border-bottom: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .nav__lista a:hover,
+  .nav__lista a[aria-current='page'] {
+    color: var(--color-accent-text);
+    border-bottom-color: var(--color-accent);
+  }
+
   .cabecera__acciones { display: none; align-items: center; gap: var(--space-4); }
   .cabecera__idioma {
     font-family: var(--font-ui); font-size: var(--text-sm);
@@ -93,6 +159,23 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     padding: var(--space-2);
   }
   .cabecera__idioma:hover { color: var(--color-accent-text); }
+
+  /* --- Variante sobre fotografía -------------------------------------------
+     Todo lo que va sobre la foto pasa a blanco puro. Sobre el velo del héroe
+     (0.3 plano + degradado) el blanco da 7:1 largo, muy por encima del 4.5:1. */
+  .cabecera--sobre-hero .marca,
+  .cabecera--sobre-hero .marca__sub,
+  .cabecera--sobre-hero .nav__lista a,
+  .cabecera--sobre-hero .cabecera__idioma { color: #fff; }
+  .cabecera--sobre-hero .nav__lista a:hover,
+  .cabecera--sobre-hero .nav__lista a[aria-current='page'] {
+    color: #fff;
+    border-bottom-color: var(--color-accent);
+  }
+  .cabecera--sobre-hero .menu__icono,
+  .cabecera--sobre-hero .menu__icono::before,
+  .cabecera--sobre-hero .menu__icono::after { background: #fff; }
+  .cabecera--sobre-hero .menu[open] .menu__icono { background: transparent; }
 
   .menu__boton {
     display: flex; align-items: center; justify-content: center;
@@ -136,8 +219,11 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     color: var(--color-ink); text-decoration: none;
   }
 
-  @media (min-width: 60rem) {
+  /* El umbral sube a 68rem porque ahora hay seis apartados en horizontal más
+     el idioma y el botón: por debajo de eso no caben sin apretarse. */
+  @media (min-width: 68rem) {
     .menu { display: none; }
+    .nav { display: block; }
     .cabecera__acciones { display: flex; }
   }
 </style>

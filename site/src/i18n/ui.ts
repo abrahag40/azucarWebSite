@@ -30,6 +30,7 @@ export const ui = {
     'hero.eyebrow': 'Zona Hotelera de Tulum · Frente al mar',
     'hero.titulo': 'El único lugar donde el mar es dulce',
     'hero.entrada': 'Hotel boutique frente al Caribe mexicano, hecho a mano en Tulum desde 2008.',
+    'hero.bajar': 'Bajar al contenido',
 
     'alojamiento.titulo': 'Alojamiento',
     'alojamiento.entrada': 'Suites con jacuzzi privado y habitaciones frente al Caribe.',
@@ -69,6 +70,7 @@ export const ui = {
     'hero.eyebrow': 'Tulum Hotel Zone · Beachfront',
     'hero.titulo': 'The sweetest place at the beach',
     'hero.entrada': 'A boutique hotel on the Mexican Caribbean, handcrafted in Tulum since 2008.',
+    'hero.bajar': 'Scroll to content',
 
     'alojamiento.titulo': 'Rooms & Suites',
     'alojamiento.entrada': 'Suites with private jacuzzi and rooms facing the Caribbean.',

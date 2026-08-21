@@ -41,6 +41,7 @@
       "en": "Wi-Fi"
     }
   ],
+  "imagenPrincipal": "../../assets/alojamiento/suite-agua.webp",
   "publicado": true,
   "verificado": [
     "nombre",

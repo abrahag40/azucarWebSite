@@ -103,4 +103,14 @@ a:hover { color: var(--color-accent-hover); }
 .boton--secundario { background: transparent; color: var(--color-ink); border-color: var(--color-accent); }
 .boton--secundario:hover { background: var(--color-accent); color: #fff; }
 .boton--claro { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
+/* Contorno claro sobre fotografia, como el boton del heroe de Cappa. El relleno
+   translucido garantiza el contraste del texto aunque la foto tenga una zona
+   clara justo detras. */
+.boton--contorno-claro {
+  background: rgb(0 0 0 / 0.28);
+  color: #fff;
+  border-color: rgb(255 255 255 / 0.75);
+}
+.boton--contorno-claro:hover,
+.boton--contorno-claro:focus-visible { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
 .boton--claro:hover { background: #fff; }

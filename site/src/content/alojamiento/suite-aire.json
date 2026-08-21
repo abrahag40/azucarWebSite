@@ -49,6 +49,7 @@
     "es": "La vista es panorámica, no frontal.",
     "en": "The view is panoramic rather than straight-on."
   },
+  "imagenPrincipal": "../../assets/alojamiento/suite-aire.webp",
   "publicado": true,
   "verificado": [
     "nombre",

@@ -40,7 +40,10 @@ jobs:
             grep -q '<html lang='        "$f" || { echo "✗ sin lang: $f";     fallos=1; }
             grep -q 'name="description"' "$f" || { echo "✗ sin description: $f"; fallos=1; }
             grep -cE '<h1' "$f" | grep -qx 1 || { echo "✗ no hay exactamente un h1: $f"; fallos=1; }
-            grep -oE '<img[^>]*>' "$f" | grep -v 'alt=' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
+            # `alt` a secas es alt vacio (imagen decorativa), y es correcto: Astro lo
+            # emite asi cuando el valor es "". Exigir `alt=` marcaba como fallo el
+            # marcado bien hecho.
+            grep -oE '<img[^>]*>' "$f" | grep -vE 'alt(=|[[:space:]>/])' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
 
             # Las páginas de error no son contenido indexable: no tienen URL
             # canónica ni versión en otro idioma que ofrecer a Google. En vez de

@@ -37,6 +37,7 @@
       "en": "Wi-Fi"
     }
   ],
+  "imagenPrincipal": "../../assets/alojamiento/habitacion-king-mar.webp",
   "publicado": true,
   "verificado": [
     "nombre",

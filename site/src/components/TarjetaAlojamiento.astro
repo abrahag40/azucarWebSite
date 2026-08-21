@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 import type { CollectionEntry } from 'astro:content';
 
@@ -8,14 +9,32 @@ const { data, id } = entrada;
 const t = usarT(idioma);
 ---
 <article class="tarjeta">
-  <div class="tarjeta__medio">
-    {/* Marcador mientras no haya fotografía asignada. Deliberadamente sobrio:
-        una imagen de relleno bonita hace creer que el sitio está más avanzado
-        de lo que está. */}
-    <div class="tarjeta__marcador" role="img" aria-label={data.nombre[idioma]}>
-      <span aria-hidden="true">{data.nombre[idioma].charAt(0)}</span>
-    </div>
-  </div>
+  <a class="tarjeta__medio" href={ruta(idioma, `alojamiento/${id}`)} tabindex="-1" aria-hidden="true">
+    {data.imagenPrincipal ? (
+      /* alt vacío, y el enlace de la foto oculto a la accesibilidad: es un
+         DUPLICADO del enlace del título que ya está debajo. La vista que muestra
+         la foto está escrita en `.tarjeta__vista`, así que no se pierde
+         información — WCAG 1.1.1, imagen cuyo contenido ya da el texto. Poner
+         aquí un alt descriptivo haría que el lector anunciara dos enlaces al
+         mismo sitio y leyera la vista dos veces. */
+      <Image
+        class="tarjeta__foto"
+        src={data.imagenPrincipal}
+        alt=""
+        widths={[300, 450, 600]}
+        sizes="(min-width: 60rem) 22rem, (min-width: 40rem) 45vw, 90vw"
+        loading="lazy"
+        quality={72}
+      />
+    ) : (
+      /* Marcador mientras no haya fotografía asignada. Deliberadamente sobrio:
+         una imagen de relleno bonita hace creer que el sitio está más avanzado
+         de lo que está. */
+      <div class="tarjeta__marcador" role="img" aria-label={data.nombre[idioma]}>
+        <span aria-hidden="true">{data.nombre[idioma].charAt(0)}</span>
+      </div>
+    )}
+  </a>
   <div class="tarjeta__cuerpo">
     <p class="antetitulo">
       {data.categoria === 'suite' ? t('alojamiento.suites') : t('alojamiento.habitaciones')}
@@ -42,8 +61,22 @@ const t = usarT(idioma);
     transition: border-color var(--dur) var(--ease);
   }
   .tarjeta:hover { border-color: var(--color-accent); }
-  /* aspect-ratio reserva el espacio antes de que cargue nada: CLS = 0 */
-  .tarjeta__medio { aspect-ratio: 4 / 3; background: var(--color-surface-warm); }
+  /* 3:4 vertical, la proporción que usa Cappa en sus tarjetas de habitación
+     (900x1200) y que además coincide con la fotografía del hotel (~530x700),
+     así que las fotos entran sin recorte agresivo.
+     aspect-ratio reserva el espacio antes de que cargue nada: CLS = 0. */
+  .tarjeta__medio {
+    display: block;
+    aspect-ratio: 3 / 4;
+    background: var(--color-surface-warm);
+    overflow: hidden;
+  }
+  .tarjeta__foto {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: scale var(--dur) var(--ease);
+  }
+  .tarjeta:hover .tarjeta__foto { scale: 1.04; }
   .tarjeta__marcador {
     display: grid; place-items: center; width: 100%; height: 100%;
     font-family: var(--font-display);

@@ -1,54 +1,212 @@
 ---
+/**
+ * Héroe a sangre, siguiendo la composición de Cappa `demo1-light/index11`:
+ * fotografía a pantalla completa, velo oscuro, antetítulo espaciado, título
+ * serif en mayúsculas centrado, y flecha de bajada.
+ *
+ * Dos adaptaciones deliberadas respecto de la plantilla:
+ *
+ * 1. El texto se ancla ABAJO, no al centro geométrico.
+ *    Cappa centra el texto porque sus fotos son interiorismo de estudio en
+ *    penumbra: el blanco contrasta solo. Las del hotel son de mediodía, con
+ *    cielo azul y duela clara, y son claras en TODA su superficie. Un velo
+ *    uniforme lo bastante denso para que el blanco cumpla 4.5:1 sobre la zona
+ *    más clara exige ~0.65 de opacidad, y a esa densidad la fotografía se
+ *    convierte en un gris sin forma: se pierde justo lo que se venía a mostrar.
+ *    Se probó, se midió y se descartó.
+ *    Anclando el texto abajo, el degradado oscurece solo el tercio inferior: la
+ *    parte alta conserva la pérgola, las hamacas y el cielo a plena luz, y el
+ *    texto se apoya sobre una zona con contraste garantizado.
+ *
+ * 2. Sin parallax. Cappa usa `background-attachment: fixed` vía jquery.stellar;
+ *    en móvil provoca repintados en cada scroll y castiga el INP, que está en la
+ *    Definition of Done.
+ */
+import { Image } from 'astro:assets';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
+import fondo from '../assets/hero-roof-top.webp';
+
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 ---
 <section class="hero">
+  {/* alt vacío a propósito: la imagen es ambiente, y su contenido ya lo dice el
+      texto que va encima. Describirla obligaría al lector de pantalla a leer
+      dos veces lo mismo (WCAG 1.1.1, caso de imagen decorativa). */}
+  <Image
+    class="hero__fondo"
+    src={fondo}
+    alt=""
+    widths={[768, 1280, 1600]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    quality={72}
+  />
+  <div class="hero__velo" aria-hidden="true"></div>
+
   <div class="contenedor hero__contenido">
     <p class="hero__antetitulo">{t('hero.eyebrow')}</p>
     <h1 class="hero__titulo">{t('hero.titulo')}</h1>
     <p class="hero__entrada">{t('hero.entrada')}</p>
     <div class="hero__acciones">
       <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
-      <a class="boton boton--secundario" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
+      <a class="boton boton--contorno-claro" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
     </div>
     {/* ADR-0003, regla 1: la promesa de confirmación se hace explícita desde el
         primer contacto, no escondida al final del formulario. */}
     <p class="hero__aviso">{t('reserva.aviso')}</p>
   </div>
+
+  <a class="hero__bajar" href="#alojamiento-titulo" aria-label={t('hero.bajar')}>
+    <span aria-hidden="true"></span>
+  </a>
 </section>
 
 <style>
   .hero {
-    display: grid; align-items: center;
-    min-height: min(78svh, 46rem);
-    padding-block: var(--space-8);
-    background: linear-gradient(160deg, var(--color-surface-warm) 0%, var(--color-surface-alt) 100%);
-    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    display: grid;
+    align-items: end;
+    justify-items: center;
+    /* svh y no vh: en móvil, vh cuenta la barra del navegador y recorta el héroe. */
+    min-height: 100svh;
+    padding-block: var(--space-10) calc(var(--space-10) + var(--space-6));
+    isolation: isolate;
+    overflow: hidden;
   }
-  .hero__contenido { max-width: var(--container-text); }
+
+  .hero__fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    z-index: -2;
+  }
+
+  /* Velo ANCLADO AL TEXTO, no al viewport.
+     Primera versión: una elipse dimensionada en % del héroe. Se afinó midiendo
+     y pasaba 5.2:1 a 1280x810... y se venía abajo en cuanto cambiaba la altura
+     de la ventana: en un viewport alto la elipse crece con él y se traga la
+     fotografía entera. Un valor afinado para una sola medida de pantalla no es
+     una solución, es una coincidencia.
+     La versión buena cuelga el velo del propio bloque de texto (ver
+     `.hero__contenido::before`), de modo que su tamaño lo fija el contenido y no
+     la ventana. Aquí solo queda el degradado suave que asienta cabecera y pie. */
+  .hero__velo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom,
+      rgb(0 0 0 / 0.34) 0%,
+      rgb(0 0 0 / 0.06) 20%,
+      rgb(0 0 0 / 0.06) 70%,
+      rgb(0 0 0 / 0.38) 100%);
+  }
+
+  .hero__contenido {
+    position: relative;
+    max-width: 56rem;
+    text-align: center;
+    color: #fff;
+    isolation: isolate;
+  }
+  /* El velo que garantiza el contraste. Se extiende bastante más allá del texto
+     para que el borde sea imperceptible, y al colgar del contenido conserva la
+     misma densidad sobre las letras en cualquier tamaño de ventana.
+     Peor caso medido sobre el píxel más claro de la foto (muro blanco, L≈0.98):
+     0.98 × (1-0.64)^2.4 → 7.0:1, muy por encima del 4.5:1 de WCAG 1.4.3. */
+  .hero__contenido::before {
+    content: '';
+    position: absolute;
+    inset: -55% -28%;
+    z-index: -1;
+    background: radial-gradient(ellipse at center,
+      rgb(0 0 0 / 0.72) 0%,
+      rgb(0 0 0 / 0.64) 42%,
+      rgb(0 0 0 / 0.32) 66%,
+      rgb(0 0 0 / 0) 82%);
+  }
+
   .hero__antetitulo {
-    font-family: var(--font-ui); font-size: var(--text-sm);
-    letter-spacing: var(--tracking-wide); text-transform: uppercase;
-    color: var(--color-accent-text);
-    margin-bottom: var(--space-4);
-  }
-  .hero__titulo {
-    font-size: var(--text-hero);
-    line-height: 1.05;
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #fff;
     margin-bottom: var(--space-5);
   }
+
+  .hero__titulo {
+    font-size: var(--text-hero);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: var(--space-5);
+    text-wrap: balance;
+  }
+
   .hero__entrada {
     font-size: var(--text-lg);
-    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    color: rgb(255 255 255 / 0.92);
     max-width: 46ch;
-    margin-bottom: var(--space-6);
+    margin: 0 auto var(--space-7);
   }
-  .hero__acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+  .hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+  }
+
   .hero__aviso {
-    margin-top: var(--space-4);
+    margin-top: var(--space-5);
+    font-family: var(--font-ui);
     font-size: var(--text-sm);
-    color: var(--color-ink-muted);
+    letter-spacing: 0.08em;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  /* Flecha de bajada, como en Cappa. Es un enlace real al primer bloque de
+     contenido: además de decorar, da un salto útil a quien navega por teclado. */
+  .hero__bajar {
+    position: absolute;
+    bottom: var(--space-6);
+    left: 50%;
+    translate: -50% 0;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgb(255 255 255 / 0.5);
+    border-radius: 50%;
+    transition: background-color var(--dur) var(--ease);
+  }
+  .hero__bajar:hover,
+  .hero__bajar:focus-visible { background: rgb(255 255 255 / 0.18); }
+  .hero__bajar span {
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid #fff;
+    border-bottom: 1.5px solid #fff;
+    rotate: 45deg;
+    translate: 0 -2px;
+    animation: latido 2s var(--ease) infinite;
+  }
+  @keyframes latido {
+    0%, 100% { translate: 0 -3px; }
+    50%      { translate: 0 2px; }
+  }
+
+  @media (max-width: 40rem) {
+    .hero { min-height: 88svh; }
+    .hero__antetitulo { letter-spacing: 0.18em; }
   }
 </style>

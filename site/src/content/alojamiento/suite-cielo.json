@@ -49,6 +49,7 @@
     "es": "El jacuzzi está en un roof top privado, no en la terraza.",
     "en": "The jacuzzi sits on a private roof top rather than the terrace."
   },
+  "imagenPrincipal": "../../assets/alojamiento/suite-cielo.webp",
   "publicado": true,
   "verificado": [
     "nombre",

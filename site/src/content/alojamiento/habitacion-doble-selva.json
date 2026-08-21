@@ -37,6 +37,7 @@
       "en": "Wi-Fi"
     }
   ],
+  "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-selva.webp",
   "publicado": true,
   "verificado": [
     "nombre",

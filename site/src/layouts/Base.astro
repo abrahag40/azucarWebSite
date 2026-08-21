@@ -12,6 +12,8 @@ interface Props {
   idioma: Idioma;
   /** Ruta sin prefijo de idioma, p. ej. 'alojamiento'. Vacía = portada. */
   rutaActual?: string;
+  /** La cabecera se posa sobre la fotografía del héroe. Ver Header.astro. */
+  sobreHero?: boolean;
   /**
    * Falso sólo para páginas que no representan contenido real —hoy, el 404—.
    * Emite `noindex` y omite canonical, hreflang y datos estructurados: una
@@ -20,7 +22,7 @@ interface Props {
    */
   indexable?: boolean;
 }
-const { titulo, descripcion, idioma, rutaActual = '', indexable = true } = Astro.props;
+const { titulo, descripcion, idioma, rutaActual = '', indexable = true, sobreHero = false } = Astro.props;
 const t = usarT(idioma);
 
 const canonical = new URL(ruta(idioma, rutaActual), Astro.site).toString();
@@ -98,7 +100,7 @@ const schema = {
   </head>
   <body>
     <a class="sr-only saltar" href="#contenido">{t('nav.saltar')}</a>
-    <Header idioma={idioma} rutaActual={rutaActual} />
+    <Header idioma={idioma} rutaActual={rutaActual} sobreHero={sobreHero} />
     <main id="contenido">
       <slot />
     </main>

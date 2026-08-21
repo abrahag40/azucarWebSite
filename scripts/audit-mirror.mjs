@@ -96,7 +96,10 @@ for (const f of htmlFiles) {
     if (headings[i] - headings[i - 1] > 1) { jump = `h${headings[i-1]} → h${headings[i]}`; break; }
 
   const imgTags = all(/<img\b[^>]*>/gi, src).map(m => m[0]);
-  const sinAlt = imgTags.filter(t => !/\balt\s*=/i.test(t)).length;
+  // `alt` a secas es alt vacio: imagen DECORATIVA, que es correcto y obligatorio
+  // marcar asi (WCAG 1.1.1). Astro emite `alt` sin `=` cuando el valor es "".
+  // Exigir `alt=` marcaba como fallo justo el marcado bien hecho.
+  const sinAlt = imgTags.filter(t => !/\balt(\s*=|[\s>/])/i.test(t)).length;
   const sinDim = imgTags.filter(t => !(/\bwidth\s*=/i.test(t) && /\bheight\s*=/i.test(t))).length;
   const lazy   = imgTags.filter(t => /loading\s*=\s*["']?lazy/i.test(t)).length;
 
