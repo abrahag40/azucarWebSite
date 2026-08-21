@@ -50,5 +50,11 @@ jobs:
           [ "$fallos" -eq 0 ] && echo "✓ Todas las guardias de la DoD pasan"
           exit $fallos
 
+      # Se audita sobre una COPIA: el auditor escribe informe.md y datos.json en la
+      # carpeta que analiza, y dist es el artefacto que se despliega. Auditar en
+      # sitio publicaria el informe interno junto al sitio.
       - name: Informe de auditoría del build
-        run: node ../scripts/audit-mirror.mjs dist && cat dist/informe.md >> $GITHUB_STEP_SUMMARY
+        run: |
+          cp -r dist "$RUNNER_TEMP/dist-auditoria"
+          node ../scripts/audit-mirror.mjs "$RUNNER_TEMP/dist-auditoria"
+          cat "$RUNNER_TEMP/dist-auditoria/informe.md" >> $GITHUB_STEP_SUMMARY

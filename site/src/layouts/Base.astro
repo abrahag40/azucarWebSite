@@ -76,7 +76,9 @@ const schema = {
       href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@300;400&family=Gilda+Display&display=swap"
     />
 
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {/* is:inline — no es un script de cliente: es metadato que debe quedar
+        literal en el HTML. Sin la directiva, Astro intenta procesarlo. */}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
     <Analitica />
   </head>
   <body>
