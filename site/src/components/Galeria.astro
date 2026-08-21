@@ -1,0 +1,286 @@
+---
+/**
+ * Galería con visor accesible (H2.3).
+ *
+ * ── POR QUÉ ESTE COMPONENTE SÍ LLEVA JAVASCRIPT ──────────────────────────────
+ * Es el primer JavaScript del sitio, y conviene dejar escrito por qué se
+ * justifica aquí y no antes. ADR-0004 no dice "cero JavaScript": dice cero
+ * *salvo que una función concreta lo exija*. Un menú, un acordeón o un carrusel
+ * no lo exigen —`<details>`, `<summary>` y scroll-snap los resuelven—. Ampliar
+ * una foto sobre un fondo oscuro, con el foco atrapado dentro y navegación por
+ * flechas, sí: no existe primitiva de HTML que lo haga sola.
+ *
+ * El coste está acotado a propósito:
+ *   · ~1.4 KB sin comprimir, en línea, sin dependencias ni framework.
+ *   · Sólo se carga en las páginas que tienen galería.
+ *   · Cappa resolvía esto con Magnific Popup (41 KB) sobre jQuery (87 KB).
+ *
+ * ── DEGRADACIÓN SIN JAVASCRIPT ───────────────────────────────────────────────
+ * El criterio de aceptación pide que funcione sin JS. La rejilla son enlaces
+ * `<a href="{imagen grande}">`: sin JavaScript, pulsar abre la foto a tamaño
+ * completo en la propia pestaña, que es un comportamiento correcto y conocido.
+ * El script sólo INTERCEPTA ese clic para abrir el visor. No construye la
+ * galería: la mejora.
+ *
+ * ── POR QUÉ <dialog> Y NO UN DIV ─────────────────────────────────────────────
+ * `showModal()` da gratis y bien lo que suele implementarse mal a mano:
+ *   · Atrapa el foco dentro (WCAG 2.4.3), incluido el orden del tabulador.
+ *   · Cierra con `Esc` sin escuchar la tecla.
+ *   · Vuelve el foco al elemento que lo abrió al cerrarse.
+ *   · Marca inerte el resto de la página para el lector de pantalla.
+ * Reimplementar eso a mano es la fuente clásica de trampas de foco rotas.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props {
+  imagenes: ImageMetadata[];
+  /** Nombre del tipo de alojamiento, para construir alternativas con sentido. */
+  nombre: string;
+  idioma: Idioma;
+}
+const { imagenes, nombre, idioma } = Astro.props;
+const t = usarT(idioma);
+---
+{imagenes.length > 0 && (
+  <section class="seccion seccion--calida galeria" aria-labelledby="galeria-titulo">
+    <div class="contenedor">
+      <h2 id="galeria-titulo" class="galeria__titulo">{t('galeria.titulo')}</h2>
+
+      <ul class="galeria__rejilla" role="list">
+        {imagenes.map((img, i) => (
+          <li class="galeria__celda">
+            {/* El href apunta a la imagen grande: es lo que hace que la galería
+                siga sirviendo con el JavaScript desactivado o caído. */}
+            <a
+              class="galeria__enlace"
+              href={img.src}
+              data-galeria={i}
+              aria-label={t('galeria.ampliar', { n: i + 1, total: imagenes.length })}
+            >
+              <Image
+                src={img}
+                alt={t('galeria.alt', { nombre, n: i + 1 })}
+                widths={[240, 400, 640]}
+                sizes="(min-width: 62rem) 15rem, (min-width: 34rem) 30vw, 45vw"
+                loading="lazy"
+                quality={70}
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* El visor. Vive vacío en el marcado y se rellena al abrirlo: así no se
+        descargan ocho imágenes grandes que quizá nadie mire. */}
+    <dialog class="visor" aria-label={t('galeria.visor')}>
+      <div class="visor__marco">
+        <img class="visor__imagen" alt="" />
+        <p class="visor__pie" aria-live="polite"></p>
+      </div>
+      <button type="button" class="visor__boton visor__boton--anterior" data-accion="anterior">
+        <span aria-hidden="true">‹</span><span class="sr-only">{t('galeria.anterior')}</span>
+      </button>
+      <button type="button" class="visor__boton visor__boton--siguiente" data-accion="siguiente">
+        <span aria-hidden="true">›</span><span class="sr-only">{t('galeria.siguiente')}</span>
+      </button>
+      <button type="button" class="visor__boton visor__boton--cerrar" data-accion="cerrar">
+        <span aria-hidden="true">×</span><span class="sr-only">{t('galeria.cerrar')}</span>
+      </button>
+    </dialog>
+  </section>
+)}
+
+<script>
+  // Mejora progresiva: si esto no corre, la galería sigue siendo una lista de
+  // enlaces a las fotos y todo funciona, sólo que sin visor.
+  const seccion = document.querySelector<HTMLElement>('.galeria');
+  const visor = seccion?.querySelector<HTMLDialogElement>('.visor');
+  if (seccion && visor && typeof visor.showModal === 'function') {
+    const enlaces = [...seccion.querySelectorAll<HTMLAnchorElement>('.galeria__enlace')];
+    const img = visor.querySelector<HTMLImageElement>('.visor__imagen')!;
+    const pie = visor.querySelector<HTMLElement>('.visor__pie')!;
+    let indice = 0;
+
+    const mostrar = (i: number) => {
+      indice = (i + enlaces.length) % enlaces.length;
+      const origen = enlaces[indice];
+      const foto = origen.querySelector('img')!;
+      img.src = origen.href;
+      // El alt viaja desde la miniatura: describe la misma foto.
+      img.alt = foto.alt;
+      pie.textContent = `${indice + 1} / ${enlaces.length}`;
+    };
+
+    enlaces.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        // Se respeta abrir en pestaña nueva y la descarga: no se secuestra
+        // un clic con modificadores ni el botón central.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        mostrar(i);
+        visor.showModal();
+      }),
+    );
+
+    // Devolver el foco a la miniatura que se estaba VIENDO, que no es la misma
+    // que se pulsó si se navegó con flechas.
+    //
+    // Aquí hay una trampa que costó encontrar: <dialog> restaura por su cuenta
+    // el foco al elemento que abrió el modal, y lo hace después. Se intentó
+    // corregir desde el evento `close`… que en este motor NO SE DISPARA al
+    // llamar a `close()`. Verificado instrumentando: el oyente nunca corría, así
+    // que el foco se quedaba siempre en la miniatura de entrada.
+    //
+    // Por eso no se depende de ese evento: se restaura explícitamente en cada
+    // una de las tres vías de cierre. `setTimeout` y no `requestAnimationFrame`
+    // porque rAF no corre con la pestaña en segundo plano.
+    const devolverFoco = () => setTimeout(() => enlaces[indice]?.focus(), 0);
+    const cerrar = () => { visor.close(); devolverFoco(); };
+
+    visor.addEventListener('click', (e) => {
+      const destino = e.target as HTMLElement;
+      const accion = destino.closest('[data-accion]')?.getAttribute('data-accion');
+      if (accion === 'cerrar') cerrar();
+      else if (accion === 'anterior') mostrar(indice - 1);
+      else if (accion === 'siguiente') mostrar(indice + 1);
+      // Pulsar el fondo cierra, que es lo que la gente espera de un visor.
+      else if (destino === visor) cerrar();
+    });
+
+    visor.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); mostrar(indice - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); mostrar(indice + 1); }
+      // El cierre por `Esc` lo hace el navegador y no se intercepta —quitarle
+      // esa tecla a un modal es romperlo—. Sólo se corrige el destino del foco.
+      if (e.key === 'Escape') devolverFoco();
+    });
+  }
+</script>
+
+<style>
+  .galeria__titulo {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Móvil: dos columnas. Una sola dejaría una tira larguísima que obliga a
+     mucho scroll para hacerse una idea del conjunto, que es para lo que está
+     una galería. `minmax(0, 1fr)` por la misma razón que en el resto del sitio. */
+  .galeria__rejilla {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .galeria__celda { min-width: 0; }
+
+  .galeria__enlace {
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+  }
+  .galeria__enlace :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale var(--dur) var(--ease);
+  }
+  .galeria__enlace:hover :global(img) { scale: 1.05; }
+
+  @media (min-width: 34rem) {
+    .galeria__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  }
+  @media (min-width: 62rem) {
+    .galeria__rejilla { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  /* --- Visor -------------------------------------------------------------- */
+  .visor {
+    /* `margin: auto` es OBLIGATORIO aquí, y el motivo no es evidente.
+       El navegador centra los <dialog> modales con `inset: 0` mas `margin: auto`
+       en su hoja de estilo. Nuestro reset abre con `* { margin: 0 }` —el idioma
+       habitual de los resets modernos— y eso pisa ese `auto`: el visor se pegaba
+       a la esquina superior izquierda y dos de los tres botones quedaban fuera
+       de la pantalla. Medido: el diálogo salia en (0,0) con 1120x735 dentro de
+       un viewport de 1280x900.
+       Un <dialog> modal ya es contexto de posicionamiento, asi que los botones
+       absolutos de dentro no necesitan `position: relative` — ponerlo, ademas,
+       lo saca del centrado. */
+    margin: auto;
+    width: min(96vw, 70rem);
+    max-width: none;
+    max-height: 92svh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+  .visor::backdrop { background: rgb(0 0 0 / 0.88); }
+
+  .visor__marco {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: center;
+  }
+  .visor__imagen {
+    max-width: 100%;
+    /* Se descuenta el alto del pie para que la foto nunca empuje fuera. */
+    max-height: calc(92svh - 3.5rem);
+    width: auto;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+  .visor__pie {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  /* 48 px: por encima del mínimo de 24 px de WCAG 2.2 AA 2.5.8 y del objetivo
+     cómodo de 44 px. En un visor a pantalla completa el dedo va a ciegas. */
+  .visor__boton {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+    line-height: 1;
+    color: #fff;
+    background: rgb(0 0 0 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color var(--dur) var(--ease);
+  }
+  .visor__boton:hover,
+  .visor__boton:focus-visible { background: rgb(0 0 0 / 0.85); }
+  .visor__boton--anterior  { left: calc(-1 * var(--space-2)); top: 50%; translate: 0 -50%; }
+  .visor__boton--siguiente { right: calc(-1 * var(--space-2)); top: 50%; translate: 0 -50%; }
+  .visor__boton--cerrar    { top: calc(-1 * var(--space-6)); right: 0; }
+
+  /* En pantallas estrechas los tres botones se meten DENTRO del visor.
+     Colgados por fuera —que es como estaban— el de cerrar se salía del viewport
+     vertical a 320x720 y quedaba inalcanzable: sólo se podía cerrar con `Esc` o
+     tocando el fondo, que es justo lo que no sabe hacer quien más lo necesita.
+     Medido, no supuesto.
+     Los laterales bajan además a la altura del pulgar en vez de quedarse a media
+     pantalla, y el de cerrar va arriba a la derecha, sobre la propia foto. */
+  @media (max-width: 40rem) {
+    .visor { max-height: 84svh; }
+    .visor__imagen { max-height: calc(84svh - 6rem); }
+    .visor__boton--anterior  { left: var(--space-3);  top: auto; bottom: var(--space-3); translate: none; }
+    .visor__boton--siguiente { right: var(--space-3); top: auto; bottom: var(--space-3); translate: none; }
+    .visor__boton--cerrar    { top: var(--space-3);   right: var(--space-3); }
+    /* Hueco inferior para que la barra de botones no se coma el pie. */
+    .visor__marco { padding-bottom: calc(48px + var(--space-4)); }
+  }
+</style>

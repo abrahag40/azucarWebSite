@@ -95,7 +95,13 @@ for (const f of htmlFiles) {
   for (let i = 1; i < headings.length; i++)
     if (headings[i] - headings[i - 1] > 1) { jump = `h${headings[i-1]} → h${headings[i]}`; break; }
 
-  const imgTags = all(/<img\b[^>]*>/gi, src).map(m => m[0]);
+  // Las imagenes dentro de un <dialog> CERRADO no participan del layout —el
+  // navegador las trata como display:none— y por tanto no pueden provocar CLS.
+  // La regla de width/height se aplica sobre el resto: exigirselas al hueco de
+  // un visor, que se rellena en tiempo de ejecucion con una foto de dimensiones
+  // distintas cada vez, seria pedir un dato que no existe al construir.
+  const sinDialogos = src.replace(/<dialog\b(?![^>]*\bopen\b)[^>]*>[\s\S]*?<\/dialog>/gi, '');
+  const imgTags = all(/<img\b[^>]*>/gi, sinDialogos).map(m => m[0]);
   // `alt` a secas es alt vacio: imagen DECORATIVA, que es correcto y obligatorio
   // marcar asi (WCAG 1.1.1). Astro emite `alt` sin `=` cuando el valor es "".
   // Exigir `alt=` marcaba como fallo justo el marcado bien hecho.

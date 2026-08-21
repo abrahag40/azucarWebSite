@@ -38,6 +38,12 @@
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-mar.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/habitacion-king-mar-02.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-mar-03.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-mar-04.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-mar-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

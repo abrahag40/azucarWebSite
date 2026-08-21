@@ -11,6 +11,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import BannerPagina from '../../components/BannerPagina.astro';
 import FichaAlojamiento from '../../components/FichaAlojamiento.astro';
+import Galeria from '../../components/Galeria.astro';
 import { usarT } from '../../i18n/ui';
 
 const IDIOMA = 'es' as const;
@@ -58,5 +59,6 @@ const schemaHabitacion = {
     titulo={data.nombre[IDIOMA]}
   />
   <FichaAlojamiento entrada={entrada} anterior={anterior} siguiente={siguiente} idioma={IDIOMA} />
+  <Galeria imagenes={data.galeria} nombre={data.nombre[IDIOMA]} idioma={IDIOMA} />
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaHabitacion)} />
 </Base>

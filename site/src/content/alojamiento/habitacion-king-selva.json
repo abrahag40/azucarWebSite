@@ -38,6 +38,12 @@
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-selva.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/habitacion-king-selva-02.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-selva-03.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-selva-04.webp",
+    "../../assets/alojamiento/galeria/habitacion-king-selva-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

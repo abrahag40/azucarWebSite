@@ -56,6 +56,14 @@ export const ui = {
     'ficha.otras': 'Otros tipos de alojamiento',
     'ficha.porConfirmar': 'Dato por confirmar con el hotel',
 
+    'galeria.titulo': 'Galería',
+    'galeria.visor': 'Visor de fotografías',
+    'galeria.ampliar': 'Ampliar la fotografía {n} de {total}',
+    'galeria.alt': '{nombre}, fotografía {n}',
+    'galeria.anterior': 'Fotografía anterior',
+    'galeria.siguiente': 'Fotografía siguiente',
+    'galeria.cerrar': 'Cerrar el visor',
+
     'footer.derechos': 'Todos los derechos reservados.',
     'footer.privacidad': 'Aviso de privacidad',
     'footer.terminos': 'Términos y condiciones',
@@ -114,6 +122,14 @@ export const ui = {
     'ficha.siguiente': 'Next',
     'ficha.otras': 'Other room types',
     'ficha.porConfirmar': 'Detail pending confirmation by the hotel',
+
+    'galeria.titulo': 'Gallery',
+    'galeria.visor': 'Photo viewer',
+    'galeria.ampliar': 'Enlarge photo {n} of {total}',
+    'galeria.alt': '{nombre}, photo {n}',
+    'galeria.anterior': 'Previous photo',
+    'galeria.siguiente': 'Next photo',
+    'galeria.cerrar': 'Close the viewer',
 
     'footer.derechos': 'All rights reserved.',
     'footer.privacidad': 'Privacy notice',

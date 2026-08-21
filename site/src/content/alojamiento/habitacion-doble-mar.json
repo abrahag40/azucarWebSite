@@ -38,6 +38,12 @@
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-mar.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/habitacion-doble-mar-02.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-mar-03.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-mar-04.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-mar-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

@@ -38,6 +38,12 @@
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-selva.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/habitacion-doble-selva-02.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-selva-03.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-selva-04.webp",
+    "../../assets/alojamiento/galeria/habitacion-doble-selva-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

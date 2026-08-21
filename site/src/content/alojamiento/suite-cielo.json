@@ -50,6 +50,12 @@
     "en": "The jacuzzi is on a private roof top, not the terrace."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-cielo.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/suite-cielo-02.webp",
+    "../../assets/alojamiento/galeria/suite-cielo-03.webp",
+    "../../assets/alojamiento/galeria/suite-cielo-04.webp",
+    "../../assets/alojamiento/galeria/suite-cielo-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

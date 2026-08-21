@@ -42,6 +42,12 @@
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/suite-agua.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/suite-agua-02.webp",
+    "../../assets/alojamiento/galeria/suite-agua-03.webp",
+    "../../assets/alojamiento/galeria/suite-agua-04.webp",
+    "../../assets/alojamiento/galeria/suite-agua-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",

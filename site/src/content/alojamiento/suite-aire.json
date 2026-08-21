@@ -50,6 +50,12 @@
     "en": "The view is panoramic, not head-on: it opens end to end."
   },
   "imagenPrincipal": "../../assets/alojamiento/suite-aire.webp",
+  "galeria": [
+    "../../assets/alojamiento/galeria/suite-aire-02.webp",
+    "../../assets/alojamiento/galeria/suite-aire-03.webp",
+    "../../assets/alojamiento/galeria/suite-aire-04.webp",
+    "../../assets/alojamiento/galeria/suite-aire-05.webp"
+  ],
   "publicado": true,
   "verificado": [
     "nombre",
