@@ -1,0 +1,118 @@
+---
+/**
+ * Solicitud de reserva (H3.1, H3.2).
+ *
+ * La página sólo hace tres cosas: presenta el proceso, pasa los tipos publicados
+ * al módulo `booking/` y publica los datos de contacto directos. Toda la lógica
+ * vive detrás de la frontera del módulo — ver `src/booking/README.md`.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BannerPagina from '../../components/BannerPagina.astro';
+import banner from '../../assets/galeria/03-terraza-hamaca.webp';
+import FormularioSolicitud from '../../booking/FormularioSolicitud.astro';
+import { contacto } from '../../data/hotel';
+import { usarT, ruta } from '../../i18n/ui';
+
+const idioma = 'es' as const;
+const t = usarT(idioma);
+
+// Mismo orden que el listado: el huésped reconoce la lista que acaba de ver.
+const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden);
+---
+<Base
+  idioma={idioma}
+  rutaActual="reservar"
+  titulo={`${t('reserva.cta')} | Azúcar Hotel Tulum`}
+  descripcion={t('reserva.pagMeta')}
+>
+  <BannerPagina imagen={banner} titulo={t('reserva.cta')} />
+
+  <section class="seccion seccion--entrada">
+    <div class="contenedor"><p class="entrada entrada-pagina">{t('reserva.entrada')}</p></div>
+  </section>
+
+  <div class="seccion">
+    <div class="contenedor solicitud__disposicion">
+      <div class="solicitud__formulario">
+        <FormularioSolicitud tipos={tipos} idioma={idioma} />
+      </div>
+
+      <aside class="solicitud__lado">
+        <section class="tarjeta" aria-labelledby="como-funciona">
+          <h2 class="tarjeta__titulo" id="como-funciona">{t('reserva.comoFunciona')}</h2>
+          <ol class="pasos">
+            <li>{t('reserva.paso1')}</li>
+            <li>{t('reserva.paso2')}</li>
+            <li>{t('reserva.paso3')}</li>
+          </ol>
+          {/* Regla 2: nunca se muestra disponibilidad que no podamos respaldar.
+              Y en vez de callarlo, se explica: un hotel sin calendario en línea
+              levanta la sospecha de estar improvisando, y decir el motivo la
+              desactiva. */}
+          <p class="tarjeta__nota">{t('reserva.porQueNoHayCalendario')}</p>
+        </section>
+
+        {/* Siempre visible, no sólo en <noscript>: si el `mailto` no abre nada
+            —correo web sin protocolo registrado— ésta es la salida. */}
+        <section class="tarjeta" aria-labelledby="directo">
+          <h2 class="tarjeta__titulo" id="directo">{t('reserva.directo')}</h2>
+          <p class="tarjeta__nota">{t('reserva.directoTexto')}</p>
+          <ul class="contactos">
+            <li><a href={`mailto:${contacto.correo}`}>{contacto.correo}</a></li>
+            {contacto.telefonos.map((tel) => (
+              <li><a href={`tel:${tel.replace(/[^+\d]/g, '')}`}>{tel}</a></li>
+            ))}
+          </ul>
+          <p class="tarjeta__nota">
+            <a href={ruta(idioma, 'aviso-de-privacidad')}>{t('footer.privacidad')}</a>
+          </p>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .seccion--entrada { padding-bottom: 0; }
+  .entrada { margin: 0; }   /* el tamaño lo pone `.entrada-pagina` en base.css */
+  .solicitud__disposicion { display: grid; gap: var(--space-7); }
+  @media (min-width: 60rem) {
+    /* El formulario primero y ancho; la ayuda al lado. En móvil el orden del
+       marcado ya es el correcto —formulario, luego contexto— así que no hace
+       falta reordenar y no se usa `order`, que separaría el orden visual del
+       orden de tabulación. */
+    .solicitud__disposicion {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+  .solicitud__lado { display: grid; gap: var(--space-5); min-width: 0; }
+  .tarjeta {
+    background: var(--color-surface-warm);
+    padding: var(--space-5);
+    border-radius: var(--radius-sm);
+  }
+  .tarjeta__titulo { font-size: var(--text-lg); margin-bottom: var(--space-3); }
+  .tarjeta__nota {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: 0;
+  }
+  .pasos {
+    margin: 0 0 var(--space-4);
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+  }
+  .contactos { list-style: none; padding: 0; margin: 0 0 var(--space-4); display: grid; gap: var(--space-2); }
+  /* 44 px de alto: los enlaces en línea no suman su relleno vertical a la caja,
+     y este defecto ya salió dos veces en este proyecto (pie y selector de
+     idioma). `display: block` mas altura mínima lo cierra (WCAG 2.5.8). */
+  .contactos a { display: block; min-height: 44px; line-height: 44px; }
+</style>

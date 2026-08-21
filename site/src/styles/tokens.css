@@ -31,6 +31,11 @@
   --color-surface-warm:  #f8f5f0;  /* superficie cálida de sección */
   --color-surface-alt:   #f1eeeb;
   --color-border:        #e4dfd8;
+  /* Rojo de error del formulario de solicitud. Medido sobre las TRES
+     superficies del sitio, no sólo sobre blanco: 7.53:1 en blanco, 6.51:1 en
+     `surface-alt` y 6.92:1 en `surface-warm`. La lección L-036 fue exactamente
+     esta —un token verificado contra blanco que fallaba en las cálidas—. */
+  --color-error:         #9b2c2c;
 
   /* #adadad y #999 de Cappa se descartan como color de texto: 2.24:1 y 2.85:1.
      Sólo sobreviven como bordes, donde no hay requisito de contraste de texto. */

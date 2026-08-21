@@ -24,6 +24,8 @@ jobs:
         run: npm run datos
       - name: Comprobación de tipos
         run: npm run check
+      - name: Pruebas unitarias
+        run: npm test
       - name: Build
         run: npm run build
 

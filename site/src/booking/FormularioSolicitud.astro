@@ -1,0 +1,403 @@
+---
+/**
+ * Formulario de solicitud de reserva (H3.2) — UI del módulo `booking/`.
+ *
+ * Lee `README.md` de esta carpeta antes de tocarlo: explica la frontera, por qué
+ * NO se envía nada a ningún servidor nuestro y por qué no aparece un precio.
+ *
+ * ── POR QUÉ CUATRO `<fieldset>` Y NO UN ASISTENTE DE CUATRO PANTALLAS ───────
+ * El backlog pide los pasos «fechas → alojamiento → huéspedes → contacto». Eso
+ * es un ORDEN, y un orden se expresa con cuatro grupos etiquetados en una sola
+ * página. Partirlo en cuatro pantallas con estado, botones de atrás y una barra
+ * de progreso añadiría tres clics y un montón de JavaScript para nueve campos
+ * que caben en un teléfono con dos scrolls.
+ *
+ * Los asistentes se pagan solos cuando cada paso es caro —un pago, una carga de
+ * documentos— o cuando el siguiente depende del anterior. Aquí ninguno de los
+ * dos casos aplica, y además un asistente rompe la degradación sin JavaScript,
+ * que es un criterio de aceptación. Ceremonia proporcional (CLAUDE.md §2.5).
+ *
+ * ── SIN JAVASCRIPT ──────────────────────────────────────────────────────────
+ * El `<form>` lleva `action="mailto:…"` con `method="post"` y
+ * `enctype="text/plain"`. Sin JavaScript, enviar abre el cliente de correo con
+ * los campos en el cuerpo: feo —sale `llegada=2026-03-10`— pero funciona y el
+ * hotel lo entiende. Con JavaScript se intercepta y se compone el mensaje
+ * legible de `solicitud.ts`. El formulario no se CONSTRUYE con JavaScript: se
+ * mejora con él.
+ *
+ * Y por si el `mailto` falla —correo web sin protocolo registrado—, la dirección
+ * y los teléfonos están escritos en la propia página, siempre visibles. Nunca
+ * se deja al huésped sin salida.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { usarT, type Idioma } from '../i18n/ui';
+import { contacto } from '../data/hotel';
+
+interface Props {
+  /** Tipos publicados, ya ordenados. El módulo no consulta la colección. */
+  tipos: CollectionEntry<'alojamiento'>[];
+  idioma: Idioma;
+}
+const { tipos, idioma } = Astro.props;
+const t = usarT(idioma);
+
+// Los rótulos que necesita `componerSolicitud`, serializados para el script.
+// Van por `<script type="application/json">` y no incrustados en el JavaScript
+// porque así el bloque de código es IDÉNTICO en las dos páginas de idioma: un
+// solo hash en la CSP en vez de dos, y un solo archivo que mantener.
+const rotulos = {
+  asunto: t('reserva.asunto'),
+  llegada: t('reserva.llegada'),
+  salida: t('reserva.salida'),
+  noches: t('reserva.noches'),
+  tipo: t('reserva.tipo'),
+  sinPreferencia: t('reserva.sinPreferencia'),
+  huespedes: t('reserva.fieldsetHuespedes'),
+  adultos: t('reserva.adultos').toLowerCase(),
+  menores: t('reserva.menores').toLowerCase(),
+  nombre: t('reserva.nombre'),
+  correo: t('reserva.correo'),
+  telefono: t('reserva.telefono'),
+  comentarios: t('reserva.comentarios'),
+  tipos: Object.fromEntries(tipos.map((x) => [x.id, x.data.nombre[idioma]])),
+  cierre: t('reserva.cierre'),
+  errores: {
+    fecha: t('reserva.errFecha'),
+    salida: t('reserva.errSalida'),
+    pasado: t('reserva.errPasado'),
+    nombre: t('reserva.errNombre'),
+    correo: t('reserva.errCorreo'),
+  },
+  copiado: t('reserva.copiado'),
+  destino: contacto.correo,
+};
+---
+<form
+  class="solicitud"
+  id="solicitud"
+  method="post"
+  enctype="text/plain"
+  action={`mailto:${contacto.correo}?subject=${encodeURIComponent(t('reserva.asunto'))}`}
+  novalidate
+>
+  {/* Resumen de errores. Vive vacío y se rellena al validar. `role="alert"` lo
+      hace que el lector de pantalla lo anuncie sin que el foco pase por él, y
+      el foco va después al primer campo con problema (WCAG 3.3.1 y 3.3.3). */}
+  <div class="errores" id="errores" role="alert" hidden>
+    <p class="errores__titulo">{t('reserva.errTitulo')}</p>
+    <ul class="errores__lista"></ul>
+  </div>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('reserva.fieldsetFechas')}</legend>
+    <div class="grupo__campos grupo__campos--dos">
+      <p class="campo">
+        <label for="llegada">{t('reserva.llegada')}</label>
+        <input type="date" id="llegada" name="llegada" required autocomplete="off" />
+      </p>
+      <p class="campo">
+        <label for="salida">{t('reserva.salida')}</label>
+        <input type="date" id="salida" name="salida" required autocomplete="off" />
+      </p>
+    </div>
+    <p class="campo__nota" id="noches" aria-live="polite"></p>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('reserva.fieldsetAlojamiento')}</legend>
+    <p class="campo">
+      <label for="tipo">{t('reserva.tipo')}</label>
+      <select id="tipo" name="tipo">
+        <option value="">{t('reserva.sinPreferencia')}</option>
+        {tipos.map((x) => <option value={x.id}>{x.data.nombre[idioma]}</option>)}
+      </select>
+    </p>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('reserva.fieldsetHuespedes')}</legend>
+    <div class="grupo__campos grupo__campos--dos">
+      <p class="campo">
+        <label for="adultos">{t('reserva.adultos')}</label>
+        <input type="number" id="adultos" name="adultos" value="2" min="1" max="12" required />
+      </p>
+      <p class="campo">
+        <label for="menores">{t('reserva.menores')}</label>
+        <input type="number" id="menores" name="menores" value="0" min="0" max="12" />
+      </p>
+    </div>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('reserva.fieldsetContacto')}</legend>
+    <div class="grupo__campos">
+      <p class="campo">
+        <label for="nombre">{t('reserva.nombre')}</label>
+        <input type="text" id="nombre" name="nombre" required autocomplete="name" />
+      </p>
+      <p class="campo">
+        <label for="correo">{t('reserva.correo')}</label>
+        <input type="email" id="correo" name="correo" required autocomplete="email" />
+      </p>
+      <p class="campo">
+        <label for="telefono">
+          {t('reserva.telefono')} <span class="campo__opcional">({t('reserva.opcional')})</span>
+        </label>
+        <input type="tel" id="telefono" name="telefono" autocomplete="tel" />
+      </p>
+      <p class="campo">
+        <label for="comentarios">
+          {t('reserva.comentarios')} <span class="campo__opcional">({t('reserva.opcional')})</span>
+        </label>
+        <textarea id="comentarios" name="comentarios" rows="3" aria-describedby="pista-comentarios"></textarea>
+        <span class="campo__nota" id="pista-comentarios">{t('reserva.comentariosPista')}</span>
+      </p>
+    </div>
+  </fieldset>
+
+  {/* ADR-0003, regla 1. Va PEGADO al botón, que es donde se decide, y no en un
+      pie que nadie lee. Nunca se dice «reserva»: se dice «solicitud». */}
+  <p class="solicitud__aviso">{t('reserva.aviso')}</p>
+  <button type="submit" class="boton">{t('reserva.revisar')}</button>
+</form>
+
+{/* El resumen. Se rellena y se muestra al validar; sin JavaScript no aparece
+    nunca y el `mailto` del propio formulario hace su trabajo. */}
+<section class="resumen" id="resumen" aria-labelledby="resumen-titulo" hidden>
+  <h2 class="resumen__titulo" id="resumen-titulo">{t('reserva.resumenTitulo')}</h2>
+  <pre class="resumen__texto" id="resumen-texto"></pre>
+  <p class="resumen__pie">{t('reserva.resumenPie')}</p>
+  <p class="resumen__acciones">
+    <a class="boton" id="resumen-correo" href="#">{t('reserva.enviarCorreo')}</a>
+    <button type="button" class="boton boton--secundario" id="resumen-copiar">{t('reserva.copiar')}</button>
+    <button type="button" class="boton boton--secundario" id="resumen-editar">{t('reserva.editar')}</button>
+  </p>
+  <p class="sr-only" id="resumen-estado" aria-live="polite"></p>
+</section>
+
+<script type="application/json" id="rotulos-solicitud" set:html={JSON.stringify(rotulos)} />
+
+<script>
+  import { componerSolicitud, noches, enlaceCorreo } from './solicitud';
+
+  const form = document.querySelector<HTMLFormElement>('#solicitud');
+  const datos = document.querySelector<HTMLScriptElement>('#rotulos-solicitud');
+  if (form && datos) {
+    const R = JSON.parse(datos.textContent!);
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+    const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+    const cajaErr = $<HTMLElement>('#errores');
+    const listaErr = cajaErr.querySelector('ul')!;
+    const resumen = $<HTMLElement>('#resumen');
+    const hoy = new Date().toISOString().slice(0, 10);
+
+    // La llegada no puede ser pasada, y la salida no puede ser anterior a la
+    // llegada. Se fija en el propio control: el calendario del navegador ya
+    // impide elegirlas, que es mejor que corregir al huésped después.
+    campo('llegada').min = hoy;
+    campo('salida').min = hoy;
+
+    // Preselección desde `?tipo=`: el huésped llega aquí desde la ficha de un
+    // alojamiento y no debería tener que volver a elegirlo.
+    const pedido = new URLSearchParams(location.search).get('tipo');
+    const selector = campo('tipo') as unknown as HTMLSelectElement;
+    if (pedido && [...selector.options].some((o) => o.value === pedido)) selector.value = pedido;
+
+    const contarNoches = () => {
+      const n = noches(campo('llegada').value, campo('salida').value);
+      $('#noches').textContent = n ? `${n} ${R.noches}` : '';
+      if (campo('llegada').value) campo('salida').min = campo('llegada').value;
+    };
+    campo('llegada').addEventListener('change', contarNoches);
+    campo('salida').addEventListener('change', contarNoches);
+
+    const validar = () => {
+      const e: { texto: string; campo: string }[] = [];
+      const l = campo('llegada').value;
+      const s = campo('salida').value;
+      if (!l) e.push({ texto: R.errores.fecha, campo: 'llegada' });
+      else if (l < hoy) e.push({ texto: R.errores.pasado, campo: 'llegada' });
+      if (!s || noches(l, s) === 0) e.push({ texto: R.errores.salida, campo: 'salida' });
+      if (!campo('nombre').value.trim()) e.push({ texto: R.errores.nombre, campo: 'nombre' });
+      // La validación nativa de `type="email"` es la que decide: reimplementar
+      // la sintaxis del correo con una expresión regular es un clásico que
+      // siempre acaba rechazando direcciones válidas.
+      if (!campo('correo').checkValidity() || !campo('correo').value.trim())
+        e.push({ texto: R.errores.correo, campo: 'correo' });
+      return e;
+    };
+
+    form.addEventListener('submit', (ev) => {
+      const errores = validar();
+      listaErr.textContent = '';
+      for (const x of errores) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${x.campo}`;
+        a.textContent = x.texto;
+        li.append(a);
+        listaErr.append(li);
+      }
+      cajaErr.hidden = errores.length === 0;
+      for (const n of ['llegada', 'salida', 'nombre', 'correo'])
+        campo(n).setAttribute('aria-invalid', String(errores.some((x) => x.campo === n)));
+
+      if (errores.length) {
+        ev.preventDefault();
+        campo(errores[0].campo).focus();
+        return;
+      }
+
+      // Válido: se intercepta el `mailto` del formulario y se sustituye por el
+      // mensaje legible. Sin este `preventDefault` el navegador enviaría los
+      // pares `campo=valor` del enctype de texto plano.
+      ev.preventDefault();
+      const { asunto, cuerpo } = componerSolicitud(
+        {
+          llegada: campo('llegada').value,
+          salida: campo('salida').value,
+          tipo: selector.value,
+          adultos: Number(campo('adultos').value || 1),
+          menores: Number(campo('menores').value || 0),
+          nombre: campo('nombre').value.trim(),
+          correo: campo('correo').value.trim(),
+          telefono: campo('telefono').value,
+          comentarios: (form.elements.namedItem('comentarios') as HTMLTextAreaElement).value,
+        },
+        R,
+      );
+      $('#resumen-texto').textContent = cuerpo;
+      $<HTMLAnchorElement>('#resumen-correo').href = enlaceCorreo(R.destino, asunto, cuerpo);
+      resumen.hidden = false;
+      // El foco va al encabezado del resumen: es un cambio de contexto y quien
+      // navega con lector de pantalla tiene que enterarse de que ocurrió.
+      const titulo = $<HTMLElement>('#resumen-titulo');
+      titulo.tabIndex = -1;
+      titulo.focus();
+      titulo.scrollIntoView({ block: 'start' });
+    });
+
+    $('#resumen-editar').addEventListener('click', () => {
+      resumen.hidden = true;
+      campo('llegada').focus();
+    });
+
+    $('#resumen-copiar').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText($('#resumen-texto').textContent ?? '');
+        $('#resumen-estado').textContent = R.copiado;
+      } catch {
+        // Sin permiso de portapapeles se selecciona el texto: el huésped copia
+        // con su propio atajo. Un `alert` de error no le resolvería nada.
+        const r = document.createRange();
+        r.selectNodeContents($('#resumen-texto'));
+        getSelection()?.removeAllRanges();
+        getSelection()?.addRange(r);
+      }
+    });
+  }
+</script>
+
+<style>
+  .solicitud { max-width: var(--container-text); }
+
+  /* `fieldset` trae borde, márgenes y un `min-width: min-content` del navegador
+     que impide que su contenido se encoja: en un móvil estrecho eso desborda la
+     página. `min-width: 0` es obligatorio, igual que en las rejillas. */
+  .grupo {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+    margin-bottom: var(--space-6);
+  }
+  .grupo__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    padding: 0;
+    margin-bottom: var(--space-4);
+  }
+  .grupo__campos { display: grid; gap: var(--space-4); }
+  .grupo__campos--dos { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 30rem) {
+    .grupo__campos--dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .campo { display: grid; gap: var(--space-1); margin: 0; min-width: 0; }
+  .campo label { font-size: var(--text-sm); font-weight: 500; }
+  .campo__opcional { font-weight: 400; color: var(--color-ink-muted); }
+  .campo__nota {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+
+  .campo :is(input, select, textarea) {
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    /* 16 px como mínimo: por debajo de eso Safari en iOS hace zoom al enfocar
+       un campo y descoloca la página entera. No es preferencia, es una regla
+       del motor. */
+    font-size: max(1rem, var(--text-base));
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    /* Sin esto, `padding` mas `width: 100%` desborda el contenedor. */
+    box-sizing: border-box;
+    /* Safari da a los `input[type=date]` una altura menor que al resto. */
+    min-height: 3rem;
+  }
+  .campo textarea { min-height: 5.5rem; resize: vertical; }
+  .campo :is(input, select, textarea):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .campo :is(input, select, textarea)[aria-invalid='true'] {
+    border-color: var(--color-error);
+    /* El color NO es la única señal: el mensaje del resumen de arriba dice qué
+       pasa y con qué campo (WCAG 1.4.1). */
+    border-width: 2px;
+  }
+
+  .errores {
+    border-left: 3px solid var(--color-error);
+    background: var(--color-surface-alt);
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-sm);
+  }
+  .errores__titulo { font-weight: 500; margin-bottom: var(--space-2); }
+  .errores__lista { margin: 0; padding-left: var(--space-5); }
+  .errores__lista a { color: var(--color-error); }
+
+  .solicitud__aviso {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .resumen {
+    max-width: var(--container-text);
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+  }
+  .resumen__titulo { font-size: var(--text-xl); margin-bottom: var(--space-4); }
+  .resumen__titulo:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+  .resumen__texto {
+    font: inherit;
+    font-size: var(--text-sm);
+    white-space: pre-wrap;
+    /* Un `pre` no rompe palabras largas: un correo largo desbordaría a lo ancho
+       y sacaría barra horizontal a toda la página en un móvil. */
+    overflow-wrap: anywhere;
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-4);
+  }
+  .resumen__pie { font-size: var(--text-sm); color: var(--color-ink-muted); margin-bottom: var(--space-4); }
+  .resumen__acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: 0; }
+</style>

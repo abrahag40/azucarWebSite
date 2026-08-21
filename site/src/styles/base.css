@@ -115,3 +115,23 @@ a:hover { color: var(--color-accent-hover); }
 .boton--contorno-claro:hover,
 .boton--contorno-claro:focus-visible { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
 .boton--claro:hover { background: #fff; }
+
+/* ── Párrafo de entradilla de página ────────────────────────────────────────
+   El texto que presenta una página, debajo de su <h1>.
+
+   Es de CUERPO en móvil y sube a `--text-lg` sólo cuando hay ancho para que
+   quepa en dos renglones. A 320 px un `--text-lg` convierte dos frases en
+   cuatro renglones, que es el defecto que ya se corrigió en el hero.
+
+   Vive aquí y no en cada página porque el defecto se reintrodujo copiando el
+   patrón de una página a otra ANTES de que su corrección se propagara. Una
+   regla compartida no se puede copiar mal. */
+.entrada-pagina {
+  max-width: var(--container-text);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  color: var(--color-ink-muted);
+}
+@media (min-width: 40rem) {
+  .entrada-pagina { font-size: var(--text-lg); }
+}

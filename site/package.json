@@ -12,7 +12,8 @@
     "build:prod": "node scripts/check-datos.mjs --estricto && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "datos": "node scripts/check-datos.mjs"
+    "datos": "node scripts/check-datos.mjs",
+    "test": "node --test \"src/**/*.test.mjs\""
   },
   "dependencies": {
     "astro": "^7.2.4"
