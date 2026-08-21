@@ -32,7 +32,13 @@ const anio = new Date().getFullYear();
     background: var(--color-surface-alt);
     border-top: 1px solid var(--color-border);
     padding-block: var(--space-7) var(--space-5);
-    margin-top: var(--space-8);
+    /* SIN `margin-top`.
+       Tenía 4 rem, pensados para separarlo de una sección de fondo blanco. Pero
+       cuando la sección anterior es cálida —como pasa en la portada, que termina
+       en amenidades— ese margen deja una **banda blanca** de 64 px entre dos
+       fondos de color, y se ve como un error de maquetación. Lo era.
+       El pie ya se distingue por su propio fondo y por su borde superior; el
+       espacio lo aporta su `padding-block`, que sí pertenece al pie. */
   }
   .pie__rejilla { display: grid; gap: var(--space-6); }
   .pie__marca {

@@ -1,0 +1,125 @@
+---
+/**
+ * Mosaico de galería para la portada — patrón `gallery-box` de Cappa.
+ *
+ * ── DE DÓNDE SALE EL DISEÑO ─────────────────────────────────────────────────
+ * De `gallery.html` de la plantilla. Cappa monta ocho fotografías en una rejilla
+ * de doce columnas con anchos MEZCLADOS: seis piezas de un tercio y dos de un
+ * medio, repartidas 3 + 2 + 3. Ese cambio de ritmo a media rejilla es lo que
+ * distingue un mosaico de una cuadrícula, y es la razón de que la sección se
+ * mire. Se reproduce tal cual.
+ *
+ * Ocho es exactamente el número de fotografías curadas que tenemos (H4.4), así
+ * que la correspondencia con la plantilla es 1:1 y no hay que rellenar ni
+ * recortar nada.
+ *
+ * ── POR QUÉ NO REUTILIZA `Galeria.astro` ────────────────────────────────────
+ * Aquel componente es una cuadrícula uniforme con visor modal, pensada para
+ * MIRAR fotos. Éste es un adelanto que invita a ir a la galería: sin visor, sin
+ * JavaScript, y cada pieza es un enlace a `/galeria/`. Son dos trabajos
+ * distintos con la misma materia prima, y forzar uno dentro del otro habría
+ * llenado ambos de condicionales.
+ */
+import { Image } from 'astro:assets';
+import { fotos } from '../data/galeria';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+const destino = ruta(idioma, 'galeria');
+
+// El ritmo de Cappa: tercios, mitades, tercios. El índice decide el ancho.
+const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
+---
+<section class="seccion galeria-home" aria-labelledby="galeria-home-titulo">
+  <div class="contenedor">
+    <header class="encabezado encabezado--centrado">
+      <p class="antetitulo">{t('galeriaHome.antetitulo')}</p>
+      <h2 id="galeria-home-titulo">{t('galeriaHome.titulo')}</h2>
+      <p class="encabezado__texto">{t('galeriaHome.texto')}</p>
+    </header>
+
+    <ul class="mosaico" role="list">
+      {fotos.map((f, i) => (
+        <li class:list={['mosaico__celda', `mosaico__celda--${anchoDe(i)}`]}>
+          {/* Toda la pieza es el enlace. El texto accesible NO es el `alt` de la
+              foto —que describe la imagen— sino a dónde lleva: son dos cosas
+              distintas y confundirlas hace que el lector de pantalla anuncie
+              «enlace, roof top con alberca» sin decir que va a la galería. */}
+          <a class="mosaico__enlace" href={destino} aria-label={t('galeriaHome.ver')}>
+            <Image
+              src={f.imagen}
+              alt={f.alt[idioma]}
+              widths={[320, 480, 720]}
+              sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 90vw"
+              loading="lazy"
+              quality={50}
+            />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="galeria-home__accion">
+      <a class="boton boton--secundario" href={destino}>{t('galeriaHome.ver')}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .encabezado__texto {
+    max-width: 42rem;
+    margin: var(--space-4) auto 0;
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+  }
+
+  /* Doce columnas, como la rejilla de Bootstrap que usa Cappa.
+
+     En móvil TODAS las piezas ocupan seis columnas, es decir dos por fila. Se
+     probó con una sola columna y las ocho fotografías sumaban unos 1 600 px de
+     scroll para un adelanto: en un teaser eso no es generosidad, es peaje. Dos
+     columnas es además lo que ya usa la página `/galeria/`, donde se comprobó
+     que a 320 px las miniaturas siguen siendo legibles. */
+  .mosaico {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-7) 0 0;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+  .mosaico__celda { min-width: 0; grid-column: span 6; }
+
+  @media (min-width: 40rem) {
+    .mosaico { gap: var(--space-4); }
+    /* Tres tercios · dos mitades · tres tercios — el reparto de Cappa. */
+    .mosaico__celda--tercio { grid-column: span 4; }
+    .mosaico__celda--media  { grid-column: span 6; }
+  }
+
+  .mosaico__enlace {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+    aspect-ratio: 1 / 1;
+  }
+  /* Las piezas de un tercio son más estrechas: se les da más alto para que la
+     fila quede pareja, que es lo que hace que un mosaico se lea como uno. */
+  @media (min-width: 40rem) {
+    .mosaico__celda--tercio .mosaico__enlace { aspect-ratio: 4 / 3; }
+    .mosaico__celda--media  .mosaico__enlace { aspect-ratio: 16 / 9; }
+  }
+
+  .mosaico__enlace :global(img) {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: scale var(--dur) var(--ease);
+  }
+  .mosaico__enlace:hover :global(img) { scale: 1.05; }
+  .mosaico__enlace:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+  .galeria-home__accion { margin: var(--space-7) 0 0; text-align: center; }
+</style>

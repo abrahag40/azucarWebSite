@@ -14,11 +14,24 @@
 import { faq } from '../data/faq';
 import type { Idioma } from '../i18n/ui';
 
-interface Props { idioma: Idioma }
-const { idioma } = Astro.props;
+interface Props {
+  idioma: Idioma;
+  /**
+   * Cuántas preguntas mostrar. Sin valor, todas.
+   *
+   * Existe porque la portada necesita un adelanto —el patrón de acordeón de
+   * `faq.html` de Cappa— y la página completa las dieciséis. Se extiende el
+   * componente en vez de duplicarlo: el `<details>`, su marcado accesible y sus
+   * estilos ya están probados, y dos copias garantizan que una se quede atrás
+   * (L-046).
+   */
+  limite?: number;
+}
+const { idioma, limite } = Astro.props;
+const lista = limite ? faq.slice(0, limite) : faq;
 ---
 <ul class="faq" role="list">
-  {faq.map((f) => (
+  {lista.map((f) => (
     <li>
       <details class="faq__item">
         <summary class="faq__pregunta">
@@ -32,7 +45,13 @@ const { idioma } = Astro.props;
 </ul>
 
 <style>
-  .faq { list-style: none; padding: 0; margin: 0; max-width: 46rem; }
+  /* `margin-inline: auto` y no sólo `margin: 0`.
+     El componente lleva su propio `max-width: 46rem`, que es un dato PRIVADO:
+     quien lo coloca no lo conoce. En la portada se metió dentro de un envoltorio
+     centrado de 52 rem y el resultado fue una lista de 46 rem pegada a la
+     izquierda de un hueco de 52 — descentrada 48 px respecto del botón que va
+     debajo. Un componente con ancho máximo propio tiene que centrarse solo. */
+  .faq { list-style: none; padding: 0; margin-block: 0; margin-inline: auto; max-width: 46rem; }
   .faq__item { border-bottom: 1px solid var(--color-border); }
 
   .faq__pregunta {

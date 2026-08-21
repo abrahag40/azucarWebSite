@@ -6,6 +6,8 @@ import SeccionPresentacion from '../components/SeccionPresentacion.astro';
 import SeccionAlojamiento from '../components/SeccionAlojamiento.astro';
 import FranjaImagen from '../components/FranjaImagen.astro';
 import SeccionAmenidades from '../components/SeccionAmenidades.astro';
+import SeccionGaleria from '../components/SeccionGaleria.astro';
+import SeccionPreguntas from '../components/SeccionPreguntas.astro';
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
@@ -21,4 +23,13 @@ const t = usarT(idioma);
   <SeccionAlojamiento idioma={idioma} limite={3} />
   <FranjaImagen idioma={idioma} />
   <SeccionAmenidades idioma={idioma} />
+  {/* El orden reproduce el ritmo de la portada de Cappa: presentación →
+      alojamiento → franja a sangre → servicios → galería → «lo que quita el
+      miedo antes de reservar». En Cappa ese último hueco son testimonios; ver
+      `SeccionPreguntas.astro` para por qué aquí no puede serlo todavía.
+
+      También alterna fondo blanco y cálido en cada salto, que es lo que da el
+      pulso visual de la plantilla. */}
+  <SeccionGaleria idioma={idioma} />
+  <SeccionPreguntas idioma={idioma} />
 </Base>

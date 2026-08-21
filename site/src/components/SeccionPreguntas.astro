@@ -1,0 +1,50 @@
+---
+/**
+ * Adelanto de preguntas frecuentes en la portada — patrón de `faq.html` de Cappa.
+ *
+ * ── POR QUÉ ESTA SECCIÓN Y NO LA DE TESTIMONIOS ─────────────────────────────
+ * En la portada de Cappa este hueco lo ocupan los **testimonios**, y es el hueco
+ * de «quitar el miedo antes de reservar». No se puede reproducir: se buscaron
+ * reseñas en todo el sitio vigente del hotel y **no hay ninguna**. Escribirlas
+ * sería fabricar citas atribuidas a huéspedes reales, que no es una licencia
+ * creativa: es inventar testimonio. Queda como historia H4.10, con reseñas
+ * reales de TripAdvisor o Google cuando el cliente las autorice.
+ *
+ * Mientras tanto, el mismo hueco se ocupa con lo que sí es cierto y sí quita el
+ * miedo: **las preguntas que el hotel ya responde**. Playa, desayuno, wifi,
+ * mascotas, horarios. Son objeciones reales de compra, contestadas con texto que
+ * el propio hotel publica.
+ *
+ * Seis de dieciséis. Suficientes para que se vea que hay respuestas; pocas para
+ * que la portada no se convierta en la página de FAQ.
+ */
+import Acordeon from './Acordeon.astro';
+import { faq } from '../data/faq';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<section class="seccion seccion--calida preguntas-home" aria-labelledby="faq-home-titulo">
+  <div class="contenedor">
+    <header class="encabezado encabezado--centrado">
+      <p class="antetitulo">{t('faqHome.antetitulo')}</p>
+      <h2 id="faq-home-titulo">{t('faqHome.titulo')}</h2>
+    </header>
+
+    <Acordeon idioma={idioma} limite={6} />
+
+    <p class="preguntas-home__accion">
+      <a class="boton boton--secundario" href={ruta(idioma, 'preguntas-frecuentes')}>
+        {t('faqHome.ver', { n: faq.length })}
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  /* El ancho de lectura lo pone el propio `Acordeon`, que se centra solo.
+     Imponerle otro desde fuera fue justo lo que lo descentró. */
+  .preguntas-home__accion { margin: var(--space-7) 0 0; text-align: center; }
+</style>

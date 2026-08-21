@@ -149,6 +149,14 @@ export const ui = {
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
 
     'amenidades.antetitulo': 'Servicios',
+    // ── Secciones nuevas de la portada, tomadas de Cappa ────────────────────
+    'galeriaHome.antetitulo': 'La propiedad',
+    'galeriaHome.titulo': 'La playa, el roof top y los rincones',
+    'galeriaHome.texto': 'Ocho fotografías del hotel tal como es: sin retoques y sin promesas que no podamos cumplir.',
+    'galeriaHome.ver': 'Ver la galería completa',
+    'faqHome.antetitulo': 'Antes de reservar',
+    'faqHome.titulo': 'Lo que más nos preguntan',
+    'faqHome.ver': 'Ver las {n} preguntas',
     'amenidades.titulo': 'Todo lo que el hotel pone a tu alcance',
 
     'error404.titulo': 'Esta página no existe',
@@ -286,6 +294,13 @@ export const ui = {
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
 
     'amenidades.antetitulo': 'Our services',
+    'galeriaHome.antetitulo': 'The property',
+    'galeriaHome.titulo': 'The beach, the rooftop and the quiet corners',
+    'galeriaHome.texto': 'Eight photographs of the hotel as it is: unretouched, and with no promises we cannot keep.',
+    'galeriaHome.ver': 'See the full gallery',
+    'faqHome.antetitulo': 'Before you book',
+    'faqHome.titulo': 'What guests ask us most',
+    'faqHome.ver': 'See all {n} questions',
     'amenidades.titulo': 'Everything the hotel puts within your reach',
 
     'error404.titulo': 'This page does not exist',
