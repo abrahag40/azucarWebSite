@@ -156,11 +156,17 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   }
 
   .cabecera__acciones { display: none; align-items: center; gap: var(--space-4); }
+  /* `inline-flex` y no el `inline` por defecto: en un <a> inline el padding
+     vertical NO cuenta para la altura de la caja, así que el enlace medía 23 px
+     y no llegaba al mínimo de 24 px de WCAG 2.2 AA 2.5.8. Es el mismo defecto
+     que ya apareció en el pie, y sigue siendo invisible a ojo. */
   .cabecera__idioma {
+    display: inline-flex; align-items: center;
+    min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
     letter-spacing: var(--tracking-wide); text-transform: uppercase;
     color: var(--color-ink); text-decoration: none;
-    padding: var(--space-2);
+    padding-inline: var(--space-2);
   }
   .cabecera__idioma:hover { color: var(--color-accent-text); }
 
@@ -218,6 +224,8 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     border-top: 1px solid var(--color-border);
   }
   .menu__idioma {
+    display: inline-flex; align-items: center;
+    min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
     letter-spacing: var(--tracking-wide); text-transform: uppercase;
     color: var(--color-ink); text-decoration: none;

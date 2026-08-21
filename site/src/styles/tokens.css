@@ -13,7 +13,15 @@
      iconos; y una variante oscurecida —mismo tono 34°, misma saturación—
      para cualquier acento que lleve texto. La marca no cambia; el contraste sí. */
   --color-accent:        #aa8453;  /* 3.42:1 — decorativo, bordes, iconos, fondos */
-  --color-accent-text:   #8f6f46;  /* 4.64:1 — texto y enlaces en color de acento */
+  /* Se verificó contra BLANCO y daba 4.64:1, pero el sitio pinta este color
+     también sobre las superficies cálidas, que son más oscuras: ahí caía a
+     4.26:1 y 4.01:1, por debajo del 4.5:1 de WCAG 1.4.3. Medido en producción,
+     no supuesto. El valor nuevo conserva matiz (34°) y saturación (51%) —la
+     marca no cambia— y cumple sobre las tres superficies:
+       blanco 5.23:1 · cálida 4.81:1 · alterna 4.53:1
+     Lección: un token de texto se valida contra el fondo MÁS DESFAVORABLE en el
+     que se vaya a usar, no contra el blanco por defecto. */
+  --color-accent-text:   #856741;  /* 5.23:1 blanco · 4.53:1 superficie alterna */
   --color-accent-hover:  #735938;  /* 6.53:1 — estado hover/focus */
 
   --color-ink:           #222222;  /* 15.91:1 — texto principal */
