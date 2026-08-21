@@ -1,11 +1,9 @@
 {
   "version": "0.0.1",
   "configurations": [
-    {
-      "name": "azucar-preview",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "http-server", "site/dist", "-p", "4321", "-s", "--silent"],
-      "port": 4321
-    }
+    { "name": "azucar-preview", "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes","http-server","site/dist","-p","4321","-s","--silent"], "port": 4321 },
+    { "name": "cappa-original", "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes","http-server","investigacion/mirrors/cappa/archivos/duruthemes.com/demo/html/cappa/demo1-light","-p","4322","-s","--silent"], "port": 4322 }
   ]
 }

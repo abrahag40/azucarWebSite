@@ -173,6 +173,12 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   }
 
   .cabecera__acciones { display: none; align-items: center; gap: var(--space-4); }
+  /* El botón de la cabecera NUNCA se parte en dos líneas.
+     Al subir la separación de letras del selector de idioma de 0.12em a 0.20em
+     —para igualar la navegación de Cappa— la fila creció ocho píxeles y eso
+     bastó para que «Solicitar reserva» pasara a dos renglones. Ocho píxeles.
+     La cabecera iba al límite y nadie lo sabía porque nunca se había medido. */
+  .cabecera__acciones .boton { white-space: nowrap; }
   /* `inline-flex` y no el `inline` por defecto: en un <a> inline el padding
      vertical NO cuenta para la altura de la caja, así que el enlace medía 23 px
      y no llegaba al mínimo de 24 px de WCAG 2.2 AA 2.5.8. Es el mismo defecto
@@ -181,7 +187,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     display: inline-flex; align-items: center;
     min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
-    letter-spacing: var(--tracking-wide); text-transform: uppercase;
+    letter-spacing: var(--tracking-nav); text-transform: uppercase;
     color: var(--color-ink); text-decoration: none;
     padding-inline: var(--space-2);
   }
@@ -260,7 +266,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     display: inline-flex; align-items: center;
     min-height: 44px;
     font-family: var(--font-ui); font-size: var(--text-sm);
-    letter-spacing: var(--tracking-wide); text-transform: uppercase;
+    letter-spacing: var(--tracking-nav); text-transform: uppercase;
     color: var(--color-ink); text-decoration: none;
   }
 

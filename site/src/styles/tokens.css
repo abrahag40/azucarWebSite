@@ -64,7 +64,24 @@
   --leading-tight: 1.15;
   --leading-snug:  1.35;
   --leading-body:  1.65;
-  --tracking-wide: 0.12em;
+  /* --- Separación entre letras -------------------------------------------
+     Cappa distingue TRES niveles y nosotros teníamos uno solo para todo, lo que
+     aplanaba la jerarquía tipográfica que da a la plantilla su carácter.
+     Medido sobre `demo1-light/index11.html`, convertido a `em`:
+
+         antetítulo de sección   0.400em     nosotros teníamos 0.120em
+         titular del héroe       0.273em     nosotros teníamos 0.060em
+         enlace de navegación    0.200em     nosotros teníamos 0.160em
+
+     Se adoptan los de Cappa salvo en el antetítulo, donde 0.40em a 14 px parte
+     «ZONA HOTELERA DE TULUM · FRENTE AL MAR» en un móvil de 320 px. Se queda en
+     0.28em, que además era ya el valor del antetítulo del héroe: el mismo
+     elemento llevaba dos valores distintos según la sección, una incoherencia
+     nuestra que esta comparación destapó. */
+  --tracking-titular:    0.20em;   /* Cappa 0.273em — ver `Hero.astro` */
+  --tracking-antetitulo: 0.28em;   /* Cappa 0.400em, imposible a 320 px */
+  --tracking-nav:        0.20em;   /* Cappa 0.200em — idéntico */
+  --tracking-wide:       0.12em;   /* botones y etiquetas menores */
 
   /* --- Espaciado — escala de 4px ---------------------------------------- */
   --space-1: 0.25rem;  --space-2: 0.5rem;   --space-3: 0.75rem;
