@@ -177,5 +177,10 @@ export function ruta(idioma: Idioma, path = '') {
   if (!limpio) return base;
   const [primero, ...resto] = limpio.split('/');
   const traducido = (segmentos as Record<string, Record<Idioma, string>>)[primero]?.[idioma] ?? primero;
-  return `${base}${[traducido, ...resto].join('/')}`;
+  const ruta = `${base}${[traducido, ...resto].join('/')}`;
+  // Barra final SOLO en las secciones, que se compilan como `index.html`.
+  // Sin ella Cloudflare Pages responde 308 y redirige a la version con barra:
+  // un salto de red extra en los enlaces mas pulsados del sitio. Las fichas
+  // (`alojamiento/suite-mar`) son archivos, no directorios, y no la llevan.
+  return resto.length === 0 ? `${ruta}/` : ruta;
 }
