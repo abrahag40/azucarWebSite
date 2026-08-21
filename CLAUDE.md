@@ -362,6 +362,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/decisiones/ADR-0001..0005` | Decisiones con consecuencias |
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
+| **`docs/04-diseno/fidelidad-a-cappa.md`** | **Cuánto se parece el sitio a la plantilla, medido elemento por elemento** |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
 | **`docs/05-despliegue/medicion-calidad.md`** | **Lighthouse, axe-core y html-validate: evidencia con fecha (H5.1, H5.2)** |
 | `docs/05-despliegue/validacion-html.md` | Validación de HTML y las dos reglas desactivadas |

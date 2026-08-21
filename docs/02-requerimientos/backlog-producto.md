@@ -253,6 +253,7 @@ escribir, todo lo que pregunta antes de decidir.*
 | H4.7 | Políticas y preguntas frecuentes | `M` | ✅ 16 preguntas + 6 grupos de políticas |
 | H4.8 | Páginas legales | `S` | 🔄 publicado con sus carencias declaradas (**E-PRIV**) |
 | H4.9 | 404 útil, `sitemap.xml`, `robots.txt` | `S` | ✅ |
+| H4.10 | **Testimonios en la portada** | `S` | ⬜ **nueva.** Es la única sección de Cappa que falta sin motivo de fondo: el hotel SÍ tiene reseñas en TripAdvisor y Google. Ver `docs/04-diseno/fidelidad-a-cappa.md` |
 
 ### H4.5 merece detalle
 > Como **huésped potencial que ya reservó o está por hacerlo**, quiero saber exactamente
