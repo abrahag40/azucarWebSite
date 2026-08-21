@@ -53,6 +53,24 @@ const definidas = (cssTexto) => {
   return s;
 };
 
+/**
+ * Prefijos de clases que la plantilla construye INTERPOLANDO, del estilo
+ * `` `mosaico__celda--${ancho}` ``. El valor no se puede saber leyendo el
+ * código, así que se guarda el prefijo —`mosaico__celda--`— y cualquier clase
+ * definida que empiece por él cuenta como usada.
+ *
+ * Sin esto, el detector daba por muertas cuatro clases perfectamente vivas
+ * —las proporciones de la galería y los anchos del mosaico— sólo porque su
+ * nombre se compone en tiempo de ejecución. Un detector que no entiende cómo
+ * se escribe el código que analiza produce ruido, y el ruido se ignora.
+ */
+const prefijosDinamicos = (fuente) => {
+  const plantilla = fuente.split(/<style[\s>]/)[0];
+  const s = new Set();
+  for (const m of plantilla.matchAll(/([\w-]+)\$\{/g)) if (m[1]) s.add(m[1]);
+  return s;
+};
+
 /** Clases que la plantilla de un componente escribe en el marcado. */
 const usadas = (fuente) => {
   const plantilla = fuente.split(/<style[\s>]/)[0];
@@ -100,11 +118,17 @@ const porComponente = new Map();
 for (const f of astro) {
   const src = readFileSync(f, 'utf8');
   const bloques = [...src.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
-  porComponente.set(f, { usa: usadas(src), define: definidas(bloques) });
+  porComponente.set(f, { usa: usadas(src), define: definidas(bloques), dinamicos: prefijosDinamicos(src) });
 }
 
 const rojas = [];
 const amarillas = [];
+/* Y el sentido contrario: clases DEFINIDAS en el ámbito de un componente que su
+   plantilla no usa. No rompen nada, pero el CSS viaja en cada página que carga
+   ese componente. `.marca__sub` sobrevivió así a la sustitución del wordmark por
+   el logotipo real: nadie la usaba y sus reglas seguían en las 38 páginas.
+   El detector sólo miraba una dirección; una clase huérfana no avisa de nada. */
+const muertas = [];
 for (const [f, { usa, define }] of porComponente) {
   for (const c of usa) {
     if (define.has(c) || globales.has(c) || INTENCIONALES.has(c)) continue;
@@ -122,6 +146,11 @@ for (const [f, { define }] of porComponente)
   for (const c of define) dobles.set(c, [...(dobles.get(c) ?? []), f]);
 const repetidas = [...dobles].filter(([c, fs]) => fs.length > 1 && !globales.has(c));
 
+for (const [f, { usa, define, dinamicos }] of porComponente)
+  for (const c of define)
+    if (!usa.has(c) && !INTENCIONALES.has(c) && ![...dinamicos].some((p) => c.startsWith(p)))
+      muertas.push({ f, c });
+
 const rel = (f) => relative(RAIZ, f);
 console.log(`\n  Estilos con ámbito · ${astro.length} componentes · ${css.length} hojas globales\n`);
 
@@ -137,12 +166,17 @@ if (amarillas.length) {
   for (const [c, fs] of porClase) console.log(`    .${c}  —  ${fs.join(', ')}`);
   console.log();
 }
+if (muertas.length) {
+  console.log(`  ⚠ ${muertas.length} clase(s) definidas y no usadas por su propio componente:\n`);
+  for (const { f, c } of muertas) console.log(`    .${c}  —  ${rel(f)}`);
+  console.log();
+}
 if (repetidas.length) {
   console.log(`  ⚠ ${repetidas.length} clase(s) con el MISMO nombre definidas en varios componentes:\n`);
   for (const [c, fs] of repetidas) console.log(`    .${c}  —  ${fs.map((x) => basename(x)).join(', ')}`);
   console.log();
 }
-if (!rojas.length && !amarillas.length && !repetidas.length)
+if (!rojas.length && !amarillas.length && !repetidas.length && !muertas.length)
   console.log(`  ✓ Ninguna clase huérfana. (${INTENCIONALES.size} declaradas sin estilo a propósito.)\n`);
 
 process.exit(rojas.length ? 1 : 0);

@@ -13,7 +13,9 @@
  * La alternativa —fija y translúcida— dejaría texto blanco sobre el contenido
  * claro de abajo, que es un fallo de contraste, no una decisión estética.
  */
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import logo from '../assets/logo-azucar.webp';
 import { usarT, ruta, idiomas, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
@@ -58,8 +60,26 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
 ---
 <header class:list={['cabecera', sobreHero && 'cabecera--sobre-hero']}>
   <div class="contenedor cabecera__fila">
+    {/* El logotipo REAL del hotel, tomado de su sitio vigente
+        (`logo_azucar_dorado-png.webp`, 310 × 193, con transparencia).
+
+        Antes había un wordmark tipográfico —«Azúcar» en Gilda Display con
+        «Hotel Tulum» debajo— que compuse para tener algo mientras. No era el
+        logotipo del hotel: la cúpula dorada, la palabra manuscrita «Hotel» y
+        las líneas turquesa son su identidad, y ninguna estaba ahí.
+
+        `alt` con el nombre del hotel y no «logotipo»: quien no ve la imagen
+        necesita saber a dónde lleva el enlace, no de qué tipo de gráfico se
+        trata (WCAG 1.1.1). */}
     <a class="marca" href={ruta(idioma)}>
-      Azúcar<span class="marca__sub">Hotel Tulum</span>
+      <Image
+        class="marca__logo"
+        src={logo}
+        alt="Azúcar Hotel Tulum"
+        widths={[112, 224]}
+        sizes="112px"
+        loading="eager"
+      />
     </a>
 
     {/* Navegación horizontal, sólo en escritorio. Es la pieza que más distingue
@@ -250,25 +270,15 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     gap: var(--space-5);
     min-height: var(--alto-cabecera);
   }
-  .marca {
-    display: flex; flex-direction: column; line-height: 1;
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    color: var(--color-ink);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
+  .marca { display: flex; align-items: center; text-decoration: none; }
+  .marca__logo {
+    /* 112 px de ancho: a 310 × 193 el logotipo queda en 70 px de alto, que cabe
+       holgado en la fila de 88 px y deja el aire de la plantilla. Alto
+       automático desde la proporción real, así no hay CLS. */
+    width: 112px;
+    height: auto;
   }
-  .marca__sub {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--color-ink-muted);
-    margin-top: 5px;
-  }
-
+  .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {
     display: flex; align-items: center; gap: var(--space-5);
@@ -338,10 +348,21 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
      superior, esto DEJA DE CUMPLIR y no lo detecta ningún auditor de marcado.
      Hay que volver a medir. La alternativa estructural sería añadir un velo
      propio a la cabecera, a costa de la composición de Cappa. */
-  .cabecera--sobre-hero .marca,
-  .cabecera--sobre-hero .marca__sub,
   .cabecera--sobre-hero .nav__lista > li > a,
   .cabecera--sobre-hero .cabecera__idioma { color: #fff; }
+
+  /* Sobre la fotografía del héroe el logotipo se pinta en BLANCO SÓLIDO.
+     El del hotel es dorado sobre marrón oscuro y sólo existe esa versión —se
+     buscó en toda la captura del sitio vigente—, porque su cabecera es blanca y
+     nunca necesitaron otra. Sobre una foto oscura, los marrones desaparecen.
+
+     `brightness(0)` lo aplasta a negro puro y `invert(1)` lo pasa a blanco: se
+     conserva la SILUETA, que es lo que hace reconocible una marca, y se pierde
+     el color, que aquí no se podía leer de todos modos.
+
+     Lo correcto sería una versión clara del logotipo. Es un archivo, no código:
+     queda anotado para pedírselo al hotel. */
+  .cabecera--sobre-hero .marca__logo { filter: brightness(0) invert(1); }
   .cabecera--sobre-hero .nav__lista > li > a:hover,
   .cabecera--sobre-hero .nav__lista > li > a[aria-current='page'] {
     color: #fff;

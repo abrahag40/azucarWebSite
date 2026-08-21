@@ -1538,6 +1538,55 @@ falta» cuesta cero hoy y confunde siempre.
 
 ---
 
+## L-067 — El logotipo llevaba semanas siendo un marcador de posición mío
+
+**Lección.** La cabecera mostraba «AZÚCAR» en Gilda Display con «HOTEL TULUM» debajo. Lo
+compuse en el sprint 1 para que la cabecera no estuviera vacía, y **se quedó**. En ningún
+informe de fidelidad lo señalé —comparé tipografías, colores y separaciones con la plantilla—
+porque estaba comparando el sitio con **Cappa** y no con **el hotel**.
+
+El logotipo real estaba en la captura desde el sprint 0: `logo_azucar_dorado-png.webp`, con
+una cúpula dorada, la palabra «Hotel» manuscrita y dos líneas turquesa. Nada de eso existía en
+mi versión. Lo vio Abraham en dos segundos.
+
+**Lo que enseña:** un marcador de posición razonable es más peligroso que uno feo. Un
+`LOGO AQUÍ` en rojo se sustituye el primer día; un wordmark tipográfico correcto pasa por
+decisión de diseño y sobrevive a doce revisiones — incluidas las mías, que estaban mirando
+exactamente esa zona de la pantalla.
+
+**La regla:** al poner algo provisional, dejarlo anotado donde se lea —una lista de
+provisionales, no un comentario en el componente— o hacerlo visiblemente provisional. Si
+parece terminado, se da por terminado.
+
+**Y el detalle técnico:** el logotipo del hotel es dorado sobre marrón y **sólo existe esa
+versión**, porque su cabecera es blanca. Sobre la fotografía del héroe se pierde, así que ahí
+se pinta en blanco sólido con `brightness(0) invert(1)`: se conserva la silueta, que es lo que
+hace reconocible una marca. Lo correcto sería una versión clara del logotipo, y eso es un
+archivo que tiene que dar el hotel, no algo que se arregle en CSS.
+
+---
+
+## L-068 — Un detector que sólo mira en una dirección deja pasar la mitad
+
+**Lección.** Al sustituir el wordmark por el logotipo, `.marca__sub` dejó de usarse y **sus
+reglas siguieron viajando en las 38 páginas**. El detector de clases con ámbito no dijo nada:
+sólo buscaba clases *usadas y no definidas*, nunca *definidas y no usadas*.
+
+Añadido el sentido contrario, apareció otra cosa: **cuatro falsos positivos propios**. Las
+proporciones de la galería y los anchos del mosaico se construyen interpolando
+—`` `mosaico__celda--${ancho}` ``— y el analizador saltaba los literales con `${`, así que las
+daba por muertas estando vivas.
+
+Se enseñó al analizador a guardar el **prefijo** de esas interpolaciones y a considerar usada
+cualquier clase que empiece por él. Un detector que no entiende cómo se escribe el código que
+analiza produce ruido, y el ruido se ignora (L-047, otra vez).
+
+**El patrón, ya con varios casos:** cada vez que se amplía una comprobación conviene esperar
+dos cosechas — los hallazgos reales **y** los falsos positivos que la ampliación introduce. La
+segunda cosecha no es opcional: si se publica sin limpiarla, la herramienta nace desacreditada.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -1562,6 +1611,6 @@ falta» cuesta cero hoy y confunde siempre.
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
 | R-23 | **Quien pase la URL por PageSpeed verá SEO 92 y «robots.txt is not valid».** Es un artefacto de nuestra propia CSP —`connect-src 'none'` bloquea la lectura que hace Lighthouse—; el archivo es válido y a Googlebot no le afecta | Bajo | Explicación lista en `medicion-calidad.md`. Se resuelve solo en el sprint 3, cuando `connect-src` pase a `'self'` para el formulario |
 | R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
-| R-21 | **El hotel no publica ningún WhatsApp.** Se buscó en toda la captura del sitio vigente: cero enlaces `wa.me`. H3.7 pide «acceso visible en todas las páginas» y no hay número que poner | Medio | Pregunta **B3**, que ya estaba, pero ahora se sabe que la respuesta no existe hoy: hay que pedir que lo creen o retirar H3.7 |
+| R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B3**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |
