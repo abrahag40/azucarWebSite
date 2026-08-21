@@ -1,29 +1,81 @@
 ---
 import { usarT, ruta, type Idioma } from '../i18n/ui';
+import { contacto, presentacion } from '../data/hotel';
+
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 const anio = new Date().getFullYear();
+
+/**
+ * Pie de tres columnas — patrón `footer` de Cappa, medido en el sitio en vivo:
+ * «About Hotel» con un párrafo, «Explore» con seis enlaces de navegación,
+ * «Contact» con dirección, teléfono y correo, y una barra de copyright debajo.
+ *
+ * ── QUÉ FALTABA, Y NO ERA ESTÉTICO ──────────────────────────────────────────
+ * El pie tenía **tres enlaces** —los legales— frente a los doce de Cappa. Es
+ * decir: quien llegaba al final de cualquiera de las 38 páginas no tenía a
+ * dónde ir salvo volver arriba. Un pie sin navegación desperdicia el único
+ * momento en que el visitante ya leyó todo y sigue interesado, y además deja al
+ * sitio sin la red de enlaces internos que Google usa para entender su
+ * estructura.
+ *
+ * Todo el contenido nuevo ya existía: los enlaces son los del menú, y el texto
+ * es la primera frase de la presentación, que es literal del hotel.
+ */
+const explorar = [
+  { clave: 'nav.alojamiento', path: 'alojamiento' },
+  { clave: 'nav.servicios', path: 'servicios' },
+  { clave: 'nav.galeria', path: 'galeria' },
+  { clave: 'nav.ubicacion', path: 'ubicacion' },
+  { clave: 'nav.faq', path: 'preguntas-frecuentes' },
+  { clave: 'nav.contacto', path: 'contacto' },
+] as const;
+
+/* Primera frase de la presentación. Se corta en el primer punto para no meter
+   tres párrafos en un pie; el texto completo está en la portada. */
+const resumen = presentacion.parrafos[0][idioma].split('. ')[0] + '.';
+const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
 ---
 <footer class="pie">
   <div class="contenedor pie__rejilla">
-    <div>
+    <div class="pie__col pie__col--sobre">
       <p class="pie__marca">Azúcar Hotel Tulum</p>
-      <address class="pie__direccion">{t('footer.direccion')}</address>
+      <p class="pie__resumen">{resumen}</p>
     </div>
-    <nav class="pie__nav" aria-label="Legal">
-      <ul>
-        {/* «Términos y condiciones» sigue FUERA: no existe ni en el sitio vigente
-            —lo inventamos nosotros al maquetar el pie— y no hay texto que
-            publicar. Vuelve cuando exista, no antes. */}
-        <li><a href={ruta(idioma, 'politicas')}>{t('footer.politicas')}</a></li>
-        <li><a href={ruta(idioma, 'aviso-de-privacidad')}>{t('footer.privacidad')}</a></li>
-        <li><a href={ruta(idioma, 'preguntas-frecuentes')}>{t('nav.faq')}</a></li>
+
+    <nav class="pie__col" aria-label={t('footer.explorar')}>
+      <h2 class="pie__titulo">{t('footer.explorar')}</h2>
+      <ul class="pie__lista">
+        {explorar.map((e) => (
+          <li><a href={ruta(idioma, e.path)}>{t(e.clave)}</a></li>
+        ))}
       </ul>
     </nav>
+
+    <div class="pie__col">
+      <h2 class="pie__titulo">{t('footer.contacto')}</h2>
+      <address class="pie__direccion">{t('footer.direccion')}</address>
+      <ul class="pie__lista">
+        {contacto.telefonos.map((n) => (
+          <li><a class="telefono" href={`tel:${soloDigitos(n)}`}>{n}</a></li>
+        ))}
+        <li><a href={`mailto:${contacto.correo}`}>{contacto.correo}</a></li>
+      </ul>
+    </div>
   </div>
+
   <div class="contenedor pie__legal">
     <p>© {anio} Azúcar Hotel Tulum. {t('footer.derechos')}</p>
+    {/* «Términos y condiciones» sigue FUERA: no existe ni en el sitio vigente
+        —lo inventamos nosotros al maquetar el pie— y no hay texto que publicar.
+        Vuelve cuando exista, no antes. */}
+    <nav class="pie__nav" aria-label={t('footer.legalTitulo')}>
+      <ul>
+        <li><a href={ruta(idioma, 'politicas')}>{t('footer.politicas')}</a></li>
+        <li><a href={ruta(idioma, 'aviso-de-privacidad')}>{t('footer.privacidad')}</a></li>
+      </ul>
+    </nav>
   </div>
 </footer>
 
@@ -31,42 +83,93 @@ const anio = new Date().getFullYear();
   .pie {
     background: var(--color-surface-alt);
     border-top: 1px solid var(--color-border);
-    padding-block: var(--space-7) var(--space-5);
+    padding-block: var(--space-8) var(--space-5);
     /* SIN `margin-top`.
        Tenía 4 rem, pensados para separarlo de una sección de fondo blanco. Pero
-       cuando la sección anterior es cálida —como pasa en la portada, que termina
-       en amenidades— ese margen deja una **banda blanca** de 64 px entre dos
-       fondos de color, y se ve como un error de maquetación. Lo era.
-       El pie ya se distingue por su propio fondo y por su borde superior; el
-       espacio lo aporta su `padding-block`, que sí pertenece al pie. */
+       cuando la sección anterior es cálida —como pasa en la portada— ese margen
+       deja una banda blanca de 64 px entre dos fondos de color, y se ve como un
+       error de maquetación. Lo era. El pie ya se distingue por su fondo y su
+       borde superior; el espacio lo aporta su `padding-block`. */
   }
-  .pie__rejilla { display: grid; gap: var(--space-6); }
-  .pie__marca {
-    font-family: var(--font-display); font-size: var(--text-xl);
-    margin-bottom: var(--space-2);
-  }
-  .pie__direccion {
-    font-style: normal; color: var(--color-ink-muted);
-    max-width: 32ch; line-height: var(--leading-snug);
-  }
-  .pie__nav ul { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
-  /* `inline-block` + padding vertical para llegar a 24 px de alto. Sin esto el
-     enlace medía 19 px y no alcanzaba el minimo de WCAG 2.2 AA 2.5.8 (Target
-     Size Minimum), que aplica al dedo tanto como al puntero impreciso. */
-  .pie__nav a {
-    display: inline-block;
-    padding-block: var(--space-1);
-    font-family: var(--font-ui); letter-spacing: 0.04em;
-    color: var(--color-ink); text-decoration: none;
-  }
-  .pie__nav a:hover { color: var(--color-accent-text); text-decoration: underline; }
-  .pie__legal {
-    margin-top: var(--space-6); padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
-    font-size: var(--text-sm); color: var(--color-ink-muted);
+
+  /* Una columna en móvil, tres a partir de 48 rem. El reparto 1.4 / 1 / 1.2 da
+     más aire a la columna del texto y a la de contacto, que llevan frases, y
+     menos a la lista de enlaces, que son palabras sueltas. Cappa usa 4/3/4 de
+     doce, que es la misma idea. */
+  .pie__rejilla {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1fr);
+    margin-bottom: var(--space-7);
   }
   @media (min-width: 48rem) {
-    .pie__rejilla { grid-template-columns: 1fr auto; align-items: start; }
-    .pie__nav ul { grid-auto-flow: row; }
+    .pie__rejilla { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--space-6); }
   }
+  .pie__col { min-width: 0; }
+
+  .pie__marca {
+    font-family: var(--font-display); font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+  .pie__resumen {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    max-width: 42ch;
+    margin: 0;
+  }
+
+  .pie__titulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-antetitulo);
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .pie__direccion {
+    font-style: normal;
+    color: var(--color-ink-muted);
+    max-width: 32ch;
+    line-height: var(--leading-snug);
+    margin-bottom: var(--space-3);
+  }
+
+  .pie__lista { list-style: none; padding: 0; margin: 0; }
+  /* `block` con altura mínima: un <a> en línea NO suma su relleno vertical a la
+     caja y se queda en 19 px, por debajo de los 24 de WCAG 2.5.8. Es el defecto
+     que más veces ha aparecido en este proyecto; por eso el auditor ya avisa
+     del patrón «enlace solo en su párrafo». */
+  .pie__lista a,
+  .pie__nav a {
+    display: block;
+    min-height: 32px;
+    line-height: 32px;
+    font-family: var(--font-ui);
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+    text-decoration: none;
+  }
+  .pie__lista a:hover,
+  .pie__nav a:hover,
+  .pie__lista a[aria-current='page'] { color: var(--color-accent-text); }
+
+  /* Barra inferior: copyright a la izquierda, legales a la derecha. */
+  .pie__legal {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+  .pie__legal p { margin: 0; }
+  @media (min-width: 48rem) {
+    .pie__legal { grid-template-columns: 1fr auto; align-items: center; }
+  }
+  .pie__nav ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-wrap: wrap; gap: var(--space-5);
+  }
+  .pie__nav a { font-size: var(--text-sm); }
 </style>

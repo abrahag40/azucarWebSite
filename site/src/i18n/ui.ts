@@ -145,6 +145,11 @@ export const ui = {
 
     'footer.derechos': 'Todos los derechos reservados.',
     'footer.privacidad': 'Aviso de privacidad',
+    // ── Pie de tres columnas, patrón de Cappa ────────────────────────────────
+    'footer.explorar': 'Explorar',
+    'footer.contacto': 'Contacto',
+    'footer.sobre': 'El hotel',
+    'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Términos y condiciones',
     'footer.politicas': 'Políticas del hotel',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
@@ -311,6 +316,10 @@ export const ui = {
 
     'footer.derechos': 'All rights reserved.',
     'footer.privacidad': 'Privacy notice',
+    'footer.explorar': 'Explore',
+    'footer.contacto': 'Contact',
+    'footer.sobre': 'The hotel',
+    'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Terms and conditions',
     'footer.politicas': 'Hotel policies',
     'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
