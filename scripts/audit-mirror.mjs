@@ -14,7 +14,7 @@
  * releer el mirror: el informe es para humanos, el JSON para el siguiente paso.
  */
 import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, extname, relative, basename } from 'node:path';
+import { join, extname, relative, basename, sep } from 'node:path';
 
 const ROOT = process.argv[2];
 if (!ROOT || !existsSync(ROOT)) {
@@ -74,6 +74,7 @@ const pages = [];
 const extDomains = new Map();
 const forms = [];
 const jsonld = [];
+const enlacesInternos = [];
 const noteDomain = (url, ctx) => {
   const m = url.match(/^(?:https?:)?\/\/([^/?#]+)/i);
   if (!m) return;
@@ -102,6 +103,14 @@ for (const f of htmlFiles) {
   for (const m of all(/<(?:script|img|iframe|source)\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi, src)) noteDomain(m[1], 'src');
   for (const m of all(/<link\b[^>]*\bhref\s*=\s*["']([^"']+)["']/gi, src)) noteDomain(m[1], 'link');
   for (const m of all(/<a\b[^>]*\bhref\s*=\s*["']((?:https?:)?\/\/[^"']+)["']/gi, src)) noteDomain(m[1], 'enlace');
+
+  // Enlaces internos: se guardan para comprobar despues que resuelven a un
+  // archivo real. Un enlace roto no lo detecta ninguna de las otras reglas.
+  for (const m of all(/<a\b[^>]*\bhref\s*=\s*["']([^"']+)["']/gi, src)) {
+    const h = m[1].trim();
+    if (/^(https?:)?\/\//i.test(h) || /^(mailto:|tel:|javascript:|data:|#)/i.test(h)) continue;
+    enlacesInternos.push({ pagina: rel, href: h });
+  }
 
   for (const m of all(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi, src)) {
     forms.push({
@@ -246,6 +255,41 @@ const sinLang = pages.filter(p => !p.lang);
 if (sinLang.length) F('alta', 'A11y', `${sinLang.length} página(s) sin atributo lang en <html> (WCAG 3.1.1)`);
 const noindex = pages.filter(p => /noindex/i.test(p.robots ?? ''));
 if (noindex.length) F('alta', 'SEO', `${noindex.length} página(s) con meta robots noindex — invisibles para Google`);
+// ---------- enlaces internos rotos ----------
+// Ninguna otra regla mira si un enlace lleva a alguna parte. En un sitio estatico
+// un enlace roto no da error en compilacion: simplemente produce un 404 en
+// produccion. Se comprueba resolviendo cada href contra el arbol de archivos.
+const existentes = new Set(files.map(f => relative(FILES_DIR, f).split(sep).join('/')));
+const resuelve = destino => {
+  const limpio = destino.replace(/[?#].*$/, '');
+  if (!limpio) return true;                       // enlace a la propia pagina
+  const candidatos = limpio.endsWith('/')
+    ? [limpio + 'index.html', limpio.slice(0, -1) + '.html', limpio.slice(0, -1)]
+    : [limpio, limpio + '.html', limpio + '/index.html'];
+  return candidatos.some(c => existentes.has(c.replace(/^\/+/, '')));
+};
+const rotos = [];
+for (const e of enlacesInternos) {
+  const dir = e.pagina.split('/').slice(0, -1).join('/');
+  // Un href que empieza por / cuelga de la raiz del sitio; el resto, de su pagina.
+  const absoluto = e.href.startsWith('/')
+    ? e.href.slice(1)
+    : [dir, e.href].filter(Boolean).join('/');
+  // Normaliza los ../ sin tocar el sistema de archivos
+  const partes = [];
+  for (const t of absoluto.split('/')) {
+    if (t === '.' || t === '') continue;
+    if (t === '..') partes.pop(); else partes.push(t);
+  }
+  if (!resuelve(partes.join('/'))) rotos.push(e);
+}
+if (rotos.length) {
+  const porDestino = [...new Set(rotos.map(r => r.href))];
+  F('alta', 'Enlaces', `${rotos.length} enlace(s) interno(s) no resuelven a ningun archivo `
+    + `(${porDestino.length} destino(s) distintos): ${porDestino.slice(0, 6).map(h => `\`${h}\``).join(' · ')}`
+    + (porDestino.length > 6 ? ` y ${porDestino.length - 6} mas` : ''));
+}
+
 const titleLargo = pages.filter(p => p.titleLen > 60);
 if (titleLargo.length) F('info', 'SEO', `${titleLargo.length} <title> de más de 60 caracteres: Google los trunca en resultados`);
 

@@ -1,0 +1,3551 @@
+{
+  "resumen": {
+    "paginas": 26,
+    "es": 14,
+    "en": 12,
+    "archivos": 430,
+    "bytes": 21186848
+  },
+  "hallazgos": [
+    {
+      "sev": "crítica",
+      "tema": "PCI-DSS / Seguridad",
+      "det": "`azucarhotel.com/autorizacion-de-pago-con-tdc/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/autorizacion-de-pago-con-tdc/#wpcf7-f2822-p928-o1`"
+    },
+    {
+      "sev": "crítica",
+      "tema": "PCI-DSS / Seguridad",
+      "det": "`azucarhotel.com/autorizacion-de-pago-con-tdc/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/autorizacion-de-pago-con-tdc/#wpcf7-f585-p928-o2`"
+    },
+    {
+      "sev": "crítica",
+      "tema": "PCI-DSS / Seguridad",
+      "det": "`azucarhotel.com/en/cc-payment-authorization/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o1`"
+    },
+    {
+      "sev": "crítica",
+      "tema": "PCI-DSS / Seguridad",
+      "det": "`azucarhotel.com/en/cc-payment-authorization/index.html` captura datos de tarjeta en un formulario propio: PAN (numero_tarjeta) · **CVV (codigo_cvc)** · expiración (exp_tarjeta_1, exp_tarjeta_2). Destino: `https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o2`"
+    },
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "1 página(s) sin <title>"
+    },
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "1 <title> duplicado(s): \"Azucar Hotel Tulum\" ×2"
+    },
+    {
+      "sev": "alta",
+      "tema": "i18n",
+      "det": "4 página(s) sin hreflang pese a existir versión EN"
+    },
+    {
+      "sev": "alta",
+      "tema": "Móvil",
+      "det": "4 página(s) sin meta viewport → no responsivo"
+    },
+    {
+      "sev": "alta",
+      "tema": "A11y",
+      "det": "468 <img> sin atributo alt (WCAG 1.1.1)"
+    },
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "schema.org presente pero **genérico** (WebPage, ReadAction, ImageObject, BreadcrumbList, ListItem, WebSite): sin Hotel, LodgingBusiness, HotelRoom, Offer ni AggregateRating. Google no puede mostrar precio, disponibilidad ni estrellas en resultados"
+    },
+    {
+      "sev": "alta",
+      "tema": "A11y",
+      "det": "3 página(s) sin atributo lang en <html> (WCAG 3.1.1)"
+    },
+    {
+      "sev": "media",
+      "tema": "Seguridad",
+      "det": "API REST de WordPress accesible sin autenticación (67 respuestas capturadas en `/wp-json/`) — expone estructura, contenido y usuarios"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO",
+      "det": "24 de 26 páginas sin meta description"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO/A11y",
+      "det": "23 página(s) sin exactamente un <h1>"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO",
+      "det": "4 página(s) sin canonical"
+    },
+    {
+      "sev": "media",
+      "tema": "Rendimiento",
+      "det": "24 <img> sin width/height → provoca CLS"
+    },
+    {
+      "sev": "media",
+      "tema": "i18n",
+      "det": "Desequilibrio ES/EN: 14 páginas ES vs 12 EN — hay contenido sin traducir"
+    },
+    {
+      "sev": "media",
+      "tema": "A11y",
+      "det": "20 página(s) con salto en la jerarquía de encabezados (ej. h1 → h4 en `azucarhotel.com/amenidades-y-facilidades/index.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)"
+    },
+    {
+      "sev": "info",
+      "tema": "Captura",
+      "det": "20 stub(s) de redirección de HTTrack excluidos del análisis · el mapa de destinos alimenta las 301 del relanzamiento"
+    },
+    {
+      "sev": "info",
+      "tema": "Stack",
+      "det": "WordPress detectado · temas: Divi, Divi-child · 3 plugins"
+    },
+    {
+      "sev": "info",
+      "tema": "SEO",
+      "det": "2 <title> de más de 60 caracteres: Google los trunca en resultados"
+    }
+  ],
+  "huella": {
+    "wordpress": true,
+    "tema": [
+      "Divi",
+      "Divi-child"
+    ],
+    "plugins": [
+      "contact-form-7",
+      "jquery-validation-for-contact-form-7",
+      "telephone-input-for-contact-form-7"
+    ],
+    "jquery": true,
+    "generators": [
+      "WordPress 7.0.4"
+    ]
+  },
+  "pages": [
+    {
+      "ruta": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "bytes": 170231,
+      "lang": "es-MX",
+      "title": "Amenidades y Facilidades - Azucar Hotel Tulum",
+      "titleLen": 45,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Amenidades y Facilidades",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "bytes": 173209,
+      "lang": "es-MX",
+      "title": "Formulario de Autorización de Reservación con Cargo a Tarjeta de Crédito - Azucar Hotel Tulum",
+      "titleLen": 93,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Formulario de Autorizaciónde Reservación con Cargo aTarjeta de Crédito",
+        "Formulario de Autorización de Reservación con Cargo a Tarjeta de Crédito"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h3",
+      "imgs": 11,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/contacto/index.html",
+      "bytes": 167724,
+      "lang": "es-MX",
+      "title": "Contacto - Azucar Hotel Tulum",
+      "titleLen": 29,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Contáctanos",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/about-us/index.html",
+      "bytes": 170958,
+      "lang": "en-US",
+      "title": "We - Azucar Hotel Tulum",
+      "titleLen": 23,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "We",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 11,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/amenities-facilities/index.html",
+      "bytes": 166737,
+      "lang": "en-US",
+      "title": "AMENITIES &amp; FACILITIES - Azucar Hotel Tulum",
+      "titleLen": 47,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Amenities &amp; Facilities",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "bytes": 147268,
+      "lang": "en-US",
+      "title": "Credit Card Reservation Authorization Form - Azucar Hotel Tulum",
+      "titleLen": 63,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Credit Card Reservation Authorization Form",
+        "Credit Card Reservation Authorization Form"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h3",
+      "imgs": 11,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/contact/index.html",
+      "bytes": 164407,
+      "lang": "en-US",
+      "title": "CONTACT US - Azucar Hotel Tulum",
+      "titleLen": 31,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Contact Us",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/feed/index.html",
+      "bytes": 1074,
+      "lang": null,
+      "title": "Azucar Hotel Tulum",
+      "titleLen": 18,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "azucarhotel.com/en/frequent-questions/index.html",
+      "bytes": 162615,
+      "lang": "en-US",
+      "title": "Frequent Questions - Azucar Hotel Tulum",
+      "titleLen": 39,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Frequent Questions",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/home/index.html",
+      "bytes": 456955,
+      "lang": "en-US",
+      "title": "Azucar Hotel - The Sweetest Place at the Beach",
+      "titleLen": 46,
+      "description": "Experience the Magic of Tulum at Azucar Hotel: Luxury, Nature, and Relaxation by the Sea.",
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Policies​",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 127,
+      "imgsSinAlt": 108,
+      "imgsSinDim": 6,
+      "imgsLazy": 111,
+      "scriptsInline": 16,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/policies/index.html",
+      "bytes": 160247,
+      "lang": "en-US",
+      "title": "Policies - Azucar Hotel Tulum",
+      "titleLen": 29,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Policies​",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/privacy-policy/index.html",
+      "bytes": 126543,
+      "lang": "en-US",
+      "title": "Privacy Policy - Azucar Hotel Tulum",
+      "titleLen": 35,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Política de Privacidad."
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 13,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/reservations/index.html",
+      "bytes": 154623,
+      "lang": "en-US",
+      "title": "Reservations - Azucar Hotel Tulum",
+      "titleLen": 33,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Reservations",
+        "Reservations"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": null,
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/rooms/index.html",
+      "bytes": 449646,
+      "lang": "en-US",
+      "title": "Bungalows, Suites &amp; Rooms - Azucar Hotel Tulum",
+      "titleLen": 50,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Bungalows, Suites &#038; Rooms",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 144,
+      "imgsSinAlt": 126,
+      "imgsSinDim": 6,
+      "imgsLazy": 128,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/en/services/index.html",
+      "bytes": 166054,
+      "lang": "en-US",
+      "title": "Services - Azucar Hotel Tulum",
+      "titleLen": 29,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Services",
+        "Request Rates"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 14,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/feed/index.html",
+      "bytes": 1052,
+      "lang": null,
+      "title": "Azucar Hotel Tulum",
+      "titleLen": 18,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "azucarhotel.com/habitaciones/index.html",
+      "bytes": 452785,
+      "lang": "es-MX",
+      "title": "Bungalows, Suites y Habitaciones - Azucar Hotel Tulum",
+      "titleLen": 53,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Bungalows, Suites y Habitaciones",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 146,
+      "imgsSinAlt": 126,
+      "imgsSinDim": 6,
+      "imgsLazy": 130,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/index.html",
+      "bytes": 442392,
+      "lang": "es-MX",
+      "title": "Inicio - Azucar Hotel Tulum",
+      "titleLen": 27,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Políticas​",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 129,
+      "imgsSinAlt": 108,
+      "imgsSinDim": 6,
+      "imgsLazy": 113,
+      "scriptsInline": 18,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/nosotros/index.html",
+      "bytes": 173954,
+      "lang": "es-MX",
+      "title": "Nosotros - Azucar Hotel Tulum",
+      "titleLen": 29,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Nosotros",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 13,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/politica-de-privacidad/index.html",
+      "bytes": 122645,
+      "lang": "es-MX",
+      "title": "Política de Privacidad - Azucar Hotel Tulum",
+      "titleLen": 43,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Política de Privacidad."
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/politicas/index.html",
+      "bytes": 163800,
+      "lang": "es-MX",
+      "title": "Políticas - Azucar Hotel Tulum",
+      "titleLen": 30,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Políticas​",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h3 → h5",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "bytes": 166155,
+      "lang": "es-MX",
+      "title": "Preguntas Frecuentes - Azucar Hotel Tulum",
+      "titleLen": 41,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Preguntas Frecuentes",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/reservaciones/index.html",
+      "bytes": 153622,
+      "lang": "es-MX",
+      "title": "Reservaciones - Azucar Hotel Tulum",
+      "titleLen": 34,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Reservaciones",
+        "Reservaciones"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/servicios/index.html",
+      "bytes": 169450,
+      "lang": "es-MX",
+      "title": "Servicios - Azucar Hotel Tulum",
+      "titleLen": 30,
+      "description": null,
+      "canonical": "index.html",
+      "hreflang": [
+        "es",
+        "en"
+      ],
+      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      "viewport": true,
+      "generator": "WordPress 7.0.4",
+      "h1": [
+        "Servicios",
+        "Solicitud de Cotización"
+      ],
+      "nH1": 2,
+      "saltoJerarquia": "h1 → h4",
+      "imgs": 12,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 15,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "azucarhotel.com/wp-json/index.html",
+      "bytes": 287885,
+      "lang": null,
+      "title": null,
+      "titleLen": 0,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "index.html",
+      "bytes": 5217,
+      "lang": "en",
+      "title": "Local index - HTTrack Website Copier",
+      "titleLen": 36,
+      "description": "HTTrack is an easy-to-use website mirror utility. It allows you to download a World Wide website from the Internet to a local directory,building recursively all structures, getting html, images, and other files from the server to your computer. Links are rebuiltrelatively so that you can freely browse to the local site (works with any browser). You can mirror several sites together so that you can jump from one toanother. You can, also, update an existing mirror site, or resume an interrupted download. The robot is fully configurable, with an integrated help",
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [
+        "Index of locally available sites:"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h1 → h6",
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    }
+  ],
+  "forms": [
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "action": "https://azucarhotel.com/amenidades-y-facilidades/#wpcf7-f2821-p2347-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "action": "https://azucarhotel.com/autorizacion-de-pago-con-tdc/#wpcf7-f2822-p928-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "fecha_venta",
+        "fecha_entrada",
+        "fecha_salida",
+        "numero_huespedes",
+        "telephone_input-81",
+        "habitaciones",
+        "huesped_principal",
+        "fac-calle",
+        "numero-ext",
+        "numero-interior",
+        "codigo-postal",
+        "colonia-barrio",
+        "ciudad",
+        "pais",
+        "nombre_tarjeta",
+        "tipo_tarjeta",
+        "numero_tarjeta",
+        "exp_tarjeta_1",
+        "exp_tarjeta_2",
+        "codigo_cvc",
+        "total",
+        "aceptar[]"
+      ],
+      "labels": 21
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "action": "https://azucarhotel.com/autorizacion-de-pago-con-tdc/#wpcf7-f585-p928-o2",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "fecha_venta",
+        "fecha_entrada",
+        "fecha_salida",
+        "numero_huespedes",
+        "telephone_input-281",
+        "room",
+        "huesped_principal",
+        "adress",
+        "number-ext",
+        "number-int",
+        "zip-code",
+        "neighborhood",
+        "city",
+        "country",
+        "nombre_tarjeta",
+        "tipo_tarjeta",
+        "numero_tarjeta",
+        "exp_tarjeta_1",
+        "exp_tarjeta_2",
+        "codigo_cvc",
+        "total",
+        "aceptar[]"
+      ],
+      "labels": 21
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "action": "https://azucarhotel.com/contacto/#wpcf7-f2821-p958-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "action": "https://azucarhotel.com/en/about-us/#wpcf7-f9-p505-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "action": "https://azucarhotel.com/en/amenities-facilities/#wpcf7-f9-p2356-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "action": "https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "fecha_venta",
+        "fecha_entrada",
+        "fecha_salida",
+        "numero_huespedes",
+        "telephone_input-281",
+        "room",
+        "huesped_principal",
+        "adress",
+        "number-ext",
+        "number-int",
+        "zip-code",
+        "neighborhood",
+        "city",
+        "country",
+        "nombre_tarjeta",
+        "tipo_tarjeta",
+        "numero_tarjeta",
+        "exp_tarjeta_1",
+        "exp_tarjeta_2",
+        "codigo_cvc",
+        "total",
+        "aceptar[]"
+      ],
+      "labels": 21
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "action": "https://azucarhotel.com/en/cc-payment-authorization/#wpcf7-f585-p606-o2",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "fecha_venta",
+        "fecha_entrada",
+        "fecha_salida",
+        "numero_huespedes",
+        "telephone_input-281",
+        "room",
+        "huesped_principal",
+        "adress",
+        "number-ext",
+        "number-int",
+        "zip-code",
+        "neighborhood",
+        "city",
+        "country",
+        "nombre_tarjeta",
+        "tipo_tarjeta",
+        "numero_tarjeta",
+        "exp_tarjeta_1",
+        "exp_tarjeta_2",
+        "codigo_cvc",
+        "total",
+        "aceptar[]"
+      ],
+      "labels": 21
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "action": "https://azucarhotel.com/en/contact/#wpcf7-f9-p423-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "action": "https://azucarhotel.com/en/frequent-questions/#wpcf7-f9-p761-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "action": "https://azucarhotel.com/en/home/#wpcf7-f9-p333-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "action": "https://azucarhotel.com/en/policies/#wpcf7-f9-p2433-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "action": "https://azucarhotel.com/en/reservations/#wpcf7-f9-p586-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "action": "https://azucarhotel.com/en/reservations/#wpcf7-f9-p586-o2",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "action": "https://azucarhotel.com/en/rooms/#wpcf7-f9-p445-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "action": "https://azucarhotel.com/en/services/#wpcf7-f9-p730-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "action": "https://azucarhotel.com/habitaciones/#wpcf7-f2821-p887-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "action": "https://azucarhotel.com/#wpcf7-f2821-p843-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "action": "https://azucarhotel.com/nosotros/#wpcf7-f2821-p1067-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "action": "https://azucarhotel.com/politicas/#wpcf7-f2821-p2424-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "action": "https://azucarhotel.com/preguntas-frecuentes/#wpcf7-f2821-p947-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "action": "https://azucarhotel.com/reservaciones/#wpcf7-f2821-p898-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "action": "https://azucarhotel.com/reservaciones/#wpcf7-f9-p898-o2",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-162",
+        "country",
+        "city",
+        "huespedes",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "rooms[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "action": "https://azucarhotel.com/servicios/#wpcf7-f2821-p938-o1",
+      "method": "POST",
+      "campos": [
+        "_wpcf7",
+        "_wpcf7_version",
+        "_wpcf7_locale",
+        "_wpcf7_unit_tag",
+        "_wpcf7_container_post",
+        "_wpcf7_posted_data_hash",
+        "entrada",
+        "salida",
+        "your-name",
+        "your-email",
+        "telephone_input-322",
+        "pais",
+        "ciudad",
+        "huespedes",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "habitacion[]",
+        "Comentarios",
+        "rates[]"
+      ],
+      "labels": 18
+    }
+  ],
+  "jsonld": [
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "tipos": [
+        "WebPage",
+        "ReadAction",
+        "ImageObject",
+        "BreadcrumbList",
+        "ListItem",
+        "WebSite",
+        "SearchAction",
+        "EntryPoint",
+        "PropertyValueSpecification"
+      ]
+    }
+  ],
+  "enlacesReserva": [
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/amenidades-y-facilidades/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/autorizacion-de-pago-con-tdc/index.html",
+      "href": "index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/contacto/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/about-us/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/amenities-facilities/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/cc-payment-authorization/index.html",
+      "href": "index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/contact/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/frequent-questions/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/home/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/policies/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/privacy-policy/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "../../reservaciones/index.html",
+      "texto": ""
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/reservations/index.html",
+      "href": "../../reservaciones/index.html",
+      "texto": ""
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/rooms/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "#",
+      "texto": "Reservations"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "../reservations/index.html",
+      "texto": "Request Rates"
+    },
+    {
+      "pagina": "azucarhotel.com/en/services/index.html",
+      "href": "../cc-payment-authorization/index.html",
+      "texto": "Credit Card Reservation Authorization Form"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/habitaciones/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/index.html",
+      "href": "autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/nosotros/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/politica-de-privacidad/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/politicas/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/preguntas-frecuentes/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "../en/reservations/index.html",
+      "texto": ""
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/reservaciones/index.html",
+      "href": "../en/reservations/index.html",
+      "texto": ""
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "#",
+      "texto": "Reservaciones"
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "../reservaciones/index.html",
+      "texto": "Solicitud de Cotización"
+    },
+    {
+      "pagina": "azucarhotel.com/servicios/index.html",
+      "href": "../autorizacion-de-pago-con-tdc/index.html",
+      "texto": "Formulario de Autorización de Reservación con Cargo a Tarjet"
+    }
+  ],
+  "redirecciones": [
+    {
+      "stub": "azucarhotel.com/index0ced.html",
+      "destino": "en/reservations/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index0ecd.html",
+      "destino": "en/rooms/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index1ce2.html",
+      "destino": "nosotros/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index1dd2.html",
+      "destino": "contacto/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index227a.html",
+      "destino": "preguntas-frecuentes/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index3dfa.html",
+      "destino": "politicas/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index4b26.html",
+      "destino": "politica-de-privacidad/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index4e8a.html",
+      "destino": "en/amenities-facilities/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index5aa6.html",
+      "destino": "en/privacy-policy/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index5e02.html",
+      "destino": "en/frequent-questions/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index771f.html",
+      "destino": "amenidades-y-facilidades/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index7c89.html",
+      "destino": "en/services/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index8791.html",
+      "destino": "en/policies/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index8eb0.html",
+      "destino": "habitaciones/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/index9b9e.html",
+      "destino": "en/about-us/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/indexb351.html",
+      "destino": "en/contact/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/indexce2e.html",
+      "destino": "en/cc-payment-authorization/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/indexd255.html",
+      "destino": "reservaciones/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/indexefce.html",
+      "destino": "servicios/index.html"
+    },
+    {
+      "stub": "azucarhotel.com/indexf065.html",
+      "destino": "autorizacion-de-pago-con-tdc/index.html"
+    }
+  ],
+  "tiposSchema": [
+    "WebPage",
+    "ReadAction",
+    "ImageObject",
+    "BreadcrumbList",
+    "ListItem",
+    "WebSite",
+    "SearchAction",
+    "EntryPoint",
+    "PropertyValueSpecification"
+  ],
+  "dominiosExternos": [
+    {
+      "dominio": "fonts.googleapis.com",
+      "n": 44,
+      "ctx": [
+        "link"
+      ]
+    },
+    {
+      "dominio": "goo.gl",
+      "n": 10,
+      "ctx": [
+        "enlace"
+      ]
+    }
+  ],
+  "imagenes": [
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_052-1.webp",
+      "b": 199968
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/6.webp",
+      "b": 176196
+    },
+    {
+      "f": "azucarhotel.com/wp-content/plugins/telephone-input-for-contact-form-7/public/img/flags@2x.png",
+      "b": 174369
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_021.webp",
+      "b": 158406
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/15_suite_aire.webp",
+      "b": 151852
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_101.webp",
+      "b": 150906
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_suite_cielo.webp",
+      "b": 148366
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_031.webp",
+      "b": 133354
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/03_suite_mar.webp",
+      "b": 132418
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/9.webp",
+      "b": 126442
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_095.webp",
+      "b": 126196
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_suite_cielo.webp",
+      "b": 125664
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/09_suite_aire.webp",
+      "b": 124976
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_016.webp",
+      "b": 121624
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/16_suite_cielo.webp",
+      "b": 121462
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/3.webp",
+      "b": 120304
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_suite_cielo.webp",
+      "b": 117418
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/15_suite_cielo.webp",
+      "b": 116878
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_034.webp",
+      "b": 115294
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/4.webp",
+      "b": 114358
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_092.webp",
+      "b": 112940
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_suite_cielo.webp",
+      "b": 112574
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/5.webp",
+      "b": 112536
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/7.webp",
+      "b": 112356
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_suite_aire.webp",
+      "b": 109346
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/14_suite_agua.webp",
+      "b": 107104
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_097.webp",
+      "b": 105934
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/8.webp",
+      "b": 104760
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_doble_mar.webp",
+      "b": 104588
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/10_suite_aire.webp",
+      "b": 101400
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_098.webp",
+      "b": 100934
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_suite_aire.webp",
+      "b": 100774
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/10_suite_cielo.webp",
+      "b": 99952
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_093.webp",
+      "b": 99902
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_070-2.webp",
+      "b": 97208
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_suite_mar.webp",
+      "b": 96904
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_083-2.webp",
+      "b": 94540
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_091-1.webp",
+      "b": 92498
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_094.webp",
+      "b": 91706
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_king_selva.webp",
+      "b": 90708
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/10_king_mar.webp",
+      "b": 90698
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_doble_avenida.webp",
+      "b": 89688
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_019.webp",
+      "b": 88278
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_suite_aire.webp",
+      "b": 82614
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/14_suite_aire.webp",
+      "b": 82446
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_058-2.webp",
+      "b": 82370
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_064-2.webp",
+      "b": 78120
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_014.webp",
+      "b": 77854
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/09_king_mar.webp",
+      "b": 77720
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_013.webp",
+      "b": 75246
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_king_selva.webp",
+      "b": 75246
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_doble_avenida.webp",
+      "b": 74956
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_100.webp",
+      "b": 74504
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_003.webp",
+      "b": 74210
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_doble_mar.webp",
+      "b": 74000
+    },
+    {
+      "f": "azucarhotel.com/wp-content/plugins/telephone-input-for-contact-form-7/public/img/flags.png",
+      "b": 70857
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_suite_aire.webp",
+      "b": 69518
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/18_suite_cielo.webp",
+      "b": 69094
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_079-2.webp",
+      "b": 69008
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/13_suite_mar.webp",
+      "b": 68936
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_060-2.webp",
+      "b": 68922
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_doble_mar.webp",
+      "b": 68900
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/11_suite_agua.webp",
+      "b": 68840
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_suite_mar.webp",
+      "b": 68808
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/13_suite_aire.webp",
+      "b": 68250
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_015.webp",
+      "b": 67656
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_044.webp",
+      "b": 65134
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/14_suite_cielo.webp",
+      "b": 63476
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_087-2.webp",
+      "b": 63264
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_suite_aire.webp",
+      "b": 62794
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_037.webp",
+      "b": 61864
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_056-2.webp",
+      "b": 60662
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_006.webp",
+      "b": 60522
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_005.webp",
+      "b": 60164
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/17_suite_cielo.webp",
+      "b": 57208
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/01_suite_agua.webp",
+      "b": 57080
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_099.webp",
+      "b": 57060
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_suite_mar.webp",
+      "b": 56638
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_074-2.webp",
+      "b": 55524
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_suite_cielo.webp",
+      "b": 54452
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_king_mar.webp",
+      "b": 54338
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_036.webp",
+      "b": 53974
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_053-2.webp",
+      "b": 53370
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/09_suite_agua.webp",
+      "b": 52666
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_king_mar.webp",
+      "b": 52412
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_033.webp",
+      "b": 52108
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_045.webp",
+      "b": 51386
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_doble_mar.webp",
+      "b": 50192
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/17_king_mar.webp",
+      "b": 49610
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_075-2.webp",
+      "b": 49162
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_023.webp",
+      "b": 48378
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_004.webp",
+      "b": 48262
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/02_suite_agua.webp",
+      "b": 48244
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/13_suite_cielo.webp",
+      "b": 48146
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_063-2.webp",
+      "b": 47726
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/19_suite_aire.webp",
+      "b": 47630
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/19_suite_cielo.webp",
+      "b": 47630
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_suite_mar.webp",
+      "b": 47248
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_002.webp",
+      "b": 47072
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_061-2.webp",
+      "b": 47030
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_020.webp",
+      "b": 46952
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_068-2.webp",
+      "b": 46780
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_067-2.webp",
+      "b": 46768
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_doble_mar.webp",
+      "b": 46368
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_suite_mar.webp",
+      "b": 46220
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_suite_mar.webp",
+      "b": 45584
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_084-2.webp",
+      "b": 45534
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_090.webp",
+      "b": 45370
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_096.webp",
+      "b": 44994
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_071-2.webp",
+      "b": 44810
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_077-2.webp",
+      "b": 44804
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/03_suite_agua.webp",
+      "b": 44644
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_057-2.webp",
+      "b": 44092
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_007.webp",
+      "b": 44052
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_017.webp",
+      "b": 44022
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/09_suite_mar.webp",
+      "b": 43936
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_suite_mar.webp",
+      "b": 43348
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_039.webp",
+      "b": 43158
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_081-2.webp",
+      "b": 43060
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_089-2.webp",
+      "b": 42750
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_085-2.webp",
+      "b": 42602
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_suite_cielo.webp",
+      "b": 41928
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/15_king_mar.webp",
+      "b": 41784
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_047-1.webp",
+      "b": 41296
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_012.webp",
+      "b": 41070
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/08_doble_mar.webp",
+      "b": 40706
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_king_selva.webp",
+      "b": 40306
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/16_suite_aire.webp",
+      "b": 40292
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_doble_avenida.webp",
+      "b": 40266
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_062-2.webp",
+      "b": 40140
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/03_king_selva.webp",
+      "b": 38544
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/03_doble_avenida.webp",
+      "b": 38378
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/10_suite_agua.webp",
+      "b": 38244
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_048-1.webp",
+      "b": 37866
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_king_mar.webp",
+      "b": 37808
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/09_suite_cielo.webp",
+      "b": 37596
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_king_selva.webp",
+      "b": 37554
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_066-2.webp",
+      "b": 37116
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_suite_aire.webp",
+      "b": 37100
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_doble_avenida.webp",
+      "b": 37086
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_doble_avenida.webp",
+      "b": 36436
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_king_selva-1.webp",
+      "b": 36356
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/05_king_mar.webp",
+      "b": 36254
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_010.webp",
+      "b": 35998
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_082-2.webp",
+      "b": 35610
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/03_doble_mar.webp",
+      "b": 35442
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_king_selva.webp",
+      "b": 34694
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/01_doble_avenida.webp",
+      "b": 34498
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_041.webp",
+      "b": 34384
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_088-2.webp",
+      "b": 34052
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/10_suite_mar.webp",
+      "b": 33860
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_086-2.webp",
+      "b": 33580
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/03_suite_cielo.webp",
+      "b": 33502
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/05_suite_agua.webp",
+      "b": 33324
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_030.webp",
+      "b": 32342
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/16_king_mar.webp",
+      "b": 31740
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_069-2.webp",
+      "b": 31718
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_suite_mar.webp",
+      "b": 31594
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_038.webp",
+      "b": 31450
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_018.webp",
+      "b": 31406
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/14_king_mar.webp",
+      "b": 31332
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_king_mar.webp",
+      "b": 31236
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/21_suite_cielo.webp",
+      "b": 31088
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/17_suite_aire.webp",
+      "b": 30938
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_doble_mar.webp",
+      "b": 30472
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/03/mapa_ubica.webp",
+      "b": 30080
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/18_king_mar.webp",
+      "b": 30008
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_doble_avenida.webp",
+      "b": 29976
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_doble_mar.webp",
+      "b": 29798
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_008.webp",
+      "b": 29770
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_024.webp",
+      "b": 29734
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_king_selva.webp",
+      "b": 29594
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_049-1.webp",
+      "b": 29586
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/07_doble_avenida.webp",
+      "b": 29546
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/06_king_selva.webp",
+      "b": 29410
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/Nosotros-foto-de-fondo-gde-1.webp",
+      "b": 29214
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/07_suite_agua.webp",
+      "b": 28378
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_076-2.webp",
+      "b": 27976
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/13_king_mar.webp",
+      "b": 27752
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_072-2.webp",
+      "b": 27508
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_027.webp",
+      "b": 27244
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_040.webp",
+      "b": 26796
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/12_king_mar.webp",
+      "b": 26696
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/Nosotros-foto-de-fondo-1.webp",
+      "b": 26494
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_073-2.webp",
+      "b": 26370
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_011.webp",
+      "b": 26348
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_051-1.webp",
+      "b": 25820
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_suite_aire.webp",
+      "b": 25358
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/06_suite_agua.webp",
+      "b": 25312
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_059-2.webp",
+      "b": 25256
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/04_king_mar.webp",
+      "b": 24942
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_022.webp",
+      "b": 24716
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/06/04_suite_agua.webp",
+      "b": 24308
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_046.webp",
+      "b": 24236
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_080-2.webp",
+      "b": 23892
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_king_selva-1.webp",
+      "b": 23526
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_doble_mar.webp",
+      "b": 23088
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/11_doble_avenida.webp",
+      "b": 22942
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/05/02_king_mar.webp",
+      "b": 22730
+    },
+    {
+      "f": "azucarhotel.com/wp-content/uploads/2025/04/img_azucar_028.webp",
+      "b": 22680
+    }
+  ],
+  "pesoPorExtension": {
+    ".html": {
+      "n": 46,
+      "bytes": 4992852
+    },
+    ".css": {
+      "n": 42,
+      "bytes": 333869
+    },
+    ".js": {
+      "n": 18,
+      "bytes": 727596
+    },
+    ".png": {
+      "n": 3,
+      "bytes": 246722
+    },
+    ".eot": {
+      "n": 2,
+      "bytes": 126522
+    },
+    ".gif": {
+      "n": 3,
+      "bytes": 14498
+    },
+    ".webp": {
+      "n": 244,
+      "bytes": 12437956
+    },
+    ".mp4": {
+      "n": 1,
+      "bytes": 1096923
+    },
+    ".ttf": {
+      "n": 1,
+      "bytes": 154020
+    },
+    ".svg": {
+      "n": 1,
+      "bytes": 4598
+    },
+    ".json": {
+      "n": 44,
+      "bytes": 947741
+    },
+    "(sin-ext)": {
+      "n": 22,
+      "bytes": 97228
+    },
+    ".php": {
+      "n": 2,
+      "bytes": 847
+    },
+    ".txt": {
+      "n": 1,
+      "bytes": 5476
+    }
+  }
+}

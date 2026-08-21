@@ -66,7 +66,8 @@ google-api-key|AIza[0-9A-Za-z_-]{35}
 aws-access-key|AKIA[0-9A-Z]{16}
 stripe-live|[sr]k_live_[0-9a-zA-Z]{16,}
 github-token|gh[pousr]_[A-Za-z0-9]{30,}
-slack-token|xox[baprs]-[A-Za-z0-9-]{10,}'
+slack-token|xox[baprs]-[A-Za-z0-9-]{10,}
+session-cookie|(?i:JSESSIONID|PHPSESSID|ASP\.NET_SessionId|AWSALB|AWSALBCORS|connect\.sid|laravel_session|_session_id)[\t ;=]+\K[A-Za-z0-9%+\/=_.-]{16,}'
 
   local ARCHIVOS
   ARCHIVOS=$(find "$DEST/archivos" -type f \( -iname '*.html' -o -iname '*.htm' -o -iname '*.js' \
@@ -135,7 +136,7 @@ procesar_captura() {
   fi
 
   # 2. Copia, excluyendo artefactos de HTTrack en origen
-  ( cd "$SRC" && tar cf - --exclude './hts-cache' --exclude './^' . ) \
+  ( cd "$SRC" && tar cf - --exclude './hts-cache' --exclude './^' --exclude './cookies.txt' . ) \
     | ( cd "$DEST/archivos" && tar xf - )
 
   # 3. Redactar credenciales antes de que git las vea

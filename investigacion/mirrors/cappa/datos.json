@@ -1,0 +1,2303 @@
+{
+  "resumen": {
+    "paginas": 41,
+    "es": 41,
+    "en": 0,
+    "archivos": 150,
+    "bytes": 19002747
+  },
+  "hallazgos": [
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "2 <title> duplicado(s): \"The Cappa Luxury Hotel\" ×35 · \"404 Not Found\" ×5"
+    },
+    {
+      "sev": "alta",
+      "tema": "Móvil",
+      "det": "1 página(s) sin meta viewport → no responsivo"
+    },
+    {
+      "sev": "alta",
+      "tema": "SEO",
+      "det": "Sin datos estructurados schema.org — un hotel sin schema.org/Hotel pierde presentación enriquecida en Google"
+    },
+    {
+      "sev": "alta",
+      "tema": "A11y",
+      "det": "5 página(s) sin atributo lang en <html> (WCAG 3.1.1)"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO",
+      "det": "5 de 41 páginas sin meta description"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO/A11y",
+      "det": "13 página(s) sin exactamente un <h1>"
+    },
+    {
+      "sev": "media",
+      "tema": "SEO",
+      "det": "41 página(s) sin canonical"
+    },
+    {
+      "sev": "media",
+      "tema": "Rendimiento",
+      "det": "715 <img> sin width/height → provoca CLS"
+    },
+    {
+      "sev": "media",
+      "tema": "Rendimiento",
+      "det": "0 de 52 imágenes en formato moderno (WebP/AVIF)"
+    },
+    {
+      "sev": "media",
+      "tema": "A11y",
+      "det": "35 página(s) con salto en la jerarquía de encabezados (ej. h2 → h5 en `duruthemes.com/demo/html/cappa/demo1-light/about.html`) — rompe la navegación por lector de pantalla (WCAG 1.3.1)"
+    }
+  ],
+  "huella": {
+    "wordpress": false,
+    "tema": [],
+    "plugins": [],
+    "jquery": true,
+    "generators": []
+  },
+  "pages": [
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/404.html",
+      "bytes": 10161,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 1,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 1,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/about.html",
+      "bytes": 34301,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "About Us"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 19,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 19,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/blog2.html",
+      "bytes": 1251,
+      "lang": null,
+      "title": "404 Not Found",
+      "titleLen": 13,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 7
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/careers.html",
+      "bytes": 22362,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Job Opening"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/coming-soon.html",
+      "bytes": 6891,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 1,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/contact.html",
+      "bytes": 24391,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Contact Us"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/css/plugins/Flaticon.html",
+      "bytes": 1251,
+      "lang": null,
+      "title": "404 Not Found",
+      "titleLen": 13,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 7
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/css/plugins/owl.video.play.html",
+      "bytes": 1251,
+      "lang": null,
+      "title": "404 Not Found",
+      "titleLen": 13,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 7
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/facilities.html",
+      "bytes": 23355,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Hotel Facilities"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/faq.html",
+      "bytes": 25280,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Frequently Asked Questions"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/gallery.html",
+      "bytes": 26781,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Our Gallery"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 20,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 20,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "bytes": 59263,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience",
+        "The Perfect Base For You",
+        "Enjoy The Best Moments of Life"
+      ],
+      "nH1": 3,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "bytes": 57793,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 1,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "bytes": 51790,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "The Perfect Base For You"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "bytes": 55094,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "The Perfect Base For You"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "bytes": 56070,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "bytes": 57377,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 11
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "bytes": 60963,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 14
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "bytes": 60923,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience",
+        "The Perfect Base For You",
+        "Enjoy The Best Moments of Life"
+      ],
+      "nH1": 3,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 33,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 33,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "bytes": 64672,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience",
+        "The Perfect Base For You",
+        "Enjoy The Best Moments of Life"
+      ],
+      "nH1": 3,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 29,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 29,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "bytes": 60438,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience",
+        "The Perfect Base For You",
+        "Enjoy The Best Moments of Life"
+      ],
+      "nH1": 3,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 35,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 35,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "bytes": 53607,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "bytes": 57176,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Enjoy a Luxury Experience"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "bytes": 58322,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 4
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "bytes": 53873,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "The best five-star luxury hotel"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 1,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "bytes": 57442,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "The best five-star luxury hotel"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h4",
+      "imgs": 34,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 34,
+      "imgsLazy": 0,
+      "scriptsInline": 1,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/news.html",
+      "bytes": 25558,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Our News"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 13,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 13,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/news2.html",
+      "bytes": 22217,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Our News"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/post.html",
+      "bytes": 22776,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Historic Restaurant"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 9,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 9,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/post2.html",
+      "bytes": 1251,
+      "lang": null,
+      "title": "404 Not Found",
+      "titleLen": 13,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 7
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/post3.html",
+      "bytes": 1251,
+      "lang": null,
+      "title": "404 Not Found",
+      "titleLen": 13,
+      "description": null,
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "404"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": null,
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 7
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/pricing.html",
+      "bytes": 25604,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Extra Pricing"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 13,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 13,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/restaurant.html",
+      "bytes": 36266,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 7,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 7,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "bytes": 40643,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 17,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 17,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "bytes": 32048,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Rooms & Suites"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 16,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 16,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "bytes": 37607,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Rooms & Suites"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 15,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 15,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 5
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "bytes": 37699,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Rooms & Suites"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 11,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 11,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/services.html",
+      "bytes": 24833,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Our Services"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 11,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 11,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/spa-wellness.html",
+      "bytes": 27356,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [],
+      "nH1": 0,
+      "saltoJerarquia": "h2 → h6",
+      "imgs": 10,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 10,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    },
+    {
+      "ruta": "duruthemes.com/demo/html/cappa/demo1-light/team.html",
+      "bytes": 26354,
+      "lang": "en",
+      "title": "The Cappa Luxury Hotel",
+      "titleLen": 22,
+      "description": "THE CAPPA is a modern, elegant HTML template for luxury hotels, resorts, and vacation rentals. Fully responsive, customizable, and perfect for hospitality websites.",
+      "canonical": null,
+      "hreflang": [],
+      "robots": "index, follow",
+      "viewport": true,
+      "generator": null,
+      "h1": [
+        "Meet The Team"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h2 → h5",
+      "imgs": 13,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 13,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 2
+    },
+    {
+      "ruta": "index.html",
+      "bytes": 5270,
+      "lang": "en",
+      "title": "Local index - HTTrack Website Copier",
+      "titleLen": 36,
+      "description": "HTTrack is an easy-to-use website mirror utility. It allows you to download a World Wide website from the Internet to a local directory,building recursively all structures, getting html, images, and other files from the server to your computer. Links are rebuiltrelatively so that you can freely browse to the local site (works with any browser). You can mirror several sites together so that you can jump from one toanother. You can, also, update an existing mirror site, or resume an interrupted download. The robot is fully configurable, with an integrated help",
+      "canonical": null,
+      "hreflang": [],
+      "robots": null,
+      "viewport": false,
+      "generator": null,
+      "h1": [
+        "Index of locally available sites:"
+      ],
+      "nH1": 1,
+      "saltoJerarquia": "h1 → h6",
+      "imgs": 0,
+      "imgsSinAlt": 0,
+      "imgsSinDim": 0,
+      "imgsLazy": 0,
+      "scriptsInline": 0,
+      "estilosInline": 0
+    }
+  ],
+  "forms": [
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/404.html",
+      "action": "(vacío)",
+      "method": "GET",
+      "campos": [
+        "search"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/careers.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/coming-soon.html",
+      "action": "(vacío)",
+      "method": "GET",
+      "campos": [
+        "email"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/contact.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/mail.php",
+      "method": "POST",
+      "campos": [
+        "name",
+        "email",
+        "phone",
+        "subject",
+        "message"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/contact.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/facilities.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/faq.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/gallery.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/news.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/news2.html",
+      "action": "(vacío)",
+      "method": "GET",
+      "campos": [
+        "search"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/post.html",
+      "action": "(vacío)",
+      "method": "POST",
+      "campos": [
+        "name",
+        "email",
+        "message"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/post.html",
+      "action": "(vacío)",
+      "method": "GET",
+      "campos": [
+        "search"
+      ],
+      "labels": 0
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/pricing.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "action": "(vacío)",
+      "method": "GET",
+      "campos": [],
+      "labels": 5
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/services.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/team.html",
+      "action": "https://duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "method": "GET",
+      "campos": [],
+      "labels": 4
+    }
+  ],
+  "jsonld": [],
+  "enlacesReserva": [
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index10.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index11.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index12.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index13.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 150$ / Night Junior Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 200$ / Night Family Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 250$ / Night Double Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 300$ / Night Deluxe Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 150$ / Night Superior Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 450$ / Night Furka Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 250$ / Night Grand Deluxe Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 450$ / Night Gemsstock Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "room-details.html",
+      "texto": "Book 300$ / Night Grand Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index14.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 150$ / Night Junior Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 200$ / Night Family Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 250$ / Night Double Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 300$ / Night Deluxe Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 150$ / Night Superior Room"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 450$ / Night Furka Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 250$ / Night Grand Deluxe Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 450$ / Night Gemsstock Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "room-details.html",
+      "texto": "Book 300$ / Night Grand Suite"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index15.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index4.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index5.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index6.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index7.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index8.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "tel:8551004444",
+      "texto": "855 100 4444 Reservation"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/index9.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/room-details.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms2.html",
+      "href": "#",
+      "texto": "Book Now"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    },
+    {
+      "pagina": "duruthemes.com/demo/html/cappa/demo1-light/rooms3.html",
+      "href": "rooms2.html",
+      "texto": "Book"
+    }
+  ],
+  "redirecciones": [],
+  "tiposSchema": [],
+  "dominiosExternos": [
+    {
+      "dominio": "fonts.googleapis.com",
+      "n": 70,
+      "ctx": [
+        "link"
+      ]
+    },
+    {
+      "dominio": "fonts.gstatic.com",
+      "n": 35,
+      "ctx": [
+        "link"
+      ]
+    },
+    {
+      "dominio": "google.com",
+      "n": 1,
+      "ctx": [
+        "src"
+      ]
+    },
+    {
+      "dominio": "youtu.be",
+      "n": 20,
+      "ctx": [
+        "enlace"
+      ]
+    },
+    {
+      "dominio": "duruthemes.com",
+      "n": 6,
+      "ctx": [
+        "src"
+      ]
+    }
+  ],
+  "imagenes": [
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/7.jpg",
+      "b": 378956
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/7.jpg",
+      "b": 378956
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/restaurant/1.jpg",
+      "b": 340906
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/restaurant/3.jpg",
+      "b": 325952
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/5.jpg",
+      "b": 323542
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/spa/1.jpg",
+      "b": 306240
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/restaurant/2.jpg",
+      "b": 295499
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/4.jpg",
+      "b": 294799
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/3.jpg",
+      "b": 294799
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/fonts/Flaticon.svg",
+      "b": 285661
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/spa/2.jpg",
+      "b": 285423
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/2.jpg",
+      "b": 267125
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/1.jpg",
+      "b": 236600
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/fonts/themify.svg",
+      "b": 234269
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/slider/4.jpg",
+      "b": 229909
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/6.jpg",
+      "b": 201603
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/6.jpg",
+      "b": 201603
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/3.jpg",
+      "b": 198484
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/10.jpg",
+      "b": 198484
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/1.jpg",
+      "b": 190383
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/4.jpg",
+      "b": 178601
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/5.jpg",
+      "b": 177199
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/9.jpg",
+      "b": 174085
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/3.jpg",
+      "b": 170812
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/2.jpg",
+      "b": 170760
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/spa/3.jpg",
+      "b": 163173
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/5.jpg",
+      "b": 146638
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/1.jpg",
+      "b": 131531
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/rooms/8.jpg",
+      "b": 131531
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/4.jpg",
+      "b": 88016
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/news/2.jpg",
+      "b": 80357
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/5.jpg",
+      "b": 62905
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/6.jpg",
+      "b": 56378
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/2.jpg",
+      "b": 42044
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/pricing/1.jpg",
+      "b": 42001
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/3.jpg",
+      "b": 33351
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/pricing/4.jpg",
+      "b": 30931
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/pricing/2.jpg",
+      "b": 28891
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/pricing/3.jpg",
+      "b": 26576
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/team/1.jpg",
+      "b": 25543
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/1.png",
+      "b": 25199
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/4.png",
+      "b": 17573
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/quot.png",
+      "b": 15824
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/3.png",
+      "b": 13735
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/5.png",
+      "b": 13593
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/2.png",
+      "b": 11190
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/logo.png",
+      "b": 9165
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/clients/6.png",
+      "b": 8641
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/img/favicon.png",
+      "b": 5213
+    },
+    {
+      "f": "backblue.gif",
+      "b": 4243
+    },
+    {
+      "f": "duruthemes.com/demo/html/cappa/demo1-light/css/plugins/close.png",
+      "b": 1779
+    },
+    {
+      "f": "fade.gif",
+      "b": 828
+    }
+  ],
+  "pesoPorExtension": {
+    ".gif": {
+      "n": 2,
+      "bytes": 5071
+    },
+    ".html": {
+      "n": 41,
+      "bytes": 1408811
+    },
+    ".css": {
+      "n": 14,
+      "bytes": 959434
+    },
+    ".png": {
+      "n": 10,
+      "bytes": 121912
+    },
+    ".eot": {
+      "n": 4,
+      "bytes": 238868
+    },
+    ".svg": {
+      "n": 2,
+      "bytes": 519930
+    },
+    ".ttf": {
+      "n": 9,
+      "bytes": 5962096
+    },
+    ".woff": {
+      "n": 2,
+      "bytes": 80936
+    },
+    ".woff2": {
+      "n": 8,
+      "bytes": 2173636
+    },
+    ".jpg": {
+      "n": 38,
+      "bytes": 6910586
+    },
+    ".js": {
+      "n": 19,
+      "bytes": 618528
+    },
+    ".txt": {
+      "n": 1,
+      "bytes": 2939
+    }
+  }
+}
