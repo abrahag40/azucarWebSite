@@ -24,7 +24,7 @@
 | 🔴 | SEO | 1 <title> duplicado(s): "Azúcar | Hotel Boutique Frente al Mar en la Z" ×2 |
 | 🔴 | Móvil | 1 página(s) sin meta viewport → no responsivo |
 | 🔴 | SEO | 12 página(s) con meta robots noindex — invisibles para Google |
-| 🔴 | Enlaces | 54 enlace(s) interno(s) no resuelven a ningun archivo (14 destino(s) distintos): `/nosotros` · `/habitaciones` · `/politicas` · `/nosotros#Spa` · `/nosotros#Daypass` · `/nosotros#BeachClub` y 8 mas |
+| 🔴 | Enlaces | 54 enlace(s) interno(s) no resuelven a ningun archivo (14 destino(s) distintos): `/nosotros` · `/habitaciones` · `/politicas` · `/nosotros#Spa` · `/nosotros#Daypass` · `/nosotros#BeachClub` · `/nosotros#Eventos` · `/nosotros#Wellness` · `/experiencias` · `/restaurante` · `/galeria` · `/contacto` · `/terminos-y-condiciones` · `/politica-de-privacidad` |
 | 🟡 | SEO/A11y | 3 página(s) sin exactamente un <h1> |
 | 🟡 | SEO | 1 página(s) sin canonical |
 | 🟡 | Rendimiento | 40 <img> sin width/height → provoca CLS |

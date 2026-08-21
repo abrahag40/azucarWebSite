@@ -315,9 +315,15 @@ for (const e of enlacesInternos) {
 }
 if (rotos.length) {
   const porDestino = [...new Set(rotos.map(r => r.href))];
+  // Se listan TODOS los destinos hasta 24, y no los seis primeros. El corte en
+  // seis escondio un 404 real —una imagen que el build no emitia— detras de
+  // dieciocho enlaces a paginas aun no construidas, que son ruido conocido. Un
+  // informe que trunca la lista deja de servir en cuanto hay ruido conocido:
+  // justo cuando mas falta hace.
+  const MAX = 24;
   F('alta', 'Enlaces', `${rotos.length} enlace(s) interno(s) no resuelven a ningun archivo `
-    + `(${porDestino.length} destino(s) distintos): ${porDestino.slice(0, 6).map(h => `\`${h}\``).join(' · ')}`
-    + (porDestino.length > 6 ? ` y ${porDestino.length - 6} mas` : ''));
+    + `(${porDestino.length} destino(s) distintos): ${porDestino.slice(0, MAX).map(h => `\`${h}\``).join(' · ')}`
+    + (porDestino.length > MAX ? ` y ${porDestino.length - MAX} mas` : ''));
 }
 
 const paginasError = pages.filter(esError);

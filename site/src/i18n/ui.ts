@@ -62,6 +62,9 @@ export const ui = {
     'ficha.porConfirmar': 'Dato por confirmar con el hotel',
 
     'galeria.titulo': 'Galería',
+    'galeria.pagMeta': 'La playa, el roof top, los jardines y las áreas comunes de Azúcar Hotel Tulum, en fotografías del propio hotel.',
+    'galeria.entrada': 'La playa, el roof top y las áreas comunes. Cada habitación tiene su propia galería.',
+    'galeria.verAlojamiento': 'Ver el alojamiento',
     'galeria.visor': 'Visor de fotografías',
     'galeria.ampliar': 'Ampliar la fotografía {n} de {total}',
     'galeria.alt': '{nombre}, fotografía {n}',
@@ -150,6 +153,9 @@ export const ui = {
     'ficha.porConfirmar': 'Detail pending confirmation by the hotel',
 
     'galeria.titulo': 'Gallery',
+    'galeria.pagMeta': 'The beach, the rooftop, the gardens and the common areas of Azúcar Hotel Tulum, in the hotel’s own photographs.',
+    'galeria.entrada': 'The beach, the rooftop and the common areas. Each room has its own gallery.',
+    'galeria.verAlojamiento': 'View the rooms',
     'galeria.visor': 'Photo viewer',
     'galeria.ampliar': 'Enlarge photo {n} of {total}',
     'galeria.alt': '{nombre}, photo {n}',

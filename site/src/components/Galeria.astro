@@ -30,7 +30,7 @@
  *   · Marca inerte el resto de la página para el lector de pantalla.
  * Reimplementar eso a mano es la fuente clásica de trampas de foco rotas.
  */
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { usarT, type Idioma } from '../i18n/ui';
 
@@ -39,14 +39,72 @@ interface Props {
   /** Nombre del tipo de alojamiento, para construir alternativas con sentido. */
   nombre: string;
   idioma: Idioma;
+  /**
+   * Textos alternativos propios, uno por imagen. Cuando se pasan, sustituyen a
+   * los generados a partir de `nombre`.
+   *
+   * Existen porque la galería general del hotel muestra la propiedad —playa,
+   * roof top, fachada, jardín— y ahí «Suite Mar, fotografía 3» no describiría
+   * nada. En las fichas de alojamiento el patrón generado sí sirve, porque todas
+   * las fotos son del mismo tipo de habitación y la vista ya está escrita al
+   * lado. Se extiende el componente en vez de duplicarlo: el visor y su trampa
+   * de foco ya están probados, y mantener dos copias garantizaría que una de las
+   * dos se quede atrás.
+   */
+  alternativas?: string[];
+  /** Título de la sección. Por defecto, «Galería». */
+  titulo?: string;
+  /** El <h2> pasa a <h1> cuando la galería ES la página, no una sección de ella. */
+  comoTitular?: boolean;
+  /**
+   * Proporción de la miniatura. `vertical` (3:4) es la de las fichas de
+   * alojamiento, donde TODAS las fotos son verticales y el recorte no quita
+   * nada. `cuadrada` es para la galería general, cuyo material está mezclado:
+   * de las ocho fotos de propiedad, cinco son apaisadas 4:3 y tres verticales
+   * 3:4. Recortar una panorámica del roof top a 3:4 se lleva el 44 % de su
+   * ancho —deja de reconocerse—; el cuadrado quita un 25 % simétrico a unas y
+   * otras. La foto entera, sin recortar, está a un clic en el visor.
+   */
+  proporcion?: 'vertical' | 'cuadrada';
 }
-const { imagenes, nombre, idioma } = Astro.props;
+const { imagenes, nombre, idioma, alternativas, titulo, comoTitular = false,
+        proporcion = 'vertical' } = Astro.props;
 const t = usarT(idioma);
+const rotulo = titulo ?? t('galeria.titulo');
+const alt = (i: number) => alternativas?.[i] ?? t('galeria.alt', { nombre, n: i + 1 });
+
+/**
+ * La imagen grande a la que apunta cada miniatura —y que el visor muestra—.
+ *
+ * ── POR QUÉ NO `img.src` ────────────────────────────────────────────────────
+ * Era `href={img.src}`, y eso **producía un 404 en producción**. `img.src` es la
+ * ruta del archivo ORIGINAL, y Astro sólo lo emite si alguien lo pide con ese
+ * nombre exacto. Vite además deduplica por hash de contenido: dos archivos
+ * idénticos con nombres distintos colapsan en uno, y `src` acaba apuntando al
+ * nombre del OTRO. Dos de las ocho fotos de la galería general resultaron ser
+ * byte a byte las mismas que el hero y la franja de la portada, así que su
+ * enlace señalaba a un archivo que el build nunca escribió.
+ *
+ * `getImage()` devuelve una derivada que el build **garantiza** que emite. De
+ * paso, el visor deja de servir el original intacto —hasta 1600 px sin tocar—
+ * y sirve una versión con la misma calidad 50 que el resto del sitio.
+ */
+const grandes = await Promise.all(
+  imagenes.map((src) => getImage({ src, width: 1400, format: 'webp', quality: 50 })),
+);
 ---
 {imagenes.length > 0 && (
-  <section class="seccion seccion--calida galeria" aria-labelledby="galeria-titulo">
+  <section class={`seccion seccion--calida galeria galeria--${proporcion}`} aria-labelledby="galeria-titulo">
     <div class="contenedor">
-      <h2 id="galeria-titulo" class="galeria__titulo">{t('galeria.titulo')}</h2>
+      {comoTitular
+        ? <h1 id="galeria-titulo" class="galeria__titulo">{rotulo}</h1>
+        : <h2 id="galeria-titulo" class="galeria__titulo">{rotulo}</h2>}
+
+      {/* Entradilla opcional, DESPUÉS del encabezado. Estaba en una sección
+          aparte encima y el resultado se leía al revés: primero un párrafo
+          suelto, luego el título de la página. El texto que presenta algo va
+          debajo de su nombre, no antes. */}
+      <slot name="entrada" />
 
       <ul class="galeria__rejilla" role="list">
         {imagenes.map((img, i) => (
@@ -55,13 +113,13 @@ const t = usarT(idioma);
                 siga sirviendo con el JavaScript desactivado o caído. */}
             <a
               class="galeria__enlace"
-              href={img.src}
+              href={grandes[i].src}
               data-galeria={i}
               aria-label={t('galeria.ampliar', { n: i + 1, total: imagenes.length })}
             >
               <Image
                 src={img}
-                alt={t('galeria.alt', { nombre, n: i + 1 })}
+                alt={alt(i)}
                 widths={[240, 400, 640]}
                 sizes="(min-width: 62rem) 15rem, (min-width: 34rem) 30vw, 45vw"
                 loading="lazy"
@@ -163,8 +221,10 @@ const t = usarT(idioma);
 <style>
   .galeria__titulo {
     font-size: var(--text-2xl);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
   }
+  /* Cuando no hay entradilla, el título conserva su separación original. */
+  .galeria__titulo:last-of-type { margin-bottom: var(--space-6); }
 
   /* Móvil: dos columnas. Una sola dejaría una tira larguísima que obliga a
      mucho scroll para hacerse una idea del conjunto, que es para lo que está
@@ -181,7 +241,6 @@ const t = usarT(idioma);
 
   .galeria__enlace {
     display: block;
-    aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: var(--radius-sm);
     background: var(--color-surface-alt);
@@ -193,6 +252,13 @@ const t = usarT(idioma);
     transition: scale var(--dur) var(--ease);
   }
   .galeria__enlace:hover :global(img) { scale: 1.05; }
+
+  /* La proporción va en una clase y NO en un `style=` en línea: la CSP del
+     sitio autoriza los estilos por hash, y los hashes no cubren los atributos
+     `style` —eso exigiría `'unsafe-hashes'`—. Hoy el build tiene cero atributos
+     de estilo en línea y conviene que siga así. */
+  .galeria--vertical .galeria__enlace { aspect-ratio: 3 / 4; }
+  .galeria--cuadrada .galeria__enlace { aspect-ratio: 1 / 1; }
 
   @media (min-width: 34rem) {
     .galeria__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }

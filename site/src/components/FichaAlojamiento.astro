@@ -35,12 +35,18 @@ const t = usarT(idioma);
 /** Las mismas claves que usa `verificado` en el esquema del contenido. */
 type Marca = NonNullable<typeof data.verificado>[number];
 const verificado = new Set<Marca>(data.verificado ?? []);
-const datos: { clave: Marca; etiqueta: string; valor: string }[] = [
+type Dato = { clave: Marca; etiqueta: string; valor: string };
+// El `satisfies` del ramo condicional no es adorno: sin el, TypeScript ensancha
+// `'metros'` a `string` —el array literal de dentro del ternario no recibe tipo
+// contextual— y `astro check` fallaba. Fallaba desde hacia varios commits, y no
+// se vio porque Cloudflare NO corre `check`: desplegaba en verde con el CI en
+// rojo. Un CI que falla y no bloquea nada deja de leerse a las dos semanas.
+const datos: Dato[] = [
   { clave: 'capacidad', etiqueta: t('ficha.capacidad'), valor: t('alojamiento.capacidad', { n: data.capacidadMaxima }) },
   { clave: 'camas',     etiqueta: t('ficha.camas'),     valor: data.camas[idioma] },
   { clave: 'vista',     etiqueta: t('ficha.vista'),     valor: data.vista[idioma] },
   ...(data.metrosCuadrados
-    ? [{ clave: 'metros', etiqueta: t('ficha.metros'), valor: `${data.metrosCuadrados} m²` }]
+    ? [{ clave: 'metros', etiqueta: t('ficha.metros'), valor: `${data.metrosCuadrados} m²` } satisfies Dato]
     : []),
 ];
 ---

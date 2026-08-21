@@ -1,0 +1,58 @@
+---
+/**
+ * Galería general (H4.4).
+ *
+ * Deliberadamente SIN banner de imagen: la página entera son fotografías, así
+ * que una foto grande de cabecera sólo añadiría un scroll de peaje antes de lo
+ * que el huésped viene a ver. Es la única página del sitio que no lo lleva, y
+ * por esa razón.
+ */
+import Base from '../../../layouts/Base.astro';
+import Galeria from '../../../components/Galeria.astro';
+import { fotos } from '../../../data/galeria';
+import { usarT, ruta } from '../../../i18n/ui';
+const idioma = 'en' as const;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="galeria"
+  titulo={`${t('galeria.titulo')} | Azúcar Hotel Tulum`}
+  descripcion={t('galeria.pagMeta')}
+>
+  <Galeria
+    imagenes={fotos.map((f) => f.imagen)}
+    alternativas={fotos.map((f) => f.alt[idioma])}
+    nombre="Azúcar Hotel Tulum"
+    titulo={t('galeria.titulo')}
+    comoTitular
+    proporcion="cuadrada"
+    idioma={idioma}
+  >
+    <div slot="entrada" class="galeria-entrada">
+      <p>{t('galeria.entrada')}</p>
+      <p><a class="boton boton--secundario" href={ruta(idioma, 'alojamiento')}>
+        {t('galeria.verAlojamiento')}
+      </a></p>
+    </div>
+  </Galeria>
+</Base>
+
+<style>
+  .galeria-entrada {
+    max-width: var(--container-text);
+    margin-bottom: var(--space-6);
+  }
+  .galeria-entrada p:first-child {
+    /* Tamaño de cuerpo, NO de titular. A 320 px un `--text-lg` convertía dos
+       frases en cuatro renglones: el mismo defecto que se corrigió en el hero.
+       Sube sólo cuando hay ancho de sobra para que quepan en dos. */
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-4);
+  }
+  @media (min-width: 40rem) {
+    .galeria-entrada p:first-child { font-size: var(--text-lg); }
+  }
+</style>

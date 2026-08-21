@@ -19,14 +19,14 @@ interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
 const { idioma, rutaActual = '', sobreHero = false } = Astro.props;
 const t = usarT(idioma);
 
-// Sólo se enlaza lo que EXISTE. Estaban «Restaurante» y «Galería» y se retiran:
-// el restaurante está bloqueado por la pregunta C0 —el propio hotel dice en su
-// FAQ que no tiene— y la galería general es la historia H4.4, sin construir.
-// Un menú que promete páginas que no existen es la primera grieta de confianza,
-// y además dejaba 348 enlaces rotos en el auditor.
+// Sólo se enlaza lo que EXISTE. «Galería» vuelve al menú porque ya está
+// construida (H4.4). «Restaurante» sigue fuera: está bloqueado por la pregunta
+// C0 —el propio hotel dice en su FAQ que no tiene— y un menú que promete
+// páginas inexistentes es la primera grieta de confianza.
 const enlaces = [
   { clave: 'nav.alojamiento', path: 'alojamiento' },
   { clave: 'nav.servicios',   path: 'servicios' },
+  { clave: 'nav.galeria',     path: 'galeria' },
   { clave: 'nav.ubicacion',   path: 'ubicacion' },
   { clave: 'nav.faq',         path: 'preguntas-frecuentes' },
   { clave: 'nav.contacto',    path: 'contacto' },
