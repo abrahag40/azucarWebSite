@@ -29,7 +29,11 @@ export const ui = {
     'reserva.whatsapp': 'Escribir por WhatsApp',
 
     'hero.eyebrow': 'Zona Hotelera de Tulum · Frente al mar',
-    'hero.titulo': 'El único lugar donde el mar es dulce',
+    // Titular corto a propósito: 36 caracteres caían en tres renglones y el
+    // héroe perdía fuerza. Se conserva el núcleo del lema del hotel —«el mar es
+    // dulce»— y se cede el lema completo a la franja de imagen, que tiene ancho
+    // para lucirlo. Cappa resuelve su héroe en 24 caracteres y dos líneas.
+    'hero.titulo': 'Donde el mar es dulce',
     'hero.entrada': 'Hotel boutique frente al Caribe mexicano, hecho a mano en Tulum desde 2008.',
     'hero.bajar': 'Bajar al contenido',
 
@@ -117,7 +121,7 @@ export const ui = {
     'reserva.whatsapp': 'Message us on WhatsApp',
 
     'hero.eyebrow': 'Tulum Hotel Zone · Beachfront',
-    'hero.titulo': 'The sweetest place at the beach',
+    'hero.titulo': 'Where the sea is sweet',
     'hero.entrada': 'A boutique hotel on the Mexican Caribbean, handcrafted in Tulum since 2008.',
     'hero.bajar': 'Scroll to content',
 

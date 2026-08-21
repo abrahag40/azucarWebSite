@@ -1,4 +1,5 @@
 ---
+import '../styles/fuentes.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
@@ -84,14 +85,21 @@ const schema = {
     <meta property="og:description" content={descripcion} />
     <meta property="og:locale" content={idioma === 'es' ? 'es_MX' : 'en_US'} />
 
-    <!-- Fuentes: preconnect para adelantar el handshake TLS, y display=swap
-         para que el texto sea legible desde el primer frame en vez de quedar
-         invisible mientras carga la fuente. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/* Tipografías autoalojadas — ver src/styles/fuentes.css. Ya no hay
+        `preconnect` ni hoja de estilo de terceros: las declaraciones viajan en
+        el CSS del sitio y los archivos salen del mismo origen.
+
+        `preload` SÓLO de la display. Es la del <h1>, que es el elemento que
+        Chrome elige como LCP en la portada, así que se pide en paralelo con el
+        CSS en vez de esperar a que el CSS se analice para descubrirla.
+        Precargar las cinco sería contraproducente: competirían por el ancho de
+        banda con la fotografía del héroe, que es el otro candidato a LCP. */}
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@300;400&family=Gilda+Display&display=swap"
+      rel="preload"
+      href="/fuentes/gilda-display-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     {/* is:inline — no es un script de cliente: es metadato que debe quedar
