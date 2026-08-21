@@ -274,7 +274,7 @@ escribir, todo lo que pregunta antes de decidir.*
 **Sprint 5. Objetivo del sprint:** *que el sitio esté en producción, sin perder
 posicionamiento y con vuelta atrás probada.*
 
-### H5.1 — Auditoría WCAG 2.2 AA · `M` · 🔄 *marcado auditado y en cero; contraste, foco y objetivos táctiles medidos en navegador. Falta H5.4*
+### H5.1 — Auditoría WCAG 2.2 AA · `M` · ✅ *axe-core 4.13: **0 violaciones** en 22 páginas. Contraste sobre fotografía medido en el píxel. Falta sólo H5.4 (lector de pantalla real)*
 - **Entonces** recorrido completo por teclado sin trampas de foco.
 - **Y** recorrido con lector de pantalla real, no sólo con herramienta automática.
 - **Y** todo contraste ≥ 4.5:1 verificado.
@@ -283,7 +283,7 @@ posicionamiento y con vuelta atrás probada.*
 > Las herramientas automáticas detectan alrededor de un tercio de los problemas reales de
 > accesibilidad. Por eso la revisión manual es requisito, no adorno.
 
-### H5.2 — Core Web Vitals · `M` · 🔴 *requiere PageSpeed desde un navegador real (Abraham)*
+### H5.2 — Core Web Vitals · `M` · ✅ *LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms. Medido con Lighthouse 13, móvil 4G simulada, 2026-08-21. INP real queda para H5.7*
 - **Entonces** en móvil con red 4G simulada: **LCP < 2.5 s · INP < 200 ms · CLS < 0.1**.
 - **Y** la medición queda registrada como evidencia con fecha.
 

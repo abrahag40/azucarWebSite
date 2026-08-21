@@ -287,6 +287,10 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | Auditor propio | **2 hallazgos, ninguno rojo.** Los 90 enlaces a `/reservar/` ya resuelven |
 | Redirecciones | 12 reglas · 25 URLs · 0 fallos |
 | CI | ✅ **verde**, tras trece commits en rojo que nadie vio (L-040). Ahora también corre `npm test` |
+| **Lighthouse** (móvil, 4G) | **rendimiento 99 · accesibilidad 100 · buenas prácticas 100 · SEO 92** ⚠️ |
+| **Core Web Vitals** | **LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms** — los tres dentro de umbral |
+| **axe-core 4.13** | **0 violaciones** en 22 páginas · 33-44 comprobaciones por página |
+| **html-validate** | **0 incidencias** en 38 páginas (se partió de 202) |
 | Pruebas unitarias | 9 casos sobre `componerSolicitud` · 0 dependencias nuevas |
 
 ### 🔴 Contradicción en el contenido del cliente — pregunta C0
@@ -314,7 +318,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **E-PRIV** | Aviso de privacidad conforme a LFPDPPP | Requisito de **entrada** del sprint 3 |
 | **R-01** | Licencia de iconos de Cappa | Sustituibles por un set libre |
 | — | ID de GA4 (`G-…`) | H1.7 |
-| — | Core Web Vitals por PageSpeed | Criterio de salida del sprint 1 |
+
 
 ### Pendientes de Abraham, fuera del carril de software
 
@@ -324,7 +328,9 @@ el cliente vea en la demo exactamente qué debe confirmar.
    0**— y las cuatro decisiones que desbloquean el sprint 3. **Es lo primero.**
 2. Visto bueno a ADR-0003. *(ADR-0004 y ADR-0005 vigentes.)*
 3. Licencia de Cappa (R-01), reducida a iconos e imágenes del demo.
-4. Pasar la URL por PageSpeed y registrar las tres cifras.
+4. ~~Pasar la URL por PageSpeed~~ **HECHO por Claude.** Ver
+   [`medicion-calidad.md`](docs/05-despliegue/medicion-calidad.md). Estaba mal marcado como
+   tarea de Abraham: Chrome está instalado aquí y Lighthouse es el mismo motor.
 
 > ⚠️ **Riesgo de método, dicho en voz alta.** Hay 38 páginas construidas. El sprint 3 ya no
 > está en cero —el formulario existe y los 90 enlaces rotos se cerraron—, pero **no puede
@@ -357,11 +363,13 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
+| **`docs/05-despliegue/medicion-calidad.md`** | **Lighthouse, axe-core y html-validate: evidencia con fecha (H5.1, H5.2)** |
+| `docs/05-despliegue/validacion-html.md` | Validación de HTML y las dos reglas desactivadas |
 | **`docs/05-despliegue/plan-de-reversion.md`** | **Criterio de reversión, tres capas y preparativos de DNS** |
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **49 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **52 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

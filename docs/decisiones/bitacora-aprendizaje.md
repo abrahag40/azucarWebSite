@@ -1068,6 +1068,92 @@ más que una comprobación, y el cuarto caso llega igual.
 
 ---
 
+## L-050 — «Lo hace el cliente» era una suposición que nadie comprobó
+
+**Lección.** H5.2 —Core Web Vitals— estuvo marcada **cinco sprints** como *«requiere
+PageSpeed desde el navegador de Abraham»*. Yo mismo la puse ahí y la repetí en cada informe
+de estado como bloqueante ajeno.
+
+Era falso. Chrome está instalado en la máquina de trabajo, Lighthouse se instala con `npx`,
+y **es el mismo motor que PageSpeed**, con el mismo estrangulamiento móvil 4G que pide el
+criterio. La medición tardó cuatro minutos.
+
+El origen del error es rastreable: **L-034** documentó que el panel del navegador no puede
+medir métricas de pintado —`visibilityState` en `hidden`, el LCP nunca se dispara—. Eso era
+cierto **para ese panel**. De ahí salté a «no puedo medir CWV», que es una conclusión
+distinta y más ancha, y no volví a comprobarla cuando el contexto cambió.
+
+**La regla.** Un bloqueante que no se ha intentado no es un bloqueante: es una hipótesis. Y
+las hipótesis caducan. Antes de escribir «requiere X» en un backlog conviene gastar cinco
+minutos en probarlo, porque esa etiqueta **sobrevive sola durante meses** y nadie la vuelve
+a cuestionar — es demasiado cómoda para los dos lados.
+
+**Antipatrón evitado:** el bloqueante heredado. El que está en la lista desde hace tanto que
+ya nadie recuerda si alguien llegó a intentarlo.
+
+**Y el resultado, que además era bueno:** LCP 1.33–1.86 s, CLS 0.003, TBT 0–26 ms.
+Accesibilidad 100 y buenas prácticas 100. Se pudo haber sabido en el sprint 1.
+
+---
+
+## L-051 — Herramienta de terceros contra herramienta propia: cada una encuentra lo que la otra no
+
+**Lección.** Se pasaron tres herramientas estándar sobre un sitio que **ya estaba en verde**
+según mis tres auditores propios. Lo que encontró cada una es lo interesante:
+
+| Herramienta | Lo que encontró que lo mío no podía |
+|---|---|
+| **Lighthouse** | `/favicon.ico` devolvía **404 en cada visita**. No está en el HTML: es una petición que el navegador hace **sin que nadie se la escriba**. Ningún auditor de marcado puede verlo |
+| **Lighthouse** | 655 ms de *resource load delay* en el LCP. Un dato de la línea de tiempo, invisible en el marcado |
+| **html-validate** | Los dos `<nav>` de la cabecera con la **misma** etiqueta. Mi regla exigía que tuvieran nombre, no que fuera **único** |
+| **html-validate** | Un `<img>` sin `src` en el visor: HTML inválido que algún navegador resuelve contra la URL de la página |
+| **axe-core** | Nada. **Cero violaciones** en 22 páginas — lo que confirma que los auditores propios cubrían bien su terreno |
+
+Y al revés, lo que **sólo** encontraron las herramientas propias: los 90 enlaces rotos a
+`/reservar/`, la regresión del idioma en `/en/`, la fecha en `es-MX` en la página inglesa, y
+el contraste real sobre la fotografía. Ninguna herramienta genérica conoce las reglas de
+este proyecto.
+
+**La regla:** las herramientas estándar cubren lo **genérico** —lo que vale para cualquier
+sitio— y las propias cubren lo **específico** —lo que sólo vale para éste—. No compiten;
+tampoco se sustituyen. Un sitio en verde con las propias puede tener un 404 en cada carga.
+
+**Y un corolario incómodo:** que axe diera cero no significa que el sitio sea accesible.
+Significa que pasa lo que axe sabe comprobar. El propio axe lo admite dejando
+`color-contrast` en «incompleto» sobre fotografías, y falta H5.4: un lector de pantalla real
+manejado por una persona.
+
+---
+
+## L-052 — Medir sin esperar a que el CSS se aplique inventa defectos
+
+**Lección.** axe-core devolvió `target-size` **«serious»** en 10 de 12 páginas, entre 13 y 28
+nodos cada una. Enlaces del menú de 18.5 px de alto donde debería haber 57.
+
+No había ningún defecto. Bajé la espera del iframe de 3000 a 1500 ms y axe corrió **antes de
+que se aplicara la hoja de estilos**. Sin CSS, todo mide la altura de una línea de texto:
+`padding` sin aplicar, `display: block` sin aplicar. La delató un detalle que no encajaba —el
+enlace de «saltar al contenido» medía 120×18.5 cuando debe medir **1×1**—: si eso no estaba
+oculto, es que no había estilos.
+
+Con espera suficiente y esperando a que **una variable CSS resuelva**, las mismas páginas dan
+**cero violaciones**.
+
+Es la tercera vez en dos sesiones que un artefacto de medición se disfraza de hallazgo: el
+`:focus` que no se evalúa sin foco de ventana (L-047), el `scrollIntoView` medido a mitad de
+una animación, y esto.
+
+**La regla, ya con tres casos detrás:** ante un hallazgo automático, la primera pregunta no
+es «¿cómo lo arreglo?» sino **«¿estaba la página en condiciones de ser medida?»**. Y la
+señal más barata para saberlo es buscar un valor que se conozca de antemano —aquí, que el
+enlace de salto mida 1×1— y usarlo como **testigo**: si el testigo falla, la medición entera
+se descarta sin mirarla.
+
+**Antipatrón evitado:** arreglar el síntoma que reporta un instrumento mal calibrado. Habría
+metido `min-height` a trece enlaces que ya median 57 px.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -1090,6 +1176,7 @@ más que una comprobación, y el cuarto caso llega igual.
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
+| R-23 | **Quien pase la URL por PageSpeed verá SEO 92 y «robots.txt is not valid».** Es un artefacto de nuestra propia CSP —`connect-src 'none'` bloquea la lectura que hace Lighthouse—; el archivo es válido y a Googlebot no le afecta | Bajo | Explicación lista en `medicion-calidad.md`. Se resuelve solo en el sprint 3, cuando `connect-src` pase a `'self'` para el formulario |
 | R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
 | R-21 | **El hotel no publica ningún WhatsApp.** Se buscó en toda la captura del sitio vigente: cero enlaces `wa.me`. H3.7 pide «acceso visible en todas las páginas» y no hay número que poner | Medio | Pregunta **B3**, que ya estaba, pero ahora se sabe que la respuesta no existe hoy: hay que pedir que lo creen o retirar H3.7 |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
