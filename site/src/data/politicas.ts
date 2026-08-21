@@ -19,7 +19,21 @@
 import type { Idioma } from '../i18n/ui';
 
 type Texto = Record<Idioma, string>;
-export interface GrupoPoliticas { titulo: Texto; puntos: Texto[] }
+export interface GrupoPoliticas {
+  titulo: Texto;
+  puntos: Texto[];
+  /**
+   * Identificador estable para citar un grupo desde otra página.
+   *
+   * La ficha de cada tipo de alojamiento muestra los horarios de entrada y
+   * salida, porque es donde el huésped decide y no debería tener que irse a
+   * otra página a averiguarlo —es lo que hace la plantilla en `room-details`—.
+   * Referenciarlo **por clave y no por posición**: reordenar los grupos es algo
+   * que va a pasar, y con un índice la ficha empezaría a mostrar la política de
+   * estacionamiento sin que nada fallara.
+   */
+  clave?: string;
+}
 
 export const politicas: GrupoPoliticas[] = [
   {
@@ -43,6 +57,7 @@ export const politicas: GrupoPoliticas[] = [
     ],
   },
   {
+    clave: 'horarios',
     titulo: { es: 'Check-in y check-out', en: 'Check-in and check-out' },
     puntos: [
       { es: 'Check-in a partir de las 15:00. Check-out hasta las 12:00.',

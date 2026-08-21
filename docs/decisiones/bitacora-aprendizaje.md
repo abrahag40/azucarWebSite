@@ -1368,6 +1368,59 @@ descendente escrito antes de que existieran los descendientes es una bomba de re
 
 ---
 
+## L-060 — Una respuesta sólo se reutiliza fuera de su pregunta si se sostiene sola
+
+**Lección.** La ficha de habitación de Cappa lleva check-in, check-out, mascotas y menores:
+las condiciones que deciden la compra, en la página donde se decide. Nuestra ficha no las
+tenía, y quien se preguntaba «¿puedo traer al perro?» tenía que salir a otra página — y quien
+sale de una ficha de producto no siempre vuelve.
+
+El contenido ya existía en `politicas.ts` y `faq.ts`, así que era sólo citarlo. Al hacerlo
+salieron dos trampas:
+
+**1. Citar un grupo entero mete letra pequeña donde estorba.** El grupo «Check-in y check-out»
+tiene cuatro puntos y tres son cargos por salida tardía. En una ficha, eso aleja de la
+decisión en vez de acercar. Se cita **el primer punto**, que es la hora; el resto sigue
+completo en `/politicas/`, a un clic.
+
+**2. Una respuesta sin su pregunta puede quedarse sin sentido.** La respuesta del hotel a
+«¿Aceptan niños?» es, literalmente, **«Sí.»**. Bajo la etiqueta «Menores» queda un «Sí.»
+suelto que no informa de nada. Y la de «¿Puedo llegar después de las 15:00?» empieza por «Sí,
+a cualquier hora», que **detrás del horario parece contradecirlo**.
+
+Descarté la primera por ese motivo y dejé la segunda, que tiene el mismo defecto. Lo vi al
+mirar el resultado renderizado, no al escribirlo.
+
+**La regla que queda:** un fragmento de FAQ sólo se puede reutilizar fuera de su contexto si
+**se sostiene solo**. «Amamos las mascotas, pero por ahora no podemos recibirlas» sí; «Sí.»
+no. Y reescribirlo para que encaje sería inventar texto del cliente — justo lo que este tipo
+de bloque existe para evitar.
+
+**Antipatrón evitado:** reutilizar contenido por su *estructura de datos* en vez de por su
+*sentido*. Que dos textos vivan en el mismo array no los hace intercambiables.
+
+---
+
+## L-061 — Citar por clave, nunca por posición
+
+**Lección.** Para que la ficha muestre los horarios había que señalar un grupo concreto de
+`politicas.ts`. Lo cómodo era `politicas[2]`.
+
+Habría funcionado hoy y fallado en silencio el día que alguien reordene los grupos —algo que
+va a pasar, porque el orden de unas políticas es una decisión editorial que se revisa—. La
+ficha empezaría a mostrar la política de **estacionamiento** bajo el título «Entrada y
+salida», sin error, sin build roto y sin que ningún auditor lo notara.
+
+Se añadió un campo `clave` opcional a `GrupoPoliticas` y a `Pregunta`, y se citan por él. El
+coste es una línea por entrada citada; el beneficio es que un reordenamiento no puede
+producir una mentira.
+
+**La generalización:** cuando un dato se referencia desde otro sitio, necesita un
+identificador que no dependa de cómo esté ordenado. Es la misma razón por la que una clave
+primaria no es el número de fila.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

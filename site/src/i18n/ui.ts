@@ -22,6 +22,12 @@ export const ui = {
     'nav.menu': 'Menú',
     'nav.principal': 'Navegación principal',
     'nav.verTodo': 'Ver todo el alojamiento',
+    // ── Bloque práctico de la ficha (patrón `room-details` de Cappa) ─────────
+    'practicos.titulo': 'Antes de reservar',
+    'practicos.horarios': 'Entrada y salida',
+    'practicos.mascotas': 'Mascotas',
+    'practicos.menores': 'Menores',
+    'practicos.ver': 'Ver todas las políticas',
     'nav.cerrar': 'Cerrar menú',
     'nav.saltar': 'Saltar al contenido',
 
@@ -202,6 +208,11 @@ export const ui = {
     'nav.menu': 'Menu',
     'nav.principal': 'Main navigation',
     'nav.verTodo': 'See all rooms',
+    'practicos.titulo': 'Before you book',
+    'practicos.horarios': 'Check-in and check-out',
+    'practicos.mascotas': 'Pets',
+    'practicos.menores': 'Children',
+    'practicos.ver': 'See all policies',
     'nav.cerrar': 'Close menu',
     'nav.saltar': 'Skip to content',
 

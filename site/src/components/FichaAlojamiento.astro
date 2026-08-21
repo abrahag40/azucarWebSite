@@ -20,6 +20,7 @@
  * confirmar, en lugar de que el aviso viva sólo en la consola.
  */
 import type { CollectionEntry } from 'astro:content';
+import DatosPracticos from './DatosPracticos.astro';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -67,6 +68,12 @@ const datos: Dato[] = [
           <p class="distingue__texto">{data.diferenciador[idioma]}</p>
         </div>
       )}
+
+        {/* Horarios, mascotas y menores: las condiciones que deciden la compra,
+            en la página donde se decide. Es lo que hace `room-details.html` de
+            Cappa, y tiene razón — quien sale de una ficha a buscar la política
+            de mascotas no siempre vuelve. */}
+        <DatosPracticos idioma={idioma} />
     </div>
 
     <aside class="resumen" aria-labelledby="resumen-titulo">

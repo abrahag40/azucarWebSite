@@ -18,7 +18,13 @@
 import type { Idioma } from '../i18n/ui';
 
 type Texto = Record<Idioma, string>;
-export interface Pregunta { p: Texto; r: Texto }
+export interface Pregunta {
+  p: Texto;
+  r: Texto;
+  /** Identificador estable para citar una respuesta desde otra página. Ver la
+   *  nota equivalente en `politicas.ts`: por clave, nunca por posición. */
+  clave?: string;
+}
 
 export const faq: Pregunta[] = [
   {
@@ -75,11 +81,13 @@ export const faq: Pregunta[] = [
          en: 'Yes. Every room and bungalow has air conditioning and a ceiling fan.' },
   },
   {
+      clave: 'mascotas',
     p: { es: '¿Aceptan mascotas?', en: 'Do you accept pets?' },
     r: { es: 'Amamos las mascotas, pero por ahora no podemos recibirlas: no todos los huéspedes se sienten cómodos con animales.',
          en: 'We love pets, but we cannot host them for now: not every guest is comfortable around animals.' },
   },
   {
+      clave: 'menores',
     p: { es: '¿Aceptan niños?', en: 'Do you accept children?' },
     r: { es: 'Sí.', en: 'Yes.' },
   },
@@ -89,6 +97,7 @@ export const faq: Pregunta[] = [
          en: 'Both: an infinity pool facing the sea, and a large jacuzzi with loungers and hammocks on the “Selvamar” rooftop, overlooking the sea and the jungle.' },
   },
   {
+      clave: 'llegadaTarde',
     p: { es: '¿Puedo llegar después de las 15:00, que es la hora de check-in?', en: 'Can I arrive after 3:00 pm, the check-in time?' },
     r: { es: 'Sí, a cualquier hora. Sólo te pedimos avisarnos para esperarte.',
          en: 'Yes, at any time. We only ask that you let us know so we can expect you.' },
