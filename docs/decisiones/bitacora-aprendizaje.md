@@ -796,6 +796,106 @@ controlado, para validar la respuesta antes de necesitarla.
 
 ---
 
+## L-040 — Un CI que falla sin bloquear nada deja de leerse
+
+**Lección.** `astro check` llevaba **trece commits fallando**. El CI estaba en rojo desde
+`feat(catalogo)` y nadie lo miró, porque el despliegue seguía saliendo verde: Cloudflare Pages
+corre `npm run build`, no `npm run check`. Dos tuberías, dos veredictos distintos sobre el
+mismo commit, y el que se veía a diario —el sitio publicado— decía que todo estaba bien.
+
+El error era menor: un `'metros'` que TypeScript ensanchaba a `string` dentro de un ternario.
+Un `satisfies` lo cierra. Lo grave no es el error, es **el tiempo que estuvo visible sin que
+nadie lo leyera**.
+
+**Por qué pasa.** Un semáforo que se pone en rojo y no detiene el tráfico se convierte en
+decoración en cuestión de días. Es el mismo mecanismo que la *alert fatigue* de las guardias
+de producción: la señal que nunca tiene consecuencia se filtra como ruido.
+
+**Antipatrón evitado:** *broken windows* en la integración continua — normalizar el rojo hasta
+que deja de distinguirse un fallo nuevo de los que ya estaban.
+
+**Cómo se aplica aquí.** El CI y el despliegue tienen que dar el mismo veredicto. Cloudflare
+Pages no ejecuta los guardias, así que el CI es la única red y **su rojo tiene que doler**:
+antes del lanzamiento, protección de rama que exija el *check* en verde para fusionar. Y
+mientras tanto, mirarlo después de cada empuje, que cuesta diez segundos.
+
+---
+
+## L-041 — La salida truncada esconde justo el hallazgo nuevo
+
+**Lección.** Este defecto apareció **dos veces en la misma sesión**, en dos herramientas
+distintas y con la misma forma.
+
+*Primera.* El auditor informa de los enlaces internos rotos y listaba **los seis primeros
+destinos** más un «y 13 más». Entre esos trece escondidos había un 404 real y nuevo —una
+imagen que el build no llegaba a escribir— sepultado bajo dieciocho enlaces a las páginas de
+reserva del sprint 3, que son ruido conocido y esperado.
+
+*Segunda.* Yo mismo verificaba los tipos con `npm run check | tail -3`. La herramienta imprime
+`errores / avisos / pistas` y cierra con una línea en blanco, así que `tail -3` me devolvía
+avisos, pistas y el vacío: **la línea de errores quedaba justo fuera del recorte**. Di por
+limpio un proyecto con un error de tipos, y así llevaba trece commits (L-040).
+
+**La regla.** En cuanto una lista contiene ruido conocido, truncarla la vuelve inútil
+exactamente cuando más falta hace: lo viejo ocupa las primeras posiciones y lo nuevo cae en la
+cola cortada. Un informe se trunca por *volumen*, nunca por *defecto*, y lo que se recorta se
+elige por relevancia, no por orden de aparición.
+
+**Y sobre verificar:** si el comando de comprobación recorta su propia salida, no se está
+comprobando nada, se está confirmando un sesgo. Se lee el veredicto completo o no se lee.
+
+**Antipatrón evitado:** *verification theater* — ejecutar el comprobador, mirar sólo el trozo
+que se espera ver, y anunciar que está en verde.
+
+---
+
+## L-042 — Una foto se juzga en la miniatura, no en el visor
+
+**Lección.** La panorámica de la alberca del roof top entró en la galería con todos los votos:
+es la mejor fotografía del hotel. Puesta en la rejilla, se cayó sola. Es una toma ancha con
+mucha duela vacía y la alberca es una franja delgada; el recorte cuadrado la deja en nada. La
+miniatura mostraba tablas de madera y una pérgola.
+
+Funciona a lo grande, como hero. No funciona pequeña. Y **el tamaño al que casi todo el mundo
+la va a ver es el pequeño**: la miniatura la ven todos, el visor sólo quien hace clic.
+
+De paso apareció el segundo motivo para retirarla, que ninguna mirada habría encontrado: era
+**byte a byte la misma imagen del hero**. Lo delató que Vite deduplica por hash de contenido y
+el enlace apuntaba al nombre del otro archivo.
+
+**Cómo se aplica.** La curaduría se hace sobre el recorte real y en el dispositivo real, no
+sobre el archivo original abierto a pantalla completa. Y antes de dar por buena una selección,
+comprobar huellas: dos nombres distintos pueden ser el mismo archivo.
+
+**Antipatrón evitado:** curar fotografía en el visor de escritorio —la mirada del diseñador—
+en lugar de en la rejilla del teléfono, que es la mirada del huésped.
+
+---
+
+## L-043 — `image.src` no es una URL que el build garantice
+
+**Lección.** Las miniaturas enlazaban con `href={img.src}`, que parece lo obvio: la ruta de la
+imagen importada. Producía un **404 en producción**.
+
+`img.src` es la ruta del archivo *original*. En un build estático Astro emite las derivadas que
+`<Image>` genera; el original sólo aparece si algo lo pide con ese nombre exacto. Y Vite
+deduplica por hash: dos archivos idénticos con nombres distintos colapsan en uno, de modo que
+`src` puede acabar apuntando a un nombre que este build no escribió nunca.
+
+La forma correcta es `getImage()`, que devuelve una derivada que el build **garantiza** que
+emite. El beneficio colateral fue grande: el visor dejó de servir originales intactos —hasta
+1600 px sin comprimir— y `dist` adelgazó **1 MB**.
+
+**La generalización, que es lo que vale.** En un empaquetador con hash de contenido, la ruta de
+un recurso es una **promesa del build, no un dato del código fuente**. Sólo se puede enlazar lo
+que se le ha pedido explícitamente que produzca. Un enlace construido a mano a partir de un
+`src` importado es una suposición sobre el resultado de la compilación.
+
+**Antipatrón evitado:** deducir URLs de salida a partir de rutas de entrada. No dan error de
+compilación: dan un 404 el día del lanzamiento.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -818,4 +918,5 @@ controlado, para validar la respuesta antes de necesitarla.
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
+| R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

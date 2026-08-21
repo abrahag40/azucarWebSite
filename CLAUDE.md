@@ -224,6 +224,16 @@ Servicios, ubicación, contacto, preguntas frecuentes y políticas en los dos id
 vigente, traducciones incluidas**. Aviso de privacidad publicado con sus carencias declaradas
 (H4.8 parcial). Queda **H4.4**, la galería general.
 
+**H4.4 — galería general** en `/galeria/` y `/en/gallery/`: ocho fotografías de la propiedad
+con texto alternativo descriptivo propio en los dos idiomas. Reutiliza el visor de H2.3 en vez
+de duplicarlo. La curaduría dejó un dato para Abraham: de las diez fotos de propiedad
+revisadas una a una, **ocho entraron**; el archivo de 244 imágenes es desigual y no admite
+atajos —ordenar por tamaño de archivo no predice si una foto sirve—.
+
+Construirla destapó **tres defectos, dos anteriores a la historia**: un `href` que producía un
+404 en producción (L-043), el CI en rojo desde hacía trece commits (L-040) y dos informes que
+truncaban su salida justo donde estaba el hallazgo nuevo (L-041).
+
 ### Sprint 5 — adelantado lo que caducaba
 
 **Mapa de 301 construido y verificado** (H5.3), porque el inventario de URLs sólo existe
@@ -235,12 +245,13 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **34** (ES + EN) |
-| Archivos JavaScript externos | **0** · 897 bytes en línea sólo en las 16 fichas con galería |
+| Páginas | **36** (ES + EN) |
+| Archivos JavaScript externos | **0** · 897 bytes en línea sólo en las 17 páginas con galería |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
-| Imágenes | 182 WebP · 4 226 KB |
+| Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
 | Auditor propio | 3 hallazgos: 1 real (enlaces a `/reservar/`, sprint 3) + 2 informativos |
 | Redirecciones | 12 reglas · 25 URLs · 0 fallos |
+| CI | ✅ **verde**, tras trece commits en rojo que nadie vio (L-040) |
 
 ### 🔴 Contradicción en el contenido del cliente — pregunta C0
 
@@ -309,7 +320,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | `docs/05-despliegue/mapa-301.md` | Redirecciones del relanzamiento y su prueba |
 | **`docs/05-despliegue/plan-de-reversion.md`** | **Criterio de reversión, tres capas y preparativos de DNS** |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **39 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **43 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 
