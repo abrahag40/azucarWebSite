@@ -130,6 +130,24 @@ for (const f of paginas) {
   // ── 2.4.1 Saltar al contenido ────────────────────────────────────────────
   if (!/href\s*=\s*["']#contenido["']/i.test(doc)) A(pag, 'WCAG 2.4.1', 'sin enlace para saltar al contenido');
 
+  // ── 2.5.8 Enlace solo en su párrafo — AVISO, no fallo ────────────────────
+  // Este auditor NO puede medir cajas: no tiene estilos calculados. Lo que sí
+  // puede es señalar el PATRÓN donde el defecto aparece siempre.
+  //
+  // Un `<a>` dentro de una frase está exento del tamaño mínimo de objetivo —lo
+  // dice el propio criterio 2.5.8, «Inline»—. Un `<a>` que es el contenido
+  // COMPLETO de su párrafo no lo está, y ahí el relleno vertical de un elemento
+  // en línea NO suma a la altura de la caja: se queda en la altura de la
+  // línea, unos 17 px.
+  //
+  // Ha ocurrido TRES veces en este proyecto —pie de página, selector de idioma
+  // y el enlace al aviso de privacidad de la página de solicitud—. A la tercera
+  // deja de ser un descuido y pasa a ser algo que la herramienta debe recordar.
+  const solos = all(/<p\b[^>]*>\s*(<a\b[^>]*>[\s\S]*?<\/a>)\s*<\/p>/gi, doc);
+  if (solos.length)
+    A(pag, 'WCAG 2.5.8', `${solos.length} enlace(s) que ocupan su párrafo entero: `
+      + `verificar que la caja mide 24 px o más de alto (un <a> en línea NO suma su relleno vertical)`);
+
   // ── 1.1.1 Imágenes ───────────────────────────────────────────────────────
   const sinAlt = all(/<img\b[^>]*>/gi, doc).filter((m) => !/\balt(\s*=|[\s>/])/i.test(m[0]));
   if (sinAlt.length) F(pag, 'WCAG 1.1.1', `${sinAlt.length} <img> sin atributo alt`);

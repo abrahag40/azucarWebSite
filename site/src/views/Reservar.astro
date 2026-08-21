@@ -113,7 +113,9 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   }
   .contactos { list-style: none; padding: 0; margin: 0 0 var(--space-4); display: grid; gap: var(--space-2); }
   /* 44 px de alto: los enlaces en línea no suman su relleno vertical a la caja,
-     y este defecto ya salió dos veces en este proyecto (pie y selector de
-     idioma). `display: block` mas altura mínima lo cierra (WCAG 2.5.8). */
-  .contactos a { display: block; min-height: 44px; line-height: 44px; }
+     y este defecto ya salió TRES veces en este proyecto (pie, selector de idioma
+     y el enlace al aviso de aquí abajo). `display: block` mas altura mínima lo
+     cierra (WCAG 2.5.8). */
+  .contactos a,
+  .tarjeta__nota a { display: inline-block; min-height: 44px; line-height: 44px; }
 </style>

@@ -173,6 +173,22 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   /* --- Variante sobre fotografía -------------------------------------------
      Todo lo que va sobre la foto pasa a blanco puro. Sobre el velo del héroe
      (0.3 plano + degradado) el blanco da 7:1 largo, muy por encima del 4.5:1. */
+  /* ⚠️ MARGEN MEDIDO, Y ES ESTRECHO.
+     Sobre el héroe estos textos son blancos y su legibilidad depende de la
+     FOTOGRAFÍA que haya debajo, no de un color. Medido sobre los píxeles reales
+     de `hero-roof-top.webp`, componiendo el degradado de `.hero__velo`
+     (34 % de negro arriba, 6 % al 20 % del alto), en 18 muestras por elemento:
+
+         escritorio 1280 px   logo 5.30:1 · subtítulo 4.93:1 · nav 4.93:1
+         móvil       320 px   logo 9.42:1 · subtítulo 9.60:1
+
+     El mínimo AA para texto pequeño es 4.5:1. En escritorio quedan **4.93:1**:
+     pasa, con un 10 % de margen. Es el punto más ajustado del sitio.
+
+     🔴 Si se cambia la fotografía del héroe por una más clara en su franja
+     superior, esto DEJA DE CUMPLIR y no lo detecta ningún auditor de marcado.
+     Hay que volver a medir. La alternativa estructural sería añadir un velo
+     propio a la cabecera, a costa de la composición de Cappa. */
   .cabecera--sobre-hero .marca,
   .cabecera--sobre-hero .marca__sub,
   .cabecera--sobre-hero .nav__lista a,

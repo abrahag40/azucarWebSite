@@ -982,6 +982,92 @@ ha dejado la trampa armada para la siguiente.
 
 ---
 
+## L-047 — Un auditor que no sabe lo que no puede ver produce ruido, no hallazgos
+
+**Lección.** El barrido de UI en el navegador —contraste, objetivos táctiles y desbordamiento
+sobre 19 rutas y tres anchos— devolvió **175 hallazgos**. Reales había **dos**.
+
+Los 173 restantes eran fallos **de mi auditor**, no del sitio, y de tres clases distintas:
+
+| Falso positivo | Por qué se producía |
+|---|---|
+| «contraste 1.00:1, blanco sobre blanco» ×130 | Buscaba un `background-color` subiendo por el árbol. Sobre una **fotografía** no hay color de fondo, así que encontraba el blanco del `body` y comparaba blanco con blanco |
+| «objetivo táctil de 1×1» en el enlace de salto ×51 | Está oculto hasta recibir foco, por diseño |
+| «8 enlaces invisibles enfocables» | Miraba `display` del propio enlace, no el de sus **ancestros**. El menú móvil entero es `display:none` en escritorio |
+
+Y hubo un cuarto, más traicionero: medí el enlace de salto **con el foco puesto** y seguía
+midiendo 1×1. Conclusión aparente: está roto. Conclusión real: el panel del navegador **no
+tenía foco de ventana**, así que `:focus` no se evaluaba —`elemento.matches(':focus')` daba
+`false` con `document.activeElement === elemento`—. Con un clic previo que diera foco real a
+la ventana, el enlace medía **161 × 50 px** y funcionaba perfectamente.
+
+**La regla.** Una herramienta de auditoría tiene que **declarar lo que no puede ver** y
+callarse ahí, en vez de adivinar. `auditar-accesibilidad.mjs` ya lo hacía —dice por escrito
+que no comprueba contraste ni foco porque no tiene estilos calculados—; el barrido del
+navegador no, y por eso mintió 173 veces.
+
+**Y el corolario que cuesta más aceptar:** 175 hallazgos de los que 173 son ruido es **peor
+que cero hallazgos**. Nadie revisa una lista así dos veces; a la tercera se ignora entera —el
+mismo mecanismo de L-040—. Un auditor ruidoso no es un auditor estricto: es un auditor roto.
+
+---
+
+## L-048 — El contraste sobre una fotografía se mide en el píxel, no en el CSS
+
+**Lección.** Descartados los falsos positivos quedaba una pregunta que **no se puede
+responder leyendo estilos**: ¿los textos blancos de la cabecera y del héroe cumplen sobre la
+foto que hay debajo?
+
+Se resolvió dibujando la propia imagen en un `<canvas>` —es del mismo origen, así que se
+puede leer—, mapeando coordenadas de pantalla a píxeles a través del `object-fit: cover`,
+**componiendo encima los dos velos negros** con su alfa exacta en cada punto, y muestreando
+de 18 a 32 posiciones por elemento.
+
+| Dónde | Peor caso | Mínimo AA |
+|---|---|---|
+| Cabecera sobre héroe · 1280 px | **4.93:1** | 4.5 |
+| Cabecera sobre héroe · 320 px | 9.42:1 | 4.5 |
+| Antetítulo del héroe · 320 px | 6.27:1 | 4.5 |
+| Titular del héroe · 320 px | 6.46:1 | 3 |
+
+**El dato que importa no es que cumpla: es el 4.93.** Queda un 10 % de margen, y ese margen
+depende de **qué fotografía haya puesta**. Cambiar el héroe por una imagen más clara en su
+franja superior rompe el contraste sin que lo detecte ningún auditor de marcado, ningún
+`build` y ningún revisor mirando la página. Escrito en el propio componente, donde lo verá
+quien cambie la foto.
+
+**La generalización:** cuando un color depende de un contenido variable —una foto, un vídeo,
+un fondo elegido por el usuario—, el resultado no es una propiedad del CSS: es una propiedad
+del **contenido**, y hay que volver a medirlo cada vez que el contenido cambia.
+
+---
+
+## L-049 — A la tercera vez, el arreglo no es el arreglo: es la comprobación
+
+**Lección.** Un `<a>` que ocupa su párrafo entero mide **17 px de alto**, porque el relleno
+vertical de un elemento en línea no suma a la caja. WCAG 2.5.8 pide 24.
+
+Apareció en el pie de página. Se arregló. Apareció en el selector de idioma. Se arregló, y
+ahí ya se añadió una comprobación… que no lo cubría. Apareció por **tercera vez** en el
+enlace al aviso de privacidad de la página de solicitud, escrito por mí ese mismo día.
+
+Tres veces el mismo defecto es información sobre el **proceso**, no sobre el código.
+
+Lo que se hizo la tercera vez: una regla en el auditor que señala el **patrón** —un `<p>`
+cuyo único contenido es un `<a>`— como **aviso**, no como fallo. El auditor no puede medir
+cajas y no finge que puede: dice «verifica estos diez sitios». Los diez se midieron en el
+navegador; ocho ya cumplían (44–52 px) y dos no. Se arreglaron.
+
+**Por qué aviso y no fallo.** Un `<a>` dentro de una frase está **exento** del criterio —lo
+dice el propio 2.5.8, «Inline»—. Una regla que lo marcara como fallo produciría falsos
+positivos en cada párrafo con un enlace, y volvería a L-047: ruido. El aviso apunta; la
+persona decide.
+
+**Antipatrón evitado:** arreglar el caso en vez de la clase. Tres arreglos puntuales cuestan
+más que una comprobación, y el cuarto caso llega igual.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -1004,6 +1090,7 @@ ha dejado la trampa armada para la siguiente.
 | R-13 | 🚨 **El sitio actual captura número de tarjeta y CVV por Contact Form 7.** Incumplimiento PCI-DSS 3.3.1 y 4.2.1 + LFPDPPP. Los buzones del hotel contienen un histórico de tarjetas completas | **Crítico** | Despublicar de inmediato, fuera del plan de sprints. Purgar histórico. Sustituir por enlace de pasarela |
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
+| R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
 | R-21 | **El hotel no publica ningún WhatsApp.** Se buscó en toda la captura del sitio vigente: cero enlaces `wa.me`. H3.7 pide «acceso visible en todas las páginas» y no hay número que poner | Medio | Pregunta **B3**, que ya estaba, pero ahora se sabe que la respuesta no existe hoy: hay que pedir que lo creen o retirar H3.7 |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |
