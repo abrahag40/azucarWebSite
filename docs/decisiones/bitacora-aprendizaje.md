@@ -1223,6 +1223,59 @@ hacer la lista de qué falta, conviene preguntarse dónde acaba el sitio y empie
 
 ---
 
+## L-055 — Un patrón compartido escondido en el ámbito de un componente falla en silencio
+
+**Lección.** Cuatro secciones de la portada escribían `class="encabezado encabezado--centrado"`.
+La regla estaba definida **dentro de los estilos con ámbito de `SeccionAmenidades.astro`**, y
+Astro los limita a ese componente. Resultado: **una sección se veía bien y tres no**. Sus
+encabezados salían alineados a la izquierda y con el `<h2>` a tamaño por defecto.
+
+Lo que lo hace peligroso es que **no falla, se degrada**. Una clase que no existe no da error,
+no rompe el build, no la ve ningún auditor: simplemente no aplica nada, y el resultado tiene
+aspecto de decisión de diseño. Estuvo así en tres secciones sin que nadie —yo incluido— lo
+señalara, hasta que Abraham mandó una captura de una sección descuadrada.
+
+Es la **segunda vez en dos sesiones** con la misma forma: el `max-width` del acordeón era un
+dato privado del componente y descentraba la lista cuando otro lo colocaba (L-046 en su
+variante de encapsulación).
+
+**La regla:** si dos componentes usan el mismo nombre de clase, esa clase **no puede vivir en
+el ámbito de uno de ellos**. O va a la hoja compartida, o cada uno define la suya. La opción
+intermedia —definirla en el primero que la necesitó y confiar en que llegue a los demás— no
+existe en un sistema con ámbito por componente.
+
+**Cómo detectarlo:** buscar nombres de clase usados en varios archivos y comprobar dónde se
+definen. Aquí `grep -rn 'encabezado--centrado'` lo habría enseñado en un segundo: seis usos,
+una sola definición, y dentro de un componente.
+
+---
+
+## L-056 — Copiar un patrón sin medir sus dos mitades lo deja peor que no copiarlo
+
+**Lección.** Se reprodujo la sección `services` de Cappa —filas alternadas de foto y texto— y
+el resultado se veía roto. Al medir el original salieron **dos cosas que no había mirado**:
+
+1. **En Cappa esa sección NO tiene encabezado.** Cada fila lleva su antetítulo y su título.
+   Yo le añadí uno.
+2. **Sus filas van dentro del contenedor de 1140 px**, no a sangre. Yo las saqué a sangre.
+
+Las dos juntas producían el defecto que se veía: un encabezado dentro del contenedor y unas
+filas que llegaban al borde de la pantalla, de modo que los dos bloques **no parecían la misma
+sección**. Cada decisión por separado era defendible; combinadas, no.
+
+Y una tercera, esta de contenido: copié también su altura de fila —380 px— sin mirar que los
+párrafos de Cappa ocupan cuatro renglones y los nuestros uno. El bloque de texto medía 108 px
+dentro de 380: **272 px de vacío** que se leían como un error de maquetación. La altura la fija
+el contenido, no la plantilla.
+
+**La regla:** al tomar un patrón prestado hay que medir **el contenedor y el contenido**, no
+sólo la disposición. Un layout copiado con contenido de otra longitud no es el mismo layout.
+
+**Antipatrón evitado:** *cargo cult* de maquetación — reproducir la forma visible de un diseño
+sin las restricciones que la sostienen.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

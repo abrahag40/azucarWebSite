@@ -62,13 +62,17 @@ const tarjetas = [
       </header>
     </div>
 
-    {/* Cada experiencia es una FILA a media pantalla: fotografía en un lado,
+    {/* Cada experiencia es una FILA de dos mitades: fotografía en un lado,
         texto sobre fondo cálido en el otro, alternando el lado en cada fila.
-        Es el reparto exacto de la sección `services` de Cappa —cuatro filas de
-        380 px, imagen izquierda, derecha, izquierda, derecha— y es lo que le da
-        a esa sección su peso: en tres columnas, lo mismo ocupa la mitad y se lee
-        como un pie de foto. */}
-    <ul class="experiencias__filas" role="list">
+        Es el reparto de la sección `services` de Cappa —cuatro filas de 380 px,
+        imagen izquierda, derecha, izquierda, derecha— y es lo que le da su peso:
+        en tres columnas lo mismo ocupa la mitad y se lee como un pie de foto.
+
+        Las filas van DENTRO del contenedor y no a sangre. Se midió el original:
+        su sección `services` vive en un contenedor de 1140 px como todo lo demás.
+        A sangre, el encabezado quedaba dentro del contenedor y las filas fuera,
+        y los dos bloques se leían como si no fueran la misma sección. */}
+    <ul class="experiencias__filas contenedor" role="list">
       {tarjetas.map(({ dato, imagen, etiqueta }, i) => (
         <li class:list={['exp-fila', i % 2 === 1 && 'exp-fila--invertida']}>
           <div class="exp-fila__medio">
@@ -103,30 +107,57 @@ const tarjetas = [
 <style>
   .experiencias { padding-block: clamp(var(--space-7), 8vw, var(--space-9)); }
 
-  .experiencias__filas { list-style: none; padding: 0; margin: var(--space-7) 0 0; }
+  /* `padding-inline` lo aporta `.contenedor`; sólo se anula el de la lista. */
+  .experiencias__filas { list-style: none; padding-block: 0; margin: var(--space-7) auto 0; }
+  .experiencias__filas > li + li { margin-top: var(--space-4); }
 
   /* A partir de 56 rem, dos mitades exactas. Por debajo, la foto arriba y el
      texto debajo: partir 380 px en dos columnas a 320 px deja ambas ilegibles. */
   .exp-fila { display: grid; grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 56rem) {
-    .exp-fila { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 380px; }
+    /* 320 px y no los 380 de Cappa. Sus párrafos ocupan cuatro renglones; los
+       nuestros son de una frase —texto literal del hotel, que no se alarga por
+       rellenar—, y a 380 px el bloque de texto medía 108 px dentro de 380: **272
+       px de vacío** que se leían como un fallo de maquetación. La altura la fija
+       el contenido, no la plantilla. */
+    .exp-fila { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 320px; }
     /* La inversión se hace con `order` y sólo aquí: en móvil el orden del
        marcado —foto, luego texto— ya es el correcto y reordenar separaría el
        orden visual del orden de lectura. */
     .exp-fila--invertida .exp-fila__medio { order: 2; }
   }
 
-  .exp-fila__medio { position: relative; min-height: 260px; background: var(--color-surface-alt); }
+  .exp-fila__medio {
+    position: relative;
+    min-height: 260px;
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    overflow: hidden;
+  }
+  .exp-fila--invertida .exp-fila__medio { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  @media (max-width: 55.99rem) {
+    .exp-fila__medio,
+    .exp-fila--invertida .exp-fila__medio { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+  }
   .exp-fila__medio :global(img) {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
   }
 
+  /* Las esquinas exteriores de la fila se redondean en las DOS mitades, no sólo
+     en la fotografía: si sólo una lado va redondeado, la fila deja de leerse
+     como una pieza y parece una foto pegada a un rectángulo. */
   .exp-fila__cuerpo {
     display: grid; align-items: center;
     background: var(--color-surface-warm);
     padding: clamp(var(--space-6), 5vw, var(--space-8));
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .exp-fila--invertida .exp-fila__cuerpo { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+  @media (max-width: 55.99rem) {
+    .exp-fila__cuerpo,
+    .exp-fila--invertida .exp-fila__cuerpo { border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
   }
   .exp-fila__texto { max-width: 34rem; }
   .exp-fila__titulo {
@@ -135,6 +166,7 @@ const tarjetas = [
   }
   .exp-fila__parrafo {
     color: var(--color-ink-muted);
+    font-size: var(--text-lg);
     line-height: var(--leading-body);
     margin: 0;
   }

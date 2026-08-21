@@ -215,3 +215,24 @@ a:hover { color: var(--color-accent-hover); }
      llamar al hotel si las indicaciones no bastan. */
   .pie { border-top: 1px solid #999; padding-top: 0.6rem; }
 }
+
+/* ── Encabezado de sección ──────────────────────────────────────────────────
+   Antetítulo + <h2>, centrado y con medida de lectura.
+
+   Vivía dentro de los estilos con ÁMBITO de `SeccionAmenidades.astro`, y Astro
+   los limita a ese componente. Otras tres secciones —experiencias, galería y
+   preguntas— escribían `class="encabezado encabezado--centrado"` y **no recibían
+   nada**: sus encabezados salían alineados a la izquierda y a tamaño de <h2> por
+   defecto, sin que nada avisara. Se veía, pero parecía una decisión.
+
+   Es el mismo defecto que el ancho máximo del acordeón: un patrón compartido
+   escondido dentro del ámbito de un componente. Si lo usan varios, vive aquí. */
+.encabezado--centrado {
+  max-width: var(--container-text);
+  margin-inline: auto;
+  text-align: center;
+}
+.encabezado--centrado h2 {
+  font-size: var(--text-2xl);
+  margin-top: var(--space-2);
+}
