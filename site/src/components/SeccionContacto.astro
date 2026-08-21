@@ -1,0 +1,111 @@
+---
+/**
+ * Bloque de contacto y ubicación — patrón `contact` de `contact.html` de Cappa.
+ *
+ * Cappa lo monta en dos columnas: a la izquierda un texto de presentación, a la
+ * derecha tres datos con icono —teléfono con la etiqueta «Reservation», correo y
+ * dirección— y debajo un formulario.
+ *
+ * **El formulario no se reproduce aquí.** El del proyecto vive en `/reservar/`,
+ * detrás de la frontera del módulo `booking/`, y duplicarlo en la portada
+ * significaría dos caminos que capturan lo mismo y que habría que mantener
+ * sincronizados. La sección enlaza al formulario real.
+ *
+ * Por qué merece estar en la portada: el hotel está en la carretera a Boca
+ * Paila, donde la entrada se pasa de largo si no se sabe qué buscar. La
+ * dirección y el teléfono son, literalmente, lo que un huésped necesita el día
+ * que llega — y buscarlos no debería costar dos clics.
+ */
+import Icono from './Icono.astro';
+import { contacto } from '../data/hotel';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+const tel = (n: string) => n.replace(/[^+\d]/g, '');
+---
+<section class="seccion seccion--calida contacto-home" aria-labelledby="contacto-home-titulo">
+  <div class="contenedor contacto-home__fila">
+    <div class="contacto-home__texto">
+      <p class="antetitulo">{t('contactoHome.antetitulo')}</p>
+      <h2 id="contacto-home-titulo">{t('contactoHome.titulo')}</h2>
+      <p class="contacto-home__parrafo">{t('contactoHome.texto')}</p>
+      <p class="contacto-home__accion">
+        <a class="boton boton--secundario" href={ruta(idioma, 'ubicacion')}>
+          {t('contactoHome.ver')}
+        </a>
+      </p>
+    </div>
+
+    <ul class="datos" role="list">
+      <li class="dato">
+        <span class="dato__icono" aria-hidden="true"><Icono nombre="telefono" /></span>
+        <div>
+          <p class="dato__etiqueta">{t('contactoHome.telefono')}</p>
+          {contacto.telefonos.map((n) => (
+            <a class="dato__valor telefono" href={`tel:${tel(n)}`}>{n}</a>
+          ))}
+        </div>
+      </li>
+      <li class="dato">
+        <span class="dato__icono" aria-hidden="true"><Icono nombre="correo" /></span>
+        <div>
+          <p class="dato__etiqueta">{t('contactoHome.correo')}</p>
+          <a class="dato__valor" href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+        </div>
+      </li>
+      <li class="dato">
+        <span class="dato__icono" aria-hidden="true"><Icono nombre="mapa" /></span>
+        <div>
+          <p class="dato__etiqueta">{t('contactoHome.direccion')}</p>
+          <p class="dato__valor dato__valor--texto">{t('footer.direccion')}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contacto-home__fila { display: grid; gap: var(--space-7); align-items: start; }
+  @media (min-width: 56rem) {
+    .contacto-home__fila { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8); }
+  }
+  .contacto-home__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    max-width: 46ch;
+    margin-block: var(--space-4) var(--space-5);
+  }
+  .contacto-home__accion { margin: 0; }
+
+  .datos { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-5); }
+  .dato { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+  .dato__icono {
+    display: grid; place-items: center;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-accent-text);
+  }
+  .dato__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-antetitulo);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-1);
+  }
+  /* `block` con altura mínima: un <a> en línea no suma su relleno vertical a la
+     caja y se queda por debajo de los 24 px de WCAG 2.5.8. Cuarta vez en el
+     proyecto; por eso el auditor ya avisa del patrón. */
+  .dato__valor {
+    display: block;
+    min-height: 32px;
+    line-height: 32px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .dato__valor:hover { color: var(--color-accent-text); }
+  .dato__valor--texto { line-height: var(--leading-body); min-height: 0; margin: 0; }
+</style>

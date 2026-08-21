@@ -8,6 +8,9 @@ import FranjaImagen from '../components/FranjaImagen.astro';
 import SeccionAmenidades from '../components/SeccionAmenidades.astro';
 import SeccionGaleria from '../components/SeccionGaleria.astro';
 import SeccionPreguntas from '../components/SeccionPreguntas.astro';
+import SeccionExperiencias from '../components/SeccionExperiencias.astro';
+import FranjaLlamada from '../components/FranjaLlamada.astro';
+import SeccionContacto from '../components/SeccionContacto.astro';
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
@@ -18,18 +21,34 @@ const t = usarT(idioma);
   titulo={t('home.titulo')}
   descripcion={t('home.meta')}
 >
+  {/* ── ORDEN DE LA PORTADA ──────────────────────────────────────────────
+      Reproduce el recorrido de `index11.html` de Cappa, sustituyendo cada
+      sección por la nuestra equivalente:
+
+        Cappa                        aquí
+        ─────────────────────────    ────────────────────────────────────────
+        slider                    →  Hero
+        about                     →  SeccionPresentacion
+        rooms1                    →  SeccionAlojamiento
+        pricing (bg-blck)         →  FranjaLlamada  · sin tarifas, ver C3
+        video-wrapper             →  FranjaImagen   · el hotel no tiene vídeo
+        facilties                 →  SeccionAmenidades
+        services                  →  SeccionExperiencias
+        (gallery.html)            →  SeccionGaleria
+        testimonials              →  SeccionPreguntas · ver H4.10
+        (contact.html)            →  SeccionContacto
+        news / clients            →  no existen: sin blog y sin marcas asociadas
+
+      Los fondos alternan blanco · cálido · oscuro · foto, que es el pulso
+      visual de la plantilla y la razón de que el recorrido no se haga plano. */}
   <Hero idioma={idioma} />
   <SeccionPresentacion idioma={idioma} />
   <SeccionAlojamiento idioma={idioma} limite={3} />
+  <FranjaLlamada idioma={idioma} />
   <FranjaImagen idioma={idioma} />
   <SeccionAmenidades idioma={idioma} />
-  {/* El orden reproduce el ritmo de la portada de Cappa: presentación →
-      alojamiento → franja a sangre → servicios → galería → «lo que quita el
-      miedo antes de reservar». En Cappa ese último hueco son testimonios; ver
-      `SeccionPreguntas.astro` para por qué aquí no puede serlo todavía.
-
-      También alterna fondo blanco y cálido en cada salto, que es lo que da el
-      pulso visual de la plantilla. */}
+  <SeccionExperiencias idioma={idioma} />
   <SeccionGaleria idioma={idioma} />
   <SeccionPreguntas idioma={idioma} />
+  <SeccionContacto idioma={idioma} />
 </Base>

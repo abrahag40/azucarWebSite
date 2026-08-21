@@ -1,0 +1,99 @@
+---
+/**
+ * Franja oscura de llamada a la acción — patrón `pricing bg-blck` de Cappa,
+ * con el bloque `reservations` que Cappa pone en su cabecera.
+ *
+ * ── QUÉ SE TOMA Y QUÉ NO ────────────────────────────────────────────────────
+ * De Cappa se toma **la franja**: fondo oscuro, título serif claro, un párrafo,
+ * el teléfono grande con su etiqueta encima y un botón. Es la única sección de
+ * su portada con fondo oscuro, y ese contraste es lo que corta el recorrido y
+ * hace que se lea: sin ella, la portada es una sucesión de blanco y crema.
+ *
+ * **No se toman los precios.** La sección de Cappa se llama `pricing` y muestra
+ * tarjetas con tarifas. La regla 3 del proyecto exige que todo total incluya
+ * impuestos y **C3 sigue sin respuesta**: publicar un «desde $X» sin impuestos
+ * es exactamente la queja que este proyecto existe para curar. Cuando el cliente
+ * responda, las tarjetas de tarifa entran aquí.
+ *
+ * Mientras tanto la franja dice lo que sí es verdad y además diferencia frente a
+ * las OTAs: que aquí confirma una persona y que el total llega con impuestos.
+ */
+import { contacto } from '../data/hotel';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+const tel = contacto.telefonos[0];
+---
+<section class="llamada" aria-labelledby="cta-titulo">
+  <div class="contenedor llamada__fila">
+    <div class="llamada__texto">
+      <h2 class="llamada__titulo" id="cta-titulo">{t('cta.titulo')}</h2>
+      <p class="llamada__parrafo">{t('cta.texto')}</p>
+    </div>
+
+    <div class="llamada__accion">
+      <p class="llamada__etiqueta">{t('cta.etiquetaTel')}</p>
+      <a class="llamada__tel telefono" href={`tel:${tel.replace(/[^+\d]/g, '')}`}>{tel}</a>
+      <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('cta.boton')}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Único fondo oscuro de la portada. El valor no sale de la paleta clara: es un
+     tono propio, comprobado contra el blanco del texto (16.1:1) y contra el
+     acento del botón. */
+  .llamada {
+    background: #1c1a17;
+    color: #fff;
+    padding-block: clamp(var(--space-7), 7vw, var(--space-9));
+  }
+  .llamada__fila {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  @media (min-width: 56rem) {
+    .llamada__fila { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-8); }
+  }
+
+  .llamada__titulo {
+    font-size: clamp(var(--text-2xl), 3.4vw, var(--text-3xl));
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+    color: #fff;
+  }
+  .llamada__parrafo {
+    color: rgb(255 255 255 / 0.82);
+    line-height: var(--leading-body);
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  .llamada__accion { display: grid; justify-items: start; gap: var(--space-3); min-width: 0; }
+  @media (min-width: 56rem) { .llamada__accion { justify-items: end; text-align: right; } }
+
+  .llamada__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-antetitulo);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0;
+  }
+  /* El teléfono grande en color de acento es el remate del bloque `reservations`
+     de Cappa, y se reproduce igual. `display: block` con altura mínima porque un
+     <a> en línea no suma su relleno vertical a la caja (WCAG 2.5.8). */
+  .llamada__tel {
+    display: block;
+    min-height: 44px;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: #fff;
+    text-decoration: none;
+  }
+  .llamada__tel:hover { color: var(--color-accent); }
+  .llamada__tel:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+</style>

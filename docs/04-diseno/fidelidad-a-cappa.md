@@ -114,3 +114,16 @@ verticales — se comprobó una a una al montar la galería.
 
 Eso explica buena parte de la distancia que queda, y **no se cierra con CSS**. Si el cliente
 quiere acercarse más, la palanca no es el código: es una sesión de fotografía.
+
+### Las tomas que faltan, concretas
+
+Al montar las secciones nuevas quedó claro qué falta exactamente, y no es «más fotos»:
+
+| Falta | Para qué | Qué se usa mientras |
+|---|---|---|
+| **La alberca infinita como sujeto** | Es una de las tres razones para venir y no hay ni una toma suya. Sólo aparece de fondo en la de la terraza | La terraza con hamaca, donde el agua se ve al fondo |
+| Una toma apaisada del roof top con gente | Todas las del roof top están vacías, y un hotel vacío se lee como cerrado | La del jacuzzi |
+| Un plano general del hotel desde la playa | Es la foto que un huésped busca para hacerse una idea del conjunto | No hay sustituto |
+
+Tres tomas. Es una mañana de trabajo, y cierra más distancia con la plantilla que cualquier
+cosa que se pueda hacer en CSS.

@@ -1,0 +1,127 @@
+---
+/**
+ * Tres experiencias con fotografía grande — patrón `services` de Cappa.
+ *
+ * ── DE DÓNDE SALE ───────────────────────────────────────────────────────────
+ * De la sección `services` de `index11.html`: tres tarjetas con fotografía a
+ * sangre, un antetítulo corto encima del título, un párrafo y un enlace. En
+ * Cappa son Restaurant, Spa Center y Fitness Center.
+ *
+ * ── POR QUÉ NO SON ESAS TRES ────────────────────────────────────────────────
+ * Ninguna de las tres existe en este hotel. El restaurante y el spa están
+ * bloqueados por la pregunta **C0** —su propio sitio se contradice— y gimnasio
+ * no hay. Copiar los títulos de la plantilla habría sido prometer tres
+ * servicios inventados en la portada.
+ *
+ * Se usa el mismo patrón con las tres cosas que el hotel SÍ tiene y que además
+ * son su argumento real: la playa privada, la alberca infinita y el jacuzzi del
+ * roof top. El texto sale de `data/hotel.ts`, que es literal de su propio sitio,
+ * y las fotografías son de las ocho curadas en H4.4.
+ */
+import { Image } from 'astro:assets';
+import { amenidades } from '../data/hotel';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+/**
+ * ⚠️ NOTA PARA ABRAHAM — la fotografía de la alberca es la más floja de las tres.
+ *
+ * De las ocho fotografías curadas en H4.4, **ninguna tiene la alberca infinita
+ * como sujeto**: la única que la menciona siquiera es la de la terraza con
+ * hamaca, donde el agua se ve al fondo. Se revisó además todo el material
+ * apaisado del archivo del hotel —244 imágenes— y las que hay son interiores y
+ * terrazas.
+ *
+ * Se usa la mejor disponible en vez de forzar otra que no encaje, y queda
+ * escrito aquí porque **no se arregla con código**: hace falta una fotografía de
+ * la alberca. Es el mismo asterisco del informe de fidelidad
+ * (`docs/04-diseno/fidelidad-a-cappa.md`, §5).
+ */
+import playa from '../assets/galeria/02-playa-arco.webp';
+import alberca from '../assets/galeria/03-terraza-hamaca.webp';
+import jacuzzi from '../assets/galeria/04-jacuzzi-roof-top.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+// Las tres primeras amenidades del hotel son exactamente estas tres. Se toman
+// por su clave de icono y no por posición, para que reordenar `hotel.ts` no
+// rompa esto en silencio.
+const porIcono = (n: string) => amenidades.find((a) => a.icono === n);
+const tarjetas = [
+  { dato: porIcono('ola'),      imagen: playa,   etiqueta: t('exp.playaEtiqueta') },
+  { dato: porIcono('alberca'),  imagen: alberca, etiqueta: t('exp.albercaEtiqueta') },
+  { dato: porIcono('jacuzzi'),  imagen: jacuzzi, etiqueta: t('exp.jacuzziEtiqueta') },
+].filter((x) => x.dato);
+---
+{tarjetas.length > 0 && (
+  <section class="seccion experiencias" aria-labelledby="exp-titulo">
+    <div class="contenedor">
+      <header class="encabezado encabezado--centrado">
+        <p class="antetitulo">{t('exp.antetitulo')}</p>
+        <h2 id="exp-titulo">{t('exp.titulo')}</h2>
+      </header>
+
+      <ul class="experiencias__rejilla" role="list">
+        {tarjetas.map(({ dato, imagen, etiqueta }) => (
+          <li class="experiencia">
+            <div class="experiencia__medio">
+              <Image
+                src={imagen}
+                alt=""
+                widths={[360, 540, 720]}
+                sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 92vw"
+                loading="lazy"
+                quality={50}
+              />
+            </div>
+            <div class="experiencia__cuerpo">
+              <p class="antetitulo experiencia__etiqueta">{etiqueta}</p>
+              <h3 class="experiencia__titulo">{dato!.titulo[idioma]}</h3>
+              <p class="experiencia__texto">{dato!.texto[idioma]}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <p class="experiencias__accion">
+        <a class="boton boton--secundario" href={ruta(idioma, 'servicios')}>{t('exp.ver')}</a>
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .experiencias__rejilla {
+    list-style: none; padding: 0; margin: var(--space-7) 0 0;
+    display: grid; gap: var(--space-6);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 48rem) {
+    .experiencias__rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); }
+  }
+  .experiencia { min-width: 0; }
+
+  .experiencia__medio {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-alt);
+    margin-bottom: var(--space-5);
+  }
+  .experiencia__medio :global(img) { width: 100%; height: 100%; object-fit: cover; }
+
+  /* La fotografía es decorativa: su `alt` va vacío a propósito. Lo que describe
+     la tarjeta es el título y el párrafo que van justo debajo, y repetirlo en el
+     `alt` haría que un lector de pantalla dijera lo mismo dos veces seguidas. */
+  .experiencia__etiqueta { margin-bottom: var(--space-2); }
+  .experiencia__titulo {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+  .experiencia__texto {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin: 0;
+  }
+  .experiencias__accion { margin: var(--space-7) 0 0; text-align: center; }
+</style>
