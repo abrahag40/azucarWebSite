@@ -8,7 +8,7 @@ import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analitica from '../components/Analitica.astro';
-import { usarT, ruta, type Idioma } from '../i18n/ui';
+import { usarT, ruta, ancla, idAncla, type Idioma } from '../i18n/ui';
 
 interface Props {
   titulo: string;
@@ -197,9 +197,9 @@ const schema = {
     <Analitica />
   </head>
   <body>
-    <a class="sr-only saltar" href="#contenido">{t('nav.saltar')}</a>
+    <a class="sr-only saltar" href={ancla(idioma, 'contenido')}>{t('nav.saltar')}</a>
     <Header idioma={idioma} rutaActual={rutaActual} sobreHero={sobreHero} />
-    <main id="contenido">
+    <main id={idAncla(idioma, 'contenido')}>
       <slot />
     </main>
     <Footer idioma={idioma} />

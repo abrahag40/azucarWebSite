@@ -13,7 +13,7 @@
  * ha ganado premios y es un Small Luxury Hotel.
  */
 import { Image } from 'astro:assets';
-import { usarT, type Idioma } from '../i18n/ui';
+import { usarT, idAncla, type Idioma } from '../i18n/ui';
 import { presentacion, contacto } from '../data/hotel';
 import foto1 from '../assets/nosotros-1.webp';
 import foto2 from '../assets/nosotros-2.webp';
@@ -22,7 +22,7 @@ interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 ---
-<section id="presentacion" class="seccion presentacion" aria-labelledby="presentacion-titulo">
+<section id={idAncla(idioma, 'elHotel')} class="seccion presentacion" aria-labelledby="presentacion-titulo">
   <div class="contenedor presentacion__rejilla">
     <div class="presentacion__texto">
       <p class="antetitulo">{presentacion.antetitulo[idioma]}</p>

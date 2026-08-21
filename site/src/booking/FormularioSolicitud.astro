@@ -45,6 +45,10 @@ const t = usarT(idioma);
 // Van por `<script type="application/json">` y no incrustados en el JavaScript
 // porque así el bloque de código es IDÉNTICO en las dos páginas de idioma: un
 // solo hash en la CSP en vez de dos, y un solo archivo que mantener.
+/* Destino de partida del botón de correo: el buzón del hotel con el asunto ya
+   puesto y sin cuerpo. El script lo reemplaza por el mensaje completo. */
+const correoDeReserva = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('reserva.asunto'))}`;
+
 const rotulos = {
   asunto: t('reserva.asunto'),
   llegada: t('reserva.llegada'),
@@ -168,7 +172,14 @@ const rotulos = {
   <pre class="resumen__texto" id="resumen-texto"></pre>
   <p class="resumen__pie">{t('reserva.resumenPie')}</p>
   <p class="resumen__acciones">
-    <a class="boton" id="resumen-correo" href="#">{t('reserva.enviarCorreo')}</a>
+    {/* El `href` de partida es un `mailto:` REAL, no `href="#"`.
+        Nace sin cuerpo y el script lo sustituye por el mensaje completo al
+        validar; pero si el script no llegara a correr, un `href="#"` saltaría
+        al principio de la página y dejaría una almohadilla en la barra de
+        direcciones. Un enlace debe llevar a algo desde el primer momento — es
+        el mismo defecto que se le señaló a la plantilla en sus disparadores
+        de menú. */}
+    <a class="boton" id="resumen-correo" href={correoDeReserva}>{t('reserva.enviarCorreo')}</a>
     <button type="button" class="boton boton--secundario" id="resumen-copiar">{t('reserva.copiar')}</button>
     <button type="button" class="boton boton--secundario" id="resumen-editar">{t('reserva.editar')}</button>
   </p>

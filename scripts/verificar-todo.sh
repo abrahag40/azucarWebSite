@@ -71,6 +71,20 @@ paso "og:image en todas las páginas" bash -c '
   # el 404 no lleva metadatos sociales a propósito: no es contenido
   [ "$c" -ge "$((t - 2))" ] || { echo "sólo $c de $t páginas declaran og:image"; exit 1; }'
 
+paso "fragmentos de URL sanos" bash -c '
+  fallos=0
+  # 1. Ningun `href="#"` a secas: no lleva a ninguna parte y ensucia la barra
+  #    de direcciones. Es el defecto que se le senalo a la plantilla.
+  n=$(grep -rho "href=\"#\"" site/dist --include="*.html" | wc -l | tr -d " ")
+  [ "$n" -eq 0 ] || { echo "$n enlace(s) con href=\"#\" vacio"; fallos=1; }
+  # 2. Todo fragmento apunta a un id que EXISTE en su propia pagina.
+  for f in $(find site/dist -name "*.html"); do
+    for frag in $(grep -o "href=\"#[^\"]\+\"" "$f" | sed "s/href=\"#//;s/\"//" | sort -u); do
+      grep -q "id=\"$frag\"" "$f" || { echo "$f: #$frag no existe"; fallos=1; }
+    done
+  done
+  [ "$fallos" -eq 0 ]'
+
 paso "sin enlaces a recursos inexistentes" bash -c '
   rotos=0
   for u in $(grep -rho "href=\"/_astro/[^\"]*\"" site/dist --include="*.html" | sed "s/href=\"//;s/\"//" | sort -u); do

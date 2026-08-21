@@ -23,7 +23,7 @@
  *    Definition of Done.
  */
 import { Image, getImage } from 'astro:assets';
-import { usarT, ruta, type Idioma } from '../i18n/ui';
+import { usarT, ruta, ancla, type Idioma } from '../i18n/ui';
 import fondo from '../assets/hero-roof-top.webp';
 
 /**
@@ -106,7 +106,7 @@ const t = usarT(idioma);
 
        Una flecha «hacia abajo» promete enseñar lo que viene justo debajo. Si
        salta dos secciones, el gesto y el resultado no coinciden. */}
-    <a class="hero__bajar" href="#presentacion" aria-label={t('hero.bajar')}>
+    <a class="hero__bajar" href={ancla(idioma, 'elHotel')} aria-label={t('hero.bajar')}>
     <span aria-hidden="true"></span>
   </a>
 </section>

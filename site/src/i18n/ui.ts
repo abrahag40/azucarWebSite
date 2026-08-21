@@ -388,19 +388,70 @@ export function usarT(idioma: Idioma) {
  *
  * Es también criterio de aceptación de la historia H2.1.
  */
+/**
+ * Segmento de ruta por idioma. Las URLs se traducen enteras: `/alojamiento/` y
+ * `/en/rooms/`, no `/en/alojamiento/`.
+ *
+ * ── CONTRATO ────────────────────────────────────────────────────────────────
+ * **Este mapa describe lo que EXISTE.** Una entrada aquí es la promesa de que
+ * hay una página en los dos idiomas; añadir una página obliga a añadir su
+ * segmento, y retirar una obliga a retirarlo.
+ *
+ * Había dos entradas huérfanas —`restaurante` y `terminos`— declaradas para
+ * páginas que no existen y sin una sola referencia en el código. Ninguna hacía
+ * daño hoy, pero un mapa de rutas que enumera destinos inexistentes deja de ser
+ * una descripción del sitio y pasa a ser una lista de intenciones, que es justo
+ * lo que nadie sabe interpretar seis meses después. `restaurante` sigue
+ * bloqueado por **C0** y `terminos` está descartado porque el hotel no tiene ese
+ * texto; cuando existan, se añaden aquí y en `_redirects` a la vez.
+ */
 export const segmentos = {
   alojamiento: { es: 'alojamiento', en: 'rooms' },
   servicios:   { es: 'servicios',   en: 'services' },
-  restaurante: { es: 'restaurante', en: 'restaurant' },
   galeria:     { es: 'galeria',     en: 'gallery' },
   ubicacion:   { es: 'ubicacion',   en: 'location' },
   contacto:    { es: 'contacto',    en: 'contact' },
   reservar:    { es: 'reservar',    en: 'booking' },
   politicas:   { es: 'politicas',   en: 'policies' },
   'preguntas-frecuentes': { es: 'preguntas-frecuentes', en: 'frequent-questions' },
-  terminos:    { es: 'terminos',    en: 'terms' },
   'aviso-de-privacidad': { es: 'aviso-de-privacidad', en: 'privacy-policy' },
 } as const;
+
+/**
+ * Fragmentos de URL — el mismo criterio que `segmentos`, y por el mismo motivo.
+ *
+ * Un `#` acaba en la barra de direcciones en cuanto alguien pulsa el enlace, y
+ * desde ahí se copia y se comparte. Es parte de la dirección pública, no un
+ * detalle de implementación, así que sigue las mismas dos reglas que el resto de
+ * la ruta: **se traduce** y **no expone nombres internos**.
+ *
+ * `#presentacion` fallaba en las dos: era el nombre del componente que dibuja
+ * esa sección —`SeccionPresentacion`— y aparecía igual en inglés. Al visitante
+ * no le dice nada; a quien mantenga el sitio le hace creer que renombrar el
+ * componente es seguro.
+ *
+ * Los `id` de los CAMPOS del formulario NO entran aquí, y es deliberado: son
+ * identificadores técnicos que enlazan `<label for>` con su control y que el
+ * script usa para componer el mensaje. Traducirlos obligaría a bifurcar esa
+ * lógica por idioma a cambio de un fragmento que aparece un segundo al saltar a
+ * un error. El coste no lo paga el beneficio.
+ */
+export const anclas = {
+  contenido: { es: 'contenido', en: 'content' },
+  elHotel: { es: 'el-hotel', en: 'the-hotel' },
+} as const;
+
+export type ClaveAncla = keyof typeof anclas;
+
+/** El identificador, sin `#`. Para el atributo `id` del destino. */
+export function idAncla(idioma: Idioma, clave: ClaveAncla): string {
+  return anclas[clave][idioma];
+}
+
+/** El destino con `#`. Para el `href` del enlace. */
+export function ancla(idioma: Idioma, clave: ClaveAncla): string {
+  return `#${anclas[clave][idioma]}`;
+}
 
 export type ClaveRuta = keyof typeof segmentos;
 

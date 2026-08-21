@@ -1470,6 +1470,74 @@ que nada lo señale**. Por eso hay un token, `--desplazamiento-ancla`, y la anul
 
 ---
 
+## L-064 — El fragmento de una URL es parte de la dirección pública, no un detalle interno
+
+**Lección.** Abraham pulsó la flecha del héroe, miró la barra de direcciones y preguntó: «¿por
+qué `presentacion`?». La respuesta era incómoda: porque así se llama el componente que dibuja
+esa sección, `SeccionPresentacion`.
+
+Ese `#` fallaba en las dos reglas que el resto de la ruta sí cumplía:
+
+* **No estaba traducido.** Las rutas de este sitio se traducen enteras —`/alojamiento/` y
+  `/en/rooms/`— y sin embargo la página inglesa decía `#presentacion`.
+* **Exponía un nombre interno.** Al visitante no le dice nada, y a quien mantenga el sitio le
+  hace creer que renombrar el componente es una operación segura. No lo es: rompe un enlace
+  que alguien pudo haber copiado.
+
+Un fragmento acaba en la barra de direcciones en cuanto alguien pulsa el enlace, y desde ahí
+se copia y se comparte. **Es dirección pública.**
+
+Se resolvió extendiendo el mecanismo que ya existía para los segmentos, no inventando otro:
+un mapa `anclas` con `idAncla()` y `ancla()`. `#el-hotel` y `#the-hotel`.
+
+**Y una excepción declarada, que es lo que la hace defendible:** los `id` de los campos del
+formulario NO se traducen. Son identificadores técnicos que enlazan `<label for>` con su
+control y que el script usa para componer el mensaje; traducirlos obligaría a bifurcar esa
+lógica por idioma a cambio de un fragmento que aparece un segundo al saltar a un error. Una
+regla sin excepciones escritas se aplica mal en el primer caso raro.
+
+---
+
+## L-065 — Un verificador que codifica un valor en vez de la propiedad caduca
+
+**Lección.** La regla del auditor para «saltar al contenido» era
+`href="#contenido"` escrito a mano. En cuanto los fragmentos se tradujeron, **las 19 páginas
+inglesas empezaron a dar aviso**: el sitio estaba bien y el auditor decía que no.
+
+El error de diseño es fino: la regla no comprobaba **la propiedad que importa** —que existe un
+enlace de salto y que su destino existe en la página— sino **un valor concreto** que resultaba
+tenerla. En cuanto ese valor cambió por una razón legítima, la regla se volvió ruido.
+
+Reescrita: busca el enlace por su clase, extrae el fragmento **sea cual sea**, y comprueba que
+haya un `id` que lo reciba. Ahora verifica más que antes —antes ni siquiera miraba si el
+destino existía— y no le importa cómo se llame.
+
+**La regla:** al escribir una comprobación, preguntarse «¿qué estoy afirmando de verdad?». Si
+la respuesta contiene una cadena literal del contenido, casi siempre se está comprobando una
+coincidencia en lugar de una propiedad.
+
+---
+
+## L-066 — Un mapa de rutas que enumera destinos inexistentes deja de describir el sitio
+
+**Lección.** El mapa de segmentos declaraba `restaurante` y `terminos`: dos rutas **sin página
+y sin una sola referencia en el código**. Ninguna hacía daño —nadie enlazaba a ellas— pero el
+mapa dejaba de ser una descripción de lo que existe y pasaba a ser una lista de intenciones
+mezclada con hechos, sin nada que distinguiera una de otra.
+
+Seis meses después, quien lo lea no sabrá si `/restaurante/` es una página que se rompió, una
+que falta por enlazar o una que nunca existió.
+
+Se retiran, y el mapa gana un **contrato escrito**: una entrada aquí es la promesa de que hay
+página en los dos idiomas; añadir una página obliga a añadir su segmento y retirarla obliga a
+retirarlo. `restaurante` sigue bloqueado por C0 y `terminos` está descartado porque el hotel
+no tiene ese texto — cuando existan, se añaden aquí y en `_redirects` **a la vez**.
+
+**Antipatrón evitado:** configuración especulativa. Declarar por adelantado lo que «quizá haga
+falta» cuesta cero hoy y confunde siempre.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

@@ -140,7 +140,16 @@ for (const f of paginas) {
   }
 
   // ── 2.4.1 Saltar al contenido ────────────────────────────────────────────
-  if (!/href\s*=\s*["']#contenido["']/i.test(doc)) A(pag, 'WCAG 2.4.1', 'sin enlace para saltar al contenido');
+  // El destino se comprueba por su RELACIÓN, no por su nombre. La regla tenía
+  // `#contenido` escrito a mano y empezó a fallar en las 19 páginas inglesas en
+  // cuanto los fragmentos se tradujeron: el sitio estaba bien y el auditor decía
+  // que no. Un verificador que codifica un valor concreto en vez de la propiedad
+  // que le importa caduca en cuanto ese valor cambia legítimamente.
+  const salto = /<a\b[^>]*\bhref\s*=\s*["']#([^"']+)["'][^>]*class\s*=\s*["'][^"']*\bsaltar\b/i.exec(doc)
+    ?? /<a\b[^>]*class\s*=\s*["'][^"']*\bsaltar\b[^>]*\bhref\s*=\s*["']#([^"']+)["']/i.exec(doc);
+  if (!salto) A(pag, 'WCAG 2.4.1', 'sin enlace para saltar al contenido');
+  else if (!new RegExp(`\\bid\\s*=\\s*["']${salto[1]}["']`, 'i').test(doc))
+    F(pag, 'WCAG 2.4.1', `el enlace de salto apunta a #${salto[1]}, que no existe en la página`);
 
   // ── 2.5.8 Enlace solo en su párrafo — AVISO, no fallo ────────────────────
   // Este auditor NO puede medir cajas: no tiene estilos calculados. Lo que sí
