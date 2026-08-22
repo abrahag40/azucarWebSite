@@ -1642,6 +1642,44 @@ mecanismo que la plantilla sí usa para ese problema.
 
 ---
 
+## L-071 — Las cinco primeras fotos no son las cinco mejores
+
+**Lección.** Abraham vio las fichas de habitación y preguntó, con razón, si de verdad esas
+eran las mejores fotos disponibles: la ficha de «Habitación King · Vista al mar» abría con un
+pasillo de entrada y seguía con clóset, inodoro, clóset otra vez y regadera. Ninguna de las
+cinco mostraba la cama.
+
+La causa, verificada por hash contra la captura del sitio vigente: **las ocho fichas de
+alojamiento usan, sin excepción, los archivos `01` a `05` de cada carpeta numerada** —
+`01_king_mar.webp` … `05_king_mar.webp`—, en el orden en que el hotel los subió. Nadie miró el
+contenido; se tomó el prefijo numérico como si fuera un criterio de calidad. Es la generalización
+de un defecto que el proyecto ya había nombrado una vez, en la curaduría de la galería general
+(H4.4): *"ordenar por tamaño de archivo no predice si una foto sirve"*. Aquí ni siquiera hubo
+una métrica — se tomó el orden de subida, que no predice nada en absoluto.
+
+Revisar las 122 fotos reales del acervo —entre 10 y 22 por tipo, contra las 5 usadas— cambió
+selección en las ocho fichas. Casos notables:
+
+- **Suite Agua** y **Suite Mar** ya tenían la tina/jacuzzi privada entre sus cinco, por
+  casualidad de numeración — se conservaron casi intactas.
+- **Suite Cielo** tenía dos fotos de cielo nocturno (estrellas, luna) que no comunican nada del
+  espacio; se sustituyeron por el roof top con alberca infinita y el mar al frente, que sí
+  estaba en el acervo sin usar.
+- **Habitación King · Vista a la selva** y **Habitación Doble · Vista a la selva** **no tienen
+  ninguna fotografía de cama en todo el acervo del hotel** — sólo baño, pasillo y balcón. No es
+  un defecto de curaduría: es un hueco de fotografía que ninguna selección distinta iba a
+  cerrar. Se dejó la mejor vista disponible como portada y se anota aquí para no repetir la
+  pregunta.
+- Esas mismas dos fichas comparten fotografías de balcón casi idénticas entre sí —el mismo
+  pasillo, tomado con minutos de diferencia—, porque ambas habitaciones dan al mismo corredor.
+  No hay forma de evitarlo con el acervo actual.
+
+**La regla, ya con dos casos (ver también L-041 y H4.4):** ninguna selección de fotografías se
+hace por convención de nombre de archivo — ni orden numérico, ni tamaño, ni fecha. Se revisa el
+acervo completo, imagen por imagen, y se anota cuando el acervo mismo no alcanza.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -1668,4 +1706,5 @@ mecanismo que la plantilla sí usa para ese problema.
 | R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
 | R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B3**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
+| R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |
