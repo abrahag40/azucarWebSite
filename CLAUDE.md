@@ -102,6 +102,7 @@ Mac, ni al navegador, ni salida a internet** hacia dominios externos. Consecuenc
 | **Orden de trabajo** | Descubrimiento antes que requerimientos | [0001](docs/decisiones/ADR-0001-descubrimiento-antes-de-requerimientos.md) |
 | **Marco** | Iterativo quincenal. **Scrum adaptado, no puro** | [0002](docs/decisiones/ADR-0002-marco-de-trabajo-iterativo.md) |
 | **Reservas** | Solicitud sujeta a confirmación. Sin calendario de disponibilidad. Cotización con impuestos. Aviso al manager por correo + WhatsApp. Aislado en `booking/` | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| **Entrega de la solicitud** | Endpoint en Cloudflare Pages Functions, sin base de datos. Correo con Resend. WhatsApp con la Cloud API de Meta (recomendado) o alternativa a decidir. Bloqueado por E-PRIV y B4 | [0006](docs/decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md) |
 | **Stack** | **Astro** estático, i18n ES/EN nativo, *content collections*, Cloudflare Pages, formulario contra función serverless | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
 | **Plantilla Cappa** | Fuente de **diseño**, no de código. Se extraen tokens y se reconstruyen componentes | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
 | **Pagos** | Enlace de pago del hotel. **No tocamos datos de tarjeta → fuera de alcance PCI-DSS** | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
@@ -359,7 +360,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
 | `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
-| `docs/decisiones/ADR-0001..0005` | Decisiones con consecuencias |
+| `docs/decisiones/ADR-0001..0006` | Decisiones con consecuencias |
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | **`docs/04-diseno/fidelidad-a-cappa.md`** | **Cuánto se parece el sitio a la plantilla, medido elemento por elemento** |
@@ -370,7 +371,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **72 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **73 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

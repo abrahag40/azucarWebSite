@@ -200,7 +200,7 @@ completa y con el precio total, enviada desde el sitio.*
 > Ataca directamente la queja recurrente de "me cobraron más de lo publicado" documentada
 > en la auditoría. **Es el diferenciador frente a las OTAs.**
 
-### H3.4 — Endpoint de recepción · `M` · 🔴 *bloqueada por B1–B4 y E-PRIV*
+### H3.4 — Endpoint de recepción · `M` · 🔴 *bloqueada por B1–B4 y E-PRIV. Propuesta técnica lista: [ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)*
 > Como **manager**, quiero que las solicitudes lleguen íntegras y sin basura.
 
 - **Entonces** la validación se repite en servidor, nunca sólo en cliente.
@@ -220,6 +220,11 @@ completa y con el precio total, enviada desde el sitio.*
 
 - **Entonces** llega por correo **y** WhatsApp.
 - **Y** contiene fechas, tipo, huéspedes, contacto, cotización y comentarios.
+
+> **Cómo se construyen las tres:** [ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)
+> propone Cloudflare Pages Functions sin base de datos, Resend para correo y, para WhatsApp, tres
+> opciones con una decisión de costo/proveedor pendiente del cliente. Nada se publica hasta que
+> se resuelvan B4 y E-PRIV.
 
 ### H3.7 — WhatsApp como canal paralelo · `S` · 🔄 *interfaz construida; el enlace real espera el número (B4)*
 > Como **huésped potencial**, quiero preguntar por WhatsApp si no quiero llenar un formulario.

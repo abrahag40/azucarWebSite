@@ -1718,6 +1718,30 @@ proyecto, no una invención propia ni un vacío.
 
 ---
 
+## L-073 — Una pregunta con dos respuestas mezcladas bajo un solo número
+
+**Lección.** Al proponer cómo entregar la solicitud por WhatsApp de verdad (ADR-0006), apareció
+algo que **B4** no distinguía: preguntaba *"cuál de los dos números ya tiene WhatsApp"*, pensado
+para el enlace manual de la cabecera del sitio vigente. Pero automatizar el envío con la
+Plataforma de WhatsApp Business exige un número **dedicado** — uno que, una vez registrado ahí,
+deja de comportarse como WhatsApp normal en el teléfono de quien lo use a diario. Son dos
+preguntas de negocio distintas —*"¿cuál ya tiene WhatsApp?"* y *"¿quieres dedicar un número
+sólo a las notificaciones automatizadas?"*— que habían estado viviendo bajo la misma etiqueta.
+
+**Lo que enseña:** cuando una decisión técnica nueva se apoya en una pregunta ya hecha al
+cliente, vale la pena releerla literal antes de asumir que la cubre. Aquí la pregunta original
+alcanzaba para un enlace manual, pero se quedaba corta para una integración automatizada — y
+sólo se vio al diseñar el mecanismo concreto, no al leer la pregunta en abstracto.
+
+**De paso, la corrección de la sesión que motivó revisar esto:** al construir el botón
+flotante (L-072) se citó **B3** en vez de **B4** —B3 es la pasarela de pago— y **R-24** en vez
+de **R-21** —R-24 es el riesgo de las fotos sin cama, no el de WhatsApp—, en seis lugares del
+código y la documentación. El banco de preguntas canónico (`preguntas-cliente.md`) es la
+fuente; todo lo demás se cita desde ahí, nunca desde la memoria de qué número "sonaba
+correcto".
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
