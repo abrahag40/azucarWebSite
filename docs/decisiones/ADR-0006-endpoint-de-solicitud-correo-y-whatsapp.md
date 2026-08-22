@@ -1,7 +1,7 @@
 # ADR-0006 — Endpoint de solicitud: entrega real por correo y WhatsApp
 
 - **Fecha:** 2026-08-22
-- **Estado:** Propuesta — requiere visto bueno de Abraham y, en la parte de WhatsApp, una decisión de costo/proveedor del cliente
+- **Estado:** Aceptado para la Fase 1 (correo con Resend, 2026-08-22). La Decisión 4 (WhatsApp) sigue en Propuesta — pospuesta a propósito, requiere decisión de costo/proveedor del cliente
 - **Decisor:** Claude (líder de proyecto)
 - **Complementa a:** [ADR-0003](ADR-0003-arquitectura-de-reserva-sin-pms.md) (decide *qué* pasa con una solicitud) y [ADR-0004](ADR-0004-stack-tecnico.md) (decide que el endpoint corre en Cloudflare Pages Functions). Este documento decide **cómo se construye** esa pieza, que ninguno de los dos cubría a nivel técnico.
 
@@ -101,10 +101,9 @@ Simple, sin nueva infraestructura — KV ya viene con Cloudflare Pages.
 | SendGrid | Nivel gratuito existe | Configuración más pesada; sin cuidado en la configuración, tiende a caer en spam |
 | MailChannels | Fue la opción de costo cero integrada a Cloudflare Workers | El relevo gratuito y anónimo para Workers se descontinuó — **no depender de memoria vieja aquí, verificar el estado del programa al implementar** |
 
-**Recomendación: Resend.** Cualquiera de las cuatro sirve; se nombra la elección para no
-volver a evaluar en el sprint, no porque las otras estén mal. Requiere verificar el dominio de
-correo del hotel (registros SPF/DKIM) — tarea operativa de Abraham, mismo patrón que GA4 o
-Search Console en el runbook de despliegue.
+**Decidido: Resend.** Confirmado por Abraham el 2026-08-22. Pasos de alta —cuenta,
+verificación de dominio, llave, variables en Cloudflare Pages— en
+[`runbook-accesos-y-despliegue.md`, Parte 5](../05-despliegue/runbook-accesos-y-despliegue.md#parte-5--resend--el-correo-de-solicitudes).
 
 ## Decisión 4 — Canal de WhatsApp: la decisión que le toca al cliente
 
@@ -173,14 +172,15 @@ proveedores.
 
 ## Preguntas / decisiones que le tocan a Abraham y al cliente
 
-1. **¿Resend como proveedor de correo, o prefieres evaluar otro de la tabla?** Cualquiera
-   sirve; si no hay preferencia, se avanza con Resend.
-2. **¿Cuál de las tres opciones de WhatsApp (A/B/C)?** Se recomienda A. Si el costo o el
-   trámite de Meta Business son un obstáculo real hoy, se puede lanzar con sólo el correo
-   (Fase 1) y añadir WhatsApp después — el sitio no necesita las dos piezas a la vez para
-   dejar de depender del `mailto:`.
-3. **Si se elige la opción A:** ¿el hotel dedica un número nuevo a la Plataforma de WhatsApp
-   Business, o prefiere usar uno de los dos existentes asumiendo que deja de comportarse como
-   WhatsApp normal en ese teléfono?
+1. ~~¿Resend como proveedor de correo, o prefieres evaluar otro de la tabla?~~ **Resuelto
+   2026-08-22: Resend.** El WhatsApp automatizado (Decisión 4) queda pospuesto a propósito —
+   se avanza sólo con el correo por ahora.
+2. **¿Cuál de las tres opciones de WhatsApp (A/B/C)?** Pospuesta. Se recomienda A cuando se
+   retome. Mientras tanto, el sitio no necesita las dos piezas a la vez para dejar de depender
+   del `mailto:` — el correo solo ya es una mejora real sobre hoy.
+3. **Si se elige la opción A, cuando se retome:** ¿el hotel dedica un número nuevo a la
+   Plataforma de WhatsApp Business, o prefiere usar uno de los dos existentes asumiendo que
+   deja de comportarse como WhatsApp normal en ese teléfono?
 4. Sigue en pie **B4** (correo y WhatsApp oficiales de recepción) y **E-PRIV** (aviso de
-   privacidad conforme). Ninguna decisión de esta lista sustituye a esas dos.
+   privacidad conforme). Ninguna decisión de esta lista sustituye a esas dos — ni siquiera con
+   Resend ya elegido y configurado, el endpoint sigue sin cablearse al formulario real.

@@ -344,6 +344,10 @@ el cliente vea en la demo exactamente qué debe confirmar.
 4. ~~Pasar la URL por PageSpeed~~ **HECHO por Claude.** Ver
    [`medicion-calidad.md`](docs/05-despliegue/medicion-calidad.md). Estaba mal marcado como
    tarea de Abraham: Chrome está instalado aquí y Lighthouse es el mismo motor.
+5. **Cuenta de Resend + dominio verificado + variables en Cloudflare Pages.** Decidido Resend
+   como proveedor de correo (ADR-0006). Pasos exactos en
+   [`runbook-accesos-y-despliegue.md`, Parte 5](docs/05-despliegue/runbook-accesos-y-despliegue.md#parte-5--resend--el-correo-de-solicitudes).
+   No activa nada visible por sí solo — sigue esperando B4 y E-PRIV para cablearse.
 
 > ⚠️ **Riesgo de método, dicho en voz alta.** Hay 38 páginas construidas. El sprint 3 ya no
 > está en cero —el formulario existe y los 90 enlaces rotos se cerraron—, pero **no puede

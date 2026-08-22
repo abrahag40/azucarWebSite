@@ -162,6 +162,59 @@ sprint 5 y está en su lista. No se olvida porque está escrito en los dos sitio
 
 ---
 
+## Parte 5 — Resend · el correo de solicitudes
+
+### Qué es y por qué
+
+El proveedor de correo transaccional que envía el endpoint de solicitudes
+([ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)): el mensaje al
+manager y el acuse al huésped. Decidido el 2026-08-22, sin evaluar más alternativas — cualquiera
+de las de la tabla del ADR servía; Resend se eligió por su API mínima, pensada para runtimes
+tipo *edge* como el de Cloudflare Pages Functions, y un nivel gratuito que cubre de sobra el
+volumen de un hotel boutique.
+
+**Esto NO activa el envío real todavía.** El endpoint sigue sin cablearse al formulario
+(`FormularioSolicitud.astro` sigue con el `mailto:` de siempre) hasta que se resuelvan **B4** y
+**E-PRIV**. Configurar Resend ahora deja el terreno listo para cuando lleguen esas dos
+respuestas — no las adelanta.
+
+### Configuración
+
+1. `resend.com` → crear cuenta (correo o GitHub).
+2. **Domains → Add Domain.** El dominio que se verifique aquí es el que aparecerá como
+   remitente (`CORREO_REMITENTE`). 🔴 **Depende de tener acceso a su DNS** — y la titularidad
+   de `azucarhotel.com` sigue sin confirmar (**R-06**, checklist de abajo). Si esa duda no está
+   resuelta todavía, Resend permite probar con restricciones sin verificar un dominio propio;
+   revisar el modo de prueba vigente en su documentación al configurar, no asumir que sigue
+   igual que en 2026.
+3. Añadir los registros que Resend entregue (SPF y DKIM, típicamente TXT y CNAME) en la zona
+   DNS de ese dominio. Resend marca el dominio como verificado solo cuando los detecta —puede
+   tardar minutos u horas por la propagación de DNS.
+4. **API Keys → Create API Key.** Copiar la llave (empieza con `re_`) — sólo se muestra una vez.
+5. En Cloudflare Pages: proyecto → **Settings → Environment variables**. Cloudflare separa
+   variables de **Preview** y de **Production**: configúrense **sólo en Preview** por ahora. Es
+   una segunda red de seguridad, además de que el propio endpoint falla cerrado sin ellas — así,
+   aunque alguien cablee el `fetch()` del formulario antes de tiempo, Production sigue inerte.
+
+| Variable | Valor | Nota |
+|---|---|---|
+| `RESEND_API_KEY` | la llave del paso 4 | — |
+| `CORREO_REMITENTE` | `Azúcar Hotel Tulum <solicitudes@dominio-verificado>` | El dominio debe coincidir con el verificado en el paso 2 |
+| `CORREO_MANAGER` | — | 🔴 Sigue vacía: es la pregunta **B4**, todavía sin responder. No inventar un valor — el endpoint falla cerrado mientras falte |
+| `TURNSTILE_SECRET_KEY` | — | Producto aparte de Cloudflare (**dash.cloudflare.com → Turnstile**), no de Resend. También hace falta para que el endpoint opere; se documenta su alta cuando se retome |
+
+6. Probar en local antes de tocar Cloudflare: `cp site/.dev.vars.example site/.dev.vars`,
+   rellenar, y `npm run functions:dev` — ver
+   [`site/functions/README.md`](../../site/functions/README.md).
+
+### Qué se obtiene
+
+Nada visible todavía para un huésped real — el endpoint queda **configurado y probable**, no
+**conectado**. Lo visible llega en el cambio, deliberadamente pequeño, que cablee el `fetch()`
+del formulario, y ese cambio espera a B4 y E-PRIV.
+
+---
+
 ## Checklist de accesos pendientes
 
 - [ ] Titularidad de `azucarhotel.com` y acceso al registrador (**E2** · R-06)
@@ -172,3 +225,6 @@ sprint 5 y está en su lista. No se olvida porque está escrito en los dos sitio
 - [ ] Cloudflare Pages — repositorio conectado
 - [ ] Correo y WhatsApp oficiales de reservas (**B4**)
 - [ ] Pasarela de pago elegida (**B3**)
+- [ ] Cuenta de Resend creada y dominio de correo verificado (**Parte 5**)
+- [ ] `RESEND_API_KEY` y `CORREO_REMITENTE` en Cloudflare Pages, sólo en Preview (**Parte 5**)
+- [ ] Cuenta de Cloudflare Turnstile, `TURNSTILE_SECRET_KEY` en Cloudflare Pages (**Parte 5**)
