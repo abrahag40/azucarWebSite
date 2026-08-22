@@ -1709,7 +1709,7 @@ verificar — un campo explícitamente en `null` — pero con una salida distint
 fallar el build, el componente **degrada con honestidad** a `/contacto/`, un destino que hoy
 es cierto, y su propio `aria-label` lo dice ("Contactar al hotel", no "WhatsApp"). No hay dato
 falso que bloquear porque no se afirma ningún dato falso — el botón nunca miente sobre a dónde
-lleva, sólo hace lo mejor que puede mientras falta la respuesta a B3.
+lleva, sólo hace lo mejor que puede mientras falta la respuesta a B4.
 
 **El patrón:** "no inventes nada, la plantilla es la fuente" asume que la plantilla tiene el
 elemento. Cuando no lo tiene, la pregunta correcta no es "¿qué haría Cappa?" sino "¿qué espera
@@ -1742,7 +1742,7 @@ proyecto, no una invención propia ni un vacío.
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
 | R-23 | **Quien pase la URL por PageSpeed verá SEO 92 y «robots.txt is not valid».** Es un artefacto de nuestra propia CSP —`connect-src 'none'` bloquea la lectura que hace Lighthouse—; el archivo es válido y a Googlebot no le afecta | Bajo | Explicación lista en `medicion-calidad.md`. Se resuelve solo en el sprint 3, cuando `connect-src` pase a `'self'` para el formulario |
 | R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
-| R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B3**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
+| R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B4**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

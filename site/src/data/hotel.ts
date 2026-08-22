@@ -38,8 +38,8 @@ export const contacto = {
    * los dos telefonos de arriba, pero no publica un enlace `wa.me` en ningun
    * lado: no hay forma de saber cual de los dos numeros lo tiene. Adivinar
    * aqui mandaria a un huesped a escribirle a un numero que puede no
-   * responder por ese canal, peor que no ofrecer el boton. Pregunta B3,
-   * riesgo R-24 en la bitacora.
+   * responder por ese canal, peor que no ofrecer el boton. Pregunta B4,
+   * riesgo R-21 en la bitacora.
    *
    * Mientras siga en `null`, `BotonWhatsApp.astro` no inventa un numero: cae
    * a `/contacto/`, que es cierto hoy. En cuanto el cliente confirme, este

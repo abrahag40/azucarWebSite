@@ -33,8 +33,8 @@ No es una limitación técnica: es la única opción correcta hoy.
 | Falta | Bloqueado por | Consecuencia |
 |---|---|---|
 | Destinatario y responsable de responder | **B1, B2** | No sabemos a quién notificar ni con qué compromiso de tiempo |
-| Correo y WhatsApp de recepción | **B3** | El sitio vigente **no publica ningún WhatsApp**: no hay número que usar |
-| Pasarela de pago | **B4** | Fuera de alcance de esta historia |
+| Correo y WhatsApp de recepción | **B4** | El sitio vigente **no publica ningún WhatsApp**: no hay número que usar |
+| Pasarela de pago | **B3** | Fuera de alcance de esta historia |
 | Desglose fiscal | **C3** | Sin él no se puede cotizar. Ver abajo |
 | Aviso de privacidad conforme a LFPDPPP | **E-PRIV** | Ver abajo |
 
