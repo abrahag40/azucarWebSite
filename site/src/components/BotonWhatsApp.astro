@@ -1,0 +1,110 @@
+---
+/**
+ * Boton flotante de WhatsApp, clasico: circulo verde, abajo a la derecha,
+ * fijo sobre el resto de la pagina. Es el patron que cualquier huesped ya
+ * reconoce de otros sitios, y reconocerlo es el punto: aqui gana la
+ * convencion universal sobre el radio de esquina de la plantilla (2-4px en
+ * todo lo demas). Cappa no tiene un elemento equivalente para tomar como
+ * base -no hay nada que traicionar-, así que la fuente aqui es el propio
+ * patron de la industria, no la plantilla.
+ *
+ * El icono es un telefono generico dibujado a mano, no el logotipo de
+ * WhatsApp: mismo motivo que el resto de `Icono.astro` (R-01, iconos de
+ * pago bloqueados) y la misma prudencia de no reproducir una marca de
+ * terceros trazo por trazo. El circulo verde en la esquina inferior derecha
+ * ya comunica "WhatsApp" por convencion; el glifo exacto es secundario.
+ *
+ * SIN NUMERO CONFIRMADO (R-24, pregunta B3): mientras `contacto.whatsapp`
+ * siga en `null`, el boton no inventa un enlace `wa.me` -mandaria al
+ * huesped a escribirle a un numero que podria no tener WhatsApp-. Cae a
+ * `/contacto/`, que es cierto hoy, y lo dice su propia etiqueta accesible:
+ * nunca afirma "WhatsApp" si en realidad abre la pagina de contacto.
+ *
+ * El saludo precargado (criterio de aceptacion de H3.7, "el mensaje llega
+ * con el contexto de la pagina") ya esta listo aunque hoy no se use: en
+ * cuanto `contacto.whatsapp` tenga un numero real, el enlace empieza a
+ * abrir con "Hola, estoy viendo '<titulo de la pagina>'..." sin tocar mas
+ * codigo que ese unico campo.
+ */
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+import { contacto } from '../data/hotel';
+
+interface Props { idioma: Idioma; titulo: string }
+const { idioma, titulo } = Astro.props;
+const t = usarT(idioma);
+
+const numero = contacto.whatsapp;
+// `titulo` es siempre "<nombre de la pagina> | Azucar Hotel Tulum" (convencion
+// de las 19 vistas, ver `Contacto.astro` o `[slug].astro`): se toma sólo el
+// primer tramo para no repetir el nombre del hotel dos veces en el saludo.
+const nombrePagina = titulo.split(' | ')[0];
+const saludo = t('flotante.saludo', { pagina: nombrePagina });
+const destino = numero
+  ? `https://wa.me/${numero}?text=${encodeURIComponent(saludo)}`
+  : ruta(idioma, 'contacto');
+const etiqueta = numero ? t('reserva.whatsapp') : t('flotante.contacto');
+---
+<a
+  class="whatsapp-flotante"
+  href={destino}
+  aria-label={etiqueta}
+  target={numero ? '_blank' : undefined}
+  rel={numero ? 'noopener' : undefined}
+>
+  <svg
+    class="whatsapp-flotante__icono"
+    viewBox="0 0 24 24"
+    width="28"
+    height="28"
+    fill="#fff"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+  </svg>
+</a>
+
+<style>
+  /* Verde de marca de WhatsApp, no un token del sitio: es el unico lugar de
+     la interfaz donde el color tiene que ser el de un tercero reconocible,
+     no el del hotel. Por eso vive aqui y no en `tokens.css`. */
+  .whatsapp-flotante {
+    position: fixed;
+    right: var(--space-5);
+    bottom: var(--space-5);
+    /* Progresivo: si el navegador no entiende `env()`, se queda con el
+       `bottom` de arriba. Si lo entiende, suma el area segura de iOS para
+       que el boton no quede debajo de la barra de gestos. */
+    bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.25), 0 2px 6px rgb(37 211 102 / 0.35);
+    z-index: 40;
+    transition: transform var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+  .whatsapp-flotante:hover,
+  .whatsapp-flotante:focus-visible {
+    background: #1ebd5a;
+    transform: scale(1.06);
+  }
+  .whatsapp-flotante:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* En movil el boton se acerca mas al borde: la pantalla es mas angosta y
+     `--space-5` (24px) a cada lado le resta demasiado ancho util al pulgar. */
+  @media (max-width: 30rem) {
+    .whatsapp-flotante {
+      right: var(--space-4);
+      bottom: var(--space-4);
+      bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+    }
+  }
+</style>

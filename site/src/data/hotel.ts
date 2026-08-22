@@ -30,6 +30,22 @@ type Texto = Record<Idioma, string>;
 export const contacto = {
   correo: 'contacto@azucarhotel.com',
   telefonos: ['+52\u00A0(984)\u00A0210-0057', '+52\u00A0(81)\u00A01380-2176'],
+  /**
+   * Numero de WhatsApp para el boton flotante, en formato wa.me: solo digitos,
+   * con codigo de pais, sin `+` ni espacios (p. ej. `529841234567`).
+   *
+   * `null` a proposito. El sitio vigente muestra el icono de WhatsApp junto a
+   * los dos telefonos de arriba, pero no publica un enlace `wa.me` en ningun
+   * lado: no hay forma de saber cual de los dos numeros lo tiene. Adivinar
+   * aqui mandaria a un huesped a escribirle a un numero que puede no
+   * responder por ese canal, peor que no ofrecer el boton. Pregunta B3,
+   * riesgo R-24 en la bitacora.
+   *
+   * Mientras siga en `null`, `BotonWhatsApp.astro` no inventa un numero: cae
+   * a `/contacto/`, que es cierto hoy. En cuanto el cliente confirme, este
+   * campo es el unico cambio que hace falta para que el boton abra WhatsApp.
+   */
+  whatsapp: null as string | null,
 } as const;
 
 /** Presentación. Fuente: `/nosotros/` y `/en/about-us/`. */

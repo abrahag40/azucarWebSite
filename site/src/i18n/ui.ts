@@ -84,6 +84,13 @@ export const ui = {
     'reserva.cierre': 'Entiendo que es una solicitud sujeta a confirmación del hotel.',
     'reserva.aviso': 'Solicitud sujeta a confirmación del hotel',
     'reserva.whatsapp': 'Escribir por WhatsApp',
+    // Etiqueta honesta del boton flotante mientras `contacto.whatsapp` siga en
+    // `null` (R-24): no promete WhatsApp si en realidad lleva a /contacto/.
+    'flotante.contacto': 'Contactar al hotel',
+    // Mensaje precargado en wa.me con el contexto de la pagina (criterio de
+    // aceptacion de H3.7). Listo desde hoy: en cuanto `contacto.whatsapp` deje
+    // de ser `null`, este saludo empieza a usarse sin tocar mas codigo.
+    'flotante.saludo': 'Hola, estoy viendo "{pagina}" y tengo una pregunta.',
 
     'hero.eyebrow': 'Zona Hotelera de Tulum · Frente al mar',
     // Titular corto a propósito: 36 caracteres caían en tres renglones y el
@@ -264,6 +271,8 @@ export const ui = {
     'reserva.cierre': 'I understand this is a request subject to confirmation by the hotel.',
     'reserva.aviso': 'Request subject to confirmation by the hotel',
     'reserva.whatsapp': 'Message us on WhatsApp',
+    'flotante.contacto': 'Contact the hotel',
+    'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 
     'hero.eyebrow': 'Tulum Hotel Zone · Beachfront',
     'hero.titulo': 'Where the sea is sweet',

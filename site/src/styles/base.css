@@ -195,7 +195,8 @@ a:hover { color: var(--color-accent-hover); }
 
   /* Lo que en papel no sirve para nada: no se puede pulsar. */
   .cabecera, .menu, .nav, .saltar, .hero__acciones, .boton,
-  .pie__nav, .galeria__rejilla, .visor, .hero__indicador { display: none !important; }
+  .pie__nav, .galeria__rejilla, .visor, .hero__indicador,
+  .whatsapp-flotante { display: none !important; }
 
   /* El banner deja de ser una fotografía a sangre y pasa a ser un título. */
   .banner, .hero {

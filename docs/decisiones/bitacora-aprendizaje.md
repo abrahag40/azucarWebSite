@@ -1680,6 +1680,44 @@ acervo completo, imagen por imagen, y se anota cuando el acervo mismo no alcanza
 
 ---
 
+## L-072 — Cuando la plantilla no tiene el elemento, la fuente es la convención de la industria
+
+**Lección.** Se pidió el botón flotante de WhatsApp, clásico, abajo a la derecha. Cappa no
+tiene nada parecido — ni en el pie, ni en ninguna página de la demo hay un botón flotante de
+ningún tipo. Por primera vez en el proyecto, "toma como base la plantilla, no inventes nada"
+no tenía dónde aterrizar: no hay plantilla que seguir.
+
+La resolución fue tratarlo como lo que es — un patrón de **la industria del sitio web para
+hoteles**, no de Cappa —, y tomar la fuente de ahí: círculo verde de marca, esquina inferior
+derecha, fijo sobre el resto de la página. Es la única vez en el proyecto que el radio de
+esquina de la plantilla (2–4px en todo lo demás) se rompe a propósito por un círculo perfecto:
+el reconocimiento inmediato del patrón importa más que la coherencia visual interna, porque la
+función del botón depende de que se lea como "WhatsApp" en un vistazo.
+
+**El icono, otra vez sin activos con licencia (R-01):** no se intentó reproducir el logotipo
+exacto de WhatsApp trazo por trazo — arriesga una marca de un tercero por una fidelidad que a
+28px nadie nota. Se usa un teléfono genérico dibujado a mano, el mismo criterio que ya rigió
+el globo de idioma (L-070): el círculo verde en la esquina ya comunica "WhatsApp" por
+convención; el glifo exacto es secundario.
+
+**El bloqueo real, y cómo no repetirlo:** el número de WhatsApp no está confirmado — mismo
+hueco que R-21 ya había encontrado en el sitio vigente (el icono está, el enlace `wa.me`
+nunca). Adivinar cuál de los dos teléfonos publicados lo tiene habría mandado a un huésped a
+escribirle a un número que quizá no responde por ese canal: peor que no ofrecer el botón.
+Se aplicó el mismo patrón que ya usa `check-datos.mjs` para los datos de alojamiento sin
+verificar — un campo explícitamente en `null` — pero con una salida distinta: en vez de hacer
+fallar el build, el componente **degrada con honestidad** a `/contacto/`, un destino que hoy
+es cierto, y su propio `aria-label` lo dice ("Contactar al hotel", no "WhatsApp"). No hay dato
+falso que bloquear porque no se afirma ningún dato falso — el botón nunca miente sobre a dónde
+lleva, sólo hace lo mejor que puede mientras falta la respuesta a B3.
+
+**El patrón:** "no inventes nada, la plantilla es la fuente" asume que la plantilla tiene el
+elemento. Cuando no lo tiene, la pregunta correcta no es "¿qué haría Cappa?" sino "¿qué espera
+reconocer quien lo usa?" — y ahí la fuente correcta es la convención establecida fuera del
+proyecto, no una invención propia ni un vacío.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

@@ -221,11 +221,17 @@ completa y con el precio total, enviada desde el sitio.*
 - **Entonces** llega por correo **y** WhatsApp.
 - **Y** contiene fechas, tipo, huéspedes, contacto, cotización y comentarios.
 
-### H3.7 — WhatsApp como canal paralelo · `S` · 🔴 *bloqueada: el sitio vigente **no publica ningún WhatsApp**. No hay número (B3)*
+### H3.7 — WhatsApp como canal paralelo · `S` · 🔄 *interfaz construida; el enlace real espera el número (B3)*
 > Como **huésped potencial**, quiero preguntar por WhatsApp si no quiero llenar un formulario.
 
-- **Entonces** hay acceso visible en todas las páginas.
+- **Entonces** hay acceso visible en todas las páginas. ✅ Botón flotante clásico, abajo a la
+  derecha, en las 38 páginas.
 - **Y** el mensaje llega pre-llenado con el contexto de la página desde la que se escribió.
+  ✅ Construido y listo (`flotante.saludo` en `ui.ts`), pero inactivo: sin número confirmado, el
+  botón no inventa un enlace `wa.me` — cae a `/contacto/`, que es cierto hoy, con una etiqueta
+  accesible que lo dice ("Contactar al hotel", no "WhatsApp"). En cuanto el cliente responda
+  **B3**, activar el saludo y el destino real es cambiar un solo campo: `contacto.whatsapp` en
+  `site/src/data/hotel.ts`.
 
 ### H3.8 — Aviso de privacidad y consentimiento · `S` · 🔄 *aviso publicado con sus carencias declaradas; el consentimiento entra con H3.4 (E-PRIV)*
 > Como **huésped potencial**, quiero saber qué hacen con mis datos, y como **hotel**,
