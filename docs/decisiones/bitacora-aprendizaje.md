@@ -1742,6 +1742,39 @@ correcto".
 
 ---
 
+## L-074 — Probar contra el servicio real, incluso sin credenciales reales
+
+**Lección.** Construido el endpoint de ADR-0006, hacía falta verificarlo sin cuenta de Resend
+ni de Turnstile. La tentación es conformarse con que `astro check` y `npm test` pasen y llamarlo
+listo. No alcanza: ninguno de los dos ejecuta la función en el runtime real, y ahí es donde vive
+la mitad del riesgo —parámetros de `fetch` mal armados, cabeceras que faltan, un `await` que
+falta en la ruta de error—.
+
+**Lo que sí se pudo probar, sin una sola cuenta propia:**
+
+- Cloudflare publica una llave de prueba de Turnstile que **siempre aprueba**
+  (`1x0000000000000000000000000000000AA`, documentada para exactamente este uso). Con ella,
+  `wrangler pages dev` corre el flujo completo —honeypot, límite de tasa, validación,
+  Turnstile— sin ninguna cuenta.
+- Con una llave de Resend deliberadamente falsa, la llamada real a `api.resend.com` sí sale,
+  Resend sí responde, y responde **401**. Eso no es un fallo de la prueba: es la prueba de que
+  el cableado llega hasta el proveedor real. Un error de credencial confirma la integración
+  igual de bien que un envío exitoso —mejor, incluso: prueba el camino de error también—.
+
+**El defecto real que encontró la prueba, y no el tipo:** al enviar `llegada: ''`, la función
+marcaba `salida` como inválida también, aunque su fecha por sí sola fuera correcta —porque
+`noches('', salida)` no puede calcularse y da 0—. Resultó ser el mismo comportamiento que ya
+tiene el cliente desde antes (`FormularioSolicitud.astro` hace exactamente lo mismo), así que no
+era un bug: era una prueba con la expectativa equivocada. Pero **sólo se supo probándolo**, no
+leyendo el código dos veces.
+
+**El patrón:** "no tengo credenciales reales" no es lo mismo que "no puedo probarlo". Entre
+mockear el proveedor externo y no probar nada, casi siempre hay una tercera vía —una llave de
+prueba pública, un modo sandbox, o simplemente dejar que la llamada real falle de la forma
+correcta— que prueba más que cualquiera de las otras dos.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

@@ -14,13 +14,15 @@
     "check": "astro check",
     "datos": "node scripts/check-datos.mjs",
     "test": "node --test \"src/**/*.test.mjs\"",
-    "verificar": "bash ../scripts/verificar-todo.sh"
+    "verificar": "bash ../scripts/verificar-todo.sh",
+    "functions:dev": "wrangler pages dev dist --compatibility-date=2026-08-20"
   },
   "dependencies": {
     "astro": "^7.2.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.125.0"
   }
 }

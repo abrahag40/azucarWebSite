@@ -22,14 +22,20 @@ import { readFileSync } from 'node:fs';
 // El módulo es TypeScript y estas pruebas corren en Node sin transpilar: se le
 // quitan las anotaciones de tipo con una sustitución mínima. Es menos elegante
 // que un runner con TS, y a cambio no añade una sola dependencia al proyecto.
+//
+// `camposInvalidos` (ADR-0006) añadió dos patrones nuevos que las sustituciones
+// de antes no cubrían: un tipo de retorno con corchetes (`string[]`) y `boolean`
+// en la lista de tipos primitivos. El shim se extiende, no se reescribe: cada
+// patrón nuevo se añade cuando aparece, no antes.
 const fuente = readFileSync(new URL('./solicitud.ts', import.meta.url), 'utf8')
   .replace(/^export interface [\s\S]*?^}$/gm, '')
   .replace(/: \{ asunto: string; cuerpo: string \}/g, '')
   .replace(/\((\w+): [A-Za-z<>, |]+\)/g, '($1)')
   .replace(/\((\w+): \w+, (\w+): \w+\)/g, '($1, $2)')
   .replace(/\((\w+): \w+, (\w+): \w+, (\w+): \w+\)/g, '($1, $2, $3)')
-  .replace(/: (number|string|void)\b(?=\s*[{;])/g, '');
-const { noches, componerSolicitud, enlaceCorreo } = await import(
+  .replace(/: (number|string|boolean|void)\b(?=\s*[{;])/g, '')
+  .replace(/: string\[\]/g, '');
+const { noches, componerSolicitud, enlaceCorreo, camposInvalidos } = await import(
   'data:text/javascript;base64,' + Buffer.from(fuente).toString('base64')
 );
 
@@ -102,4 +108,39 @@ test('el mailto escapa & ? y # de los comentarios, que si no parten la URL', () 
   assert.equal(url.split('&body=').length, 2);
   assert.ok(!url.split('&body=')[1].includes('&'));
   assert.ok(!url.split('&body=')[1].includes('#'));
+});
+
+// `camposInvalidos` (ADR-0006, H3.4): la validación del endpoint.
+const HOY = '2026-03-01';
+
+test('camposInvalidos: una solicitud completa y futura no tiene errores', () => {
+  assert.deepEqual(camposInvalidos(base, HOY), []);
+});
+
+test('camposInvalidos: llegada vacía o en el pasado', () => {
+  // Con la llegada vacía, `noches('', salida)` no puede calcularse y da 0: la
+  // salida se marca inválida TAMBIÉN, aunque su fecha por sí sola sea correcta.
+  // No es un error: es el mismo comportamiento que ya tiene el cliente en
+  // `FormularioSolicitud.astro` — no se puede confirmar la salida sin saber la
+  // llegada, así que pedir las dos de nuevo es lo honesto.
+  assert.deepEqual(camposInvalidos({ ...base, llegada: '' }, HOY), ['llegada', 'salida']);
+  assert.deepEqual(camposInvalidos({ ...base, llegada: '2026-02-01' }, HOY), ['llegada']);
+});
+
+test('camposInvalidos: salida igual o anterior a la llegada cuenta como inválida', () => {
+  assert.deepEqual(camposInvalidos({ ...base, salida: base.llegada }, HOY), ['salida']);
+});
+
+test('camposInvalidos: nombre en blanco no pasa con sólo espacios', () => {
+  assert.deepEqual(camposInvalidos({ ...base, nombre: '   ' }, HOY), ['nombre']);
+});
+
+test('camposInvalidos: correo sin arroba o sin dominio se rechaza', () => {
+  assert.deepEqual(camposInvalidos({ ...base, correo: 'no-es-correo' }, HOY), ['correo']);
+  assert.deepEqual(camposInvalidos({ ...base, correo: 'ana@sin-dominio' }, HOY), ['correo']);
+});
+
+test('camposInvalidos: acumula más de un campo inválido a la vez', () => {
+  const invalidos = camposInvalidos({ ...base, nombre: '', correo: 'x' }, HOY);
+  assert.deepEqual(invalidos.sort(), ['correo', 'nombre']);
 });

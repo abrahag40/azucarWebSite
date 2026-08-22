@@ -11,11 +11,17 @@ site/node_modules/
 build/
 .cache/
 .parcel-cache/
+site/.wrangler/
 
 # Entorno
 .env
 .env.local
 .env.*.local
+# Secretos locales de Cloudflare Pages Functions (ADR-0006). NUNCA se versiona:
+# son las mismas llaves reales que van en Cloudflare, sólo que para el equipo local.
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
 
 # Sistema
 .DS_Store

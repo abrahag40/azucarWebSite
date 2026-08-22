@@ -116,3 +116,31 @@ export function componerSolicitud(s: Solicitud, r: Rotulos): { asunto: string; c
 export function enlaceCorreo(destino: string, asunto: string, cuerpo: string): string {
   return `mailto:${destino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 }
+
+/**
+ * Campos inválidos de una solicitud. Devuelve sus NOMBRES, no el texto del
+ * error: el texto vive traducido en `Rotulos.errores` y cada quien lo pinta a
+ * su manera. El endpoint de ADR-0006 (H3.4) la usa para repetir en servidor la
+ * misma validación que ya corre en el navegador — "nunca sólo en cliente" es
+ * el criterio de aceptación, y una petición sin JavaScript de por medio salta
+ * ese cliente entero.
+ *
+ * NO sustituye la validación de `FormularioSolicitud.astro` para el correo:
+ * ahí se usa `checkValidity()` nativo del navegador a propósito, porque
+ * reimplementar la sintaxis del correo con una expresión regular termina
+ * rechazando direcciones válidas (ver el comentario de ese archivo). Aquí, sin
+ * DOM, no hay esa opción — así que la expresión es deliberadamente permisiva:
+ * su trabajo es descartar basura evidente, no certificar RFC 5322.
+ */
+export function camposInvalidos(s: Solicitud, hoy: string): string[] {
+  const invalidos: string[] = [];
+  if (!s.llegada || s.llegada < hoy) invalidos.push('llegada');
+  if (!s.salida || noches(s.llegada, s.salida) === 0) invalidos.push('salida');
+  if (!s.nombre?.trim()) invalidos.push('nombre');
+  if (!correoPlausible(s.correo)) invalidos.push('correo');
+  return invalidos;
+}
+
+function correoPlausible(correo: string | undefined): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((correo ?? '').trim());
+}

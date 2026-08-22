@@ -1,0 +1,24 @@
+# Plantilla para probar functions/api/solicitud.ts en local con:
+#
+#   npm run functions:dev
+#
+# Copiar a `.dev.vars` (NUNCA a `.dev.vars.example`) y rellenar con valores
+# reales o de prueba. `.dev.vars` esta en .gitignore -- no se sube nunca.
+#
+# En Cloudflare Pages, estas mismas llaves se configuran en
+# Settings > Environment variables, por separado para Preview y Production.
+# Ver docs/05-despliegue/runbook-accesos-y-despliegue.md.
+
+# Cuenta de Resend (resend.com). El remitente debe estar en un dominio
+# verificado con SPF/DKIM -- tarea de Abraham en el DNS del hotel.
+RESEND_API_KEY=
+CORREO_REMITENTE=Azucar Hotel Tulum <solicitudes@azucarhotel.com>
+
+# El correo OFICIAL de recepcion de solicitudes -- pregunta B4, todavia sin
+# responder. Mientras no exista, la funcion falla cerrado (503).
+CORREO_MANAGER=
+
+# Cloudflare Turnstile (dash.cloudflare.com -> Turnstile). Para probar sin
+# cuenta propia, la llave de prueba que SIEMPRE aprueba es:
+#   1x0000000000000000000000000000000AA
+TURNSTILE_SECRET_KEY=

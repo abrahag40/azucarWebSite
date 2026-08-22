@@ -200,31 +200,39 @@ completa y con el precio total, enviada desde el sitio.*
 > Ataca directamente la queja recurrente de "me cobraron más de lo publicado" documentada
 > en la auditoría. **Es el diferenciador frente a las OTAs.**
 
-### H3.4 — Endpoint de recepción · `M` · 🔴 *bloqueada por B1–B4 y E-PRIV. Propuesta técnica lista: [ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)*
+### H3.4 — Endpoint de recepción · `M` · 🔄 *construido y probado en local ([ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)), sin cablear al formulario ni desplegado con credenciales reales — falta B4 y E-PRIV*
 > Como **manager**, quiero que las solicitudes lleguen íntegras y sin basura.
 
-- **Entonces** la validación se repite en servidor, nunca sólo en cliente.
-- **Y** hay protección antispam sin CAPTCHA visible.
-- **Y** hay límite de tasa por IP.
+- **Entonces** la validación se repite en servidor, nunca sólo en cliente. ✅ `camposInvalidos`,
+  reutilizada de `booking/solicitud.ts`.
+- **Y** hay protección antispam sin CAPTCHA visible. ✅ Turnstile + honeypot.
+- **Y** hay límite de tasa por IP. ✅ Contador en KV con TTL de 1 hora, opcional (se omite si no
+  hay KV enlazado — es defensa en profundidad, no la garantía central).
 - **Y** **no se captura ningún dato de tarjeta** (ADR-0003). Lo verifica el CI.
 
-### H3.5 — Acuse inmediato al huésped · `S` · 🔴 *bloqueada por H3.4*
+### H3.5 — Acuse inmediato al huésped · `S` · 🔄 *el correo se construye y prueba junto con H3.4; falta C3 y B1/B2 para el contenido completo*
 > Como **huésped potencial**, quiero saber que mi solicitud llegó, para no irme a Booking.
 
 - **Dado** que envío, **entonces** en menos de 30 segundos recibo correo con resumen, cotización y compromiso de respuesta.
+  🔄 El resumen ✅ llega (reutiliza `componerSolicitud`); la cotización y el compromiso de tiempo
+  siguen sin poder afirmarse — dependen de **C3** y **B1/B2**. El correo lo dice explícitamente
+  en vez de inventar una cifra.
 - **Y** la pantalla de confirmación dice "solicitud recibida", nunca "reserva confirmada".
 
-### H3.6 — Notificación al manager · `S` · 🔴 *bloqueada por B1–B4*
+### H3.6 — Notificación al manager · `S` · 🔄 *el correo está construido; el WhatsApp se pospuso a propósito*
 > Como **manager**, quiero recibirla en el teléfono con todo lo necesario para responder sin
 > repreguntar.
 
-- **Entonces** llega por correo **y** WhatsApp.
-- **Y** contiene fechas, tipo, huéspedes, contacto, cotización y comentarios.
+- **Entonces** llega por correo ✅ **y** WhatsApp ⬜. Se decidió avanzar sólo con correo por ahora
+  (ver ADR-0006, Decisión 4): la pieza de WhatsApp automatizado exige una elección de
+  proveedor/costo que le toca al cliente, y no bloquea que el correo funcione.
+- **Y** contiene fechas, tipo, huéspedes, contacto, cotización y comentarios. ✅ Salvo cotización,
+  que sigue bloqueada por **C3**.
 
-> **Cómo se construyen las tres:** [ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)
-> propone Cloudflare Pages Functions sin base de datos, Resend para correo y, para WhatsApp, tres
-> opciones con una decisión de costo/proveedor pendiente del cliente. Nada se publica hasta que
-> se resuelvan B4 y E-PRIV.
+> **Cómo se construyen:** [ADR-0006](../decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)
+> propone Cloudflare Pages Functions sin base de datos y Resend para correo — ya construido y
+> probado en local. Para WhatsApp deja tres opciones con una decisión de costo/proveedor
+> pendiente del cliente. Nada de esto se publica hasta que se resuelvan **B4** y **E-PRIV**.
 
 ### H3.7 — WhatsApp como canal paralelo · `S` · 🔄 *interfaz construida; el enlace real espera el número (B4)*
 > Como **huésped potencial**, quiero preguntar por WhatsApp si no quiero llenar un formulario.

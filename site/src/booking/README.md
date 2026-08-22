@@ -62,9 +62,21 @@ impuestos incluidos. **Callar es más honesto que estimar.**
 
 ## Cuando lleguen las respuestas
 
-1. `componerSolicitud` no se toca: ya produce el cuerpo del mensaje.
-2. Se añade `enviar()` con el `POST` a la función serverless (H3.4).
-3. El consentimiento explícito y no premarcado (H3.8) entra **antes** que el
-   `POST`, no después.
-4. La cotización con impuestos (H3.3) se calcula aparte y se inyecta al módulo:
-   el formulario no debe saber de impuestos.
+1. ✅ `componerSolicitud` no se tocó: ya produce el cuerpo del mensaje, sin
+   cambios, reutilizado tal cual por el endpoint.
+2. ✅ **Construido y probado en local, sin cablear.** El endpoint vive en
+   [`functions/api/solicitud.ts`](../../functions/api/solicitud.ts) — ver
+   [ADR-0006](../../docs/decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md).
+   Valida en servidor, aplica antispam sin CAPTCHA visible, límite de tasa, y
+   entrega por correo (Resend) al manager y de acuse al huésped. Falla cerrado
+   —503— mientras falten sus variables de entorno, así que hoy, sin
+   configurar nada en Cloudflare, no hace nada. **Este `README` sigue
+   describiendo el comportamiento real del formulario**: el `<script>` de
+   `FormularioSolicitud.astro` no llama a este endpoint todavía. Cablearlo es
+   un cambio aparte y pequeño, para cuando se resuelvan los dos puntos que
+   siguen.
+3. ⬜ El consentimiento explícito y no premarcado (H3.8) entra **antes** que el
+   `POST`, no después. Se añade en el mismo cambio que cablee el `fetch()`.
+4. ⬜ La cotización con impuestos (H3.3) se calcula aparte y se inyecta al
+   módulo: el formulario no debe saber de impuestos. El correo de acuse al
+   huésped, mientras tanto, no inventa un total — lo dice explícitamente.

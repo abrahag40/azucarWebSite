@@ -84,6 +84,13 @@ export const ui = {
     'reserva.cierre': 'Entiendo que es una solicitud sujeta a confirmación del hotel.',
     'reserva.aviso': 'Solicitud sujeta a confirmación del hotel',
     'reserva.whatsapp': 'Escribir por WhatsApp',
+    // Correo de acuse al huésped (H3.5, ADR-0006). Deliberadamente NO promete
+    // cotización ni tiempo de respuesta: eso depende de C3 y B1/B2, que siguen
+    // sin responder. Repite el resumen que ya compone `componerSolicitud`.
+    'reserva.acuseAsunto': 'Recibimos tu solicitud — Azúcar Hotel Tulum',
+    'reserva.acuseSaludo': 'Hola {nombre},',
+    'reserva.acuseIntro': 'Esto es lo que recibimos. El hotel revisa la disponibilidad a mano y te responde por este mismo correo con el total, impuestos incluidos.',
+    'reserva.acuseCierre': 'Es una solicitud sujeta a confirmación del hotel, no una reserva confirmada.',
     // Etiqueta honesta del boton flotante mientras `contacto.whatsapp` siga en
     // `null` (R-21): no promete WhatsApp si en realidad lleva a /contacto/.
     'flotante.contacto': 'Contactar al hotel',
@@ -271,6 +278,10 @@ export const ui = {
     'reserva.cierre': 'I understand this is a request subject to confirmation by the hotel.',
     'reserva.aviso': 'Request subject to confirmation by the hotel',
     'reserva.whatsapp': 'Message us on WhatsApp',
+    'reserva.acuseAsunto': 'We received your request — Azúcar Hotel Tulum',
+    'reserva.acuseSaludo': 'Hi {nombre},',
+    'reserva.acuseIntro': 'Here is what we received. The hotel checks availability by hand and will reply to this same email with the total, taxes included.',
+    'reserva.acuseCierre': 'This is a request subject to confirmation by the hotel, not a confirmed reservation.',
     'flotante.contacto': 'Contact the hotel',
     'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 

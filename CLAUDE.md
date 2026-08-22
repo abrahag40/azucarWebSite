@@ -238,6 +238,18 @@ pura con **9 pruebas unitarias** —las primeras del proyecto—, porque el cál
 Siguen bloqueadas H3.3 (C3), H3.4 a H3.6 (B1–B4) y el consentimiento de H3.8 (E-PRIV).
 **H3.7 se descubre bloqueada por un dato nuevo: el sitio vigente no publica ningún WhatsApp.**
 
+**El endpoint de H3.4 ya está construido y probado en local**
+([ADR-0006](docs/decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)): Cloudflare
+Pages Function sin base de datos, antispam sin CAPTCHA visible (Turnstile + honeypot), límite de
+tasa, y entrega por correo (Resend) al manager y de acuse al huésped — verificado de punta a
+punta con `wrangler pages dev` contra la API real de Resend (falla con 401 por la llave de
+prueba, que es justamente la prueba de que el cableado funciona). **No cambia nada para un
+huésped real todavía:** `FormularioSolicitud.astro` sigue usando el `mailto:` de siempre — el
+`fetch()` que conecta uno con otro es un cambio aparte, a propósito pequeño, que espera **B4** y
+**E-PRIV**. El canal de WhatsApp automatizado (H3.6) se pospuso: exige que el cliente elija entre
+la API oficial de Meta, un intermediario de pago o un servicio no oficial con riesgo real —
+decisión de costo, no de código.
+
 ### Traspaso — H5.8, escrito salvo la sesión
 
 Tres documentos para tres lectores distintos, en `docs/06-traspaso/`: el **runbook operativo
@@ -371,7 +383,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **73 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **74 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
