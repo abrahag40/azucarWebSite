@@ -214,9 +214,10 @@ completa y con el precio total, enviada desde el sitio.*
 > Como **huésped potencial**, quiero saber que mi solicitud llegó, para no irme a Booking.
 
 - **Dado** que envío, **entonces** en menos de 30 segundos recibo correo con resumen, cotización y compromiso de respuesta.
-  🔄 El resumen ✅ llega (reutiliza `componerSolicitud`); la cotización y el compromiso de tiempo
-  siguen sin poder afirmarse — dependen de **C3** y **B1/B2**. El correo lo dice explícitamente
-  en vez de inventar una cifra.
+  🔄 El resumen ✅ llega, con el estilo del sitio (HTML propio en `booking/correoHtml.ts`,
+  verificado con envío real a Resend); la cotización y el compromiso de tiempo siguen sin poder
+  afirmarse — dependen de **C3** y **B1/B2**. El correo lo dice explícitamente en vez de inventar
+  una cifra.
 - **Y** la pantalla de confirmación dice "solicitud recibida", nunca "reserva confirmada".
 
 ### H3.6 — Notificación al manager · `S` · 🔄 *el correo está construido; el WhatsApp se pospuso a propósito*

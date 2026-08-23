@@ -91,6 +91,12 @@ export const ui = {
     'reserva.acuseSaludo': 'Hola {nombre},',
     'reserva.acuseIntro': 'Esto es lo que recibimos. El hotel revisa la disponibilidad a mano y te responde por este mismo correo con el total, impuestos incluidos.',
     'reserva.acuseCierre': 'Es una solicitud sujeta a confirmación del hotel, no una reserva confirmada.',
+    // Saludo por hora del correo HTML de acuse (`correoHtml.ts`). Es la hora
+    // de Tulum, no la del huésped -no la sabemos-. Sólo se usa en la versión
+    // HTML; la de texto plano sigue con `reserva.acuseSaludo`, más simple.
+    'reserva.saludoManana': 'Buenos días',
+    'reserva.saludoTarde': 'Buenas tardes',
+    'reserva.saludoNoche': 'Buenas noches',
     // Etiqueta honesta del boton flotante mientras `contacto.whatsapp` siga en
     // `null` (R-21): no promete WhatsApp si en realidad lleva a /contacto/.
     'flotante.contacto': 'Contactar al hotel',
@@ -282,6 +288,9 @@ export const ui = {
     'reserva.acuseSaludo': 'Hi {nombre},',
     'reserva.acuseIntro': 'Here is what we received. The hotel checks availability by hand and will reply to this same email with the total, taxes included.',
     'reserva.acuseCierre': 'This is a request subject to confirmation by the hotel, not a confirmed reservation.',
+    'reserva.saludoManana': 'Good morning',
+    'reserva.saludoTarde': 'Good afternoon',
+    'reserva.saludoNoche': 'Good evening',
     'flotante.contacto': 'Contact the hotel',
     'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 

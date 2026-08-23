@@ -34,6 +34,7 @@
  * pequeno, para cuando llegue el momento.
  */
 import { componerSolicitud, camposInvalidos, type Solicitud, type Rotulos } from '../../src/booking/solicitud';
+import { correoAcuseHtml, saludoPorHoraUTC } from '../../src/booking/correoHtml';
 import { usarT, type Idioma } from '../../src/i18n/ui';
 
 /** Sólo lo que este archivo necesita de un almacén KV -- no hace falta el
@@ -120,7 +121,8 @@ export const onRequestPost = async (contexto: { request: Request; env: Entorno }
 
   try {
     await enviarCorreo(env, env.CORREO_MANAGER, asunto, cuerpoManager);
-    await enviarCorreo(env, ...correoAcuse(cuerpo.idioma, cuerpo.solicitud, cuerpoManager));
+    const acuse = correoAcuse(cuerpo.idioma, cuerpo.solicitud, cuerpo.rotulos, cuerpoManager);
+    await enviarCorreo(env, acuse.destino, acuse.asunto, acuse.texto, acuse.html);
   } catch (err) {
     // No se reintenta ni se guarda para reintentar después -- no hay dónde
     // guardarlo (ver "qué no hace, a propósito"). El huésped se entera del
@@ -140,16 +142,30 @@ function json(estado: number, datos: unknown): Response {
   });
 }
 
+const CLAVES_SALUDO = { manana: 'reserva.saludoManana', tarde: 'reserva.saludoTarde', noche: 'reserva.saludoNoche' } as const;
+
 /**
- * El correo de acuse al huésped (H3.5). Reutiliza el CUERPO ya compuesto para
- * el manager -mismo criterio "una sola fuente"- y sólo añade un saludo y un
- * cierre. Deliberadamente NO inventa una cotización ni un compromiso de
- * tiempo: eso depende de C3 y de B1/B2, que ADR-0006 no resuelve. Ver
- * `reserva.acuseIntro` en `ui.ts`.
+ * El correo de acuse al huésped (H3.5). El texto plano reutiliza el CUERPO ya
+ * compuesto para el manager -mismo criterio "una sola fuente"- y sólo añade
+ * un saludo y un cierre. El HTML (`correoAcuseHtml`, en `booking/correoHtml.ts`)
+ * rearma esos MISMOS datos con la presentación del sitio -ver el porqué de
+ * ese archivo aparte en su propio comentario de cabecera-. Ninguno de los dos
+ * inventa una cotización ni un compromiso de tiempo: eso depende de C3 y de
+ * B1/B2, que ADR-0006 no resuelve.
+ *
+ * Siempre se manda el texto plano TAMBIÉN, no sólo el HTML: es el respaldo
+ * cuando un cliente de correo no muestra HTML, y evita que el mensaje caiga
+ * en spam por venir sin alternativa de texto -mala práctica bien conocida de
+ * entrega de correo transaccional-.
  */
-function correoAcuse(idioma: Idioma, s: Solicitud, resumen: string): [string, string, string] {
+function correoAcuse(
+  idioma: Idioma,
+  s: Solicitud,
+  r: Rotulos,
+  resumen: string,
+): { destino: string; asunto: string; texto: string; html: string } {
   const t = usarT(idioma);
-  const cuerpo = [
+  const texto = [
     t('reserva.acuseSaludo', { nombre: s.nombre }),
     '',
     t('reserva.acuseIntro'),
@@ -158,17 +174,34 @@ function correoAcuse(idioma: Idioma, s: Solicitud, resumen: string): [string, st
     '',
     t('reserva.acuseCierre'),
   ].join('\n');
-  return [s.correo, t('reserva.acuseAsunto'), cuerpo];
+
+  const claveSaludo = saludoPorHoraUTC(new Date().getUTCHours());
+  const html = correoAcuseHtml(s, r, {
+    saludo: t(CLAVES_SALUDO[claveSaludo]),
+    intro: t('reserva.acuseIntro'),
+    cierre: t('reserva.acuseCierre'),
+    idioma,
+  });
+
+  return { destino: s.correo, asunto: t('reserva.acuseAsunto'), texto, html };
 }
 
-async function enviarCorreo(env: Entorno, destino: string, asunto: string, texto: string): Promise<void> {
+async function enviarCorreo(
+  env: Entorno,
+  destino: string,
+  asunto: string,
+  texto: string,
+  html?: string,
+): Promise<void> {
+  const cuerpo: Record<string, string> = { from: env.CORREO_REMITENTE!, to: destino, subject: asunto, text: texto };
+  if (html) cuerpo.html = html;
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       authorization: `Bearer ${env.RESEND_API_KEY}`,
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ from: env.CORREO_REMITENTE, to: destino, subject: asunto, text: texto }),
+    body: JSON.stringify(cuerpo),
   });
   if (!resp.ok) throw new Error(`Resend respondio ${resp.status}`);
 }

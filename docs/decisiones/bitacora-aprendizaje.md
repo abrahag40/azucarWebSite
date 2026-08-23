@@ -1775,6 +1775,42 @@ correcta— que prueba más que cualquiera de las otras dos.
 
 ---
 
+## L-075 — Un correo sin `<meta charset>` sólo se rompe cuando alguien lo mira
+
+**Lección.** Abraham pidió un correo HTML para el acuse al huésped, con el estilo del sitio.
+Se construyó `correoHtml.ts`, con 24 pruebas unitarias verdes cubriendo escapado, saltos de
+línea, campos opcionales y la regla de ADR-0003. Todo en verde, y el primer vistazo real en el
+navegador mostró «AZÃºCAR HOTEL TULUM» y «MarÃa JosÃ© Herrera» — el HTML no declaraba
+`<meta charset="utf-8">`, así que el navegador adivinaba la codificación y adivinaba mal.
+
+**Ninguna prueba unitaria lo iba a encontrar.** `assert.match(html, /María José/)` compara la
+cadena de JavaScript contra sí misma —ambas viven en memoria como UTF-8, la comparación pasa
+siempre—; el defecto sólo existe en el momento en que un *navegador* decide con qué tabla de
+caracteres pintar esos bytes. Es la misma clase de hallazgo que ya dejó L-059 y el trabajo del
+logotipo: una captura de pantalla real encontró lo que ninguna aserción sabía preguntar.
+
+**El patrón, con nombre:** cualquier documento que se renderiza para un humano —HTML, y esto
+incluye el correo— necesita una verificación *visual*, no sólo de datos. Las pruebas
+unitarias comprueban que los DATOS lleguen correctos a la plantilla; sólo un render real
+comprueba que la plantilla los MUESTRE correctos.
+
+### El hallazgo técnico de paso: Node ya entiende TypeScript, si el import lo dice
+
+Al escribir las pruebas se encontró que Node 22+ ejecuta un `.ts` con interfaces y tipos
+simples de forma nativa —sin el truco de despojar tipos a mano que ya usa
+`solicitud.test.mjs`—, **con una condición**: los imports internos entre archivos `.ts` deben
+llevar la extensión explícita (`from './solicitud.ts'`, no `from './solicitud'`). Sin la
+extensión, Node no encuentra el módulo — el error es sobre resolución, no sobre sintaxis, y por
+eso pasó inadvertido en la primera prueba.
+
+Astro (Vite) y Cloudflare (esbuild) aceptan esa misma extensión sin cambiar nada de cómo
+compilan — se verificó con `npm run build`, `astro check` y `wrangler pages dev` antes de
+confiar en ello. `correoHtml.test.mjs` usa este camino nativo; `solicitud.test.mjs` se queda
+con su regex por ahora — migrarlo es una mejora aparte, con su propia verificación, no un
+efecto colateral de este cambio.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
