@@ -215,8 +215,9 @@ completa y con el precio total, enviada desde el sitio.*
 
 - **Dado** que envío, **entonces** en menos de 30 segundos recibo correo con resumen, cotización y compromiso de respuesta.
   🔄 El resumen ✅ llega, con el estilo del sitio (HTML propio en `booking/correoHtml.ts`,
-  verificado con envío real a Resend); la cotización y el compromiso de tiempo siguen sin poder
-  afirmarse — dependen de **C3** y **B1/B2**. El correo lo dice explícitamente en vez de inventar
+  verificado con envío real a Resend y revisado por Abraham en Gmail — se ve bien); la
+  cotización y el compromiso de tiempo siguen sin poder afirmarse — dependen de **C3** y
+  **B1/B2**. El correo lo dice explícitamente en vez de inventar
   una cifra.
 - **Y** la pantalla de confirmación dice "solicitud recibida", nunca "reserva confirmada".
 
