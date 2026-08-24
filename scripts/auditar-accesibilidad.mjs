@@ -145,11 +145,31 @@ for (const f of paginas) {
   // cuanto los fragmentos se tradujeron: el sitio estaba bien y el auditor decía
   // que no. Un verificador que codifica un valor concreto en vez de la propiedad
   // que le importa caduca en cuanto ese valor cambia legítimamente.
+  //
+  // El criterio se llama «Bypass Blocks» y existe para saltar BLOQUES DE
+  // NAVEGACIÓN repetidos entre páginas. Una página sin una sola <nav> no tiene
+  // nada que saltar, y exigirle el enlace es pedir ceremonia sin beneficio
+  // (CLAUDE.md §2.5). El caso concreto que lo destapó: `/panel/`, la
+  // herramienta interna de precios, que no lleva cabecera de navegación ni pie
+  // del sitio a propósito.
+  //
+  // Se comprueba la CONDICIÓN —¿hay navegación que saltar?— y no una lista de
+  // rutas exentas, por el mismo motivo que el destino se busca por su relación
+  // y no por su nombre: una lista de excepciones caduca; una condición, no.
   const salto = /<a\b[^>]*\bhref\s*=\s*["']#([^"']+)["'][^>]*class\s*=\s*["'][^"']*\bsaltar\b/i.exec(doc)
     ?? /<a\b[^>]*class\s*=\s*["'][^"']*\bsaltar\b[^>]*\bhref\s*=\s*["']#([^"']+)["']/i.exec(doc);
-  if (!salto) A(pag, 'WCAG 2.4.1', 'sin enlace para saltar al contenido');
-  else if (!new RegExp(`\\bid\\s*=\\s*["']${salto[1]}["']`, 'i').test(doc))
+  const hayNavegacion = /<nav\b/i.test(doc);
+  // Los dos casos se escriben por separado y NO como `if/else if`. Al añadir la
+  // condición `hayNavegacion` al primero, el `else if` que colgaba de él quedó
+  // alcanzable con `salto` en `null` y reventaba con un TypeError — un fallo
+  // que yo mismo introduje y que apareció al calibrar la regla rompiendo una
+  // página a propósito. Encadenar condiciones que ya no son excluyentes es la
+  // forma silenciosa de romper un guardián mientras se lo mejora (L-078).
+  if (!salto) {
+    if (hayNavegacion) A(pag, 'WCAG 2.4.1', 'sin enlace para saltar al contenido');
+  } else if (!new RegExp(`\\bid\\s*=\\s*["']${salto[1]}["']`, 'i').test(doc)) {
     F(pag, 'WCAG 2.4.1', `el enlace de salto apunta a #${salto[1]}, que no existe en la página`);
+  }
 
   // ── 2.5.8 Enlace solo en su párrafo — AVISO, no fallo ────────────────────
   // Este auditor NO puede medir cajas: no tiene estilos calculados. Lo que sí

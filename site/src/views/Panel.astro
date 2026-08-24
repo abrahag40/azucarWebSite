@@ -1,0 +1,349 @@
+---
+/**
+ * Panel de precios (ADR-0007, Fase 1).
+ *
+ * ── POR QUE NO USA `Base.astro` ────────────────────────────────────────────
+ * `Base` trae cabecera, pie, boton flotante de WhatsApp, `schema.org/Hotel`,
+ * `og:image` y canonical. Nada de eso tiene sentido en una herramienta interna
+ * — y algunas cosas son directamente contraproducentes: no queremos que esta
+ * pagina declare ser el hotel ante Google, ni que aparezca en el sitemap. Se
+ * hereda `tokens.css` y `base.css`, que es lo unico que se quiere compartir:
+ * el sistema visual.
+ *
+ * ── DE DONDE SALEN LOS PRECIOS ─────────────────────────────────────────────
+ * NO del build. Se piden a `/api/precios` al cargar la pagina, porque el
+ * archivo compilado es el del ULTIMO despliegue y el panel tiene que mostrar
+ * lo que hay en el repositorio AHORA -si no, justo despues de guardar
+ * mostraria el valor viejo durante los dos minutos del rebuild-.
+ *
+ * Del build sale solo la lista de tipos con su nombre legible, que si es
+ * estable: sale de la coleccion `alojamiento`, la misma fuente que el resto
+ * del sitio (regla 6).
+ *
+ * ── 🔴 QUE NO TIENE, Y NO ES UN OLVIDO ─────────────────────────────────────
+ * Ningun campo de disponibilidad. Regla 2 de CLAUDE.md y ADR-0007 §Decision 4:
+ * un panel de precios es la puerta de atras natural para que reaparezca, y
+ * con ella el riesgo de sobreventa que ADR-0003 entero existe para evitar.
+ */
+import { getCollection } from 'astro:content';
+import { PRECIO_MINIMO, PRECIO_MAXIMO, precios } from '../data/precios';
+import '../styles/fuentes.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden)
+  .map((x) => ({ id: x.id, nombre: x.data.nombre.es, categoria: x.data.categoria }));
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Una herramienta interna no se indexa. Tampoco esta en el sitemap. */}
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Precios · Azúcar Hotel Tulum</title>
+  </head>
+  <body>
+    <main class="panel">
+      <header class="panel__cabecera">
+        <p class="panel__antetitulo">Azúcar Hotel Tulum</p>
+        <h1 class="panel__titulo">Precios</h1>
+        <p class="panel__estado" id="meta" aria-live="polite"></p>
+      </header>
+
+      {/* 🔴 El aviso mas importante de la pagina, y va arriba del todo a
+          proposito: mientras C3 no responda, estas cifras NO se publican.
+          Quien las capture tiene que saberlo antes de teclear la primera. */}
+      {!precios.publicable && (
+        <div class="panel__aviso">
+          <p><strong>Estos precios no se muestran en el sitio todavía.</strong></p>
+          <p>
+            Falta que el hotel confirme el desglose de impuestos (IVA, ISH de Quintana Roo y
+            saneamiento ambiental de Tulum). Publicar un precio sin impuestos reproduciría la
+            queja de «me cobraron más de lo publicado», que es justo lo que este sitio corrige.
+          </p>
+          <p>Mientras tanto, sirven como referencia para responder solicitudes.</p>
+        </div>
+      )}
+
+      <div class="panel__cargando" id="cargando">Cargando precios…</div>
+
+      <form class="panel__lista" id="lista" hidden>
+        {tipos.map((tipo) => (
+          <div class="fila" data-tipo={tipo.id}>
+            <label class="fila__nombre" for={`precio-${tipo.id}`}>
+              {tipo.nombre}
+              <span class="fila__categoria">{tipo.categoria === 'suite' ? 'Suite' : 'Habitación'}</span>
+            </label>
+            <div class="fila__control">
+              <span class="fila__moneda" aria-hidden="true">$</span>
+              <input
+                type="number"
+                id={`precio-${tipo.id}`}
+                name={tipo.id}
+                inputmode="numeric"
+                step="1"
+                min={PRECIO_MINIMO}
+                max={PRECIO_MAXIMO}
+                placeholder="Sin capturar"
+                autocomplete="off"
+              />
+              <span class="fila__unidad">MXN / noche</span>
+            </div>
+            <button type="button" class="boton boton--primario fila__guardar" data-guardar={tipo.id}>
+              Guardar
+            </button>
+            <p class="fila__estado" data-estado={tipo.id} aria-live="polite"></p>
+          </div>
+        ))}
+      </form>
+
+      <footer class="panel__pie">
+        <p>
+          Cada cambio queda registrado con tu correo y la fecha. El sitio tarda
+          <strong>uno o dos minutos</strong> en mostrarlo — es normal, no hace falta guardar
+          dos veces.
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      const lista = document.querySelector<HTMLFormElement>('#lista')!;
+      const cargando = document.querySelector<HTMLElement>('#cargando')!;
+      const meta = document.querySelector<HTMLElement>('#meta')!;
+
+      const campo = (tipo: string) =>
+        lista.querySelector<HTMLInputElement>(`input[name="${CSS.escape(tipo)}"]`)!;
+      const estado = (tipo: string) =>
+        lista.querySelector<HTMLElement>(`[data-estado="${CSS.escape(tipo)}"]`)!;
+
+      function pintarMeta(datos: { actualizado?: string | null; actualizadoPor?: string | null }) {
+        if (!datos.actualizado) {
+          meta.textContent = 'Todavía no se ha guardado ningún precio.';
+          return;
+        }
+        const fecha = new Date(datos.actualizado).toLocaleString('es-MX', {
+          dateStyle: 'long',
+          timeStyle: 'short',
+        });
+        meta.textContent = datos.actualizadoPor
+          ? `Último cambio: ${fecha} · ${datos.actualizadoPor}`
+          : `Último cambio: ${fecha}`;
+      }
+
+      async function cargar() {
+        try {
+          const resp = await fetch('/api/precios', { headers: { accept: 'application/json' } });
+          if (!resp.ok) throw new Error(String(resp.status));
+          const datos = await resp.json();
+          for (const [tipo, valor] of Object.entries(datos.porTipo ?? {})) {
+            const input = lista.querySelector<HTMLInputElement>(
+              `input[name="${CSS.escape(tipo)}"]`,
+            );
+            if (input && typeof valor === 'number') input.value = String(valor);
+          }
+          pintarMeta(datos);
+          cargando.hidden = true;
+          lista.hidden = false;
+        } catch {
+          // Un fallo al cargar NO se disimula: si el panel mostrara los campos
+          // vacíos, quien entre creería que no hay precios capturados y
+          // teclearía encima de datos que sí existen.
+          cargando.textContent =
+            'No se pudieron cargar los precios. Recarga la página; si sigue igual, avisa a Abraham antes de teclear nada.';
+        }
+      }
+
+      async function guardar(tipo: string) {
+        const input = campo(tipo);
+        const salida = estado(tipo);
+        const crudo = input.value.trim();
+        const valor = crudo === '' ? null : Number(crudo);
+
+        // Misma validación que el servidor. Aquí es cortesía —el veredicto que
+        // cuenta es el del endpoint—, pero evita un viaje de red para decir
+        // algo que ya se sabe.
+        if (valor !== null && (!Number.isInteger(valor) || valor < 100 || valor > 500000)) {
+          salida.textContent = 'Revisa el número: tiene que ser entre 100 y 500,000, sin decimales.';
+          salida.dataset.tono = 'error';
+          input.setAttribute('aria-invalid', 'true');
+          input.focus();
+          return;
+        }
+        input.removeAttribute('aria-invalid');
+
+        salida.dataset.tono = 'trabajando';
+        salida.textContent = 'Guardando…';
+        const boton = lista.querySelector<HTMLButtonElement>(
+          `[data-guardar="${CSS.escape(tipo)}"]`,
+        )!;
+        boton.disabled = true;
+
+        try {
+          const resp = await fetch('/api/precios', {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ tipo, precio: valor }),
+          });
+          const datos = await resp.json().catch(() => ({}));
+          if (!resp.ok) throw new Error(datos.error ?? String(resp.status));
+
+          // 202: guardado en el repositorio, pero el sitio aún no lo refleja.
+          // Se dice tal cual —"en un par de minutos"— en vez de un "listo" que
+          // haría creer que ya está visible.
+          salida.dataset.tono = 'ok';
+          salida.textContent = 'Guardado. Se verá en el sitio en un par de minutos.';
+          pintarMeta(datos);
+        } catch (err) {
+          salida.dataset.tono = 'error';
+          salida.textContent =
+            'No se pudo guardar. Vuelve a intentarlo; si falla otra vez, avisa a Abraham.';
+          console.error('panel: fallo al guardar', err);
+        } finally {
+          boton.disabled = false;
+        }
+      }
+
+      lista.addEventListener('click', (ev) => {
+        const boton = (ev.target as HTMLElement).closest<HTMLElement>('[data-guardar]');
+        if (boton) guardar(boton.dataset.guardar!);
+      });
+      // Enter dentro de un campo guarda ESE campo, en vez de enviar el
+      // formulario entero —que aquí no significa nada—.
+      lista.addEventListener('submit', (ev) => ev.preventDefault());
+      lista.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Enter') return;
+        const input = (ev.target as HTMLElement).closest<HTMLInputElement>('input[name]');
+        if (input) {
+          ev.preventDefault();
+          guardar(input.name);
+        }
+      });
+
+      cargar();
+    </script>
+
+    <style>
+      .panel {
+        max-width: 48rem;
+        margin-inline: auto;
+        padding: var(--space-7) var(--gutter) var(--space-9);
+      }
+      .panel__cabecera { margin-bottom: var(--space-6); }
+      .panel__antetitulo {
+        font-family: var(--font-ui);
+        font-size: var(--text-sm);
+        letter-spacing: var(--tracking-antetitulo);
+        text-transform: uppercase;
+        color: var(--color-accent-text);
+        margin: 0 0 var(--space-2);
+      }
+      .panel__titulo { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
+      .panel__estado {
+        font-size: var(--text-sm);
+        color: var(--color-ink-muted);
+        margin: 0;
+        min-height: 1.5em;   /* reserva el hueco: sin esto la lista salta al cargar */
+      }
+
+      .panel__aviso {
+        border-left: 3px solid var(--color-accent);
+        background: var(--color-surface-warm);
+        padding: var(--space-4) var(--space-5);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--space-6);
+      }
+      .panel__aviso p { margin: 0 0 var(--space-2); font-size: var(--text-sm); }
+      .panel__aviso p:last-child { margin-bottom: 0; }
+
+      .panel__cargando { color: var(--color-ink-muted); padding-block: var(--space-5); }
+
+      .panel__lista { display: grid; gap: var(--space-3); }
+      /* 🔴 `display: grid` GANA sobre el `display: none` que el navegador da a
+         `[hidden]`, asi que sin esta linea la lista se ve aunque el atributo
+         este puesto. Aqui no es cosmetico: si la carga falla, se veria el
+         mensaje de error Y ocho campos vacios, y quien entre podria teclear
+         encima creyendo que no hay precios capturados — justo lo que el
+         `catch` de arriba intenta evitar. Lo enseño una captura de pantalla,
+         no una prueba (misma familia que L-059 y L-075). */
+      .panel__lista[hidden] { display: none; }
+
+      /* Móvil primero: una columna, cada control a lo ancho. Desde 40rem pasa a
+         nombre / control / botón en una fila, que es como se lee mejor una
+         tabla de precios en escritorio. */
+      .fila {
+        display: grid;
+        gap: var(--space-2);
+        padding: var(--space-4);
+        background: var(--color-surface-alt);
+        border-radius: var(--radius-sm);
+      }
+      .fila__nombre {
+        font-weight: 500;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--space-2);
+      }
+      .fila__categoria {
+        font-family: var(--font-ui);
+        font-size: var(--text-xs);
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        color: var(--color-ink-muted);
+      }
+      .fila__control { display: flex; align-items: center; gap: var(--space-2); }
+      .fila__moneda { color: var(--color-ink-muted); }
+      .fila__unidad {
+        font-size: var(--text-sm);
+        color: var(--color-ink-muted);
+        white-space: nowrap;
+      }
+      .fila__control input {
+        font: inherit;
+        /* 16 px mínimo: por debajo, Safari en iOS hace zoom al enfocar y
+           descoloca la página. Misma regla que el formulario de solicitud. */
+        font-size: max(1rem, var(--text-base));
+        width: 8rem;
+        min-height: 3rem;
+        padding: var(--space-3);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-surface);
+        box-sizing: border-box;
+      }
+      .fila__control input:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+      .fila__control input[aria-invalid='true'] {
+        border-color: var(--color-error);
+        border-width: 2px;
+      }
+      .fila__guardar { justify-self: start; }
+      .fila__estado { font-size: var(--text-sm); margin: 0; min-height: 1.4em; }
+      .fila__estado[data-tono='ok'] { color: var(--color-accent-text); }
+      .fila__estado[data-tono='error'] { color: var(--color-error); }
+      .fila__estado[data-tono='trabajando'] { color: var(--color-ink-muted); }
+
+      @media (min-width: 40rem) {
+        .fila {
+          grid-template-columns: minmax(0, 1fr) auto auto;
+          align-items: center;
+          column-gap: var(--space-4);
+        }
+        .fila__estado { grid-column: 1 / -1; }
+      }
+
+      .panel__pie {
+        margin-top: var(--space-7);
+        padding-top: var(--space-5);
+        border-top: 1px solid var(--color-border);
+        font-size: var(--text-sm);
+        color: var(--color-ink-muted);
+      }
+      .panel__pie p { margin: 0; }
+    </style>
+  </body>
+</html>

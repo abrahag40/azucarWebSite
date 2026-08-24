@@ -1,0 +1,17 @@
+{
+  "_nota": "Precios por tipo de alojamiento. ESTE ARCHIVO LO ESCRIBE EL PANEL (ADR-0007), no se edita a mano salvo emergencia. El esquema es deliberadamente minimo -un precio base por tipo- porque C2 sigue sin responder y no sabemos si hay temporadas. Un precio por tipo es el minimo comun denominador de cualquier esquema tarifario: si C2 revela temporadas, se anade una dimension, no se rehace. Ver src/data/precios.ts para el detalle.",
+  "moneda": "MXN",
+  "actualizado": null,
+  "actualizadoPor": null,
+  "publicable": false,
+  "porTipo": {
+    "suite-mar": null,
+    "suite-cielo": null,
+    "suite-agua": null,
+    "suite-aire": null,
+    "habitacion-king-mar": null,
+    "habitacion-king-selva": null,
+    "habitacion-doble-mar": null,
+    "habitacion-doble-selva": null
+  }
+}

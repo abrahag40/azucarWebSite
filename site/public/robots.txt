@@ -8,5 +8,11 @@
 # mismo archivo estático no puede decir cosas distintas en los dos sitios.
 User-agent: *
 Allow: /
+# El panel de precios es una herramienta interna (ADR-0007). Su proteccion real
+# es Cloudflare Access, que bloquea la peticion antes de que llegue al sitio;
+# esto es sólo para que no aparezca en resultados de busqueda si alguna vez se
+# enlaza por error. Un `Disallow` no protege nada por si solo — y decirlo aqui
+# evita que alguien lo confunda con seguridad.
+Disallow: /panel/
 
 Sitemap: https://azucarhotel.com/sitemap.xml

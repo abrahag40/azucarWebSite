@@ -66,10 +66,19 @@ paso "todos los <img> con src" bash -c '
   [ "$n" -eq 0 ] || { echo "$n <img> sin src"; exit 1; }'
 
 paso "og:image en todas las páginas" bash -c '
-  t=$(find site/dist -name "*.html" | wc -l | tr -d " ")
-  c=$(grep -rl "og:image" site/dist --include="*.html" | wc -l | tr -d " ")
-  # el 404 no lleva metadatos sociales a propósito: no es contenido
-  [ "$c" -ge "$((t - 2))" ] || { echo "sólo $c de $t páginas declaran og:image"; exit 1; }'
+  # Lista EXPLÍCITA de lo que no lleva metadatos sociales, en vez del margen
+  # numérico difuso que había antes ("al menos total - 2"). Ese margen decía
+  # reservarse para los dos 404 — que en realidad SÍ llevan og:image, así que
+  # estaba sin usar—, y al añadir el panel de precios lo consumió por accidente:
+  # el guardián siguió en verde por la razón equivocada. Un umbral con holgura
+  # tolera lo que nadie decidió tolerar (L-077).
+  excluidas="site/dist/panel/index.html"
+  faltan=""
+  for f in $(find site/dist -name "*.html"); do
+    case " $excluidas " in *" $f "*) continue ;; esac
+    grep -q "og:image" "$f" || faltan="$faltan $f"
+  done
+  [ -z "$faltan" ] || { echo "sin og:image:$faltan"; exit 1; }'
 
 paso "fragmentos de URL sanos" bash -c '
   fallos=0

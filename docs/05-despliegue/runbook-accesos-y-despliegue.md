@@ -215,6 +215,84 @@ del formulario, y ese cambio espera a B4 y E-PRIV.
 
 ---
 
+## Parte 6 — Cloudflare Access y el panel de precios
+
+> 🔴 **Nada de esta parte es opcional.** El panel escribe en el repositorio. Sin Access
+> configurado, cualquiera con la URL puede cambiar precios. **No se despliega a producción
+> hasta que los tres pasos estén hechos** — ver ADR-0007.
+
+### Qué es y por qué
+
+`/panel/` es la herramienta donde el hotel actualiza precios ([ADR-0007](../decisiones/ADR-0007-panel-de-precios.md)).
+No lleva login propio a propósito: la autenticación se delega a **Cloudflare Access**, que
+bloquea la petición **a nivel de red** — quien no tenga sesión válida no llega ni a ver la
+página. Así no almacenamos contraseñas ni gestionamos sesiones, que es donde se rompen los
+paneles pequeños.
+
+### Paso 1 — Cloudflare Access sobre las dos rutas
+
+1. `dash.cloudflare.com` → **Zero Trust**. La primera vez pide crear un equipo y elegir un
+   nombre de dominio propio (`<equipo>.cloudflareaccess.com`) — el plan gratuito cubre de sobra
+   dos o tres usuarios; verificar el límite vigente al configurar.
+2. **Access → Applications → Add an application → Self-hosted.**
+3. Dominio: el del sitio. **Path: `panel`**.
+4. En **Policies**, una política de tipo *Allow* con el método **Emails** y la lista de correos
+   autorizados. Uno por persona — no una cuenta compartida, porque el panel registra **quién**
+   hizo cada cambio y una cuenta compartida borra ese dato.
+5. **Repetir para `api/precios`.** 🔴 Es el paso que más se olvida: proteger sólo `/panel/`
+   deja el endpoint que escribe accesible por su cuenta. La página sin el API no sirve de nada;
+   el API sin la página sí.
+
+### Paso 2 — El token de GitHub (R-26, la credencial más sensible del proyecto)
+
+1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained tokens**.
+   🔴 **Fine-grained, no el clásico.** El clásico da acceso a todo lo que tu cuenta puede tocar.
+2. **Repository access → Only select repositories →** únicamente `abrahag40/azucarWebSite`.
+3. **Permissions → Repository permissions → Contents: Read and write.** Nada más. Ni
+   administración, ni workflows, ni metadatos extra.
+4. Fecha de expiración: la más corta que sea práctica. **Anotar la fecha aquí abajo** — un
+   token sin fecha registrada es un token que nadie rota:
+
+   > Token creado el: `________` · expira el: `________`
+
+5. Copiar el token (se muestra una vez) y guardarlo **sólo** como variable de Cloudflare Pages.
+
+### Paso 3 — Variables en Cloudflare Pages
+
+Proyecto → **Settings → Environment variables**. Igual que con Resend: **sólo en Preview** por
+ahora.
+
+| Variable | Valor |
+|---|---|
+| `GITHUB_TOKEN` | el token del paso 2 |
+| `GITHUB_REPO` | `abrahag40/azucarWebSite` |
+| `GITHUB_RAMA` | `claude/hotel-tulum-web-audit-0yly29` |
+
+Sin las tres, el endpoint responde `503` y no opera — falla cerrado, igual que el de
+solicitudes.
+
+### Qué se obtiene, y qué queda pendiente
+
+El panel funciona: el hotel entra con su correo, cambia un precio, y en uno o dos minutos está
+en el repositorio con su nombre en el `git log`.
+
+**Lo que NO hace todavía:** publicar esos precios en el sitio. El campo `publicable` de
+`site/src/data/precios.json` está en `false` hasta que **C3** —el desglose de impuestos—
+responda. Publicar un precio sin impuestos reproduciría la queja de «me cobraron más de lo
+publicado», que es lo que este proyecto corrige (regla 3).
+
+> ### ⚠️ Requisito de entrada a producción, todavía sin cumplir
+>
+> La función comprueba que exista la cabecera de sesión de Access, pero **no valida
+> criptográficamente su firma**. Mientras Access esté configurado eso basta —sin sesión no hay
+> cabecera que enviar—, pero es una defensa de segundo nivel, no la principal. Validar la firma
+> contra las claves públicas del equipo
+> (`https://<equipo>.cloudflareaccess.com/cdn-cgi/access/certs`) es trabajo de la Fase 2 y
+> **condición para pasar el panel a Production**. Está escrito aquí y en el código, no en la
+> memoria de nadie.
+
+---
+
 ## Checklist de accesos pendientes
 
 - [ ] Titularidad de `azucarhotel.com` y acceso al registrador (**E2** · R-06)
@@ -228,3 +306,7 @@ del formulario, y ese cambio espera a B4 y E-PRIV.
 - [ ] Cuenta de Resend creada y dominio de correo verificado (**Parte 5**)
 - [ ] `RESEND_API_KEY` y `CORREO_REMITENTE` en Cloudflare Pages, sólo en Preview (**Parte 5**)
 - [ ] Cuenta de Cloudflare Turnstile, `TURNSTILE_SECRET_KEY` en Cloudflare Pages (**Parte 5**)
+- [ ] Cloudflare Access sobre `/panel/` **y** sobre `/api/precios` (**Parte 6**)
+- [ ] Correos autorizados del panel — uno por persona, no compartido (**Parte 6**)
+- [ ] Token *fine-grained* de GitHub, con su fecha de expiración anotada (**Parte 6** · R-26)
+- [ ] `GITHUB_TOKEN`, `GITHUB_REPO` y `GITHUB_RAMA` en Cloudflare Pages, sólo en Preview (**Parte 6**)

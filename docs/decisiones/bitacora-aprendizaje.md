@@ -1841,6 +1841,66 @@ está construido.*
 
 ---
 
+## L-077 — Un umbral con holgura tolera lo que nadie decidió tolerar
+
+**Lección.** El guardián de `og:image` decía: *"al menos `total − 2` páginas deben declararlo"*,
+con un comentario explicando que el margen era para los dos 404, *"que no llevan metadatos
+sociales a propósito"*. Al añadir el panel de precios, el guardián siguió en verde.
+
+Pero por la razón equivocada. Los 404 **sí llevan `og:image`** —el comentario llevaba tiempo
+mintiendo—, así que el margen de 2 estaba entero sin usar, y el panel se lo comió sin que nada
+avisara. El guardián no aprobó el panel: simplemente le sobraba holgura de una excepción que
+nunca existió.
+
+**Lo que enseña:** un umbral numérico con margen es una excepción **anónima**. No dice *qué* se
+está tolerando, así que cualquier cosa nueva cabe dentro mientras quede hueco — y cuando el
+hueco se acaba, falla por algo que quizá sí era legítimo. Peor: el comentario que justifica el
+margen envejece sin que nadie lo verifique, porque el guardián en verde no invita a releerlo.
+
+**La corrección:** una lista explícita de rutas exentas. Ahora dice exactamente qué se exceptúa,
+el mensaje de fallo nombra el archivo concreto, y añadir una excepción obliga a escribirla —que
+es justo la fricción que se quiere.
+
+**El patrón, general:** cuando una comprobación necesite una excepción, nómbrala. `total − 2` es
+una excepción sin nombre; una lista con un archivo dentro es una decisión.
+
+---
+
+## L-078 — Cambiar la condición de un `if` puede romper el `else` que cuelga de él
+
+**Lección.** El auditor de accesibilidad avisaba de que `/panel/` no tenía enlace «saltar al
+contenido». Es un aviso legítimo en cualquier página del sitio, pero no en ésa: WCAG 2.4.1 se
+llama *Bypass Blocks* y existe para saltar **bloques de navegación repetidos**. El panel no
+tiene navegación — no hay nada que saltar. Exigirlo ahí es ceremonia sin beneficio.
+
+La regla estaba así:
+
+```js
+if (!salto) A(...)                                  // avisa: no hay enlace
+else if (!existeElDestino(salto[1])) F(...)         // falla: apunta a la nada
+```
+
+y se cambió a `if (!salto && hayNavegacion)`. Parece inocuo. **No lo es:** las dos ramas dejaron
+de ser excluyentes. Una página sin enlace *y* sin navegación —el panel exactamente— hace falsa
+la primera condición, cae al `else if`, y lee `salto[1]` sobre `null`. El auditor entero
+reventaba con un `TypeError`.
+
+**No lo encontró la corrida normal: lo encontró calibrar.** Rompí una página a propósito para
+comprobar que la regla nueva seguía detectando el caso real, y el script se cayó antes de
+llegar a decirlo. Sin ese paso, el bug habría viajado en el commit y el guardián habría muerto
+en silencio la próxima vez que alguien añadiera una página sin `<nav>`.
+
+**El patrón:** al añadir una condición a un `if`, revisar **siempre** qué cuelga de su `else`.
+Si las ramas ya no cubren el mismo espacio de casos, hay que separarlas —dos `if` anidados en
+lugar de una cadena—, no confiar en que el orden siga funcionando.
+
+**Y el meta-patrón, ya con cuatro casos (L-035, L-047, L-068, éste):** calibrar no es
+opcional ni ceremonia. Cada vez que se toca un guardián hay que romperlo a propósito y
+comprobar que grita — es la única forma de distinguir «pasa porque está bien» de «pasa porque
+ya no comprueba nada».
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

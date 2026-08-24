@@ -1,0 +1,14 @@
+---
+/**
+ * `/panel/` — herramienta interna, NO parte del sitio publico.
+ *
+ * 🔴 Su unica proteccion real es Cloudflare Access, configurado sobre esta
+ * ruta y sobre `/api/precios`. Sin eso, cualquiera con la URL entra. Ver
+ * ADR-0007 §Decision 2 y la Parte 6 del runbook de despliegue.
+ *
+ * No existe version en ingles: la usa el personal del hotel, en espanol. Por
+ * eso vive en `pages/` directamente y no en el par ES/EN del resto del sitio.
+ */
+import Panel from '../../views/Panel.astro';
+---
+<Panel />

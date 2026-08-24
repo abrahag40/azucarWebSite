@@ -252,6 +252,24 @@ huésped real todavía:** `FormularioSolicitud.astro` sigue usando el `mailto:` 
 la API oficial de Meta, un intermediario de pago o un servicio no oficial con riesgo real —
 decisión de costo, no de código.
 
+### Panel de precios — Fase 1 construida, sin configurar
+
+**Fuera del plan de sprints**, a petición de Abraham ([ADR-0007](docs/decisiones/ADR-0007-panel-de-precios.md)).
+`/panel/` existe: lee y escribe los precios de los 8 tipos, valida en servidor, y cada cambio
+hace un commit al repositorio que dispara el redespliegue — **sin base de datos**, con historial
+en `git log` y reversión de un comando. El login se delega a **Cloudflare Access**; no se
+escribió una línea de autenticación.
+
+**Todavía no funciona para nadie**, y falla cerrado hasta que se configure (Parte 6 del
+runbook): Access sobre `/panel/` **y** sobre `/api/precios`, más el token de GitHub. Verificado
+en local que rechaza sin sesión (403), sin configuración (503), y que ignora tipos inventados,
+precios con decimales, precios absurdos y los intentos de tocar `publicable`.
+
+**Los precios NO se publican en el sitio.** `publicable` está en `false` hasta que responda
+**C3**: un precio sin impuestos reproduciría la queja que este proyecto cura. Y **F4 queda
+reabierta** — el cliente aceptó por escrito que no podría editar el sitio; hay que
+reconfirmar la frontera nueva.
+
 ### Traspaso — H5.8, escrito salvo la sesión
 
 Tres documentos para tres lectores distintos, en `docs/06-traspaso/`: el **runbook operativo
@@ -295,7 +313,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **38** (19 rutas × 2 idiomas) · plantilla **sin duplicar**: `src/views/` |
+| Páginas | **38** públicas (19 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/` |
 | Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
@@ -350,6 +368,10 @@ el cliente vea en la demo exactamente qué debe confirmar.
    como proveedor de correo (ADR-0006). Pasos exactos en
    [`runbook-accesos-y-despliegue.md`, Parte 5](docs/05-despliegue/runbook-accesos-y-despliegue.md#parte-5--resend--el-correo-de-solicitudes).
    No activa nada visible por sí solo — sigue esperando B4 y E-PRIV para cablearse.
+6. **Cloudflare Access + token de GitHub, para el panel de precios.** Sin esto el panel no
+   funciona (falla cerrado, a propósito). Parte 6 del mismo runbook. 🔴 **Proteger las DOS
+   rutas** —`/panel/` y `/api/precios`—: proteger sólo la página deja el endpoint que escribe
+   accesible por su cuenta.
 
 > ⚠️ **Riesgo de método, dicho en voz alta.** Hay 38 páginas construidas. El sprint 3 ya no
 > está en cero —el formulario existe y los 90 enlaces rotos se cerraron—, pero **no puede
@@ -389,7 +411,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **76 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **78 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
