@@ -261,13 +261,25 @@ vetar una decisión ya aprobada?
 
 **F3.** ¿Hay una fecha ancla? (temporada, aniversario, campaña, fin de contrato con proveedor)
 
-**F4. ✅ RESUELTA — Después del lanzamiento, ¿quién actualiza el contenido?**
-> Respuesta confirmada: **lo gestiona Abraham**, no personal del hotel. El equipo del hotel
-> atiende OTAs y solicitudes, no el sitio.
-> **Consecuencia:** no se requiere CMS. Habilita el stack estático del
+**F4. 🔄 REABIERTA (2026-08-22) — Después del lanzamiento, ¿quién actualiza el contenido?**
+> **Respuesta original, confirmada en el sprint 0:** *lo gestiona Abraham*, no personal del
+> hotel. El equipo del hotel atiende OTAs y solicitudes, no el sitio.
+> **Consecuencia de esa respuesta:** no se requiere CMS. Habilitó el stack estático del
 > [ADR-0004](../decisiones/ADR-0004-stack-tecnico.md).
-> Se conserva escrita porque **debe quedar aceptado explícitamente que el cliente no podrá
-> editar el sitio por su cuenta.** Lo asumido sin escribir es la queja del mes tres.
+>
+> 🔴 **Por qué se reabre:** el 2026-08-22 se pidió un panel para que **el hotel** actualice
+> precios ([ADR-0007](../decisiones/ADR-0007-panel-de-precios.md)). Eso es la premisa de F4 al
+> revés. La respuesta nueva —y la que hay que **reconfirmar con el cliente**, no asumir— es una
+> frontera intermedia:
+>
+> | Quién | Qué edita |
+> |---|---|
+> | **El hotel** | **Precios**, y sólo precios, desde el panel |
+> | **Abraham** | Todo lo demás: textos, fotos, páginas, estructura |
+>
+> Se conserva escrita, igual que antes, porque **debe quedar aceptado explícitamente hasta
+> dónde llega lo que el cliente puede editar por su cuenta.** Lo asumido sin escribir es la
+> queja del mes tres — y ahora hay dos fronteras que confundir en vez de una.
 
 **F5.** La plantilla Cappa es comercial. ¿La licencia se compra a nombre del hotel, o la
 adquirimos nosotros y se factura dentro del proyecto?

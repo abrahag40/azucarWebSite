@@ -1811,6 +1811,36 @@ efecto colateral de este cambio.
 
 ---
 
+## L-076 — Una petición nueva puede invalidar una respuesta que ya estaba cerrada
+
+**Lección.** Abraham pidió un panel para que el hotel actualice precios. La petición es
+razonable y no tiene nada de raro — pero `preguntas-cliente.md` tenía **F4 marcada como
+RESUELTA** con la respuesta contraria, confirmada por el propio cliente: *"lo gestiona Abraham,
+no personal del hotel"*. Y esa respuesta no era un detalle: **es la que justificó descartar
+WordPress** en ADR-0004 (*"un CMS se justifica cuando alguien va a usarlo"*).
+
+Lo fácil habría sido construir el panel y no decir nada. La contradicción existiría igual; la
+diferencia es si queda escrita hoy o se descubre dentro de tres meses, cuando alguien lea
+ADR-0004 y pregunte por qué hay un CMS en un proyecto que decidió no tener CMS.
+
+**Lo que enseña:** las preguntas cerradas no son inmunes. Una petición nueva puede reabrir una
+decisión vieja, y el momento de detectarlo es **antes de escribir código**, releyendo qué
+decisiones se apoyaban en la respuesta que está cambiando. Aquí eran tres: el descarte de
+WordPress, la ausencia de superficie de autenticación y el alcance de la capacitación al hotel.
+
+**Cómo se resolvió:** F4 pasa de ✅ RESUELTA a 🔄 REABIERTA, con la frontera nueva escrita
+—«el hotel edita precios, Abraham edita todo lo demás»— y marcada como **pendiente de
+reconfirmar con el cliente**. No se da por buena una respuesta que nadie ha dado: el cliente
+aceptó por escrito que no podría editar el sitio, y merece la oportunidad de aceptar por
+escrito la nueva frontera.
+
+**El patrón:** una decisión registrada es un activo sólo si se relee cuando cambia el contexto.
+Un ADR que nadie vuelve a abrir es documentación muerta. La señal de que hay que releer es
+justamente ésta: *una petición que suena sencilla y que sin embargo no encaja con lo que ya
+está construido.*
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -1838,4 +1868,6 @@ efecto colateral de este cambio.
 | R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B4**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |
+| R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
+| R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

@@ -57,6 +57,8 @@ Mapa de la documentación. El contexto general y las reglas de trabajo viven en
 - [ADR-0003 — Arquitectura de reserva sin PMS](decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md)
 - [ADR-0004 — Stack técnico](decisiones/ADR-0004-stack-tecnico.md)
 - [ADR-0005 — Ajustes del stack, sprints 2 a 4](decisiones/ADR-0005-ajustes-de-stack-sprints-2-4.md)
+- [ADR-0006 — Endpoint de solicitud: correo y WhatsApp](decisiones/ADR-0006-endpoint-de-solicitud-correo-y-whatsapp.md)
+- [ADR-0007 — Panel de precios](decisiones/ADR-0007-panel-de-precios.md)
 - [Bitácora de aprendizaje](decisiones/bitacora-aprendizaje.md)
 
 ## Sobre los ADR

@@ -106,13 +106,15 @@ Mac, ni al navegador, ni salida a internet** hacia dominios externos. Consecuenc
 | **Stack** | **Astro** estático, i18n ES/EN nativo, *content collections*, Cloudflare Pages, formulario contra función serverless | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
 | **Plantilla Cappa** | Fuente de **diseño**, no de código. Se extraen tokens y se reconstruyen componentes | [0004](docs/decisiones/ADR-0004-stack-tecnico.md) |
 | **Pagos** | Enlace de pago del hotel. **No tocamos datos de tarjeta → fuera de alcance PCI-DSS** | [0003](docs/decisiones/ADR-0003-arquitectura-de-reserva-sin-pms.md) |
+| **Panel de precios** | El hotel edita **sólo precios**. Escribe a git y dispara rebuild — sin base de datos. Login delegado a Cloudflare Access. **Reabre F4.** Bloqueado por C2 y C3 | [0007](docs/decisiones/ADR-0007-panel-de-precios.md) |
 
 ### 🔴 Reglas que no se rompen
 
 1. **Nunca decir "reserva confirmada"** en la interfaz. Siempre *"solicitud sujeta a
    confirmación"*. **El CI lo verifica y falla el build.**
 2. **Nunca mostrar disponibilidad** que no podamos respaldar. El esquema de datos no tiene
-   ese campo, a propósito.
+   ese campo, a propósito. **Tampoco el panel de precios** (ADR-0007): es la puerta de atrás
+   natural para que reaparezca, y con ella el riesgo de sobreventa.
 3. **El total cotizado incluye impuestos.** Es el diferenciador frente a las OTAs.
 4. **Nunca capturar datos de tarjeta.** Es el hallazgo crítico del sitio vigente; el sitio
    nuevo no lo reproduce.
@@ -376,7 +378,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
 | `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
-| `docs/decisiones/ADR-0001..0006` | Decisiones con consecuencias |
+| `docs/decisiones/ADR-0001..0007` | Decisiones con consecuencias |
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | **`docs/04-diseno/fidelidad-a-cappa.md`** | **Cuánto se parece el sitio a la plantilla, medido elemento por elemento** |
@@ -387,7 +389,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **75 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **76 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
