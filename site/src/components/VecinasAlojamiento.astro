@@ -1,0 +1,83 @@
+---
+/**
+ * Enlaces a la ficha anterior y la siguiente (criterio de H2.2: «no dejar al
+ * huésped en un callejón sin salida»).
+ *
+ * ── POR QUE ES UN COMPONENTE PROPIO Y NO PARTE DE `FichaAlojamiento` ────────
+ * Vivía dentro de la ficha, al final de su marcado. Como la página añade la
+ * galería DESPUES de la ficha, el resultado era que «Anterior / Siguiente»
+ * aparecía **entre los datos y las fotos** — se invitaba a irse a otra
+ * habitación justo antes de enseñar las de ésta.
+ *
+ * El orden correcto es: datos → fotos → y sólo entonces, si nada convenció,
+ * la salida hacia otro tipo. Extraerlo deja que la página decida ese orden,
+ * que es donde se ve la secuencia completa; la ficha no puede saber qué
+ * viene después de ella.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props {
+  anterior?: CollectionEntry<'alojamiento'>;
+  siguiente?: CollectionEntry<'alojamiento'>;
+  idioma: Idioma;
+}
+const { anterior, siguiente, idioma } = Astro.props;
+const t = usarT(idioma);
+---
+{(anterior || siguiente) && (
+  <nav class="contenedor vecinas" aria-label={t('ficha.otras')}>
+    {anterior ? (
+      <a class="vecina vecina--anterior" href={ruta(idioma, `alojamiento/${anterior.id}`)}>
+        <span class="vecina__etiqueta">{t('ficha.anterior')}</span>
+        <span class="vecina__nombre">{anterior.data.nombre[idioma]}</span>
+      </a>
+    ) : <span></span>}
+    {siguiente && (
+      <a class="vecina vecina--siguiente" href={ruta(idioma, `alojamiento/${siguiente.id}`)}>
+        <span class="vecina__etiqueta">{t('ficha.siguiente')}</span>
+        <span class="vecina__nombre">{siguiente.data.nombre[idioma]}</span>
+      </a>
+    )}
+  </nav>
+)}
+
+<style>
+  .vecinas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .vecina {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    min-width: 0;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .vecina:hover { border-color: var(--color-accent); }
+  .vecina__etiqueta {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .vecina__nombre {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-ink);
+    overflow-wrap: break-word;
+  }
+  .vecina--siguiente { text-align: right; }
+
+  @media (min-width: 62rem) {
+    .vecinas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

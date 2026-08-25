@@ -208,11 +208,27 @@ const rotulos = {
     campo('llegada').min = hoy;
     campo('salida').min = hoy;
 
-    // Preselección desde `?tipo=`: el huésped llega aquí desde la ficha de un
-    // alojamiento y no debería tener que volver a elegirlo.
-    const pedido = new URLSearchParams(location.search).get('tipo');
+    // Precarga desde la URL. Dos orígenes, un solo mecanismo:
+    //   · `?tipo=` desde la ficha de un alojamiento (sprint 2).
+    //   · `?llegada=&salida=&adultos=&menores=` desde el formulario del héroe.
+    // Quien ya tecleó sus fechas en la portada no debe volver a teclearlas: es
+    // el punto exacto donde se abandona un formulario.
+    const params = new URLSearchParams(location.search);
+    const pedido = params.get('tipo');
     const selector = campo('tipo') as unknown as HTMLSelectElement;
     if (pedido && [...selector.options].some((o) => o.value === pedido)) selector.value = pedido;
+
+    // Las fechas se copian sólo si tienen la forma ISO que el `<input type=date>`
+    // entiende: un valor manipulado en la URL no debe acabar en el campo.
+    for (const n of ['llegada', 'salida'] as const) {
+      const v = params.get(n);
+      if (v && /^\d{4}-\d\d-\d\d$/.test(v) && v >= hoy) campo(n).value = v;
+    }
+    for (const n of ['adultos', 'menores'] as const) {
+      const v = Number(params.get(n));
+      const inp = campo(n);
+      if (Number.isInteger(v) && v >= Number(inp.min) && v <= Number(inp.max)) inp.value = String(v);
+    }
 
     const contarNoches = () => {
       const n = noches(campo('llegada').value, campo('salida').value);
@@ -221,6 +237,10 @@ const rotulos = {
     };
     campo('llegada').addEventListener('change', contarNoches);
     campo('salida').addEventListener('change', contarNoches);
+    // Y una vez al cargar: si las fechas vinieron precargadas desde la URL,
+    // asignarlas por código NO dispara `change`, y el contador se quedaba en
+    // blanco — el huésped veía sus fechas puestas pero ningún «4 noches».
+    contarNoches();
 
     const validar = () => {
       const e: { texto: string; campo: string }[] = [];

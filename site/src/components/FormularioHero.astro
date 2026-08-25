@@ -1,0 +1,135 @@
+---
+/**
+ * Formulario de inicio de solicitud sobre el héroe — patrón `booking-box` de
+ * Cappa (`demo1-light/index.html`, línea 809).
+ *
+ * ── 🔴 LO QUE CAMBIA RESPECTO A LA PLANTILLA, Y NO ES NEGOCIABLE ───────────
+ * Cappa remata este formulario con **«Check Availability»**. Aquí eso es
+ * imposible: el hotel no opera PMS ni channel manager, y la regla 2 de
+ * CLAUDE.md prohíbe mostrar disponibilidad que no podamos respaldar. Un botón
+ * que promete comprobar disponibilidad y no la comprueba es justo la promesa
+ * incumplida que este proyecto vino a corregir — y por el camino reintroduce
+ * el riesgo de sobreventa que ADR-0003 entero existe para evitar.
+ *
+ * Se conserva **el diseño** —la caja clara sobre la fotografía, los cuatro
+ * campos, el botón ancho— y se cambia **la promesa**: el botón dice
+ * «Solicitar reserva», los datos viajan a `/reservar/` y el hotel confirma a
+ * mano. Mismo lugar, misma forma, verdad distinta.
+ *
+ * ── POR QUÉ ES UN `<form method="get">` Y NO JAVASCRIPT ────────────────────
+ * El navegador ya sabe serializar campos en la URL. Un `submit` normal lleva
+ * `?llegada=…&salida=…` a `/reservar/`, donde el script del formulario grande
+ * ya lee `?tipo=` desde el sprint 2 — sólo hubo que enseñarle tres claves más.
+ * Cero JavaScript aquí, y **funciona sin JS**: es la misma exigencia que ya
+ * cumple el menú (H1.4).
+ *
+ * ── POR QUÉ NO REPITE TODO EL FORMULARIO ───────────────────────────────────
+ * Nombre, correo, teléfono y comentarios se quedan en `/reservar/`. Este
+ * bloque existe para **arrancar** la solicitud desde la primera pantalla, no
+ * para completarla: cada campo de más aquí es fricción sobre la fotografía
+ * que tiene que vender el hotel.
+ */
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<div class="reservabox">
+  <p class="reservabox__antetitulo">{t('hero.formAntetitulo')}</p>
+  <h2 class="reservabox__titulo">{t('hero.formTitulo')}</h2>
+
+  <form class="reservabox__form" method="get" action={ruta(idioma, 'reservar')}>
+    <p class="reservabox__campo">
+      <label for="hero-llegada">{t('reserva.llegada')}</label>
+      <input type="date" id="hero-llegada" name="llegada" autocomplete="off" />
+    </p>
+    <p class="reservabox__campo">
+      <label for="hero-salida">{t('reserva.salida')}</label>
+      <input type="date" id="hero-salida" name="salida" autocomplete="off" />
+    </p>
+    <div class="reservabox__dos">
+      <p class="reservabox__campo">
+        <label for="hero-adultos">{t('reserva.adultos')}</label>
+        <input type="number" id="hero-adultos" name="adultos" value="2" min="1" max="12" />
+      </p>
+      <p class="reservabox__campo">
+        <label for="hero-menores">{t('reserva.menores')}</label>
+        <input type="number" id="hero-menores" name="menores" value="0" min="0" max="12" />
+      </p>
+    </div>
+    <button type="submit" class="boton boton--primario reservabox__enviar">
+      {t('reserva.cta')}
+    </button>
+  </form>
+
+  {/* ADR-0003, regla 1: el aviso va DENTRO de la caja, no al pie de la página.
+      Quien rellena estos campos tiene que saber aquí mismo que no está
+      cerrando una reserva. */}
+  <p class="reservabox__aviso">{t('reserva.aviso')}</p>
+</div>
+
+<style>
+  .reservabox {
+    background: var(--color-surface);
+    /* 🔴 Reafirma el color del texto. El héroe fija `color: #fff` en su
+       contenedor y eso SE HEREDA hasta aquí dentro: título y etiquetas salían
+       blancos sobre la caja blanca — invisibles. Es el mismo defecto que ya
+       tuvo el desplegable del menú sobre el héroe (L-059), y otra vez lo
+       encontró una captura de pantalla, no una medición: `getComputedStyle`
+       decía «blanco» sin que nada dijera que el fondo también lo era.
+       Regla que sale de aquí: todo bloque de fondo claro colocado dentro de un
+       contexto oscuro declara su propio color, aunque parezca redundante. */
+    color: var(--color-ink);
+    border-radius: var(--radius-sm);
+    padding: var(--space-6);
+    box-shadow: 0 16px 50px rgb(0 0 0 / 0.18);
+    /* Ancho de lectura cómodo sin llegar a parecer una página aparte. Cappa
+       usa `col-md-5`, que a 1200 px son ~470 px. */
+    max-width: 27rem;
+  }
+  .reservabox__antetitulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-antetitulo);
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+    margin: 0 0 var(--space-2);
+  }
+  .reservabox__titulo {
+    font-size: var(--text-2xl);
+    margin: 0 0 var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .reservabox__form { display: grid; gap: var(--space-4); }
+  .reservabox__dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .reservabox__campo { display: grid; gap: var(--space-1); margin: 0; min-width: 0; }
+  .reservabox__campo label { font-size: var(--text-sm); font-weight: 500; }
+  .reservabox__campo :is(input) {
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    /* 16 px mínimo: por debajo, Safari en iOS hace zoom al enfocar y descoloca
+       la página. Misma regla que el resto de los formularios del sitio. */
+    font-size: max(1rem, var(--text-base));
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    box-sizing: border-box;
+    min-height: 3rem;
+  }
+  .reservabox__campo input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .reservabox__enviar { width: 100%; margin-top: var(--space-1); }
+  .reservabox__aviso {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    text-align: center;
+  }
+</style>

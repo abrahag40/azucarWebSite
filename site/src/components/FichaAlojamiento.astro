@@ -25,11 +25,9 @@ import { usarT, ruta, type Idioma } from '../i18n/ui';
 
 interface Props {
   entrada: CollectionEntry<'alojamiento'>;
-  anterior?: CollectionEntry<'alojamiento'>;
-  siguiente?: CollectionEntry<'alojamiento'>;
   idioma: Idioma;
 }
-const { entrada, anterior, siguiente, idioma } = Astro.props;
+const { entrada, idioma } = Astro.props;
 const { data } = entrada;
 const t = usarT(idioma);
 
@@ -111,23 +109,6 @@ const datos: Dato[] = [
       <p class="resumen__aviso">{t('reserva.aviso')}</p>
     </aside>
   </div>
-
-  {(anterior || siguiente) && (
-    <nav class="contenedor vecinas" aria-label={t('ficha.otras')}>
-      {anterior ? (
-        <a class="vecina vecina--anterior" href={ruta(idioma, `alojamiento/${anterior.id}`)}>
-          <span class="vecina__etiqueta">{t('ficha.anterior')}</span>
-          <span class="vecina__nombre">{anterior.data.nombre[idioma]}</span>
-        </a>
-      ) : <span></span>}
-      {siguiente && (
-        <a class="vecina vecina--siguiente" href={ruta(idioma, `alojamiento/${siguiente.id}`)}>
-          <span class="vecina__etiqueta">{t('ficha.siguiente')}</span>
-          <span class="vecina__nombre">{siguiente.data.nombre[idioma]}</span>
-        </a>
-      )}
-    </nav>
-  )}
 </div>
 
 <style>
@@ -251,47 +232,11 @@ const datos: Dato[] = [
     text-align: center;
   }
 
-  /* --- Anterior / siguiente ----------------------------------------------- */
-  .vecinas {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-4);
-    margin-top: var(--space-8);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border);
-  }
-  .vecina {
-    display: grid;
-    gap: 2px;
-    padding: var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    text-decoration: none;
-    min-width: 0;
-    transition: border-color var(--dur) var(--ease);
-  }
-  .vecina:hover { border-color: var(--color-accent); }
-  .vecina__etiqueta {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    color: var(--color-ink-muted);
-  }
-  .vecina__nombre {
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    color: var(--color-ink);
-    overflow-wrap: break-word;
-  }
-  .vecina--siguiente { text-align: right; }
-
   /* A partir de 26rem (416 px) ya sobra ancho para una etiqueta más holgada. */
   @media (min-width: 26rem) {
     .resumen__fila { grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr); }
   }
   @media (min-width: 62rem) {
     .ficha__rejilla { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--space-8); }
-    .vecinas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 </style>

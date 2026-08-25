@@ -12,6 +12,7 @@ import Base from '../../layouts/Base.astro';
 import BannerPagina from '../../components/BannerPagina.astro';
 import FichaAlojamiento from '../../components/FichaAlojamiento.astro';
 import Galeria from '../../components/Galeria.astro';
+import VecinasAlojamiento from '../../components/VecinasAlojamiento.astro';
 import { usarT } from '../../i18n/ui';
 
 const IDIOMA = 'es' as const;
@@ -72,7 +73,10 @@ const schemaHabitacion = {
     antetitulo={data.categoria === 'suite' ? t('alojamiento.suites') : t('alojamiento.habitaciones')}
     titulo={data.nombre[IDIOMA]}
   />
-  <FichaAlojamiento entrada={entrada} anterior={anterior} siguiente={siguiente} idioma={IDIOMA} />
+  <FichaAlojamiento entrada={entrada} idioma={IDIOMA} />
   <Galeria imagenes={data.galeria} nombre={data.nombre[IDIOMA]} idioma={IDIOMA} />
+  {/* Después de las fotos, no antes: la salida hacia otra habitación va al
+      final del recorrido, cuando ya se enseñó todo lo de ésta. */}
+  <VecinasAlojamiento anterior={anterior} siguiente={siguiente} idioma={IDIOMA} />
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaHabitacion)} />
 </Base>

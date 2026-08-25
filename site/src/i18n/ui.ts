@@ -113,6 +113,13 @@ export const ui = {
     'hero.titulo': 'Donde el mar es dulce',
     'hero.entrada': 'Hotel boutique frente al Caribe mexicano, hecho a mano en Tulum desde 2008.',
     'hero.bajar': 'Bajar al contenido',
+    // ── Formulario del héroe (patrón `booking-box` de Cappa) ─────────────────
+    // 🔴 Cappa remata este formulario con «Check Availability». Aquí NO: no hay
+    // PMS y la regla 2 prohíbe mostrar disponibilidad que no podamos respaldar
+    // (ADR-0003). Se conserva el DISEÑO y se cambia la promesa: los datos viajan
+    // a /reservar/ y el hotel confirma a mano.
+    'hero.formAntetitulo': 'Suites y habitaciones',
+    'hero.formTitulo': 'Empieza tu solicitud',
 
     'alojamiento.titulo': 'Alojamiento',
     'alojamiento.entrada': 'Suites con jacuzzi privado y habitaciones frente al Caribe.',
@@ -315,6 +322,8 @@ export const ui = {
     'hero.titulo': 'Where the sea is sweet',
     'hero.entrada': 'A boutique hotel on the Mexican Caribbean, handcrafted in Tulum since 2008.',
     'hero.bajar': 'Scroll to content',
+    'hero.formAntetitulo': 'Rooms & suites',
+    'hero.formTitulo': 'Start your request',
 
     'alojamiento.titulo': 'Rooms & Suites',
     'alojamiento.entrada': 'Suites with private jacuzzi and rooms facing the Caribbean.',

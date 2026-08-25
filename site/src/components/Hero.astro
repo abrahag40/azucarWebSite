@@ -23,6 +23,7 @@
  *    Definition of Done.
  */
 import { Image, getImage } from 'astro:assets';
+import FormularioHero from './FormularioHero.astro';
 import { usarT, ruta, ancla, type Idioma } from '../i18n/ui';
 import fondo from '../assets/hero-roof-top.webp';
 
@@ -85,17 +86,19 @@ const t = usarT(idioma);
   />
   <div class="hero__velo" aria-hidden="true"></div>
 
+  {/* Dos columnas como Cappa: el mensaje a la izquierda, el formulario a la
+      derecha. En móvil se apilan y el formulario queda DEBAJO del titular —
+      primero se enamora, después se rellena. */}
   <div class="contenedor hero__contenido">
-    <p class="hero__antetitulo">{t('hero.eyebrow')}</p>
-    <h1 class="hero__titulo">{t('hero.titulo')}</h1>
-    <p class="hero__entrada">{t('hero.entrada')}</p>
-    <div class="hero__acciones">
-      <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
-      <a class="boton boton--contorno-claro" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
+    <div class="hero__texto">
+      <p class="hero__antetitulo">{t('hero.eyebrow')}</p>
+      <h1 class="hero__titulo">{t('hero.titulo')}</h1>
+      <p class="hero__entrada">{t('hero.entrada')}</p>
+      <div class="hero__acciones">
+        <a class="boton boton--contorno-claro" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
+      </div>
     </div>
-    {/* ADR-0003, regla 1: la promesa de confirmación se hace explícita desde el
-        primer contacto, no escondida al final del formulario. */}
-    <p class="hero__aviso">{t('reserva.aviso')}</p>
+    <FormularioHero idioma={idioma} />
   </div>
 
   {/* Apunta a la sección INMEDIATAMENTE siguiente, no a la tercera.
@@ -154,19 +157,32 @@ const t = usarT(idioma);
       rgb(0 0 0 / 0.38) 100%);
   }
 
+  /* Dos columnas desde 62rem, como Cappa. Debajo de ese ancho se apilan y el
+     texto se centra, que es como estaba antes de añadir el formulario. */
   .hero__contenido {
     position: relative;
-    max-width: 56rem;
-    text-align: center;
+    display: grid;
+    gap: var(--space-7);
+    justify-items: center;
     color: #fff;
     isolation: isolate;
   }
+  .hero__texto {
+    position: relative;
+    max-width: 56rem;
+    text-align: center;
+    isolation: isolate;
+  }
   /* El velo que garantiza el contraste. Se extiende bastante más allá del texto
-     para que el borde sea imperceptible, y al colgar del contenido conserva la
-     misma densidad sobre las letras en cualquier tamaño de ventana.
+     para que el borde sea imperceptible, y al colgar del TEXTO —no del
+     contenedor entero— conserva la misma densidad sobre las letras en cualquier
+     tamaño de ventana. Antes colgaba de `.hero__contenido`; al añadir el
+     formulario a la derecha, ese contenedor pasó a ser mucho más ancho que el
+     texto y el velo se habría estirado hasta perder densidad justo donde hace
+     falta.
      Peor caso medido sobre el píxel más claro de la foto (muro blanco, L≈0.98):
      0.98 × (1-0.64)^2.4 → 7.0:1, muy por encima del 4.5:1 de WCAG 1.4.3. */
-  .hero__contenido::before {
+  .hero__texto::before {
     content: '';
     position: absolute;
     inset: -55% -28%;
@@ -203,7 +219,7 @@ const t = usarT(idioma);
     line-height: var(--leading-body);
     color: rgb(255 255 255 / 0.92);
     max-width: 46ch;
-    margin: 0 auto var(--space-7);
+    margin: 0 auto var(--space-6);
   }
 
   .hero__acciones {
@@ -211,14 +227,6 @@ const t = usarT(idioma);
     flex-wrap: wrap;
     gap: var(--space-4);
     justify-content: center;
-  }
-
-  .hero__aviso {
-    margin-top: var(--space-5);
-    font-family: var(--font-ui);
-    font-size: var(--text-sm);
-    letter-spacing: 0.08em;
-    color: rgb(255 255 255 / 0.85);
   }
 
   /* Flecha de bajada, como en Cappa. Es un enlace real al primer bloque de
@@ -255,5 +263,20 @@ const t = usarT(idioma);
   @media (max-width: 40rem) {
     .hero { min-height: 88svh; }
     .hero__antetitulo { letter-spacing: 0.18em; }
+  }
+
+  /* Dos columnas cuando hay ancho de sobra. `1.15fr / auto` deja que el
+     formulario mantenga sus 27rem y el texto se quede con el resto, en vez de
+     repartir a partes iguales y estrangular el titular. */
+  @media (min-width: 62rem) {
+    .hero__contenido {
+      grid-template-columns: minmax(0, 1.15fr) auto;
+      align-items: center;
+      gap: var(--space-8);
+      justify-items: stretch;
+    }
+    .hero__texto { text-align: left; }
+    .hero__entrada { margin-inline: 0; }
+    .hero__acciones { justify-content: flex-start; }
   }
 </style>
