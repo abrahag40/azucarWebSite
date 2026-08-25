@@ -104,20 +104,24 @@ export const amenidades: { icono: string; titulo: Texto; texto: Texto }[] = [
       en: 'Extra-large heated jacuzzi on the shared rooftop, with panoramic views of the ocean and the jungle.',
     },
   },
-  // ⚠️ AQUÍ IBAN «Restaurante y Bar Blanc» y «Spa», y se retiran.
+  // El RESTAURANTE vuelve. Estuvo retirado mientras duró la contradicción C0
+  // —su FAQ decía «por ahora no tenemos servicio de restaurante o bar» y sus
+  // páginas de servicios lo anunciaban—; Abraham la resolvió como Proxy PO el
+  // 2026-08-25: el restaurante existe y la respuesta del FAQ viejo estaba
+  // desactualizada. Ver `src/data/restaurante.ts`.
   //
-  // El contenido del propio cliente se contradice. `/servicios/` y
-  // `/amenidades-y-facilidades/` los anuncian; `/preguntas-frecuentes/` dice
-  // literalmente: «¿Tienen restaurante o bar? Por ahora no tenemos servicio de
-  // restaurante o bar». Ni `/restaurante/` ni `/spa/` existen como página, pese
-  // a estar en el menú del sitio vigente.
-  //
-  // Publicar un restaurante que quizá no exista es exactamente la promesa
-  // incumplida que este proyecto viene a corregir. Regla 7: dato sin confirmar,
-  // dato que no se publica. Vuelven en cuanto el cliente responda la pregunta
-  // C-REST del banco de preguntas.
-  //
-  // En su lugar van dos que el FAQ del hotel confirma sin ambigüedad.
+  // 🔴 EL **SPA** NO VUELVE. La decisión de Abraham fue sobre el restaurante;
+  // del spa no se ha dicho nada, y sigue sin página propia en el sitio vigente.
+  // Una decisión sobre una cosa no se estira a la de al lado sólo porque
+  // estuvieran en el mismo comentario.
+  {
+    icono: 'restaurante',
+    titulo: { es: 'Restaurante', en: 'Restaurant' },
+    texto: {
+      es: 'Cocina del hotel en el roof top, frente al mar.',
+      en: 'The hotel kitchen on the rooftop, facing the sea.',
+    },
+  },
   {
     icono: 'wifi',
     titulo: { es: 'Wi-Fi y estacionamiento', en: 'Wi-Fi and parking' },

@@ -2,9 +2,10 @@
 /**
  * Restaurante (bloqueado por C0 — ver `src/data/restaurante.ts`).
  *
- * La pagina existe pero NO se genera mientras `carta.publicable` sea `false`:
- * la ruta comprueba el dato y devuelve 404. Asi el trabajo esta hecho y listo,
- * sin publicar un servicio que el propio hotel dice no tener.
+ * La ruta comprueba `carta.publicable`: si es `false`, la pagina no se genera
+ * y el sitio da 404. Hoy esta en `true` —C0 resuelta— aunque la carta siga
+ * vacia: el restaurante existe y merece su pagina; lo que falta es el menu,
+ * y esa ausencia se comunica en vez de dejar la seccion en blanco (L-082).
  */
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
@@ -22,5 +23,10 @@ const t = usarT(idioma);
   descripcion={t('restaurante.meta')}
 >
   <BannerPagina imagen={banner} titulo={t('restaurante.titulo')} />
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="entradilla">{t('restaurante.entrada')}</p>
+    </div>
+  </section>
   <MenuRestaurante idioma={idioma} />
 </Base>

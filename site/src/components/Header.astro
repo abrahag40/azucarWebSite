@@ -23,13 +23,16 @@ interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
 const { idioma, rutaActual = '', sobreHero = false } = Astro.props;
 const t = usarT(idioma);
 
-// Sólo se enlaza lo que EXISTE. «Galería» vuelve al menú porque ya está
-// construida (H4.4). «Restaurante» sigue fuera: está bloqueado por la pregunta
-// C0 —el propio hotel dice en su FAQ que no tiene— y un menú que promete
-// páginas inexistentes es la primera grieta de confianza.
+// Sólo se enlaza lo que EXISTE, y esa regla se comprueba sola: si la página de
+// restaurante dejara de generarse —`carta.publicable` a `false`— este enlace
+// llevaría a un 404 y lo cazaría el guardián «sin enlaces a recursos
+// inexistentes» de `verificar-todo.sh`. Un menú que promete páginas que no
+// están es la primera grieta de confianza.
 const enlaces: { clave: string; path: string; submenu?: boolean }[] = [
   { clave: 'nav.alojamiento', path: 'alojamiento', submenu: true },
   { clave: 'nav.servicios',   path: 'servicios' },
+  // Vuelve al menú: C0 resuelta y la página existe (ver src/data/restaurante.ts).
+  { clave: 'nav.restaurante', path: 'restaurante' },
   { clave: 'nav.galeria',     path: 'galeria' },
   { clave: 'nav.ubicacion',   path: 'ubicacion' },
   { clave: 'nav.faq',         path: 'preguntas-frecuentes' },
@@ -293,7 +296,11 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     gap: var(--space-5);
     min-height: var(--alto-cabecera);
   }
-  .marca { display: flex; align-items: center; text-decoration: none; }
+  /* `flex: none` — el logo NUNCA se encoge. Es el único hijo de la fila sin
+     tamaño fijo, así que cuando el contenido no cabe, el flex lo aplasta a él:
+     al añadir «Restaurante» al menú el logotipo pasó de 112×70 a **46×28**
+     medidos. Un logo encogido no se lee como decisión, se lee como error. */
+  .marca { display: flex; align-items: center; text-decoration: none; flex: none; }
   .marca__logo {
     /* 112 px de ancho: a 310 × 193 el logotipo queda en 70 px de alto, que cabe
        holgado en la fila de 88 px y deja el aire de la plantilla. Alto
@@ -453,9 +460,14 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     color: var(--color-ink); text-decoration: none;
   }
 
-  /* El umbral sube a 68rem porque ahora hay seis apartados en horizontal más
-     el idioma y el botón: por debajo de eso no caben sin apretarse. */
-  @media (min-width: 68rem) {
+  /* 🔴 UMBRAL MEDIDO, NO ELEGIDO A OJO. Con siete apartados en horizontal el
+     contenido de la fila suma ~1171 px —logo 112, navegación 782, idioma y
+     botón 229, más los dos huecos— y a eso hay que añadirle el gutter del
+     contenedor. Por debajo de 76rem (1216 px) no cabe, y lo que pasa entonces
+     no es que se parta en dos líneas: el flex aplasta el logotipo.
+     Si algún día se añade un apartado más, hay que volver a medir esto — o
+     mejor, plantearse si el menú ya tiene demasiadas entradas. */
+  @media (min-width: 76rem) {
     .menu { display: none; }
     .nav { display: block; }
     .cabecera__acciones { display: flex; }

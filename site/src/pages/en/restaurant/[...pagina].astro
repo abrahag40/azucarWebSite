@@ -1,0 +1,12 @@
+---
+/**
+ * `/en/restaurant/` — misma condicion que la ruta en español.
+ */
+import type { GetStaticPaths } from 'astro';
+import { carta } from '../../../data/restaurante';
+import Restaurante from '../../../views/Restaurante.astro';
+
+export const getStaticPaths: GetStaticPaths = () =>
+  carta.publicable ? [{ params: { pagina: undefined } }] : [];
+---
+<Restaurante idioma="en" />

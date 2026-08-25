@@ -326,19 +326,22 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | **html-validate** | **0 incidencias** en 38 páginas (se partió de 202) |
 | Pruebas unitarias | 9 casos sobre `componerSolicitud` · 0 dependencias nuevas |
 
-### 🔴 Contradicción en el contenido del cliente — pregunta C0
+### ✅ Contradicción del restaurante — resuelta, con un matiz
 
-`/servicios/` y `/amenidades/` del sitio vigente anuncian **restaurante y spa**; su propio
-`/preguntas-frecuentes/` dice *«Por ahora no tenemos servicio de restaurante o bar»*. Ninguna
-de las dos páginas existe. **Lo habíamos publicado**: una tarjeta en la portada y
-`amenityFeature: Restaurant = true` en el `schema.org` de 20 páginas. Retirado. Ver L-031.
+El sitio vigente se contradecía: `/servicios/` y `/amenidades/` anunciaban restaurante y spa,
+y su `/preguntas-frecuentes/` decía *«Por ahora no tenemos servicio de restaurante o bar»*.
+Estuvo retirado del sitio nuevo mientras duró la duda.
 
-**Y ahora bloquea una página entera.** A petición de Abraham se construyó la sección de
-restaurante con el diseño de carta de Cappa (H4.11): el componente, los datos tipados y la
-página, todo probado con una carta de prueba. **No se publica**: `carta.publicable` está en
-`false` y la ruta *no existe* —da 404, que es la verdad— hasta que el cliente confirme que hay
-restaurante y con qué nombre (su sitio lo llama «Blanc» en un sitio y «Selvamar» en otro).
-Activarlo es rellenar `src/data/restaurante.ts`, sin tocar código. Ver L-082.
+**Abraham lo resolvió como Proxy PO el 2026-08-25: el restaurante existe** y la respuesta del
+FAQ viejo está desactualizada. En consecuencia se retiró esa pregunta del FAQ nuevo, volvió la
+amenidad a la portada, volvió `Restaurant` al `schema.org` de las 38 páginas, y `/restaurante/`
+está publicada y en el menú (H4.11).
+
+🔴 **Dos cosas que esa decisión NO resuelve:**
+- **La carta.** Que el restaurante exista no dice qué se sirve. `carta.categorias` sigue vacío
+  y la página lo comunica —«estamos preparando la carta»— en vez de inventar platos. Falta la
+  lista real y **el nombre**: su sitio lo llama «Blanc» en un sitio y «Selvamar» en otro.
+- **El spa.** Estaba retirado junto al restaurante, pero de él no se ha dicho nada. Sigue fuera.
 
 ### ⚠️ Datos sin verificar
 
@@ -351,7 +354,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 
 | # | Qué | Bloquea |
 |---|---|---|
-| **C0** | ¿Hay restaurante, bar y spa? | Contenido publicado hoy en SU sitio + **la página de restaurante ya construida** |
+| ~~**C0**~~ | ~~¿Hay restaurante?~~ **RESUELTA 2026-08-25** por Abraham: el restaurante existe. Queda **el spa**, sobre el que no se ha dicho nada | Nada bloqueado. Falta la **carta** (los platos), que es dato aparte |
 | **C1** | Tabla de los 8 tipos | `build:prod` |
 | **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
@@ -419,7 +422,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **83 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **85 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

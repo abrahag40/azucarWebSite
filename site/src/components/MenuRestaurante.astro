@@ -20,12 +20,17 @@
  *   · Y se puede imprimir. Una carta en pestañas sale en papel con una sola
  *     categoría visible.
  *
- * ── 🔴 NO SE RENDERIZA NADA SI NO HAY CARTA ────────────────────────────────
- * `carta.publicable` está en `false` hasta que se resuelva **C0** — el propio
- * hotel dice en su FAQ que no tiene restaurante. Ver `src/data/restaurante.ts`.
+ * ── DOS ESTADOS, Y NINGUNO ES UNA PÁGINA VACÍA ─────────────────────────────
+ * El restaurante existe (C0 resuelta por Abraham el 2026-08-25) pero **la
+ * carta todavía no la tenemos**. Antes que dejar la sección en blanco —el
+ * defecto de L-082: una página que anuncia algo y no entrega nada— se pinta
+ * una invitación a preguntar al hotel.
+ *
+ * En cuanto `carta.categorias` tenga contenido, la invitación desaparece y
+ * sale la carta. No hay que tocar nada aquí. Ver `src/data/restaurante.ts`.
  */
 import { carta } from '../data/restaurante';
-import { usarT, type Idioma } from '../i18n/ui';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
@@ -37,13 +42,24 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
   maximumFractionDigits: 0,
 });
 ---
-{carta.publicable && carta.categorias.length > 0 && (
+{carta.publicable && (
   <section class="carta">
     <div class="contenedor">
       <header class="carta__encabezado">
-        <p class="carta__antetitulo">{carta.nombre?.[idioma] ?? ''}</p>
+        {/* El nombre sólo se pinta si lo sabemos: el sitio vigente usa dos
+            distintos —«Blanc» y «Selvamar»— y elegir uno sería inventar. */}
+        {carta.nombre && <p class="carta__antetitulo">{carta.nombre[idioma]}</p>}
         <h2 class="carta__titulo">{t('restaurante.carta')}</h2>
       </header>
+
+      {carta.categorias.length === 0 && (
+        <div class="carta__pendiente">
+          <p class="carta__pendienteTexto">{t('restaurante.sinCarta')}</p>
+          <a class="boton boton--contorno-claro" href={ruta(idioma, 'contacto')}>
+            {t('restaurante.preguntar')}
+          </a>
+        </div>
+      )}
 
       {carta.categorias.map((cat) => (
         <div class="carta__categoria">
@@ -62,8 +78,11 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
         </div>
       ))}
 
-      {/* Regla 3: si se muestran precios, se dice qué incluyen. */}
-      <p class="carta__nota">{t('restaurante.impuestos')}</p>
+      {/* Regla 3: si se muestran precios, se dice qué incluyen. Sin platos con
+          precio la nota sobra — y afirmaría algo sobre cifras que no existen. */}
+      {carta.categorias.some((c) => c.platos.some((p) => p.precio != null)) && (
+        <p class="carta__nota">{t('restaurante.impuestos')}</p>
+      )}
     </div>
   </section>
 )}
@@ -150,6 +169,21 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
     font-size: var(--text-sm);
     color: rgb(255 255 255 / 0.72);
     max-width: 46ch;
+  }
+
+  .carta__pendiente {
+    text-align: center;
+    max-width: var(--container-text);
+    margin-inline: auto;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-5);
+  }
+  .carta__pendienteTexto {
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: rgb(255 255 255 / 0.82);
   }
 
   .carta__nota {

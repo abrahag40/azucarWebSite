@@ -2034,6 +2034,54 @@ componente vacío que compila no es un componente que funciona.
 
 ---
 
+## L-084 — La decisión sobre un dato es del cliente; la de no inventarlo, nuestra
+
+**Lección.** El sitio del hotel se contradecía sobre el restaurante: sus páginas de servicios
+lo anunciaban y su FAQ decía «por ahora no tenemos servicio de restaurante o bar». Ante la
+duda se retiró del sitio nuevo (L-031) y se abrió la pregunta **C0**.
+
+Abraham resolvió la contradicción como **Proxy PO**: *«ignora el FAQ, el restaurante existe»*.
+Y eso cierra el asunto — es exactamente su papel. El FAQ del sitio viejo es una fuente, no la
+autoridad; quien habla con el cliente decide cuál de dos fuentes contradictorias vale.
+
+**Lo que enseña sobre los roles:** plantear el conflicto una vez, con la evidencia literal
+delante, es hacer bien el trabajo. Repetirlo después de que el responsable ha decidido no es
+rigor, es no saber dónde termina la propia autoridad. Se dijo, se decidió, se ejecutó.
+
+**Y lo que NO cambia con esa decisión:** que el restaurante exista no nos dice **qué se sirve
+en él**. La carta sigue vacía, porque lo decidido fue una cosa y los platos son otra. Una
+decisión sobre A no autoriza a rellenar B — y por eso `categorias` sigue en `[]` y la página
+lo dice en vez de inventar seis entrantes con precio.
+
+**Del mismo modo, el spa NO vuelve.** Estaba retirado en el mismo comentario que el
+restaurante, y la tentación de restaurar los dos de una pasada era real. Pero de él no se dijo
+nada. Una decisión no se estira a lo que estaba escrito al lado.
+
+---
+
+## L-085 — En un flex, el elemento sin tamaño fijo es el que paga
+
+**Lección.** Añadir «Restaurante» al menú principal tuvo un efecto a tres elementos de
+distancia: **el logotipo del hotel se encogió de 112 × 70 a 46 × 28 píxeles**. No se partió el
+menú en dos líneas, no se solapó nada, no hubo error — el logo simplemente se hizo pequeño, y
+a primera vista parecía una decisión de diseño.
+
+La causa: en la fila de la cabecera, la navegación tiene su ancho, el botón y el selector de
+idioma llevan `white-space: nowrap`, y el logo era **el único elemento que podía encogerse**.
+Cuando el contenido dejó de caber, flexbox repartió el recorte donde encontró holgura.
+
+**La corrección son dos cosas, y hacen falta las dos:**
+  · `flex: none` en el logo, para que nunca sea la variable de ajuste.
+  · **Volver a medir el umbral** del menú de escritorio. Estaba en 68rem, calculado para seis
+    apartados; con siete el contenido suma ~1171 px más el gutter, así que sube a 76rem. Sin
+    esto, `flex: none` sólo cambia el síntoma: en vez de encogerse el logo, se desborda la fila.
+
+**El patrón:** cuando se añade un elemento a un contenedor flexible, el coste no lo paga quien
+se añade — lo paga el vecino más blando. Y un umbral de media query calculado para N elementos
+deja de ser válido con N+1: es un número medido, no una constante.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

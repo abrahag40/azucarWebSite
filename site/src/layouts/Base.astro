@@ -118,9 +118,11 @@ const schema = {
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Beachfront', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Outdoor pool', value: true },
-    // NO se declara `Restaurant`. Estaba declarado y se retira: el FAQ del propio
-    // hotel dice que no hay servicio de restaurante ni bar. Era una afirmación
-    // falsa emitida a Google en 20 páginas.
+    // `Restaurant` vuelve. Se retiró mientras duró la contradicción C0 —el FAQ
+    // del hotel decía que no había—; Abraham la resolvió como Proxy PO el
+    // 2026-08-25. Esto es una afirmación a Google en las 38 páginas, así que
+    // depende de que el dato sea cierto: ver `src/data/restaurante.ts`.
+    { '@type': 'LocationFeatureSpecification', name: 'Restaurant', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Free Wi-Fi', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Free parking', value: true },
   ],

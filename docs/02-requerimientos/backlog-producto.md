@@ -275,7 +275,7 @@ escribir, todo lo que pregunta antes de decidir.*
 | H4.8 | Páginas legales | `S` | 🔄 publicado con sus carencias declaradas (**E-PRIV**) |
 | H4.9 | 404 útil, `sitemap.xml`, `robots.txt` | `S` | ✅ |
 | H4.10 | **Testimonios en la portada** | `S` | ⬜ **nueva.** Es la única sección de Cappa que falta sin motivo de fondo: el hotel SÍ tiene reseñas en TripAdvisor y Google. Ver `docs/04-diseno/fidelidad-a-cappa.md` |
-| H4.11 | **Restaurante con carta** | `M` | 🔄 **nueva.** Diseño de menú construido y probado; NO se publica — la ruta no existe mientras `carta.publicable` sea `false`. Bloqueada por **C0**: el FAQ del hotel dice que no tiene restaurante |
+| H4.11 | **Restaurante con carta** | `M` | 🔄 **publicada.** C0 resuelta por Abraham (2026-08-25): el restaurante existe. Página en ES/EN, en el menú y en el sitemap. **Falta la carta** —los platos y el nombre real— y hasta que llegue la página lo dice en vez de inventarla |
 | H1.8 | **Formulario de solicitud en el héroe** | `S` | ✅ **nueva.** Patrón `booking-box` de Cappa, con «Solicitar reserva» en vez de «Check Availability» — regla 2. Precarga `/reservar/` por URL, sin JavaScript |
 
 ### H4.5 merece detalle

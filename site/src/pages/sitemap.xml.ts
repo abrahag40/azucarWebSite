@@ -13,6 +13,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { ruta, type Idioma } from '../i18n/ui';
+import { carta } from '../data/restaurante';
 
 const SITIO = 'https://azucarhotel.com';
 
@@ -23,6 +24,10 @@ export const GET: APIRoute = async () => {
   const secciones = [
     '', 'alojamiento', 'servicios', 'galeria', 'reservar', 'ubicacion',
     'preguntas-frecuentes', 'politicas', 'contacto', 'aviso-de-privacidad',
+    // Sólo si la página existe: la ruta se genera condicionalmente según
+    // `carta.publicable`, y un sitemap que apunta a un 404 es peor que uno
+    // incompleto — Search Console lo reporta como error.
+    ...(carta.publicable ? ['restaurante'] : []),
   ];
   const fichas = alojamiento.map((e) => `alojamiento/${e.id}`);
   const rutas = [...secciones, ...fichas];

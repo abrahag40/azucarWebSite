@@ -1,35 +1,35 @@
 /**
  * Carta del restaurante — datos (patrón `restaurant-menu` de Cappa).
  *
- * ── 🔴 POR QUÉ ESTÁ VACÍO, Y NO ES UN OLVIDO ───────────────────────────────
- * El propio sitio del hotel se contradice sobre este servicio, y la
- * contradicción sigue sin resolverse (pregunta **C0**, riesgo **R-17**):
+ * ── ESTADO: LA PÁGINA SE PUBLICA, LA CARTA ESTÁ VACÍA ──────────────────────
+ * Abraham resolvió **C0** como Proxy PO el 2026-08-25: el hotel SÍ tiene
+ * restaurante, y la respuesta del FAQ del sitio vigente —«por ahora no
+ * tenemos servicio de restaurante o bar»— está desactualizada. Se retiró esa
+ * pregunta del FAQ nuevo, volvió la amenidad a la portada y volvió
+ * `Restaurant` al `schema.org`.
  *
- *   · `/servicios/` y `/amenidades-y-facilidades/` anuncian «Restaurante y Bar
- *     Blanc, nuestro icónico Roof Top frente al mar».
- *   · `/preguntas-frecuentes/` dice, literal: **«¿Tienen restaurante o bar?
- *     Por ahora no tenemos servicio de restaurante o bar»**.
- *   · `/restaurante/` no existe como página, pese a estar en su menú.
+ * ── 🔴 POR QUÉ `categorias` SIGUE VACÍO ────────────────────────────────────
+ * Porque **no tenemos la carta**. Ni un plato, ni un precio. Lo que se decidió
+ * es que el restaurante existe, no qué se sirve en él.
  *
- * Ya se retiró el restaurante del sitio nuevo por este motivo, incluido el
- * `amenityFeature: Restaurant` que se estaba emitiendo a Google en 20 páginas
- * (L-031). Publicar ahora una carta con platos y precios sería **inventar un
- * servicio que el hotel niega tener**, y encima inventar su contenido: los
- * platos de la plantilla —«Rusty's Burger, 27$»— son ficción de demo.
+ * Inventar platos sería exactamente lo que este proyecto vino a corregir, y
+ * además los de la plantilla son ficción de demo —«Rusty's Burger, 27$»—.
+ * Un huésped que llega esperando un plato que no existe deja la misma reseña
+ * que el que llega esperando un restaurante que no existe.
  *
- * Regla 7 de CLAUDE.md: dato sin confirmar, dato que no se publica.
+ * Mientras la lista esté vacía, la página **se genera igual** —el restaurante
+ * es real y merece su página— pero la sección de carta no se pinta: en su
+ * lugar sale una invitación a preguntar al hotel. En cuanto llegue la carta se
+ * rellena aquí y aparece sola.
  *
- * ── QUÉ SÍ ESTÁ HECHO ──────────────────────────────────────────────────────
- * El **mecanismo entero**: el componente `MenuRestaurante.astro` con el diseño
- * de Cappa —fondo oscuro, categorías, platos con precio— y la página que lo
- * usa. En cuanto el hotel confirme que hay restaurante y entregue su carta, se
- * rellena `categorias`, se pone `publicable: true` y aparece. Ni una línea de
- * código más.
- *
- * Es el mismo patrón que ya se usó dos veces en este proyecto: el número de
- * WhatsApp (`contacto.whatsapp = null`) y los precios del panel
- * (`precios.publicable = false`). Construir el mecanismo, dejar el dato vacío,
- * fallar cerrado.
+ * ── LO QUE HACE FALTA PARA COMPLETARLA ─────────────────────────────────────
+ *   · **El nombre real.** El sitio vigente lo llama «Blanc» en amenidades y
+ *     «Selvamar» en el FAQ. Hasta saber cuál es, `nombre` queda en `null` y la
+ *     página no usa ninguno de los dos.
+ *   · **Los platos**, por categoría.
+ *   · **C3**, si se publican precios: la regla 3 vale para la carta igual que
+ *     para el alojamiento — el precio mostrado incluye impuestos, o no se
+ *     muestra. Un plato sin `precio` se pinta sin cifra y sin línea de puntos.
  */
 import type { Idioma } from '../i18n/ui';
 
@@ -69,7 +69,7 @@ export interface Carta {
 }
 
 export const carta: Carta = {
-  publicable: false,
+  publicable: true,
   nombre: null,
   categorias: [],
 };

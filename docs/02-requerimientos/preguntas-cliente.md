@@ -104,7 +104,22 @@ la misma habitación. ¿Lo revisamos después del lanzamiento?
 > El **contenido es la ruta crítica** de todo proyecto web de hotel, no el código. Este
 > bloque se entrega junto con una carpeta de Drive para subir archivos.
 
-**C0. 🔴 ¿Hay restaurante, bar y spa? (URGENTE — su propio sitio se contradice.)**
+**C0. 🔄 PARCIALMENTE RESUELTA — ¿Hay restaurante, bar y spa?**
+> ✅ **El restaurante SÍ existe.** Resuelto por Abraham como Proxy PO el 2026-08-25: la
+> respuesta del FAQ del sitio vigente está desactualizada. Se retiró esa pregunta del FAQ
+> nuevo, volvió la amenidad y volvió `Restaurant` al `schema.org`.
+>
+> 🔴 **Sigue faltando, y son datos distintos:**
+> - **La carta**: qué platos y a qué precio. Que el restaurante exista no dice qué sirve.
+> - **El nombre real**: su sitio lo llama «Blanc» en amenidades y «Selvamar» en el FAQ.
+> - **El spa**: de él no se ha dicho nada. Sigue retirado del sitio nuevo.
+>
+> El contexto original de la contradicción se conserva abajo, porque explica por qué el sitio
+> vigente sigue necesitando corrección.
+>
+> ---
+>
+> **Contexto original de la contradicción:**
 > Al construir el catálogo se encontró que el contenido publicado hoy en
 > `azucarhotel.com` se contradice a sí mismo:
 >

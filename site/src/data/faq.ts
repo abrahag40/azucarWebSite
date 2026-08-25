@@ -9,11 +9,16 @@
  * tildes ausentes— porque no cambian lo que dice, y publicar faltas de un
  * original no es fidelidad, es descuido.
  *
- * ⚠️ La pregunta del restaurante es la que destapó la contradicción del
- * contenido del cliente. Ver C0 en `docs/02-requerimientos/preguntas-cliente.md`.
- * Se publica tal cual porque es la fuente MÁS específica y reciente que existe,
- * y porque decir «no hay restaurante» y que lo haya es un problema mucho menor
- * que lo contrario.
+ * ⚠️ RETIRADA la pregunta «¿Tienen restaurante o bar?», que en el sitio vigente
+ * se responde con un «por ahora no tenemos». Decisión de Abraham como Proxy PO
+ * (2026-08-25): el hotel SÍ tiene restaurante y esa respuesta del sitio viejo
+ * está desactualizada. Con eso se cierra la contradicción C0 en la dirección
+ * contraria a la que se había supuesto — ver `src/data/restaurante.ts`.
+ *
+ * Se retira en vez de reescribirse porque la respuesta correcta —horario, si
+ * está abierto al público, qué se sirve— no la tenemos todavía. Una pregunta
+ * frecuente sin respuesta buena es peor que ninguna; la carta de
+ * `/restaurante/` la responde mejor.
  */
 import type { Idioma } from '../i18n/ui';
 
@@ -45,11 +50,6 @@ export const faq: Pregunta[] = [
   {
     p: { es: '¿Proporcionan toallas de playa?', en: 'Do you provide beach towels?' },
     r: { es: 'Sí.', en: 'Yes.' },
-  },
-  {
-    p: { es: '¿Tienen restaurante o bar?', en: 'Do you have a restaurant or bar?' },
-    r: { es: 'Por ahora no tenemos servicio de restaurante ni bar. A un lado y en toda la zona de alrededor, a muy pocos minutos caminando, están los mejores restaurantes, bares, boutiques y minimercados de la playa.',
-         en: 'We do not have restaurant or bar service for now. Right next door and all around the area, a very short walk away, you will find the best restaurants, bars, boutiques and mini-markets on the beach.' },
   },
   {
     p: { es: '¿Incluyen desayuno?', en: 'Is breakfast included?' },
