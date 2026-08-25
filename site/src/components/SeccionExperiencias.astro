@@ -22,22 +22,21 @@ import { Image } from 'astro:assets';
 import { amenidades } from '../data/hotel';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 /**
- * ⚠️ NOTA PARA ABRAHAM — la fotografía de la alberca es la más floja de las tres.
+ * ✅ RESUELTO — antes aquí decía que **ninguna** fotografía del archivo tenía la
+ * alberca como sujeto, y que hacía falta pedirla al hotel.
  *
- * De las ocho fotografías curadas en H4.4, **ninguna tiene la alberca infinita
- * como sujeto**: la única que la menciona siquiera es la de la terraza con
- * hamaca, donde el agua se ve al fondo. Se revisó además todo el material
- * apaisado del archivo del hotel —244 imágenes— y las que hay son interiores y
- * terrazas.
+ * Era falso, y el error estaba en la premisa: aquella afirmación se apoyaba en
+ * la curaduría original de H4.4, que había mirado **diez fotos de 244**. Al
+ * revisar el banco completo aparecieron dos tomas de la alberca del roof top
+ * —una de día con la duela de madera, otra de noche iluminada—. La segunda
+ * curaduría de `src/data/galeria.ts` cuenta el detalle.
  *
- * Se usa la mejor disponible en vez de forzar otra que no encaje, y queda
- * escrito aquí porque **no se arregla con código**: hace falta una fotografía de
- * la alberca. Es el mismo asterisco del informe de fidelidad
- * (`docs/04-diseno/fidelidad-a-cappa.md`, §5).
+ * Lección: una carencia sólo se puede afirmar tras mirar TODO el material. Con
+ * una muestra parcial, lo honesto es decir «no encontré», no «no hay».
  */
-import playa from '../assets/galeria/02-playa-arco.webp';
-import alberca from '../assets/galeria/03-terraza-hamaca.webp';
-import jacuzzi from '../assets/galeria/04-jacuzzi-roof-top.webp';
+import playa from '../assets/galeria/02-arco-playa.webp';
+import alberca from '../assets/galeria/06-alberca-roof-top.webp';
+import jacuzzi from '../assets/experiencias/jacuzzi-terraza.webp';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;

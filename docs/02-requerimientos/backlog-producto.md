@@ -269,7 +269,7 @@ escribir, todo lo que pregunta antes de decidir.*
 | H4.2 | Restaurante y bar | `S` | 🔴 **C0** — el propio cliente se contradice: no se publica |
 | H4.3 | Spa y experiencias | `S` | 🔴 **C0** — igual que H4.2 |
 | H4.4 | Galería general | `S` | ✅ 8 fotografías con alternativas propias |
-| H4.5 | **Ubicación y cómo llegar** | `M` | ✅ |
+| H4.5 | **Ubicación y cómo llegar** | `M` | 🔄 mapa y datos reales añadidos; tiempos y costos esperan **C-LLEG** |
 | H4.6 | Contacto | `S` | ✅ |
 | H4.7 | Políticas y preguntas frecuentes | `M` | ✅ 16 preguntas + 6 grupos de políticas |
 | H4.8 | Páginas legales | `S` | 🔄 publicado con sus carencias declaradas (**E-PRIV**) |
@@ -282,8 +282,22 @@ escribir, todo lo que pregunta antes de decidir.*
 > la noche.
 
 - **Entonces** la página explica opciones reales: traslado privado, ADO, renta de auto, con tiempos y rangos de costo.
+  🔄 **Parcial.** Se publica lo confirmable: el kilómetro y la avenida, que el hotel **sí opera
+  traslado aeropuerto–hotel** (aparece en el formulario de su sitio vigente) y que hay que
+  consultarle tarifas. **Tiempos y rangos de costo NO se publican**: son la pregunta **C-LLEG**
+  y un tiempo inventado que no se cumple es la promesa rota que este proyecto corrige (regla 7).
 - **Y** incluye mapa y referencias físicas de la carretera de Boca Paila.
-- **Y** responde "¿hay estacionamiento?" y "¿el taxi encuentra el hotel?".
+  ✅ Mapa con **carga bajo petición**: el iframe no existe hasta que el huésped lo pide, así que
+  Google no recibe ninguna petición ni planta cookies antes del consentimiento — importa con
+  E-PRIV abierto. Coordenadas visibles y enlace a Google Maps aparte. ⬜ Referencias físicas:
+  parte de C-LLEG.
+- **Y** responde "¿hay estacionamiento?" ✅ (gratuito, sujeto a disponibilidad — de su FAQ)
+  "¿el taxi encuentra el hotel?" ⬜ (C-LLEG).
+
+> ⚠️ **Estaba marcada ✅ y no cumplía ninguno de los tres criterios**: la página tenía una
+> dirección, dos teléfonos y un botón. Peor, su `meta` prometía «cómo llegar desde el aeropuerto
+> de Cancún», que no estaba escrito en ninguna parte. Lo destapó una revisión visual, no el
+> tablero — un ✅ sólo vale si alguien contrastó la página contra sus propios criterios.
 
 > **Por qué esta página rinde más de lo que parece:** *"cómo llegar a Tulum desde Cancún"*
 > es de las búsquedas más frecuentes del viajero de esta zona, y casi ningún hotel la

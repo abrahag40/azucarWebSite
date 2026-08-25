@@ -346,7 +346,8 @@ el cliente vea en la demo exactamente qué debe confirmar.
 |---|---|---|
 | **C0** | ¿Hay restaurante, bar y spa? | Contenido publicado hoy en SU sitio |
 | **C1** | Tabla de los 8 tipos | `build:prod` |
-| **C3** | Desglose fiscal | **Sprint 3 completo** |
+| **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
+| **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
 | **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
 | **E-PRIV** | Aviso de privacidad conforme a LFPDPPP | Requisito de **entrada** del sprint 3 |
 | **R-01** | Licencia de iconos de Cappa | Sustituibles por un set libre |
@@ -411,7 +412,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **78 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **80 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

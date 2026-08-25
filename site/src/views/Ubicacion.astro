@@ -1,12 +1,46 @@
 ---
+/**
+ * Cómo llegar (H4.5).
+ *
+ * ── LO QUE ESTA PÁGINA DEBÍA TENER Y NO TENÍA ──────────────────────────────
+ * H4.5 estaba marcada ✅ y no cumplía sus propios criterios de aceptación:
+ * pedía «opciones reales de traslado con tiempos y rangos de costo», «mapa y
+ * referencias físicas» y responder «¿hay estacionamiento?». La página tenía
+ * una dirección, dos teléfonos y un botón a Google Maps. Peor: su propia
+ * `meta` prometía «cómo llegar desde el aeropuerto de Cancún», que no estaba
+ * escrito en ninguna parte.
+ *
+ * ── QUÉ SE AÑADE Y DE DÓNDE SALE ───────────────────────────────────────────
+ * Todo lo de aquí está en el sitio vigente del hotel o en su FAQ:
+ *   · El kilómetro y la avenida — de su propia ficha de ubicación.
+ *   · Estacionamiento gratuito — de su FAQ, literal.
+ *   · Recepción 24 h y «siempre habrá quien te reciba» — de su FAQ.
+ *   · El traslado aeropuerto–hotel — aparece como opción en el formulario de
+ *     su sitio vigente. Se enuncia como lo que es: un servicio que existe y
+ *     cuyas tarifas hay que consultar. NO se inventa un precio.
+ *
+ * ── 🔴 LO QUE SIGUE FALTANDO, Y NO SE INVENTA ──────────────────────────────
+ * Tiempos y costos desde el aeropuerto de Cancún, y si conviene más el de
+ * Tulum. Son la pregunta **C-LLEG**, nueva. Un «1 h 45 min desde Cancún» que
+ * en temporada alta son tres horas es una promesa incumplida, que es
+ * exactamente el defecto que este proyecto vino a corregir (regla 7).
+ */
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import DatosContacto from '../components/DatosContacto.astro';
-import { usarT, type Idioma } from '../i18n/ui';
+import MapaUbicacion from '../components/MapaUbicacion.astro';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
 import banner from '../assets/nosotros-1.webp';
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
+
+const bloques = [
+  { titulo: t('ubicacion.enCoche'), texto: t('ubicacion.enCocheTexto') },
+  { titulo: t('ubicacion.traslado'), texto: t('ubicacion.trasladoTexto'), enlace: true },
+  { titulo: t('ubicacion.estacionamiento'), texto: t('ubicacion.estacionamientoTexto') },
+  { titulo: t('ubicacion.llegadaTarde'), texto: t('ubicacion.llegadaTardeTexto') },
+];
 ---
 <Base
   idioma={idioma}
@@ -15,9 +49,62 @@ const t = usarT(idioma);
   descripcion={t('ubicacion.meta')}
 >
   <BannerPagina imagen={banner} titulo={t('ubicacion.titulo')} />
+
   <section class="seccion">
     <div class="contenedor">
-      <DatosContacto idioma={idioma} conMapa={true} />
+      <DatosContacto idioma={idioma} conMapa={false} />
+    </div>
+  </section>
+
+  <section class="seccion seccion--calida">
+    <div class="contenedor">
+      <div class="llegar">
+        <div class="llegar__texto">
+          <h2 class="llegar__titulo">{t('ubicacion.comoLlegar')}</h2>
+          <dl class="llegar__lista">
+            {bloques.map((b) => (
+              <div class="llegar__bloque">
+                <dt>{b.titulo}</dt>
+                <dd>
+                  {b.texto}
+                  {b.enlace && (
+                    <> <a href={ruta(idioma, 'contacto')}>{t('contacto.titulo')}</a>.</>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <MapaUbicacion idioma={idioma} />
+      </div>
     </div>
   </section>
 </Base>
+
+<style>
+  /* Móvil primero: texto y mapa apilados. Desde 60rem, el mapa a la derecha —
+     es donde hay ancho para que se lea como mapa y no como una franja. */
+  .llegar { display: grid; gap: var(--space-7); align-items: start; }
+  .llegar__texto { min-width: 0; }
+  .llegar__titulo { font-size: var(--text-2xl); margin-bottom: var(--space-5); }
+
+  .llegar__lista { margin: 0; display: grid; gap: var(--space-5); }
+  .llegar__bloque { min-width: 0; }
+  .llegar__bloque dt {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+    margin-bottom: var(--space-2);
+  }
+  .llegar__bloque dd {
+    margin: 0;
+    line-height: var(--leading-body);
+    max-width: var(--container-text);
+  }
+
+  @media (min-width: 60rem) {
+    .llegar { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-8); }
+  }
+</style>

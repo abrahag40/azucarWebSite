@@ -147,6 +147,20 @@ ambiental del municipio de Tulum · cargo por servicio · propinas.
 > un problema de contenido con solución de contenido — y es el argumento que convierte
 > este proyecto de estético a operativo.
 
+**C-LLEG. Cómo llegar, con datos reales.** (nueva, 2026-08-24)
+- ¿Cuánto se tarda del **aeropuerto de Cancún** al hotel, y qué rango de costo tiene un
+  traslado privado? ¿Recomiendan mejor el **aeropuerto de Tulum**?
+- El **traslado aeropuerto–hotel–aeropuerto** aparece como opción en el formulario de su sitio
+  vigente: ¿lo opera el hotel o lo subcontrata? ¿Qué tarifa tiene?
+- ¿Hay alguna **referencia física** que ayude a encontrarlo desde la carretera? ¿El taxi lo
+  ubica dando sólo la dirección?
+> Es la información que falta para cumplir H4.5, que pide «opciones reales con tiempos y rangos
+> de costo». Se publicó lo confirmable —kilómetro, estacionamiento, recepción 24 h, que el
+> traslado existe— y **no se inventaron tiempos**: un «1 h 45 min» que en temporada alta son
+> tres horas es la misma promesa incumplida que este proyecto vino a corregir.
+> **Rinde más de lo que parece:** *"cómo llegar a Tulum desde Cancún"* es de las búsquedas más
+> frecuentes del viajero de la zona, y casi ningún hotel la responde bien.
+
 **C4. Políticas por escrito:** cancelación y reembolso · check-in / check-out · niños ·
 mascotas · no-show · depósito o garantía · fumar · edad mínima.
 

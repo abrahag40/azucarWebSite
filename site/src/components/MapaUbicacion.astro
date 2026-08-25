@@ -1,0 +1,162 @@
+---
+/**
+ * Mapa de la ubicacion, con carga bajo peticion (H4.5).
+ *
+ * ── POR QUE NO SE INCRUSTA DIRECTO ─────────────────────────────────────────
+ * Un iframe de Google Maps carga varios cientos de KB de JavaScript de
+ * terceros y **planta cookies antes de que el huesped haya consentido nada**.
+ * Con E-PRIV abierto —el aviso de privacidad del hotel todavia no cumple la
+ * LFPDPPP— eso es exactamente el incumplimiento que le senalamos al cliente
+ * en su propio sitio. La version anterior de esta pagina resolvio el problema
+ * no poniendo mapa; correcto en su momento, pero deja la pagina coja.
+ *
+ * ── LA TERCERA OPCION: CARGA BAJO PETICION ─────────────────────────────────
+ * Se pinta un marcador dibujado a mano —SVG propio, cero peticiones— con la
+ * direccion y un boton. El iframe **no existe en el HTML**: se crea sólo si
+ * el huesped pulsa «Ver el mapa», y el aviso dice qué implica antes de que lo
+ * pulse. Hasta entonces, Google no recibe una sola peticion desde esta pagina.
+ *
+ * Es el patron *click-to-load* que usan los sitios europeos para cumplir el
+ * RGPD. Aqui hace tres cosas a la vez: cumple, no cuesta rendimiento, y da al
+ * huesped el mapa que pedia —que era la queja de fondo—.
+ *
+ * ── POR QUE EL BOTON NO ES UN <a> ──────────────────────────────────────────
+ * Porque no navega a ningun sitio: cambia esta pagina. Un enlace que no lleva
+ * a una URL es un boton disfrazado, y a un lector de pantalla le miente sobre
+ * lo que va a pasar. El enlace de verdad —«Abrir en Google Maps»— sigue
+ * existiendo aparte, para quien prefiera su propia app.
+ */
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+/* Las mismas coordenadas que declara `schema.org/Hotel` en `Base.astro`. Si
+   algun dia cambian, cambian en los dos sitios — por eso estan aqui arriba y
+   no incrustadas en tres URLs distintas. */
+const LAT = 20.1489;
+const LON = -87.4483;
+const ENLACE = `https://www.google.com/maps/search/?api=1&query=${LAT},${LON}`;
+const INCRUSTADO = `https://maps.google.com/maps?q=${LAT},${LON}&z=15&output=embed`;
+---
+<figure class="mapa">
+  <div class="mapa__marco" id="mapa-marco">
+    <div class="mapa__reposo" id="mapa-reposo">
+      {/* Marcador dibujado a mano, mismo criterio que `Icono.astro`: los
+          iconos de la plantilla son recursos licenciados (R-01). */}
+      <svg class="mapa__pin" viewBox="0 0 24 24" width="40" height="40" fill="none"
+           stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+      </svg>
+      <p class="mapa__aviso">{t('ubicacion.mapaAviso')}</p>
+      <button type="button" class="boton boton--secundario" id="mapa-boton">
+        {t('ubicacion.verMapa')}
+      </button>
+    </div>
+  </div>
+  <figcaption class="mapa__pie">
+    <a class="mapa__enlace" href={ENLACE} rel="noopener noreferrer" target="_blank">
+      {t('ubicacion.mapa')}
+    </a>
+    <span class="mapa__coords">
+      {t('ubicacion.coordenadas')}: {LAT}, {LON}
+    </span>
+  </figcaption>
+</figure>
+
+<script define:vars={{ INCRUSTADO, TITULO: t('ubicacion.mapaTitulo') }}>
+  const boton = document.getElementById('mapa-boton');
+  const reposo = document.getElementById('mapa-reposo');
+  const marco = document.getElementById('mapa-marco');
+  boton?.addEventListener('click', () => {
+    const iframe = document.createElement('iframe');
+    iframe.src = INCRUSTADO;
+    // Sin `title` el iframe se anuncia como «marco» a secas y quien navega con
+    // lector de pantalla no sabe qué contiene (WCAG 4.1.2).
+    iframe.title = TITULO;
+    iframe.loading = 'lazy';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.className = 'mapa__iframe';
+    reposo?.remove();
+    marco?.append(iframe);
+  });
+</script>
+
+<style>
+  .mapa { margin: 0; }
+  .mapa__marco {
+    position: relative;
+    /* Proporción fijada de antemano: sin esto, al insertar el iframe la página
+       daría un salto y el CLS se dispararía justo al pulsar. */
+    aspect-ratio: 16 / 10;
+    background: var(--color-surface-warm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .mapa__reposo {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    text-align: center;
+  }
+  .mapa__pin { color: var(--color-accent); }
+  .mapa__aviso {
+    max-width: 28rem;
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+  /* 🔴 `:global()` y no una regla normal, aunque parezca innecesario.
+     El `<style>` de Astro tiene ÁMBITO: al compilar añade un atributo
+     `data-astro-cid-…` a los elementos del template y acota cada selector a
+     ese atributo. Este iframe **lo crea el JavaScript**, así que no lleva el
+     atributo y la regla con ámbito no lo alcanzaba nunca: quedaba con el
+     tamaño por defecto del navegador —medido, 304 × 154 dentro de un marco de
+     545 × 340—. Se ve al probarlo, no al leerlo.
+     Va acotado por `.mapa__marco` para que «global» no signifique «en todo el
+     sitio»: sólo escapa del ámbito, no del componente. */
+  .mapa__marco :global(.mapa__iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .mapa__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-3);
+  }
+  .mapa__enlace {
+    /* `block` con altura mínima: un <a> en línea no suma su relleno vertical y
+       se queda por debajo de los 24 px de WCAG 2.5.8. */
+    display: block;
+    min-height: 32px;
+    padding-block: var(--space-1);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+  .mapa__coords {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media print {
+    /* En papel el botón no sirve; las coordenadas y la dirección sí. */
+    .mapa__marco { display: none; }
+  }
+</style>

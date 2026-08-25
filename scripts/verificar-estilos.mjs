@@ -83,6 +83,20 @@ const usadas = (fuente) => {
       : [crudo];
     for (const t of trozos) for (const c of t.split(/\s+/)) if (c && !c.includes('$')) s.add(c);
   }
+  // Clases que el JavaScript del componente asigna en tiempo de ejecución:
+  // `el.className = 'x'`, `el.classList.add('x')`, `closest('.x')`. Sin esto,
+  // una clase perfectamente viva se reporta como muerta — pasó con
+  // `.mapa__iframe`, que sólo existe cuando el huésped pulsa «ver el mapa».
+  //
+  // Se busca en la fuente ENTERA y no sólo en la plantilla: el `<script>` de un
+  // componente de Astro va después del `<style>` unas veces y antes otras, y
+  // partir por `<style>` se dejaba fuera la mitad de los casos.
+  for (const m of fuente.matchAll(/(?:className\s*=|classList\.(?:add|remove|toggle|contains)\()\s*['"`]([^'"`]+)['"`]/g)) {
+    for (const c of m[1].split(/\s+/)) if (c) s.add(c);
+  }
+  for (const m of fuente.matchAll(/(?:querySelector(?:All)?|closest|matches)\(\s*['"`]([^'"`]+)['"`]/g)) {
+    for (const c of m[1].matchAll(/\.([\w-]+)/g)) s.add(c[1]);
+  }
   return s;
 };
 

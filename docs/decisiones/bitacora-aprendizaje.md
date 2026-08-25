@@ -1901,6 +1901,61 @@ ya no comprueba nada».
 
 ---
 
+## L-079 — Elegir bien dentro de una muestra minúscula sigue siendo elegir mal
+
+**Lección.** Abraham miró la galería y dijo: «las fotos son muy básicas y malas». Tenía razón,
+y lo interesante es **por qué** el archivo se defendía a sí mismo.
+
+El comentario de `galeria.ts` presumía de rigor: *«de las diez fotografías de propiedad que se
+revisaron una por una, ocho entraron y dos se descartaron»*, con el detalle de por qué salió
+cada una. Todo cierto. El dato que faltaba: **eran diez de 244**. La curaduría original nunca
+abrió el grueso del banco, y ahí estaba lo bueno —un atardecer con camastros bajo la pérgola,
+el arco de piedra hacia la playa, una panorámica de la selva y el mar, la alberca iluminada de
+noche—. Ninguna de esas cuatro se había visto siquiera.
+
+**Lo que enseña:** el rigor sobre la muestra equivocada produce un informe convincente y una
+conclusión mala. Peor: **el rigor documentado ahuyenta la revisión**. Nadie vuelve a mirar un
+archivo cuyo comentario explica con detalle el criterio aplicado — se asume que ya se pensó.
+
+**El síntoma que debió delatarlo antes:** el mismo archivo afirmaba, en otro componente, que
+«ninguna fotografía del hotel tiene la alberca como sujeto, hay que pedirla al cliente». Era
+falso: había dos. Una carencia sólo se puede afirmar **tras mirar todo el material**; con una
+muestra parcial lo honesto es decir «no encontré», no «no hay». Ese matiz habría hecho evidente
+que la muestra era el problema.
+
+**La regla, tercera vez que aparece (L-041, L-071, ésta):** antes de curar, contar el universo.
+Si la muestra revisada no es el 100 %, el porcentaje va **escrito en el resultado** — «8 de 10
+revisadas» es un dato distinto de «8 de 244 disponibles», y sólo el segundo permite juzgar si
+la selección vale.
+
+---
+
+## L-080 — Un `<style>` con ámbito no alcanza lo que crea el JavaScript
+
+**Lección.** El mapa de «Cómo llegar» carga bajo petición: el `<iframe>` no existe en el HTML y
+lo crea un script cuando el huésped pulsa el botón. El CSS decía
+`.mapa__iframe { width: 100%; height: 100% }` y el iframe salía a 304 × 154 dentro de un marco
+de 545 × 340.
+
+La causa es el ámbito de Astro. Al compilar, `<style>` añade un atributo `data-astro-cid-…` a
+cada elemento **del template** y acota todos los selectores a ese atributo. Un elemento creado
+con `document.createElement` no lo lleva, así que la regla no lo toca nunca. El arreglo es
+`:global()`, acotado por un ancestro que sí está en el template —`.mapa__marco :global(.mapa__iframe)`—
+para que «global» no signifique «en todo el sitio».
+
+**El corolario, que costó otro hallazgo:** el detector de clases del proyecto marcó
+`.mapa__iframe` como CSS muerto. También era un punto ciego suyo — sólo leía atributos `class`
+del marcado, y no veía `el.className = '…'`, `classList.add()` ni los selectores de
+`querySelector('.x')`. Se le enseñó a mirar ahí, y se calibró rompiendo algo a propósito para
+comprobar que sigue detectando CSS muerto de verdad.
+
+**El patrón:** todo lo que el ámbito de un componente no alcanza —elementos creados en tiempo
+de ejecución, contenido inyectado, un `<slot>` de terceros— necesita una decisión explícita.
+Y la herramienta que audita ese ámbito tiene que conocer las mismas vías por las que el código
+asigna clases, o reporta como muerto lo que está vivo.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

@@ -6,106 +6,122 @@
  * galería general que mostrara más habitaciones sería redundante: el huésped
  * que quiere ver habitaciones ya está en el catálogo.
  *
- * Ésta enseña **la propiedad**: la playa, el roof top, la fachada, el jardín.
- * Responde a una pregunta distinta —«¿cómo es el sitio?»— y por eso existe.
+ * Ésta enseña **la propiedad**: la playa, el roof top, la alberca, los pasos
+ * entre los edificios. Responde a una pregunta distinta —«¿cómo es el sitio?»—
+ * y por eso existe.
  *
- * ── SOBRE LA CURADURÍA, Y UN DATO PARA ABRAHAM ──────────────────────────────
- * De las diez fotografías de propiedad que se revisaron una por una, **ocho
- * entraron y dos se descartaron**: un recorte bajo de un borde de terraza,
- * ilegible fuera de contexto, y dos tomas dominadas por una columna de piedra a
- * mediodía. El archivo del hotel tiene 244 imágenes y es **desigual**: hay
- * material excelente y material que no se puede publicar, mezclados.
+ * ── 🔴 SEGUNDA CURADURÍA: LA PRIMERA MIRÓ 10 FOTOS DE 244 ───────────────────
+ * La versión original de este archivo decía haber revisado «las diez
+ * fotografías de propiedad» y presumía de que ocho entraron. El dato que
+ * faltaba: **eran diez de 244**. Nunca se abrió el grueso del archivo, y ahí
+ * estaba lo bueno — el atardecer con los camastros, el arco de piedra hacia la
+ * playa, la panorámica de la selva y el mar, la alberca de noche—. Ninguna de
+ * esas cuatro se había visto siquiera.
  *
- * Ocho fotos bien elegidas valen más que veinte sin elegir. Si en algún momento
- * se quiere ampliar, hay que revisarlas de nuevo una a una: no hay atajo, y
- * ordenar por tamaño de archivo —que es lo que se probó primero— no predice si
- * una foto es buena.
+ * Lo notó Abraham de un vistazo: «las fotos son muy básicas y malas». Tenía
+ * razón, y el defecto no era de criterio sino de **cobertura**: se eligió bien
+ * dentro de una muestra minúscula que nadie había cuestionado.
  *
- * ── UNA NOVENA DESCARTADA, YA PUESTA EN LA REJILLA ──────────────────────────
- * La panorámica de la alberca del roof top entró, se vio en la miniatura y
- * salió. Dos motivos, y ninguno se veía mirando la foto entera:
- *   1. Es la MISMA imagen del hero de la portada, byte a byte. Se descubrió
- *      porque Vite deduplica por hash y el enlace apuntaba al otro archivo.
- *   2. Es una toma ancha con mucha duela vacía: la alberca es una franja
- *      delgada que el recorte cuadrado deja en nada. Funciona a lo grande,
- *      como hero; no funciona pequeña.
- * Lección: una foto no se juzga en el visor, se juzga **en la miniatura**, que
- * es el tamaño al que la va a ver casi todo el mundo.
+ * En esta segunda pasada se revisaron **las 102 del banco general** en hojas de
+ * contacto. Tres de las ocho anteriores sobrevivieron —el arco, la escalera y
+ * los camastros bajo palapa—; las otras cinco eran detalles de baño, un lavabo
+ * o un rincón de vegetación, cosas que no venden un hotel frente al mar.
+ *
+ * ── CÓMO SE ORDENAN ─────────────────────────────────────────────────────────
+ * No por tipo de espacio, sino por **fuerza visual descendente**: la primera es
+ * la que decide si alguien sigue mirando. Se alterna día/noche y abierto/cerrado
+ * para que la rejilla no se lea monótona.
+ *
+ * ── LA TRAMPA DE LA MINIATURA, QUE SIGUE VIGENTE ────────────────────────────
+ * Una foto no se juzga en el visor: se juzga **en la miniatura**, que es el
+ * tamaño al que la va a ver casi todo el mundo. Una panorámica de la alberca ya
+ * se descartó por esto —funcionaba a lo grande, como hero, y en recorte cuadrado
+ * quedaba en nada— y además resultó ser la MISMA imagen del hero de la portada,
+ * byte a byte. Ambas comprobaciones se repitieron aquí: ninguna de las nueve
+ * está ya en el sitio ni duplica a otra (verificado por hash, no a ojo).
  *
  * ── LOS TEXTOS ALTERNATIVOS ─────────────────────────────────────────────────
- * Describen lo que se ve, no lo que queremos vender. «Terraza con hamaca y dos
- * sillas de madera frente al mar» le sirve a quien no ve la foto; «un rincón de
- * ensueño» no le sirve a nadie (WCAG 1.1.1).
+ * Describen lo que se ve, no lo que queremos vender. «Camastros de tejido bajo
+ * una pérgola de madera, con el sol poniéndose» le sirve a quien no ve la foto;
+ * «un atardecer de ensueño» no le sirve a nadie (WCAG 1.1.1).
  */
 import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
-import roofTop from '../assets/galeria/01-roof-top-terraza.webp';
-import playa from '../assets/galeria/02-playa-arco.webp';
-import terraza from '../assets/galeria/03-terraza-hamaca.webp';
-import jacuzzi from '../assets/galeria/04-jacuzzi-roof-top.webp';
-import vista from '../assets/galeria/05-vista-desde-habitacion.webp';
-import fachada from '../assets/galeria/06-fachada.webp';
-import jardin from '../assets/galeria/07-jardin.webp';
-import lavabo from '../assets/galeria/08-lavabo-piedra.webp';
+import atardecer from '../assets/galeria/01-roof-top-atardecer.webp';
+import arco from '../assets/galeria/02-arco-playa.webp';
+import escalera from '../assets/galeria/03-escalera-mar.webp';
+import panoramica from '../assets/galeria/04-vista-selva-mar.webp';
+import camastros from '../assets/galeria/05-camastros-palapa.webp';
+import alberca from '../assets/galeria/06-alberca-roof-top.webp';
+import albercaNoche from '../assets/galeria/07-alberca-noche.webp';
+import patio from '../assets/galeria/08-patio-arboles.webp';
+import entrada from '../assets/galeria/09-entrada-piedra.webp';
 
 type Texto = Record<Idioma, string>;
 
 export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
-    imagen: roofTop,
+    imagen: atardecer,
     alt: {
-      es: 'Paso del roof top entre un lavabo de piedra y una pérgola de madera, con duela, jardinera y el mar al fondo.',
-      en: 'Rooftop walkway between a stone basin and a wooden pergola, with timber decking, a planter and the sea beyond.',
+      es: 'Camastros de tejido bajo una pérgola de madera en el roof top, con el sol poniéndose sobre la selva.',
+      en: 'Woven sun loungers under a wooden pergola on the rooftop, with the sun setting over the jungle.',
     },
   },
   {
-    imagen: playa,
+    imagen: arco,
     alt: {
-      es: 'Paso de arena blanca entre los edificios del hotel, con palmeras, un arco de piedra y el mar al fondo.',
-      en: 'A white-sand path between the hotel buildings, with palm trees, a stone arch and the sea at the end.',
+      es: 'Arco de piedra entre palmeras, en la arena, con las sombrillas de la playa y el Caribe turquesa detrás.',
+      en: 'A stone arch among palm trees on the sand, with the beach parasols and the turquoise Caribbean behind.',
     },
   },
   {
-    imagen: terraza,
+    imagen: escalera,
     alt: {
-      es: 'Terraza techada de palma con hamaca y dos sillas de madera, mirando a la alberca y al Caribe.',
-      en: 'Palm-thatched terrace with a hammock and two wooden chairs, looking out over the pool and the Caribbean.',
+      es: 'Escalera de madera entre los edificios del hotel, sobre arena blanca, con palmeras y el mar al fondo.',
+      en: 'A wooden staircase between the hotel buildings, over white sand, with palm trees and the sea beyond.',
     },
   },
   {
-    imagen: jacuzzi,
+    imagen: panoramica,
     alt: {
-      es: 'Jacuzzi de piedra bajo una pérgola de madera, con la vegetación de la selva asomando por encima del muro.',
-      en: 'Stone jacuzzi under a wooden pergola, with jungle greenery rising above the wall.',
+      es: 'Vista desde lo alto: las palmas del jardín del hotel y, detrás, la franja azul del Caribe.',
+      en: 'View from above: the palms of the hotel garden and, beyond them, the blue band of the Caribbean.',
     },
   },
   {
-    imagen: vista,
+    imagen: camastros,
     alt: {
-      es: 'Vista desde el interior de una habitación hacia el balcón: cortinas, dos sillas de lona, palmeras y el mar.',
-      en: 'View from inside a room out to the balcony: curtains, two canvas chairs, palm trees and the sea.',
+      es: 'Dos camastros de tejido en una terraza techada de palma, mirando a las palmeras y al mar.',
+      en: 'Two woven loungers on a palm-thatched terrace, looking out to the palm trees and the sea.',
     },
   },
   {
-    imagen: fachada,
+    imagen: alberca,
     alt: {
-      es: 'Fachada del hotel desde la calle, con balcones blancos entre los árboles y locales de tiendas en la planta baja.',
-      en: 'The hotel façade from the street, with white balconies among the trees and shop units at ground level.',
+      es: 'Alberca alargada del roof top, con muro de piedra caliza, duela de madera y camastros bajo la pérgola.',
+      en: 'The long rooftop pool, with a limestone wall, timber decking and loungers under the pergola.',
     },
   },
   {
-    imagen: jardin,
+    imagen: albercaNoche,
     alt: {
-      es: 'Rincón del jardín entre dos columnas de piedra caliza, con palmas y una flor roja de heliconia.',
-      en: 'A corner of the garden between two limestone columns, with palms and a red heliconia flower.',
+      es: 'La alberca del roof top de noche, iluminada por dentro y por las luces empotradas en su muro.',
+      en: 'The rooftop pool at night, lit from within and by the lights set into its wall.',
     },
   },
   {
-    imagen: lavabo,
+    imagen: patio,
     alt: {
-      es: 'Lavabo exterior de piedra sobre una base de madera curva, junto a una celosía de troncos y el cielo azul.',
-      en: 'Outdoor stone basin on a curved wooden base, beside a lattice of timber poles and blue sky.',
+      es: 'Patio interior con árboles altos entre los balcones blancos del hotel.',
+      en: 'Inner courtyard with tall trees between the hotel white balconies.',
+    },
+  },
+  {
+    imagen: entrada,
+    alt: {
+      es: 'Acceso de piedra caliza a la playa, con vegetación a los lados y una escalera de madera al fondo.',
+      en: 'Limestone passage down to the beach, with greenery on both sides and a wooden staircase at the end.',
     },
   },
 ];
