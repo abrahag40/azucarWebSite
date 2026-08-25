@@ -333,6 +333,13 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 de las dos páginas existe. **Lo habíamos publicado**: una tarjeta en la portada y
 `amenityFeature: Restaurant = true` en el `schema.org` de 20 páginas. Retirado. Ver L-031.
 
+**Y ahora bloquea una página entera.** A petición de Abraham se construyó la sección de
+restaurante con el diseño de carta de Cappa (H4.11): el componente, los datos tipados y la
+página, todo probado con una carta de prueba. **No se publica**: `carta.publicable` está en
+`false` y la ruta *no existe* —da 404, que es la verdad— hasta que el cliente confirme que hay
+restaurante y con qué nombre (su sitio lo llama «Blanc» en un sitio y «Selvamar» en otro).
+Activarlo es rellenar `src/data/restaurante.ts`, sin tocar código. Ver L-082.
+
 ### ⚠️ Datos sin verificar
 
 De cada tipo, sólo **nombre y vista** provienen del sitio real. **Unidades, capacidad y camas
@@ -344,7 +351,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 
 | # | Qué | Bloquea |
 |---|---|---|
-| **C0** | ¿Hay restaurante, bar y spa? | Contenido publicado hoy en SU sitio |
+| **C0** | ¿Hay restaurante, bar y spa? | Contenido publicado hoy en SU sitio + **la página de restaurante ya construida** |
 | **C1** | Tabla de los 8 tipos | `build:prod` |
 | **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
@@ -412,7 +419,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **80 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **83 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

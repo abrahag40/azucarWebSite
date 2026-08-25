@@ -1,0 +1,26 @@
+---
+/**
+ * Restaurante (bloqueado por C0 — ver `src/data/restaurante.ts`).
+ *
+ * La pagina existe pero NO se genera mientras `carta.publicable` sea `false`:
+ * la ruta comprueba el dato y devuelve 404. Asi el trabajo esta hecho y listo,
+ * sin publicar un servicio que el propio hotel dice no tener.
+ */
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import MenuRestaurante from '../components/MenuRestaurante.astro';
+import { usarT, type Idioma } from '../i18n/ui';
+import banner from '../assets/galeria/01-roof-top-atardecer.webp';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="restaurante"
+  titulo={`${t('restaurante.titulo')} | Azúcar Hotel Tulum`}
+  descripcion={t('restaurante.meta')}
+>
+  <BannerPagina imagen={banner} titulo={t('restaurante.titulo')} />
+  <MenuRestaurante idioma={idioma} />
+</Base>

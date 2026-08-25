@@ -1956,6 +1956,84 @@ asigna clases, o reporta como muerto lo que está vivo.
 
 ---
 
+## L-081 — Adoptar el diseño de la plantilla no obliga a adoptar su promesa
+
+**Lección.** Cappa remata la caja de reserva de su portada con **«Check Availability»**. Aquí
+ese botón es imposible: el hotel no opera PMS ni channel manager, y la regla 2 prohíbe mostrar
+disponibilidad que no podamos respaldar. Un botón que dice comprobar disponibilidad y no la
+comprueba es la promesa incumplida que este proyecto vino a corregir — y de paso reintroduce el
+riesgo de sobreventa que ADR-0003 entero existe para evitar.
+
+La salida no fue descartar el bloque ni copiarlo entero: **se conserva la forma y se cambia la
+promesa**. Misma caja clara sobre la fotografía, mismos cuatro campos, mismo botón ancho; el
+botón dice «Solicitar reserva», los datos viajan a `/reservar/` y el hotel confirma a mano.
+
+**El patrón, general:** una plantilla aporta *composición* —qué va dónde, con qué peso visual—
+y de paso arrastra las *afirmaciones* de su demo. Lo primero es reutilizable casi siempre; lo
+segundo hay que auditarlo pieza por pieza contra lo que el cliente puede sostener de verdad.
+Copiar sin separar las dos cosas es como acaban los sitios que prometen lo que no cumplen.
+
+**Y el detalle que lo hizo barato:** el formulario grande ya leía `?tipo=` desde el sprint 2.
+Añadir tres claves más fue enseñarle a leer lo que ya sabía leer. Un `<form method="get">` sin
+una línea de JavaScript hace el resto — el navegador ya sabe serializar campos en una URL.
+
+---
+
+## L-082 — Una página que se genera vacía es peor que una página que no existe
+
+**Lección.** La carta del restaurante está bloqueada por **C0**: el propio FAQ del hotel dice
+«por ahora no tenemos servicio de restaurante o bar». Se construyó el diseño completo con el
+dato en blanco, siguiendo el patrón ya usado dos veces —el WhatsApp en `null`, los precios con
+`publicable: false`—.
+
+Pero la primera versión era un `index.astro` normal, y el resultado fue **peor que no tener
+página**: se generaba igual, con su banner a toda pantalla y su título «Restaurante», y debajo
+nada. Una URL que anuncia un servicio y no entrega nada dice exactamente lo contrario de lo que
+el interruptor pretendía evitar.
+
+La corrección es una ruta dinámica cuyo `getStaticPaths` devuelve un array vacío mientras la
+carta no sea publicable: **la ruta no existe**, el sitio da 404, y eso es la verdad. Cuando el
+hotel confirme, la misma función devuelve la ruta y la página aparece sin tocar código.
+
+**Lo que enseña:** «no publicar un dato» y «no publicar una página» son cosas distintas. Vaciar
+el contenido de una plantilla deja el envoltorio —título, banner, entrada en el menú, URL
+indexable— afirmando que el servicio existe. Cuando lo bloqueado es la página entera, hay que
+bloquear la RUTA, no el contenido.
+
+**Y la calibración casi falla por mi culpa:** al comprobar que la página no se generaba busqué
+`dist/restaurante/` como directorio, cuando este sitio emite `dist/restaurante.html` plano. La
+primera lectura dijo «no se genera» en los dos casos —con el interruptor abierto y cerrado—, lo
+que habría dado por bueno un interruptor roto. Una comprobación que no distingue los dos
+estados no comprueba nada (L-078 otra vez, con otra cara).
+
+---
+
+## L-083 — Tres intentos para una línea de puntos, y los tres sólo se ven renderizando
+
+**Lección.** La carta de Cappa separa el nombre del plato y su precio con una línea de puntos
+que rellena el hueco. Parece trivial. Costó tres intentos, y **ninguno de los dos fallos se
+podía ver leyendo el CSS**:
+
+1. `::after` en el contenedor flex → el pseudo-elemento se coloca después de **todos** los
+   hijos, así que los puntos salían a la derecha del precio.
+2. `::after` en el nombre con `width: 100%` → al no ser hijo del flex, ese 100 % se mide contra
+   el nombre y forzaba un salto: los puntos caían debajo del texto.
+3. `::after` en el contenedor, pero con **`order`** → el pseudo-elemento sigue siendo hijo
+   directo del flex, donde `flex: 1` funciona, y se *pinta* en medio. Correcto.
+
+**Lo que enseña:** `order` de flexbox separa el orden del DOM del orden visual, y es
+exactamente la herramienta para colocar un pseudo-elemento en medio de sus hermanos —algo que
+la posición en el marcado no permite, porque `::before`/`::after` sólo pueden ir al principio o
+al final.
+
+**El meta-patrón, y ya van muchas:** el componente se construyó con el dato vacío, así que
+**no renderizaba nada**. Entregarlo «listo para cuando lleguen los datos» sin haberlo visto con
+datos habría sido entregar tres bugs invisibles. Se rellenó con una carta de prueba —nombres
+largos, nombres cortos, un plato sin precio—, se miró, se corrigió, y se revirtió el dato. Un
+componente vacío que compila no es un componente que funciona.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

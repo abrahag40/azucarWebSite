@@ -1,0 +1,173 @@
+---
+/**
+ * Carta del restaurante — patrón `restaurant-menu` de Cappa
+ * (`demo1-light/restaurant.html`, línea 166).
+ *
+ * ── QUÉ SE TOMA DE LA PLANTILLA ────────────────────────────────────────────
+ * Medido sobre el original: sección de **fondo oscuro** (`bg-blck`) que corta
+ * el ritmo claro del resto de la página, antetítulo + título centrados,
+ * categorías en una fila horizontal, y los platos en **dos columnas** con el
+ * precio alineado a la derecha sobre una línea de puntos.
+ *
+ * ── QUÉ NO SE COPIA, Y POR QUÉ ─────────────────────────────────────────────
+ * Cappa monta las categorías como **pestañas con Owl Carousel** — una librería
+ * de JavaScript para un cambio de panel. Aquí no: las categorías se apilan una
+ * tras otra y se navega con desplazamiento normal.
+ *   · Una carta se LEE entera, no se consulta por pestañas: esconder cinco
+ *     secciones de seis obliga a pulsar para descubrir qué hay.
+ *   · Ahorra una dependencia de JavaScript en un sitio que hoy envía **0 KB**
+ *     de JS externo.
+ *   · Y se puede imprimir. Una carta en pestañas sale en papel con una sola
+ *     categoría visible.
+ *
+ * ── 🔴 NO SE RENDERIZA NADA SI NO HAY CARTA ────────────────────────────────
+ * `carta.publicable` está en `false` hasta que se resuelva **C0** — el propio
+ * hotel dice en su FAQ que no tiene restaurante. Ver `src/data/restaurante.ts`.
+ */
+import { carta } from '../data/restaurante';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
+  style: 'currency',
+  currency: 'MXN',
+  maximumFractionDigits: 0,
+});
+---
+{carta.publicable && carta.categorias.length > 0 && (
+  <section class="carta">
+    <div class="contenedor">
+      <header class="carta__encabezado">
+        <p class="carta__antetitulo">{carta.nombre?.[idioma] ?? ''}</p>
+        <h2 class="carta__titulo">{t('restaurante.carta')}</h2>
+      </header>
+
+      {carta.categorias.map((cat) => (
+        <div class="carta__categoria">
+          <h3 class="carta__categoriaTitulo" id={`carta-${cat.clave}`}>{cat.nombre[idioma]}</h3>
+          <ul class="carta__platos" role="list">
+            {cat.platos.map((p) => (
+              <li class="plato">
+                <p class="plato__linea">
+                  <span class="plato__nombre">{p.nombre[idioma]}</span>
+                  {p.precio != null && <span class="plato__precio">{moneda.format(p.precio)}</span>}
+                </p>
+                {p.descripcion && <p class="plato__descripcion">{p.descripcion[idioma]}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      {/* Regla 3: si se muestran precios, se dice qué incluyen. */}
+      <p class="carta__nota">{t('restaurante.impuestos')}</p>
+    </div>
+  </section>
+)}
+
+<style>
+  /* Fondo oscuro como en Cappa: corta el ritmo claro del resto del sitio y
+     hace que la carta se lea como un momento aparte. */
+  .carta {
+    background: #1a1a1a;
+    color: #fff;
+    padding-block: var(--space-9);
+  }
+  .carta__encabezado { text-align: center; margin-bottom: var(--space-8); }
+  .carta__antetitulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-antetitulo);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-2);
+  }
+  .carta__titulo { font-size: var(--text-3xl); margin: 0; color: #fff; }
+
+  .carta__categoria { margin-bottom: var(--space-8); }
+  .carta__categoriaTitulo {
+    font-family: var(--font-ui);
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    text-align: center;
+    margin: 0 0 var(--space-6);
+  }
+
+  /* Dos columnas desde 48rem, como el original. Debajo, una sola: en un
+     teléfono dos columnas de carta dejan los nombres de plato partidos. */
+  .carta__platos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-5) var(--space-8);
+  }
+  .plato { min-width: 0; }
+  /* La línea de puntos entre el plato y el precio: es lo que hace que se lea
+     como carta y no como lista. `flex` con un `::after` que crece rellena el
+     hueco sea cual sea la longitud del nombre. */
+  .plato__linea {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: #fff;
+  }
+  /* 🔴 El relleno de puntos se coloca con `order`, no por posición en el DOM.
+     Dos intentos fallidos antes de dar con esto, los dos visibles sólo al
+     renderizar con datos de prueba:
+       1. `::after` en `.plato__linea` → el pseudo-elemento va después de TODOS
+          los hijos, así que los puntos salían a la derecha del precio.
+       2. `::after` en `.plato__nombre` con `width: 100%` → al no ser hijo del
+          flex, el 100% se mide contra el nombre y forzaba un salto de línea:
+          los puntos caían debajo del texto.
+     Con `order` el pseudo-elemento sigue colgando de `.plato__linea` —donde sí
+     es hijo directo del flex y `flex: 1` funciona— pero se PINTA en medio. */
+  .plato__nombre { order: 1; flex: 0 1 auto; min-width: 0; }
+  .plato__linea::after {
+    content: '';
+    order: 2;
+    flex: 1 1 var(--space-6);
+    border-bottom: 1px dotted rgb(255 255 255 / 0.28);
+    /* Sube la línea hasta la altura de la base del texto. */
+    translate: 0 -0.35em;
+  }
+  .plato__precio {
+    order: 3;
+    flex: 0 0 auto;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .plato__descripcion {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+    color: rgb(255 255 255 / 0.72);
+    max-width: 46ch;
+  }
+
+  .carta__nota {
+    text-align: center;
+    font-size: var(--text-sm);
+    color: rgb(255 255 255 / 0.6);
+    margin: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .carta__platos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media print {
+    /* En papel, tinta negra sobre blanco. Una carta es de las pocas páginas
+       que alguien imprime de verdad. */
+    .carta { background: #fff; color: #000; }
+    .carta__titulo, .plato__linea { color: #000; }
+    .plato__descripcion { color: #333; }
+  }
+</style>

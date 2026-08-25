@@ -1,0 +1,22 @@
+---
+/**
+ * `/restaurante/` — bloqueada por C0, ver `src/data/restaurante.ts`.
+ *
+ * ── POR QUE ES UNA RUTA DINAMICA PARA UNA SOLA PAGINA ──────────────────────
+ * Primero fue un `index.astro` normal, y el resultado era peor que no tener
+ * pagina: se generaba igual, con su banner y su titulo, y el contenido vacio
+ * — una URL que anuncia «Restaurante» y no entrega nada.
+ *
+ * Con `getStaticPaths` devolviendo un array vacio, la ruta **no existe**
+ * mientras la carta no sea publicable: el sitio da 404, que es la verdad.
+ * En cuanto el hotel confirme C0 y entregue su carta, la misma funcion
+ * devuelve la ruta y la pagina aparece — sin tocar codigo.
+ */
+import type { GetStaticPaths } from 'astro';
+import { carta } from '../../data/restaurante';
+import Restaurante from '../../views/Restaurante.astro';
+
+export const getStaticPaths: GetStaticPaths = () =>
+  carta.publicable ? [{ params: { pagina: undefined } }] : [];
+---
+<Restaurante idioma="es" />
