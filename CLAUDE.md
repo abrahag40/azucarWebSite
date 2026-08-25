@@ -338,9 +338,12 @@ amenidad a la portada, volvió `Restaurant` al `schema.org` de las 38 páginas, 
 está publicada y en el menú (H4.11).
 
 🔴 **Dos cosas que esa decisión NO resuelve:**
-- **La carta.** Que el restaurante exista no dice qué se sirve. `carta.categorias` sigue vacío
-  y la página lo comunica —«estamos preparando la carta»— en vez de inventar platos. Falta la
-  lista real y **el nombre**: su sitio lo llama «Blanc» en un sitio y «Selvamar» en otro.
+- **La carta es CONTENIDO DE EJEMPLO.** A petición de Abraham (2026-08-25) se rellenó con
+  platos y precios plausibles de un hotel de playa en Tulum, para que la página se vea completa
+  y editarla sea sólo cambiar textos. **No son del hotel y hay que sustituirlos antes de
+  producción.** El aviso está en la cabecera de `src/data/restaurante.ts` y en la
+  [guía de textos](docs/06-traspaso/guia-de-textos.md). Falta también **el nombre real**: su
+  sitio lo llama «Blanc» en un sitio y «Selvamar» en otro; se puso el segundo.
 - **El spa.** Estaba retirado junto al restaurante, pero de él no se ha dicho nada. Sigue fuera.
 
 ### ⚠️ Datos sin verificar
@@ -420,6 +423,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/05-despliegue/validacion-html.md` | Validación de HTML y las dos reglas desactivadas |
 | **`docs/05-despliegue/plan-de-reversion.md`** | **Criterio de reversión, tres capas y preparativos de DNS** |
 | **`docs/06-traspaso/runbook-operativo-solicitudes.md`** | **Para el hotel: cómo atender una solicitud** |
+| **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
 | **`docs/decisiones/bitacora-aprendizaje.md`** | **85 lecciones acumuladas + riesgos abiertos** |

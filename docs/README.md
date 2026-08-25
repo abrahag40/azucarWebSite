@@ -12,6 +12,7 @@ Mapa de la documentación. El contexto general y las reglas de trabajo viven en
 | `03-arquitectura/` | Sitemap, stack tecnológico, integraciones |
 | `04-diseno/` | Design system, adaptación de la plantilla Cappa |
 | `decisiones/` | ADRs (Architecture Decision Records) y bitácora de aprendizaje |
+| **`06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto del sitio. Empieza por aquí si sólo quieres editar contenido** |
 
 ## Por dónde empezar
 
