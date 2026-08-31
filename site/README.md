@@ -69,3 +69,35 @@ lee `.nvmrc`; no hace falta configurar `NODE_VERSION` en el panel.
 
 Cloudflare Pages. Directorio raíz `site`, comando `npm run build:prod`, salida `dist`.
 Variable `PUBLIC_GA4_ID` cuando lleguen los accesos a Analytics (historia 1.7).
+
+---
+
+## 🔴 Dependencias: el lockfile se genera en Docker, no en tu Mac
+
+`npm install` en macOS produce un `package-lock.json` que **`npm ci` rechaza en Linux**, y el
+CI y Cloudflare instalan con `npm ci` en Linux. El motivo: npm resuelve un árbol distinto en
+cada plataforma cuando hay dependencias opcionales por arquitectura —los binarios de `sharp` y
+los de Astro son el caso—, y `npm ci` exige coincidencia exacta.
+
+Costó **seis commits sin desplegar** descubrirlo: aquí todo estaba en verde y el sitio llevaba
+días congelado.
+
+**Para instalar, quitar o actualizar una dependencia:**
+
+```bash
+cd site
+# 1. Cambia package.json a mano (o con npm install, da igual)
+# 2. Regenera el lockfile EN LINUX:
+docker run --rm -v "$PWD":/app -w /app node:22-slim \
+  sh -c "rm -f package-lock.json && npm install --package-lock-only"
+# 3. Comprueba
+cd .. && ./scripts/verificar-todo.sh
+```
+
+**Y después de eso, no vuelvas a correr `npm install` a secas**: reescribiría el lockfile con
+la resolución de macOS y volvería a romperlo. Para trabajar en local basta con lo que ya tienes
+en `node_modules`; si necesitas reinstalar, usa `npm ci` —que respeta el lockfile— o repite el
+paso 2 después.
+
+`./scripts/verificar-todo.sh` lo comprueba en cada pasada, usando Docker. Si no tienes Docker,
+te avisa de que no pudo comprobarlo en vez de darte un falso verde.

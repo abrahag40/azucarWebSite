@@ -73,14 +73,35 @@ paso "todos los <img> con src" bash -c '
 # lo es. Es la segunda vez que el CI se queda en rojo sin que nadie lo note
 # (L-040 fue la primera, trece commits). Ahora lo caza esta comprobación.
 #
-# `--dry-run` no instala nada: sólo verifica que el lockfile pueda satisfacer
-# el package.json, que es exactamente lo que hace fallar a `npm ci`.
-paso "lockfile sincronizado (npm ci)" bash -c '
-  cd site && npm ci --dry-run > /dev/null 2>&1 || {
-    echo "package-lock.json desincronizado: npm ci fallaria en el CI y en Cloudflare."
-    echo "Arreglo: cd site && npm install   (y commitea el lockfile)"
-    exit 1
-  }'
+# 🔴 SE COMPRUEBA EN LINUX, NO AQUÍ. npm resuelve un árbol DISTINTO en macOS y
+# en Linux cuando hay dependencias opcionales por plataforma —sharp y los
+# binarios wasm de Astro son el caso—, y `npm ci` exige coincidencia exacta.
+# Un lockfile generado en macOS es rechazado en Linux y viceversa. Como el CI y
+# Cloudflare corren en Linux, la comprobación que vale es la de Linux.
+#
+# Por eso el lockfile de este proyecto SE GENERA EN DOCKER:
+#   docker run --rm -v "$PWD/site":/app -w /app node:22-slim \
+#     sh -c "rm -f package-lock.json && npm install --package-lock-only"
+#
+# Sin Docker no se puede comprobar, y eso se dice en voz alta en vez de dar un
+# falso verde: un guardián que no puede comprobar debe avisar, no callar.
+paso "lockfile sincronizado (npm ci en Linux)" bash -c '
+  command -v docker > /dev/null 2>&1 || {
+    echo "AVISO: sin Docker no se puede comprobar el lockfile como lo hace el CI."
+    echo "El CI y Cloudflare instalan con npm ci EN LINUX, y npm resuelve"
+    echo "distinto ahi que en macOS. Instala Docker o vigila el CI a mano."
+    exit 0
+  }
+  docker run --rm -v "$PWD/site":/app -w /app node:22-slim \
+    sh -c "cp package.json package-lock.json /tmp/ && cd /tmp && npm ci --no-audit --no-fund" \
+    > /dev/null 2>&1 || {
+      echo "package-lock.json desincronizado: npm ci FALLA en Linux, que es donde"
+      echo "corren el CI y Cloudflare. El sitio no se desplegara."
+      echo "Arreglo:"
+      echo "  docker run --rm -v \"\$PWD/site\":/app -w /app node:22-slim \\"
+      echo "    sh -c \"rm -f package-lock.json && npm install --package-lock-only\""
+      exit 1
+    }'
 
 paso "og:image en todas las páginas" bash -c '
   # Lista EXPLÍCITA de lo que no lleva metadatos sociales, en vez del margen
