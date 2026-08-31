@@ -319,7 +319,8 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
 | Auditor propio | **2 hallazgos, ninguno rojo.** Los 90 enlaces a `/reservar/` ya resuelven |
 | Redirecciones | 12 reglas · 25 URLs · 0 fallos |
-| CI | ✅ **verde**, tras trece commits en rojo que nadie vio (L-040). Ahora también corre `npm test` |
+| CI | ✅ **verde**. Ha estado roto dos veces sin que nadie lo viera: trece commits (L-040) y seis (L-087) |
+| 🔴 Lockfile | **Se genera en Docker/Linux, no en macOS.** `npm ci` rechaza un lockfile de macOS y con él caen CI y Cloudflare. Procedimiento en `site/README.md` |
 | **Lighthouse** (móvil, 4G) | **rendimiento 99 · accesibilidad 100 · buenas prácticas 100 · SEO 92** ⚠️ |
 | **Core Web Vitals** | **LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms** — los tres dentro de umbral |
 | **axe-core 4.13** | **0 violaciones** en 22 páginas · 33-44 comprobaciones por página |
@@ -426,7 +427,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **86 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **87 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

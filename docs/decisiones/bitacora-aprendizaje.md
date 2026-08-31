@@ -2124,6 +2124,69 @@ desproporcionado que se lleva la culpa entera.
 
 ---
 
+## L-087 — Doce guardias en verde y el sitio llevaba seis commits sin desplegarse
+
+**Lección.** Abraham dijo *«no lo veo desplegado»*. Tenía razón, y el alcance era mucho mayor
+de lo que parecía: producción estaba **seis commits atrás** — sin la galería nueva, sin el
+mapa, sin el formulario del héroe, sin el restaurante. Días de trabajo que nadie podía ver.
+
+La causa: al instalar `wrangler`, el `package-lock.json` quedó desincronizado. `npm ci` fallaba
+en diez segundos y con él el CI y Cloudflare. **Aquí todo seguía en verde** porque en local se
+usa `npm install`, que es tolerante y arregla el lockfile sobre la marcha, mientras que `npm ci`
+—el que usan CI y Cloudflare— es estricto por diseño.
+
+**El fallo de método, y es el mismo de siempre:** mis doce guardias comprobaban el sitio.
+Ninguno comprobaba **que el sitio pudiera publicarse**. Verificaba mi trabajo, no su entrega.
+
+🔴 **Y es la SEGUNDA vez.** L-040 fue la primera: el CI estuvo trece commits en rojo sin que
+nadie lo viera. Entonces corregí el fallo concreto y escribí la lección — pero no añadí una
+comprobación. **Una lección sin guardián se vuelve a aprender**, y esta vez costó seis commits.
+
+### La cadena de causas, que tardó cinco intentos en desmontarse
+
+Cada intento falló por una razón distinta, y sólo probándolo se veía:
+
+| Intento | Qué hice | Por qué falló |
+|---|---|---|
+| 1 | `npm install` para regenerar | Faltaban `@emnapi/core` y `runtime`: en macOS son opcionales y npm no las resuelve |
+| 2 | Forzar `--os=linux --cpu=x64 --libc=glibc` | npm no resuelve las **transitivas** de un paquete opcional que su plataforma descarta |
+| 3 | Añadir las entradas al lockfile a mano | El siguiente `npm install` las borra — el parche se deshace solo |
+| 4 | Quitar `wrangler` (que las traía vía `miniflare`) | Ayudó, pero los binarios wasm de Astro y sharp seguían pidiéndolas |
+| 5 | Generar el lockfile **en Docker**, con `--package-lock-only` | Ese modo no descarga nada: registra el árbol pero omite los **binarios nativos**. `npm ci` pasaba y el build moría con *«Cannot find native binding»* |
+| 6 ✅ | Generar en Docker con **instalación real** | Funciona. 278 → 363 paquetes: los 85 que faltaban son binarios de Linux, Windows y wasm |
+
+**La causa raíz, en una frase:** npm resuelve un árbol **distinto** en macOS y en Linux cuando
+hay dependencias opcionales por arquitectura, y `npm ci` exige coincidencia exacta. Un lockfile
+generado en macOS es estructuralmente incapaz de satisfacer a `npm ci` en Linux.
+
+### Lo que se hizo para que no vuelva a pasar
+
+1. **Un guardián nuevo** en `verificar-todo.sh` que corre `npm ci` **en Docker** — comprobar en
+   macOS era comprobar la plataforma equivocada. Si no hay Docker, **avisa en voz alta** en vez
+   de dar un falso verde: un guardián que no puede comprobar debe decirlo.
+2. **El procedimiento escrito** en `site/README.md`, con la trampa incluida: después de generar
+   el lockfile en Docker, **no correr `npm install` a secas** — lo reescribe con la resolución
+   de macOS y lo rompe otra vez. Me pasó en mitad de la investigación.
+3. `wrangler` sale de `devDependencies`. Es una herramienta para probar las Pages Functions, no
+   algo que el sitio necesite para construirse; `npm run functions:dev` lo descarga con `npx`.
+
+### ⚠️ Un hallazgo secundario que sigue abierto
+
+Al desbloquearse `npm ci`, el CI avanzó y falló en unos **guardias de la Definition of Done que
+sólo existen en el workflow** —`description`, `canonical`, `hreflang`— y que `verificar-todo.sh`
+no comprueba. Por eso en local nunca los vi.
+
+**Hay dos conjuntos de comprobaciones distintos**, y el de local no es un superconjunto del de
+CI. Eso significa que «todo en verde» aquí no garantiza que el CI pase. Se anota como **R-27**:
+lo correcto es que el workflow llame a `verificar-todo.sh` y que los guardias vivan en un solo
+sitio.
+
+**El patrón, general:** un conjunto de comprobaciones que no incluye *«¿esto se puede
+publicar?»* mide la calidad del trabajo, no su llegada. Y en un proyecto donde el entregable es
+un sitio en línea, lo segundo es lo único que el cliente ve.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2153,4 +2216,5 @@ desproporcionado que se lleva la culpa entera.
 | R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |
 | R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
 | R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
+| R-27 | **`verificar-todo.sh` y el workflow del CI no comprueban lo mismo.** Los guardias de la DoD —`description`, `canonical`, `hreflang`— viven sólo en el CI, así que «todo en verde» en local no garantiza que el CI pase | Medio | Que el workflow invoque `verificar-todo.sh` y los guardias vivan en un solo sitio (L-087) |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |
