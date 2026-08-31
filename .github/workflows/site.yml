@@ -39,8 +39,13 @@ jobs:
         run: |
           set -e
           fallos=0
-          for f in $(find dist -name '*.html'); do
-            # Exigible a TODA página, incluidas las de error.
+          # El panel de precios (ADR-0007) queda fuera: es una herramienta INTERNA,
+          # protegida por Cloudflare Access y marcada `noindex`. No tiene
+          # description, canonical ni hreflang a propósito — no es contenido
+          # público, no se indexa y no tiene versión en el otro idioma. Exigirle
+          # metadatos de página pública sería pedirle que finja ser una.
+          for f in $(find dist -name '*.html' -not -path 'dist/panel/*'); do
+            # Exigible a TODA página pública, incluidas las de error.
             grep -q 'name="viewport"'    "$f" || { echo "✗ sin viewport: $f"; fallos=1; }
             grep -q '<html lang='        "$f" || { echo "✗ sin lang: $f";     fallos=1; }
             grep -q 'name="description"' "$f" || { echo "✗ sin description: $f"; fallos=1; }
