@@ -65,6 +65,23 @@ paso "todos los <img> con src" bash -c '
   n=$(grep -rho "<img\b[^>]*>" site/dist --include="*.html" | grep -vc "src=")
   [ "$n" -eq 0 ] || { echo "$n <img> sin src"; exit 1; }'
 
+# 🔴 EL LOCKFILE SINCRONIZADO. Es la comprobación que faltaba, y su ausencia
+# costó SEIS commits sin desplegar: `npm install` de una dependencia nueva dejó
+# `package-lock.json` desincronizado con `package.json`, `npm ci` empezó a
+# fallar, y con él el CI y Cloudflare — mientras aquí todo seguía en verde,
+# porque en local se usa `npm install`, que es tolerante, y no `npm ci`, que no
+# lo es. Es la segunda vez que el CI se queda en rojo sin que nadie lo note
+# (L-040 fue la primera, trece commits). Ahora lo caza esta comprobación.
+#
+# `--dry-run` no instala nada: sólo verifica que el lockfile pueda satisfacer
+# el package.json, que es exactamente lo que hace fallar a `npm ci`.
+paso "lockfile sincronizado (npm ci)" bash -c '
+  cd site && npm ci --dry-run > /dev/null 2>&1 || {
+    echo "package-lock.json desincronizado: npm ci fallaria en el CI y en Cloudflare."
+    echo "Arreglo: cd site && npm install   (y commitea el lockfile)"
+    exit 1
+  }'
+
 paso "og:image en todas las páginas" bash -c '
   # Lista EXPLÍCITA de lo que no lleva metadatos sociales, en vez del margen
   # numérico difuso que había antes ("al menos total - 2"). Ese margen decía
