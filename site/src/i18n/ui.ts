@@ -17,7 +17,15 @@ export const ui = {
     'nav.restaurante': 'Restaurante',
     'nav.galeria': 'Galería',
     'nav.ubicacion': 'Cómo llegar',
-    'nav.faq': 'Preguntas frecuentes',
+    // 🔴 CORTO A PROPÓSITO, y distinto del título de la página.
+    // «Preguntas frecuentes» medía 164 px en la barra —el doble que cualquier
+    // otro apartado— y era lo que empujaba el menú de escritorio fuera de
+    // pantalla: con siete entradas ya no cabía, y al subir el umbral para que
+    // cupiera, el menú horizontal desaparecía en portátiles normales.
+    // La PÁGINA sigue titulándose «Preguntas frecuentes» (`faq.titulo`): el
+    // menú necesita ser breve, el encabezado puede ser descriptivo. Es la
+    // misma abreviatura que usa Cappa («F.A.Qs») y la que espera cualquiera.
+    'nav.faq': 'FAQ',
     'nav.contacto': 'Contacto',
     'nav.menu': 'Menú',
     'nav.principal': 'Navegación principal',
@@ -257,7 +265,7 @@ export const ui = {
     'nav.restaurante': 'Restaurant',
     'nav.galeria': 'Gallery',
     'nav.ubicacion': 'Getting here',
-    'nav.faq': 'Frequent questions',
+    'nav.faq': 'FAQ',
     'nav.contacto': 'Contact',
     'nav.menu': 'Menu',
     'nav.principal': 'Main navigation',

@@ -2082,6 +2082,48 @@ deja de ser válido con N+1: es un número medido, no una constante.
 
 ---
 
+## L-086 — Subir el umbral de una media query esconde el problema, no lo arregla
+
+**Lección.** Al añadir «Restaurante» al menú, siete apartados dejaron de caber en la barra de
+escritorio. Mi arreglo (L-085) fue subir el umbral de la media query de 68rem a **76rem**, y
+medí que a partir de ahí cabía. Cabía, sí.
+
+Lo que no pensé: 76rem son **1216 px**. En cualquier portátil por debajo de eso —que son
+muchos— el menú horizontal simplemente **desaparecía** y salía la hamburguesa. Abraham abrió el
+sitio y dijo *«no lo veo para acceder desde el menú»*. El enlace existía, estaba en el HTML, y
+no se veía.
+
+**El error de razonamiento:** un umbral de media query no es un ajuste libre. Es la frontera
+entre dos diseños, y subirla no hace que quepa más contenido — hace que **menos gente vea ese
+diseño**. Yo medí «¿cabe?» cuando la pregunta era «¿lo va a ver alguien?».
+
+**La corrección de verdad fue hacer que el menú quepa**, midiendo qué ocupa cada apartado:
+
+```
+Preguntas frecuentes  164 px  ← el doble que cualquier otro
+Alojamiento           104
+Restaurante            91
+Cómo llegar            89
+Servicios              69
+Contacto               67
+Galería                54
+```
+
+Un solo elemento se llevaba el 21 % de la barra. Pasó a **«FAQ»** —la misma abreviatura que usa
+Cappa, y la que espera cualquiera— y el hueco entre apartados bajó de 24 a 16 px. Resultado:
+782 → **594 px**, y el umbral vuelve a 68rem, ya probado.
+
+**El matiz que lo hace correcto y no un recorte:** la etiqueta del MENÚ y el TÍTULO de la página
+son claves distintas (`nav.faq` y `faq.titulo`). La página sigue llamándose «Preguntas
+frecuentes». El menú necesita ser breve; el encabezado puede ser descriptivo. Acortar el menú
+no obliga a empobrecer la página.
+
+**La regla:** cuando algo no cabe, el primer instinto —dar más espacio— suele ser el peor.
+Antes hay que medir **qué** ocupa el espacio, porque casi siempre hay un elemento
+desproporcionado que se lleva la culpa entera.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
