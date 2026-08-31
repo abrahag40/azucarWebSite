@@ -87,9 +87,13 @@ días congelado.
 ```bash
 cd site
 # 1. Cambia package.json a mano (o con npm install, da igual)
-# 2. Regenera el lockfile EN LINUX:
-docker run --rm -v "$PWD":/app -w /app node:22-slim \
-  sh -c "rm -f package-lock.json && npm install --package-lock-only"
+# 2. Regenera el lockfile EN LINUX, con instalacion REAL (no --package-lock-only:
+#    ese modo no descarga nada y deja fuera los binarios nativos de Linux, y el
+#    build falla con "Cannot find native binding"). Se hace en una copia para no
+#    pisar tu node_modules de macOS:
+rm -rf /tmp/genlock && mkdir -p /tmp/genlock && cp package.json /tmp/genlock/
+docker run --rm -v /tmp/genlock:/app -w /app node:22-slim npm install --no-audit --no-fund
+cp /tmp/genlock/package-lock.json .
 # 3. Comprueba
 cd .. && ./scripts/verificar-todo.sh
 ```

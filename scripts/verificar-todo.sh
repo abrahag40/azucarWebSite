@@ -79,9 +79,13 @@ paso "todos los <img> con src" bash -c '
 # Un lockfile generado en macOS es rechazado en Linux y viceversa. Como el CI y
 # Cloudflare corren en Linux, la comprobación que vale es la de Linux.
 #
-# Por eso el lockfile de este proyecto SE GENERA EN DOCKER:
-#   docker run --rm -v "$PWD/site":/app -w /app node:22-slim \
-#     sh -c "rm -f package-lock.json && npm install --package-lock-only"
+# Por eso el lockfile de este proyecto SE GENERA EN DOCKER, con instalación
+# REAL —`--package-lock-only` no descarga nada y deja fuera los binarios
+# nativos de Linux, y entonces el build falla con "Cannot find native binding"—:
+#   rm -rf /tmp/genlock && mkdir -p /tmp/genlock && cp site/package.json /tmp/genlock/
+#   docker run --rm -v /tmp/genlock:/app -w /app node:22-slim npm install
+#   cp /tmp/genlock/package-lock.json site/
+# Ver `site/README.md` para el procedimiento completo.
 #
 # Sin Docker no se puede comprobar, y eso se dice en voz alta en vez de dar un
 # falso verde: un guardián que no puede comprobar debe avisar, no callar.
