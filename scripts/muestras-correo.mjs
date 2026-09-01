@@ -171,7 +171,14 @@ for (const v of VARIANTES) {
   console.log(`  ✓ ${v.id}`);
 }
 
-/** Índice para abrir todo de una vez, con la nota de qué prueba cada uno. */
+/**
+ * Índice para abrir todo de una vez, con la nota de qué prueba cada uno.
+ *
+ * Los correos del huésped van en `srcdoc` y no en `src`: así el índice es UN
+ * SOLO ARCHIVO que se puede mandar por chat o abrir en cualquier sitio sin
+ * arrastrar los otros doce detrás. Con `src` relativo, el archivo suelto
+ * enseñaba seis marcos vacíos.
+ */
 const indice = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Muestras de correo · Azucar Hotel Tulum</title>
@@ -200,7 +207,7 @@ ${generadas.map((v) => `<section class="v">
   <h2>${v.id}</h2>
   <p class="nota">${v.nota}</p>
   <div class="par">
-    <div class="col"><h3>Huésped · HTML</h3><iframe src="${v.id}--huesped.html" title="${v.id}"></iframe></div>
+    <div class="col"><h3>Huésped · HTML</h3><iframe srcdoc="${v.html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" title="${v.id}"></iframe></div>
     <div class="col"><h3>Manager · texto plano</h3><pre>Asunto: ${v.asunto.replace(/&/g,'&amp;').replace(/</g,'&lt;')}\n\n${v.cuerpo.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</pre></div>
   </div>
 </section>`).join('\n')}
