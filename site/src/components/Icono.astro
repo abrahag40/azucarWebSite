@@ -15,6 +15,10 @@ interface Props { nombre: string; tam?: number }
 const { nombre, tam = 34 } = Astro.props;
 
 const trazos: Record<string, string> = {
+  /* Persona: silueta de cabeza y hombros, para el aforo de las fichas.
+     Es un pictograma de conteo, no un adorno: se repite una vez por huésped
+     hasta el máximo del tipo. Ver `Aforo.astro`. */
+  persona: 'M12 11a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8ZM5 20.5c0-3.6 3.1-6 7-6s7 2.4 7 6',
   // Olas del mar
   ola: 'M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2',
   // Alberca: superficie de agua con escalera

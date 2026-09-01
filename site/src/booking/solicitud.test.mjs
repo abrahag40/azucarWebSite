@@ -66,10 +66,10 @@ const R = {
   tipo: 'Alojamiento', sinPreferencia: 'Sin preferencia', huespedes: 'Huéspedes',
   adultos: 'adultos', menores: 'menores', nombre: 'Nombre', correo: 'Correo',
   telefono: 'Teléfono', comentarios: 'Comentarios',
-  tipos: { 'suite-mar': 'Suite Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
+  tipos: { 'bungalow-mar': 'Bungalow Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
 };
 const base = {
-  llegada: '2026-03-10', salida: '2026-03-13', tipo: 'suite-mar',
+  llegada: '2026-03-10', salida: '2026-03-13', tipo: 'bungalow-mar',
   adultos: 2, menores: 0, nombre: 'Ana Ruiz', correo: 'ana@example.com',
 };
 
@@ -77,7 +77,7 @@ test('el mensaje lleva fechas, noches, tipo legible y contacto', () => {
   const { asunto, cuerpo } = componerSolicitud(base, R);
   assert.equal(asunto, 'Solicitud de reserva — 2026-03-10 → 2026-03-13');
   assert.match(cuerpo, /Salida: 2026-03-13 \(3 noches\)/);
-  assert.match(cuerpo, /Alojamiento: Suite Mar/);   // el id, no; el nombre, sí
+  assert.match(cuerpo, /Alojamiento: Bungalow Mar/);   // el id, no; el nombre, sí
   assert.match(cuerpo, /Correo: ana@example\.com/);
 });
 

@@ -69,14 +69,15 @@ export interface Carta {
    * restaurante NO se genera y no aparece en el menú ni en el sitemap.
    *
    * Ponerlo en `true` exige DOS respuestas del cliente, no una:
-   *   · **C0** — que confirme que el restaurante existe, con su nombre real
-   *     (su sitio lo llama «Blanc» en un sitio y «Selvamar» en otro).
+   *   · **C0** — RESUELTA. El restaurante existe y se llama «Tenedor»
+   *     (cliente, 2026-09-01). Su sitio vigente lo llamaba «Blanc» en un sitio
+   *     y «Selvamar» en otro; ninguno de los dos era el nombre.
    *   · **C3** — el desglose fiscal, si se publican precios. La regla 3 vale
    *     para la carta igual que para el alojamiento: el precio mostrado
    *     incluye impuestos, o no se muestra.
    */
   publicable: boolean;
-  /** Nombre del local. Vacío a propósito: el hotel usa dos distintos (R-17). */
+  /** Nombre del local. «Tenedor», confirmado por el cliente el 2026-09-01. */
   nombre: Texto | null;
   categorias: CategoriaCarta[];
 }
@@ -84,9 +85,10 @@ export interface Carta {
 export const carta: Carta = {
   publicable: true,
 
-  // ⚠️ EJEMPLO. El sitio vigente del hotel usa dos nombres distintos para su
-  // roof top —«Blanc» y «Selvamar»—. Pon aquí el correcto.
-  nombre: { es: 'Selvamar', en: 'Selvamar' },
+  // ✅ NOMBRE OFICIAL, confirmado por el cliente el 2026-09-01: «Tenedor».
+  // Resuelve R-17: el sitio vigente usaba dos nombres distintos para su
+  // roof top. «Selvamar» resultó ser el nombre del ROOF TOP, no del restaurante.
+  nombre: { es: 'Tenedor', en: 'Tenedor' },
 
   categorias: [
     {

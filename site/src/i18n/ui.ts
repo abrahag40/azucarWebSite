@@ -12,11 +12,33 @@ export const IDIOMA_POR_DEFECTO: Idioma = 'es';
 export const ui = {
   es: {
     'nav.inicio': 'Inicio',
+    'nav.nosotros': 'Nosotros',
     'nav.alojamiento': 'Alojamiento',
-    'nav.servicios': 'Servicios',
-    'nav.restaurante': 'Restaurante',
+    // «Amenidades» y no «Servicios»: es la palabra del propio hotel —su sitio
+    // vigente titula esa página «Amenidades y Facilidades»— y la que pidió el
+    // cliente. La RUTA sigue siendo /servicios/ a propósito: el mapa de 301 ya
+    // manda /amenidades-y-facilidades/ ahí, y darle la vuelta ahora obligaría a
+    // encadenar dos saltos a URLs que acumulan enlaces desde 2008. Etiqueta y
+    // ruta pueden diferir; una cadena de redirecciones se paga siempre.
+    'nav.amenidades': 'Amenidades',
+    'nav.restaurante': 'Restaurante y Bar',
+    'nav.spa': 'Spa',
+    'nav.daypass': 'Day Pass / Beach Club',
+    'nav.rooftopSelvamar': 'Rooftop SelvaMar · alberca y jacuzzi',
+    'nav.rooftopWhitePearl': 'Rooftop «White Pearl»',
+    'nav.eventos': 'Eventos',
+    'nav.eventosInfo': 'Solicitud de información',
+    'nav.eventosVisita': 'Visita guiada',
+    // Etiqueta corta en la barra, título largo en la página. Mismo criterio que
+    // «FAQ»: «Políticas y privacidad» mide 205 px y no cabe siete veces.
+    'nav.politicas': 'Políticas',
     'nav.galeria': 'Galería',
+    'nav.actividades': 'Qué hacer en Tulum',
     'nav.ubicacion': 'Cómo llegar',
+    // Marca de lo que aún no existe. Se anuncia, no se enlaza: un apartado del
+    // menú que lleva a una página vacía es peor que un apartado que dice
+    // «próximamente» y no lleva a ninguna parte.
+    'nav.proximamente': 'próximamente',
     // 🔴 CORTO A PROPÓSITO, y distinto del título de la página.
     // «Preguntas frecuentes» medía 164 px en la barra —el doble que cualquier
     // otro apartado— y era lo que empujaba el menú de escritorio fuera de
@@ -30,6 +52,8 @@ export const ui = {
     'nav.menu': 'Menú',
     'nav.principal': 'Navegación principal',
     'nav.verTodo': 'Ver todo el alojamiento',
+    'nav.verTodoAmenidades': 'Ver todas las amenidades',
+    'nav.verTodoEventos': 'Ver eventos y celebraciones',
     // ── Bloque práctico de la ficha (patrón `room-details` de Cappa) ─────────
     'practicos.titulo': 'Antes de reservar',
     'practicos.horarios': 'Entrada y salida',
@@ -44,11 +68,11 @@ export const ui = {
     // cada archivo de idioma, y por eso al unificar las dos portadas en una sola
     // vista la versión inglesa se perdió sin que nada avisara. El texto va en el
     // diccionario, siempre: es la regla 6 de CLAUDE.md y esto fue el recordatorio.
-    'home.titulo': 'Hotel Boutique Frente al Mar en Tulum | Azúcar Hotel Tulum',
-    'home.meta': 'Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Suites con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directa.',
+    'home.titulo': 'Hotel Boutique Frente al Mar en Tulum | Azucar Hotel Tulum',
+    'home.meta': 'Hotel boutique frente al Caribe en la Zona Hotelera de Tulum. Bungalows con jacuzzi privado, alberca infinita y playa. Solicita tu reserva directa.',
     'reserva.cta': 'Solicitar reserva',
     // ── Página de solicitud (H3.1, H3.2) ────────────────────────────────────
-    'reserva.pagMeta': 'Envía tu solicitud de reserva a Azúcar Hotel Tulum. El hotel confirma disponibilidad y te responde con el total, impuestos incluidos.',
+    'reserva.pagMeta': 'Envía tu solicitud de reserva a Azucar Hotel Tulum. El hotel confirma disponibilidad y te responde con el total, impuestos incluidos.',
     'reserva.entrada': 'Dinos tus fechas y el hotel te responde con la disponibilidad y el total, impuestos incluidos.',
     'reserva.comoFunciona': 'Cómo funciona',
     'reserva.paso1': 'Nos escribes con tus fechas.',
@@ -95,7 +119,7 @@ export const ui = {
     // Correo de acuse al huésped (H3.5, ADR-0006). Deliberadamente NO promete
     // cotización ni tiempo de respuesta: eso depende de C3 y B1/B2, que siguen
     // sin responder. Repite el resumen que ya compone `componerSolicitud`.
-    'reserva.acuseAsunto': 'Recibimos tu solicitud — Azúcar Hotel Tulum',
+    'reserva.acuseAsunto': 'Recibimos tu solicitud — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hola {nombre},',
     'reserva.acuseIntro': 'Esto es lo que recibimos. El hotel revisa la disponibilidad a mano y te responde por este mismo correo con el total, impuestos incluidos.',
     'reserva.acuseCierre': 'Es una solicitud sujeta a confirmación del hotel, no una reserva confirmada.',
@@ -113,33 +137,32 @@ export const ui = {
     // de ser `null`, este saludo empieza a usarse sin tocar mas codigo.
     'flotante.saludo': 'Hola, estoy viendo "{pagina}" y tengo una pregunta.',
 
-    'hero.eyebrow': 'Zona Hotelera de Tulum · Frente al mar',
+    // ⚠️ EL CÓDIGO POSTAL NO CUADRA CON EL SITIO VIGENTE.
+    // El cliente dictó «Tulum KM 7.5 · 77760». Su propio sitio publica «CP
+    // 77780» en el pie de las 26 páginas capturadas. Uno de los dos está mal y
+    // no podemos saber cuál desde aquí. Se usa el del cliente —es la fuente más
+    // reciente y con más autoridad— y queda anotado como C-CP para que lo
+    // confirme: un código postal equivocado rompe entregas y mapas.
+    'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77760',
     // Titular corto a propósito: 36 caracteres caían en tres renglones y el
     // héroe perdía fuerza. Se conserva el núcleo del lema del hotel —«el mar es
     // dulce»— y se cede el lema completo a la franja de imagen, que tiene ancho
     // para lucirlo. Cappa resuelve su héroe en 24 caracteres y dos líneas.
-    'hero.titulo': 'Donde el mar es dulce',
-    'hero.entrada': 'Hotel boutique frente al Caribe mexicano, hecho a mano en Tulum desde 2008.',
+    'hero.titulo': 'El único lugar donde el mar es dulce',
+    'hero.entrada': 'Somos un hotel artesanal, trabajado con amor por manos mayas y con materiales provenientes de la arena. Fundado en 2008.',
     'hero.bajar': 'Bajar al contenido',
-    // ── Formulario del héroe (patrón `booking-box` de Cappa) ─────────────────
-    // 🔴 Cappa remata este formulario con «Check Availability». Aquí NO: no hay
-    // PMS y la regla 2 prohíbe mostrar disponibilidad que no podamos respaldar
-    // (ADR-0003). Se conserva el DISEÑO y se cambia la promesa: los datos viajan
-    // a /reservar/ y el hotel confirma a mano.
-    'hero.formAntetitulo': 'Suites y habitaciones',
-    'hero.formTitulo': 'Empieza tu solicitud',
 
     'alojamiento.titulo': 'Alojamiento',
-    'alojamiento.entrada': 'Suites con jacuzzi privado y habitaciones frente al Caribe.',
+    'alojamiento.entrada': 'Bungalows con jacuzzi privado y habitaciones frente al Caribe.',
     'alojamiento.ver': 'Ver alojamiento',
     'alojamiento.detalle': 'Ver detalle',
-    'alojamiento.suites': 'Suites',
+    'alojamiento.suites': 'Bungalows',
     'alojamiento.habitaciones': 'Habitaciones',
     'alojamiento.capacidad': 'Hasta {n} personas',
     'alojamiento.tipos': '{n} tipos',
     'alojamiento.pagTitulo': 'Alojamiento',
-    'alojamiento.pagAntetitulo': 'Suites y habitaciones',
-    'alojamiento.pagMeta': 'Ocho tipos de alojamiento frente al Caribe en Tulum: suites con jacuzzi privado y habitaciones con vista al mar o a la selva.',
+    'alojamiento.pagAntetitulo': 'Bungalows y habitaciones',
+    'alojamiento.pagMeta': 'Ocho tipos de alojamiento frente al Caribe en Tulum: bungalows con jacuzzi privado y habitaciones con vistas al mar o a la selva.',
 
     'ficha.resumen': 'De un vistazo',
     'ficha.capacidad': 'Capacidad',
@@ -154,7 +177,7 @@ export const ui = {
     'ficha.porConfirmar': 'Dato por confirmar con el hotel',
 
     'galeria.titulo': 'Galería',
-    'galeria.pagMeta': 'La playa, el roof top, los jardines y las áreas comunes de Azúcar Hotel Tulum, en fotografías del propio hotel.',
+    'galeria.pagMeta': 'La playa, el roof top, los jardines y las áreas comunes de Azucar Hotel Tulum, en fotografías del propio hotel.',
     'galeria.entrada': 'La playa, el roof top y las áreas comunes. Cada habitación tiene su propia galería.',
     'galeria.verAlojamiento': 'Ver el alojamiento',
     'galeria.visor': 'Visor de fotografías',
@@ -164,12 +187,23 @@ export const ui = {
     'galeria.siguiente': 'Fotografía siguiente',
     'galeria.cerrar': 'Cerrar el visor',
 
+    'instalaciones.titulo': 'Nuestros espacios',
+    'nosotros.titulo': 'Nosotros',
+    'nosotros.meta': 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Un Small Luxury Hotel frente al Caribe, en la zona hotelera de Tulum.',
+    'nosotros.entrada': 'Un hotel artesanal frente al Caribe, hecho por manos mayas desde 2008.',
+    'eventos.titulo': 'Eventos',
+    'eventos.pagTitulo': 'Eventos y celebraciones',
+    'eventos.meta': 'Bodas en la playa, celebraciones privadas y retiros en un hotel boutique frente al Caribe en Tulum. Pide información o agenda una visita guiada.',
+    'eventos.escribir': 'Escribir al hotel',
+    'eventos.agendar': 'Agendar una visita',
+    'eventos.asunto': 'Solicitud de información para un evento',
+    'eventos.asuntoVisita': 'Solicitud de visita guiada',
     'servicios.titulo': 'Servicios',
     'servicios.meta': 'Playa privada, alberca infinita frente al mar, jacuzzi en roof top, Wi-Fi y estacionamiento gratuitos, y atención las 24 horas.',
     'faq.titulo': 'Preguntas frecuentes',
     'faq.meta': 'Respuestas a lo que más nos preguntan antes de reservar: playa, desayuno, Wi-Fi, estacionamiento, mascotas, horarios de check-in y check-out.',
     'politicas.titulo': 'Políticas del hotel',
-    'politicas.meta': 'Condiciones de pago, identificación, horarios de check-in y check-out, cambios y cancelaciones del Azúcar Hotel Tulum.',
+    'politicas.meta': 'Condiciones de pago, identificación, horarios de check-in y check-out, cambios y cancelaciones del Azucar Hotel Tulum.',
     'ubicacion.titulo': 'Cómo llegar',
     'ubicacion.meta': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum. Cómo llegar desde el aeropuerto de Cancún y desde Tulum pueblo.',
     'ubicacion.direccion': 'Dirección',
@@ -193,22 +227,28 @@ export const ui = {
     'ubicacion.coordenadas': 'Coordenadas',
     // ── Restaurante (bloqueado por C0 — ver src/data/restaurante.ts) ─────────
     'restaurante.titulo': 'Restaurante',
-    'restaurante.meta': 'La carta del restaurante de Azúcar Hotel Tulum.',
-    'restaurante.carta': 'Nuestra carta',
+    'restaurante.meta': 'La carta del restaurante de Azucar Hotel Tulum.',
+    'restaurante.carta': 'Menú',
     'restaurante.impuestos': 'Los precios incluyen impuestos.',
     // Estado mientras la carta no esté cargada: la página existe porque el
     // restaurante existe, pero no se inventan platos. Ver src/data/restaurante.ts.
-    'restaurante.entrada': 'La cocina del hotel, en el roof top frente al mar.',
+    'restaurante.entrada': 'Cocina internacional de autor en el roof top, con el Caribe enfrente.',
+    'restaurante.cocinaTitulo': 'Cocina internacional de autor',
+    'restaurante.cocinaP1': 'Tenedor no es un restaurante de hotel en el sentido de siempre. La carta la firma la cocina de la casa y cambia con lo que llega: pescado del día de los pescadores de Tulum, verdura de la península, chiles y recados de la región tratados con técnica de fuera.',
+    'restaurante.cocinaP2': 'De autor quiere decir que los platos son nuestros, no un recetario prestado. Internacional quiere decir que la técnica viene de donde haga falta —una brasa, un curado, una salsa francesa— siempre que el producto siga siendo de aquí.',
+    'restaurante.cocinaP3': 'Se come a pie de alberca al mediodía y arriba, en el roof top, al atardecer. La cocina abre desde el desayuno hasta la cena, y el bar hasta que se va el último.',
+    'restaurante.horario': 'Abierto todos los días. Reserva no necesaria para huéspedes; recomendable para visitantes.',
+    'restaurante.alergias': '¿Alergias, celiaquía o dieta especial? Dínoslo al llegar y la cocina lo ajusta.',
     'restaurante.sinCarta': 'Estamos preparando la carta para publicarla aquí. Mientras tanto, escríbenos y te contamos qué se está sirviendo estos días.',
     'restaurante.preguntar': 'Preguntar por la carta',
     'contacto.titulo': 'Contacto',
-    'contacto.meta': 'Teléfono, WhatsApp y correo del Azúcar Hotel Tulum. Recepción las 24 horas.',
+    'contacto.meta': 'Teléfono, WhatsApp y correo del Azucar Hotel Tulum. Recepción las 24 horas.',
     'contacto.telefono': 'Teléfono',
     'contacto.correo': 'Correo',
     'contacto.horario': 'Recepción las 24 horas, todos los días.',
 
     'privacidad.titulo': 'Aviso de privacidad',
-    'privacidad.meta': 'Cómo Azúcar Hotel Tulum recopila, usa y protege la información personal que facilitas a través de este sitio web.',
+    'privacidad.meta': 'Cómo Azucar Hotel Tulum recopila, usa y protege la información personal que facilitas a través de este sitio web.',
     'privacidad.vigencia': 'Vigente desde el {fecha}.',
 
     'footer.derechos': 'Todos los derechos reservados.',
@@ -256,20 +296,33 @@ export const ui = {
     'error404.titulo': 'Esta página no existe',
     'error404.entrada': 'El enlace que seguiste puede estar roto, o la página se movió. Desde aquí puedes volver.',
     'error404.inicio': 'Ir al inicio',
-    'error404.meta': 'La página que buscas no existe. Vuelve al inicio de Azúcar Hotel Tulum o consulta nuestro alojamiento.',
+    'error404.meta': 'La página que buscas no existe. Vuelve al inicio de Azucar Hotel Tulum o consulta nuestro alojamiento.',
   },
   en: {
     'nav.inicio': 'Home',
+    'nav.nosotros': 'About us',
     'nav.alojamiento': 'Rooms',
-    'nav.servicios': 'Services',
-    'nav.restaurante': 'Restaurant',
+    'nav.amenidades': 'Amenities',
+    'nav.restaurante': 'Restaurant & Bar',
+    'nav.spa': 'Spa',
+    'nav.daypass': 'Day Pass / Beach Club',
+    'nav.rooftopSelvamar': 'SelvaMar Rooftop · pool and jacuzzi',
+    'nav.rooftopWhitePearl': '“White Pearl” Rooftop',
+    'nav.eventos': 'Events',
+    'nav.eventosInfo': 'Information request',
+    'nav.eventosVisita': 'Guided visit',
+    'nav.politicas': 'Policies',
     'nav.galeria': 'Gallery',
+    'nav.actividades': 'What to do in Tulum',
     'nav.ubicacion': 'Getting here',
+    'nav.proximamente': 'coming soon',
     'nav.faq': 'FAQ',
     'nav.contacto': 'Contact',
     'nav.menu': 'Menu',
     'nav.principal': 'Main navigation',
     'nav.verTodo': 'See all rooms',
+    'nav.verTodoAmenidades': 'See all amenities',
+    'nav.verTodoEventos': 'See events and celebrations',
     'practicos.titulo': 'Before you book',
     'practicos.horarios': 'Check-in and check-out',
     'practicos.mascotas': 'Pets',
@@ -278,11 +331,11 @@ export const ui = {
     'nav.cerrar': 'Close menu',
     'nav.saltar': 'Skip to content',
 
-    'home.titulo': 'Beachfront Boutique Hotel in Tulum | Azúcar Hotel Tulum',
-    'home.meta': 'Boutique hotel on the Caribbean in Tulum\u2019s Hotel Zone. Suites with private jacuzzi, infinity pool and beach. Request your reservation directly with us.',
+    'home.titulo': 'Beachfront Boutique Hotel in Tulum | Azucar Hotel Tulum',
+    'home.meta': 'Boutique hotel on the Caribbean in Tulum\u2019s Hotel Zone. Bungalows with a private jacuzzi, infinity pool and beach. Request your reservation directly with us.',
     'reserva.cta': 'Request a reservation',
     // ── Request page (H3.1, H3.2) ───────────────────────────────────────────
-    'reserva.pagMeta': 'Send your reservation request to Azúcar Hotel Tulum. The hotel checks availability and replies with the total, taxes included.',
+    'reserva.pagMeta': 'Send your reservation request to Azucar Hotel Tulum. The hotel checks availability and replies with the total, taxes included.',
     'reserva.entrada': 'Tell us your dates and the hotel replies with availability and the total, taxes included.',
     'reserva.comoFunciona': 'How it works',
     'reserva.paso1': 'You write to us with your dates.',
@@ -326,7 +379,7 @@ export const ui = {
     'reserva.cierre': 'I understand this is a request subject to confirmation by the hotel.',
     'reserva.aviso': 'Request subject to confirmation by the hotel',
     'reserva.whatsapp': 'Message us on WhatsApp',
-    'reserva.acuseAsunto': 'We received your request — Azúcar Hotel Tulum',
+    'reserva.acuseAsunto': 'We received your request — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hi {nombre},',
     'reserva.acuseIntro': 'Here is what we received. The hotel checks availability by hand and will reply to this same email with the total, taxes included.',
     'reserva.acuseCierre': 'This is a request subject to confirmation by the hotel, not a confirmed reservation.',
@@ -336,24 +389,22 @@ export const ui = {
     'flotante.contacto': 'Contact the hotel',
     'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 
-    'hero.eyebrow': 'Tulum Hotel Zone · Beachfront',
-    'hero.titulo': 'Where the sea is sweet',
-    'hero.entrada': 'A boutique hotel on the Mexican Caribbean, handcrafted in Tulum since 2008.',
+    'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77760',
+    'hero.titulo': 'The Sweetest Temptation',
+    'hero.entrada': 'A handcrafted hotel, made with love by Maya hands and with materials that come from the sand itself. Founded in 2008.',
     'hero.bajar': 'Scroll to content',
-    'hero.formAntetitulo': 'Rooms & suites',
-    'hero.formTitulo': 'Start your request',
 
-    'alojamiento.titulo': 'Rooms & Suites',
-    'alojamiento.entrada': 'Suites with private jacuzzi and rooms facing the Caribbean.',
+    'alojamiento.titulo': 'Rooms & Bungalows',
+    'alojamiento.entrada': 'Bungalows with a private jacuzzi and rooms facing the Caribbean.',
     'alojamiento.ver': 'View rooms',
     'alojamiento.detalle': 'View details',
-    'alojamiento.suites': 'Suites',
+    'alojamiento.suites': 'Bungalows',
     'alojamiento.habitaciones': 'Rooms',
     'alojamiento.capacidad': 'Up to {n} guests',
     'alojamiento.tipos': '{n} types',
-    'alojamiento.pagTitulo': 'Rooms & Suites',
-    'alojamiento.pagAntetitulo': 'Suites and rooms',
-    'alojamiento.pagMeta': 'Eight types of accommodation facing the Caribbean in Tulum: suites with a private jacuzzi and rooms with sea or jungle views.',
+    'alojamiento.pagTitulo': 'Rooms & Bungalows',
+    'alojamiento.pagAntetitulo': 'Bungalows and rooms',
+    'alojamiento.pagMeta': 'Eight types of accommodation facing the Caribbean in Tulum: bungalows with a private jacuzzi and rooms with sea or jungle views.',
 
     'ficha.resumen': 'At a glance',
     'ficha.capacidad': 'Capacity',
@@ -368,7 +419,7 @@ export const ui = {
     'ficha.porConfirmar': 'Detail pending confirmation by the hotel',
 
     'galeria.titulo': 'Gallery',
-    'galeria.pagMeta': 'The beach, the rooftop, the gardens and the common areas of Azúcar Hotel Tulum, in the hotel’s own photographs.',
+    'galeria.pagMeta': 'The beach, the rooftop, the gardens and the common areas of Azucar Hotel Tulum, in the hotel’s own photographs.',
     'galeria.entrada': 'The beach, the rooftop and the common areas. Each room has its own gallery.',
     'galeria.verAlojamiento': 'View the rooms',
     'galeria.visor': 'Photo viewer',
@@ -378,12 +429,23 @@ export const ui = {
     'galeria.siguiente': 'Next photo',
     'galeria.cerrar': 'Close the viewer',
 
+    'instalaciones.titulo': 'Our spaces',
+    'nosotros.titulo': 'About us',
+    'nosotros.meta': 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. A Small Luxury Hotel facing the Caribbean, in Tulum\u2019s hotel zone.',
+    'nosotros.entrada': 'A handcrafted hotel facing the Caribbean, made by Maya hands since 2008.',
+    'eventos.titulo': 'Events',
+    'eventos.pagTitulo': 'Events and celebrations',
+    'eventos.meta': 'Beach weddings, private celebrations and retreats at a boutique hotel facing the Caribbean in Tulum. Request information or book a guided visit.',
+    'eventos.escribir': 'Write to the hotel',
+    'eventos.agendar': 'Book a visit',
+    'eventos.asunto': 'Information request for an event',
+    'eventos.asuntoVisita': 'Guided visit request',
     'servicios.titulo': 'Services',
     'servicios.meta': 'Private beach, oceanfront infinity pool, rooftop jacuzzi, free Wi-Fi and parking, and 24-hour service.',
     'faq.titulo': 'Frequent questions',
     'faq.meta': 'Answers to what guests ask most before booking: beach, breakfast, Wi-Fi, parking, pets, check-in and check-out times.',
     'politicas.titulo': 'Hotel policies',
-    'politicas.meta': 'Payment and identification conditions, check-in and check-out times, changes and cancellations at Azúcar Hotel Tulum.',
+    'politicas.meta': 'Payment and identification conditions, check-in and check-out times, changes and cancellations at Azucar Hotel Tulum.',
     'ubicacion.titulo': 'Getting here',
     'ubicacion.meta': 'Carretera a Boca Paila km 7.5, Hotel Zone, Tulum. How to get here from Cancún airport and from Tulum town.',
     'ubicacion.direccion': 'Address',
@@ -402,20 +464,26 @@ export const ui = {
     'ubicacion.mapaTitulo': 'Map of the hotel location',
     'ubicacion.coordenadas': 'Coordinates',
     'restaurante.titulo': 'Restaurant',
-    'restaurante.meta': 'The restaurant menu at Azúcar Hotel Tulum.',
-    'restaurante.carta': 'Our menu',
+    'restaurante.meta': 'The restaurant menu at Azucar Hotel Tulum.',
+    'restaurante.carta': 'Menu',
     'restaurante.impuestos': 'Prices include taxes.',
-    'restaurante.entrada': 'The hotel kitchen, on the rooftop facing the sea.',
+    'restaurante.entrada': 'Signature international cooking on the rooftop, with the Caribbean in front.',
+    'restaurante.cocinaTitulo': 'Signature international cooking',
+    'restaurante.cocinaP1': 'Tenedor is not a hotel restaurant in the usual sense. The menu is signed by our own kitchen and changes with what arrives: fish of the day from the Tulum fishermen, vegetables from the peninsula, chillies and regional recados handled with technique from elsewhere.',
+    'restaurante.cocinaP2': 'Signature means the dishes are ours, not a borrowed recipe book. International means the technique comes from wherever it needs to — a grill, a cure, a French sauce — as long as the produce stays local.',
+    'restaurante.cocinaP3': 'Lunch is served by the pool and dinner upstairs, on the rooftop, at sunset. The kitchen runs from breakfast to dinner, and the bar until the last guest leaves.',
+    'restaurante.horario': 'Open every day. No booking needed for hotel guests; recommended for visitors.',
+    'restaurante.alergias': 'Allergies, coeliac disease or a special diet? Tell us on arrival and the kitchen adjusts.',
     'restaurante.sinCarta': 'We are getting the menu ready to publish here. In the meantime, write to us and we will tell you what is being served these days.',
     'restaurante.preguntar': 'Ask about the menu',
     'contacto.titulo': 'Contact',
-    'contacto.meta': 'Phone, WhatsApp and email for Azúcar Hotel Tulum. Reception open 24 hours.',
+    'contacto.meta': 'Phone, WhatsApp and email for Azucar Hotel Tulum. Reception open 24 hours.',
     'contacto.telefono': 'Phone',
     'contacto.correo': 'Email',
     'contacto.horario': 'Reception is open 24 hours, every day.',
 
     'privacidad.titulo': 'Privacy notice',
-    'privacidad.meta': 'How Azúcar Hotel Tulum collects, uses and protects the personal information you provide through this website.',
+    'privacidad.meta': 'How Azucar Hotel Tulum collects, uses and protects the personal information you provide through this website.',
     'privacidad.vigencia': 'In effect since {fecha}.',
 
     'footer.derechos': 'All rights reserved.',
@@ -458,7 +526,7 @@ export const ui = {
     'error404.titulo': 'This page does not exist',
     'error404.entrada': 'The link you followed may be broken, or the page may have moved. You can head back from here.',
     'error404.inicio': 'Go to the homepage',
-    'error404.meta': 'The page you are looking for does not exist. Return to the Azúcar Hotel Tulum homepage or browse our rooms.',
+    'error404.meta': 'The page you are looking for does not exist. Return to the Azucar Hotel Tulum homepage or browse our rooms.',
   },
 } as const;
 
@@ -504,6 +572,8 @@ export const segmentos = {
   galeria:     { es: 'galeria',     en: 'gallery' },
   ubicacion:   { es: 'ubicacion',   en: 'location' },
   contacto:    { es: 'contacto',    en: 'contact' },
+  nosotros:    { es: 'nosotros',    en: 'about' },
+  eventos:     { es: 'eventos',     en: 'events' },
   restaurante: { es: 'restaurante', en: 'restaurant' },
   reservar:    { es: 'reservar',    en: 'booking' },
   politicas:   { es: 'politicas',   en: 'policies' },
@@ -533,7 +603,19 @@ export const segmentos = {
 export const anclas = {
   contenido: { es: 'contenido', en: 'content' },
   elHotel: { es: 'el-hotel', en: 'the-hotel' },
+  eventosInfo: { es: 'informacion', en: 'information' },
+  eventosVisita: { es: 'visita-guiada', en: 'guided-visit' },
 } as const;
+
+/**
+ * Las anclas de las INSTALACIONES no están aquí, y es la misma excepción que
+ * los identificadores de las fichas de alojamiento (ADR-0005): `#daypass`,
+ * `#rooftop-selvamar`, `#rooftop-white-pearl` y `#spa` son NOMBRES PROPIOS. Se
+ * escriben igual en los dos idiomas porque el hotel los llama así en los dos
+ * idiomas, y traducirlos inventaría un nombre que nadie usa. Viven en
+ * `instalaciones`, dentro de `src/data/hotel.ts`, junto al contenido que
+ * titulan.
+ */
 
 export type ClaveAncla = keyof typeof anclas;
 
@@ -551,7 +633,7 @@ export type ClaveRuta = keyof typeof segmentos;
 
 /**
  * Prefija una ruta con el idioma y traduce sus segmentos. El español no lleva
- * prefijo. Acepta rutas compuestas: `alojamiento/suite-mar` traduce el primer
+ * prefijo. Acepta rutas compuestas: `alojamiento/bungalow-mar` traduce el primer
  * segmento y deja el identificador intacto, porque el identificador es la
  * llave del dato y no cambia entre idiomas.
  */
@@ -565,6 +647,6 @@ export function ruta(idioma: Idioma, path = '') {
   // Barra final SOLO en las secciones, que se compilan como `index.html`.
   // Sin ella Cloudflare Pages responde 308 y redirige a la version con barra:
   // un salto de red extra en los enlaces mas pulsados del sitio. Las fichas
-  // (`alojamiento/suite-mar`) son archivos, no directorios, y no la llevan.
+  // (`alojamiento/bungalow-mar`) son archivos, no directorios, y no la llevan.
   return resto.length === 0 ? `${ruta}/` : ruta;
 }

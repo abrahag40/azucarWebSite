@@ -46,7 +46,7 @@ interface AlmacenTasa {
 
 interface Entorno {
   RESEND_API_KEY?: string;
-  /** Remitente verificado en Resend, p. ej. `Azúcar Hotel Tulum <solicitudes@azucarhotel.com>`. */
+  /** Remitente verificado en Resend, p. ej. `Azucar Hotel Tulum <solicitudes@azucarhotel.com>`. */
   CORREO_REMITENTE?: string;
   /** El correo oficial de recepción -- B4, todavía sin respuesta. */
   CORREO_MANAGER?: string;

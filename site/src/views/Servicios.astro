@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import SeccionAmenidades from '../components/SeccionAmenidades.astro';
+import SeccionInstalaciones from '../components/SeccionInstalaciones.astro';
 import { usarT, type Idioma } from '../i18n/ui';
 import banner from '../assets/hero-roof-top.webp';
 interface Props { idioma: Idioma }
@@ -11,9 +12,10 @@ const t = usarT(idioma);
 <Base
   idioma={idioma}
   rutaActual="servicios"
-  titulo={`${t('servicios.titulo')} | Azúcar Hotel Tulum`}
+  titulo={`${t('nav.amenidades')} | Azucar Hotel Tulum`}
   descripcion={t('servicios.meta')}
 >
-  <BannerPagina imagen={banner} titulo={t('servicios.titulo')} />
+  <BannerPagina imagen={banner} titulo={t('nav.amenidades')} />
   <SeccionAmenidades idioma={idioma} />
+  <SeccionInstalaciones idioma={idioma} />
 </Base>

@@ -23,9 +23,17 @@ const anio = new Date().getFullYear();
  * Todo el contenido nuevo ya existía: los enlaces son los del menú, y el texto
  * es la primera frase de la presentación, que es literal del hotel.
  */
+/* El pie es donde siguen viviendo «Cómo llegar» y «Contacto».
+   La barra de arriba se reordenó a petición del cliente (2026-09-01) y esos dos
+   apartados se quedaron fuera de ella: siete entradas ya no dejan sitio para
+   nueve. Que salgan del menú principal no puede significar que desaparezcan —
+   son las dos páginas que busca quien ya decidió venir. */
 const explorar = [
+  { clave: 'nav.nosotros', path: 'nosotros' },
   { clave: 'nav.alojamiento', path: 'alojamiento' },
-  { clave: 'nav.servicios', path: 'servicios' },
+  { clave: 'nav.amenidades', path: 'servicios' },
+  { clave: 'nav.restaurante', path: 'restaurante' },
+  { clave: 'nav.eventos', path: 'eventos' },
   { clave: 'nav.galeria', path: 'galeria' },
   { clave: 'nav.ubicacion', path: 'ubicacion' },
   { clave: 'nav.faq', path: 'preguntas-frecuentes' },
@@ -40,7 +48,7 @@ const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
 <footer class="pie">
   <div class="contenedor pie__rejilla">
     <div class="pie__col">
-      <p class="pie__marca">Azúcar Hotel Tulum</p>
+      <p class="pie__marca">Azucar Hotel Tulum</p>
       <p class="pie__resumen">{resumen}</p>
     </div>
 
@@ -66,7 +74,7 @@ const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
   </div>
 
   <div class="contenedor pie__legal">
-    <p>© {anio} Azúcar Hotel Tulum. {t('footer.derechos')}</p>
+    <p>© {anio} Azucar Hotel Tulum. {t('footer.derechos')}</p>
     {/* «Términos y condiciones» sigue FUERA: no existe ni en el sitio vigente
         —lo inventamos nosotros al maquetar el pie— y no hay texto que publicar.
         Vuelve cuando exista, no antes. */}

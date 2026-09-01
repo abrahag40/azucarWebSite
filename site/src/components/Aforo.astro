@@ -1,0 +1,56 @@
+---
+/**
+ * Aforo — el límite de huéspedes, dicho con siluetas además de con palabras.
+ *
+ * Petición del cliente (2026-09-01): «agregar senos de personas en vez de texto
+ * por huésped, especificando el límite de huéspedes visualmente».
+ *
+ * ── LO QUE SE HACE Y LO QUE NO ─────────────────────────────────────────────
+ * Se AÑADE el pictograma; **no se sustituye el texto**. Un dato tan
+ * consecuente como «caben cuatro o caben dos» no puede depender de que alguien
+ * cuente bien cinco siluetas de 18 píxeles de un vistazo, ni de que el CSS
+ * cargue, ni de que la persona distinga las figuras. Contar iconos es más lento
+ * y más frágil que leer un número — es la razón de que los aviones pongan «4»
+ * junto al dibujo de las salidas y no cuatro dibujos.
+ *
+ * WCAG 1.1.1: las siluetas van `aria-hidden`. Quien use lector de pantalla oye
+ * «Hasta 4 personas», que es exactamente la información, y no «imagen imagen
+ * imagen imagen». La redundancia visual ayuda a quien ve; la redundancia
+ * sonora sólo estorba.
+ */
+import Icono from './Icono.astro';
+
+interface Props { n: number; etiqueta: string }
+const { n, etiqueta } = Astro.props;
+
+/* Tope de seguridad. Ningún tipo pasa hoy de 4, pero si mañana alguien captura
+   un salón para 40 en el panel, esto pinta 8 siluetas y no 40 — una fila de
+   cuarenta iconos no informa de nada y rompe la caja. El número escrito sigue
+   siendo el correcto, que es el que manda. */
+const MAX = 8;
+const siluetas = Math.min(Math.max(n, 0), MAX);
+---
+<span class="aforo">
+  <span class="aforo__figuras" aria-hidden="true">
+    {Array.from({ length: siluetas }, () => <Icono nombre="persona" tam={17} />)}
+    {n > MAX && <span class="aforo__mas">+</span>}
+  </span>
+  <span class="aforo__texto">{etiqueta}</span>
+</span>
+
+<style>
+  .aforo { display: inline-flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .aforo__figuras {
+    display: inline-flex; align-items: center;
+    /* Solapadas ligeramente, como un grupo y no como una lista: se lee «varias
+       personas» antes de que el ojo empiece a contarlas. */
+    margin-inline-end: 2px;
+    color: var(--color-accent-text);
+  }
+  .aforo__figuras > :global(svg) { margin-inline-end: -3px; }
+  .aforo__mas {
+    font-family: var(--font-ui); font-size: var(--text-sm);
+    color: var(--color-accent-text); margin-inline-start: 4px;
+  }
+  .aforo__texto { font-variant-numeric: tabular-nums; }
+</style>

@@ -53,7 +53,18 @@ const t = usarT(idioma);
      va con el héroe— así que aquí no tapa nada. Sin esto la flecha se quedaría
      104 px corta y dejaría una franja del héroe arriba, que se lee como un
      salto a medias. */
-  .presentacion { scroll-margin-top: calc(-1 * var(--desplazamiento-ancla)); }
+  /* 🔴 SÓLO CUANDO VIENE DETRÁS DEL HÉROE — `:global(.hero) + &`.
+     Este margen negativo ANULA el `scroll-padding-top` global, y sólo tiene
+     sentido en la portada: allí la cabecera es `absolute` y se va con la foto,
+     así que no tapa nada y reservarle 120 px deja una franja del héroe arriba,
+     que se lee como un salto a medias.
+
+     En `/nosotros/`, que reutiliza este mismo componente desde el 2026-09-01,
+     la cabecera SÍ es pegajosa. Sin esta condición, saltar a `#el-hotel` allí
+     aterrizaría 120 px demasiado alto y el título quedaría debajo de la
+     cabecera. Es el precio de reutilizar un componente escrito para un solo
+     sitio: la regla que lo acompaña también tiene que saber dónde está. */
+  :global(.hero) + .presentacion { scroll-margin-top: calc(-1 * var(--desplazamiento-ancla)); }
 
   .presentacion__rejilla {
     display: grid;

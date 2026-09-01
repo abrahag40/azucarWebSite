@@ -118,7 +118,10 @@ a:hover { color: var(--color-accent-hover); }
 .boton--primario { background: var(--color-accent-text); color: #fff; }
 .boton--primario:hover { background: var(--color-accent-hover); color: #fff; }
 .boton--secundario { background: transparent; color: var(--color-ink); border-color: var(--color-accent); }
-.boton--secundario:hover { background: var(--color-accent); color: #fff; }
+/* `accent-text` y no `accent`: al invertirse, el blanco queda SOBRE el color,
+   y el decorativo sólo garantiza 3:1 — insuficiente para texto (WCAG 1.4.3).
+   Venía así desde el sprint 1 y no lo vio axe, que no prueba estados hover. */
+.boton--secundario:hover { background: var(--color-accent-text); color: #fff; }
 .boton--claro { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
 /* Contorno claro sobre fotografia, como el boton del heroe de Cappa. El relleno
    translucido garantiza el contraste del texto aunque la foto tenga una zona

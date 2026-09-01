@@ -1,28 +1,44 @@
 /* ============================================================================
-   Design tokens — Azúcar Hotel Tulum
+   Design tokens — Azucar Hotel Tulum
    Extraídos de la plantilla Cappa (demo1-light) y corregidos por accesibilidad.
    Análisis de origen: docs/04-diseno/analisis-plantilla-cappa.md
    ============================================================================ */
 
 :root {
   /* --- Color -------------------------------------------------------------
-     El oro de Cappa (#aa8453) da 3.42:1 sobre blanco: suficiente para
-     elementos grandes y de interfaz (WCAG 1.4.11, 3:1) pero INSUFICIENTE
-     para texto normal (WCAG 1.4.3, 4.5:1).
-     Por eso hay dos tokens de acento: el original para superficies, bordes e
-     iconos; y una variante oscurecida —mismo tono 34°, misma saturación—
-     para cualquier acento que lleve texto. La marca no cambia; el contraste sí. */
-  --color-accent:        #aa8453;  /* 3.42:1 — decorativo, bordes, iconos, fondos */
-  /* Se verificó contra BLANCO y daba 4.64:1, pero el sitio pinta este color
-     también sobre las superficies cálidas, que son más oscuras: ahí caía a
-     4.26:1 y 4.01:1, por debajo del 4.5:1 de WCAG 1.4.3. Medido en producción,
-     no supuesto. El valor nuevo conserva matiz (34°) y saturación (51%) —la
-     marca no cambia— y cumple sobre las tres superficies:
-       blanco 5.23:1 · cálida 4.81:1 · alterna 4.53:1
-     Lección: un token de texto se valida contra el fondo MÁS DESFAVORABLE en el
-     que se vaya a usar, no contra el blanco por defecto. */
-  --color-accent-text:   #856741;  /* 5.23:1 blanco · 4.53:1 superficie alterna */
-  --color-accent-hover:  #735938;  /* 6.53:1 — estado hover/focus */
+     🟢 PISTACHO, NO ORO — cambio pedido por el cliente el 2026-09-01.
+     Cappa venía en oro (#aa8453) y de ahí salieron estos tokens. El cliente
+     pidió «colores más verde pistache». Se cambia la FAMILIA de acento y se
+     conserva ENTERA la disciplina de contraste que la justificaba, que es lo
+     que no se puede perder al cambiar de color:
+
+       · un tono decorativo  ≥ 3:1 sobre blanco (WCAG 1.4.11, componentes)
+       · un tono para TEXTO  ≥ 4.5:1 sobre la superficie MÁS oscura en la que
+         se vaya a usar (WCAG 1.4.3), no sobre blanco — la lección L-036
+       · un tono de hover claramente más oscuro que el de texto
+
+     Medido, no supuesto (mismos tres fondos del sitio):
+
+                        blanco   cálida   alterna
+       accent   #6F9440   3.51     3.23     3.04    decorativo, bordes, iconos
+       accent-text #4A6E2C 5.90    5.43     5.11    cualquier acento con texto
+       accent-hover #3A5C24 7.67   7.06     6.64    hover y foco
+
+     El oro anterior daba 3.42 / 4.53 / 6.53 en esas mismas casillas: el verde
+     no baja el contraste en ninguna, y en `accent-text` lo sube medio punto.
+
+     🔴 REVERTIR ES CAMBIAR TRES LÍNEAS. Si el hotel prefiere el oro de su
+     logotipo, se restauran #aa8453 / #856741 / #735938 y nada más se toca:
+     ningún componente conoce el color, sólo el token. Ésa es exactamente la
+     razón de que los tokens existan.
+
+     ⚠️ Lo que este cambio NO resuelve: el LOGOTIPO sigue siendo dorado y
+     turquesa. Verde de interfaz junto a oro de marca convive, pero no es lo
+     mismo que una identidad. Si el pistacho es la marca nueva, hace falta un
+     logotipo nuevo, y eso es un archivo, no código. */
+  --color-accent:        #6F9440;  /* 3.51:1 — decorativo, bordes, iconos, fondos */
+  --color-accent-text:   #4A6E2C;  /* 5.90:1 blanco · 5.11:1 superficie alterna */
+  --color-accent-hover:  #3A5C24;  /* 7.67:1 — estado hover/focus */
 
   --color-ink:           #222222;  /* 15.91:1 — texto principal */
   --color-ink-muted:     #666666;  /*  5.74:1 — texto secundario, cumple AA */
@@ -97,7 +113,9 @@
      inferior. No se compensa aquí porque el `--space-4` del desplazamiento ya
      deja 15 px de aire, medidos, y añadir un `+1px` haría el token más difícil
      de leer que exacto. */
-  --alto-cabecera: 88px;
+  /* 104px y no 88: el logotipo creció a petición del cliente (2026-09-01) y a
+     144px de ancho mide 90px de alto — en una fila de 88px no cabía. */
+  --alto-cabecera: 104px;
   /* Cuánto se adelanta un salto a un ancla para que la cabecera pegajosa no
      tape el destino. Es un token y no un número suelto porque hay que poder
      ANULARLO con exactitud: `scroll-margin` y `scroll-padding` se suman, no se

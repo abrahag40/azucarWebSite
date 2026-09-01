@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación King · Vista a la selva",
-    "en": "King Room · Jungle view"
+    "es": "Habitación King · Vistas a la selva",
+    "en": "King Room · Jungle views"
   },
   "categoria": "habitacion",
   "orden": 6,
@@ -35,6 +35,10 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-selva.webp",

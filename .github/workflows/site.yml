@@ -5,88 +5,55 @@ name: Sitio — build y verificación
 on:
   push:
     branches: [main, 'claude/**']
-    paths: ['site/**', '.github/workflows/site.yml']
+    paths: ['site/**', 'scripts/**', '.github/workflows/site.yml']
   pull_request:
-    paths: ['site/**']
+    paths: ['site/**', 'scripts/**']
 
+# ── UNA SOLA FUENTE DE VERDAD (R-27) ─────────────────────────────────────────
+# Este workflow NO comprueba nada por su cuenta. Antes tenía sus propias
+# guardias de la Definition of Done escritas a mano aquí dentro, en paralelo a
+# las de `scripts/verificar-todo.sh`, y las dos listas divergieron sin que nadie
+# lo notara: el CI exigía `description`, `canonical`, `hreflang` y `width/height`
+# que en local no se miraban. Se descubrió cuando el CI se desbloqueó tras seis
+# commits sin desplegar y falló en guardias que en la máquina de Abraham
+# llevaban meses en verde (L-087, L-088).
+#
+# Ahora sólo hay un guardián, y correrlo en local es literalmente correr el CI:
+#
+#     ./scripts/verificar-todo.sh
+#
+# Añadir una comprobación se hace en ese script, y este workflow la hereda.
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run: { working-directory: site }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm, cache-dependency-path: site/package-lock.json }
 
-      - run: npm ci
-      - name: Verificar datos de alojamiento
-        run: npm run datos
-      - name: Comprobación de tipos
-        run: npm run check
-      - name: Pruebas unitarias
-        run: npm test
+      # `npm ci` y no `npm install`: es el instalador estricto, el que exige que
+      # `package-lock.json` cuadre exactamente con `package.json`. Es también el
+      # que usa Cloudflare Pages, y por eso es el que vale.
+      - name: Instalar
+        working-directory: site
+        run: npm ci
+
+      # Tipos, pruebas, build, accesibilidad, auditoría, 301, estilos, guardias
+      # de la DoD… todo. La lista vive en el script, no aquí.
+      #
+      # SALVO el lockfile: esa comprobación levanta un contenedor Docker para
+      # reproducir la instalación de Linux, y aquí ya ESTAMOS en Linux — el
+      # `npm ci` de arriba es la prueba real y directa. Si el lockfile estuviera
+      # desincronizado, este job ya habría muerto en el paso anterior.
       - name: Verificación completa
-        working-directory: .
+        env: { SALTAR_LOCKFILE: '1' }
         run: bash scripts/verificar-todo.sh
-      - name: Build
-        run: npm run build
-
-      # Guardias de la DoD, verificados sobre el HTML realmente generado.
-      # No es teatro: son las mismas comprobaciones que la auditoría aplicó al
-      # sitio viejo, ahora aplicadas al nuestro en cada commit.
-      - name: Guardias de la Definition of Done
-        run: |
-          set -e
-          fallos=0
-          # El panel de precios (ADR-0007) queda fuera: es una herramienta INTERNA,
-          # protegida por Cloudflare Access y marcada `noindex`. No tiene
-          # description, canonical ni hreflang a propósito — no es contenido
-          # público, no se indexa y no tiene versión en el otro idioma. Exigirle
-          # metadatos de página pública sería pedirle que finja ser una.
-          for f in $(find dist -name '*.html' -not -path 'dist/panel/*'); do
-            # Exigible a TODA página pública, incluidas las de error.
-            grep -q 'name="viewport"'    "$f" || { echo "✗ sin viewport: $f"; fallos=1; }
-            grep -q '<html lang='        "$f" || { echo "✗ sin lang: $f";     fallos=1; }
-            grep -q 'name="description"' "$f" || { echo "✗ sin description: $f"; fallos=1; }
-            grep -cE '<h1' "$f" | grep -qx 1 || { echo "✗ no hay exactamente un h1: $f"; fallos=1; }
-            # `alt` a secas es alt vacio (imagen decorativa), y es correcto: Astro lo
-            # emite asi cuando el valor es "". Exigir `alt=` marcaba como fallo el
-            # marcado bien hecho.
-            grep -oE '<img[^>]*>' "$f" | grep -vE 'alt(=|[[:space:]>/])' | grep -q . && { echo "✗ <img> sin alt: $f"; fallos=1; } || true
-            # width/height en toda imagen: es lo que mantiene el CLS en cero y
-            # está en la DoD, pero no se comprobaba. Se excluye el contenido de
-            # los <dialog> cerrados —el hueco del visor de la galería— porque no
-            # participa del layout y se rellena en ejecución con fotos de
-            # dimensiones distintas cada vez. Mismo criterio que el auditor.
-            perl -0777 -pe 's/<dialog\b(?![^>]*\bopen\b)[^>]*>.*?<\/dialog>//gs' "$f" \
-              | grep -oE '<img[^>]*>' | grep -v 'width=' | grep -q . \
-              && { echo "✗ <img> sin width/height: $f"; fallos=1; } || true
-
-            # Las páginas de error no son contenido indexable: no tienen URL
-            # canónica ni versión en otro idioma que ofrecer a Google. En vez de
-            # eximirlas sin más, se les exige lo contrario — que declaren noindex.
-            if [ "$(basename "$f")" = "404.html" ]; then
-              grep -q 'name="robots"[^>]*noindex' "$f" || { echo "✗ 404 sin noindex: $f"; fallos=1; }
-              grep -q 'rel="canonical"'           "$f" && { echo "✗ 404 con canonical: $f"; fallos=1; } || true
-              grep -q 'schema.org'                "$f" && { echo "✗ 404 con datos estructurados: $f"; fallos=1; } || true
-            else
-              grep -q 'rel="canonical"'      "$f" || { echo "✗ sin canonical: $f"; fallos=1; }
-              grep -q 'rel="alternate"'      "$f" || { echo "✗ sin hreflang: $f";  fallos=1; }
-            fi
-          done
-          # ADR-0003 regla 1: la interfaz nunca promete una reserva confirmada.
-          if grep -rniE 'reserva confirmada|booking confirmed' dist --include='*.html' -q; then
-            echo "✗ La interfaz promete una reserva confirmada. Prohibido por ADR-0003."; fallos=1
-          fi
-          [ "$fallos" -eq 0 ] && echo "✓ Todas las guardias de la DoD pasan"
-          exit $fallos
 
       # Se audita sobre una COPIA: el auditor escribe informe.md y datos.json en la
       # carpeta que analiza, y dist es el artefacto que se despliega. Auditar en
-      # sitio publicaria el informe interno junto al sitio.
+      # sitio publicaría el informe interno junto al sitio.
       - name: Informe de auditoría del build
         run: |
-          cp -r dist "$RUNNER_TEMP/dist-auditoria"
-          node ../scripts/audit-mirror.mjs "$RUNNER_TEMP/dist-auditoria"
+          cp -r site/dist "$RUNNER_TEMP/dist-auditoria"
+          node scripts/audit-mirror.mjs "$RUNNER_TEMP/dist-auditoria"
           cat "$RUNNER_TEMP/dist-auditoria/informe.md" >> $GITHUB_STEP_SUMMARY

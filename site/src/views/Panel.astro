@@ -42,12 +42,12 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {/* Una herramienta interna no se indexa. Tampoco esta en el sitemap. */}
     <meta name="robots" content="noindex, nofollow" />
-    <title>Precios · Azúcar Hotel Tulum</title>
+    <title>Precios · Azucar Hotel Tulum</title>
   </head>
   <body>
     <main class="panel">
       <header class="panel__cabecera">
-        <p class="panel__antetitulo">Azúcar Hotel Tulum</p>
+        <p class="panel__antetitulo">Azucar Hotel Tulum</p>
         <h1 class="panel__titulo">Precios</h1>
         <p class="panel__estado" id="meta" aria-live="polite"></p>
       </header>
@@ -69,7 +69,14 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
 
       <div class="panel__cargando" id="cargando">Cargando precios…</div>
 
-      <form class="panel__lista" id="lista" hidden>
+      {/* <div> y no <form>. Cada fila se guarda por separado con su propio
+          botón —no hay un envío que abarque las ocho—, así que un <form> sin
+          botón de envío prometía un comportamiento que no existe: quien pulsa
+          Enter dentro de un campo espera guardar, y no pasaba nada. Lo señaló
+          `html-validate` con la regla wcag/h32, y llevaba ahí desde que se
+          construyó el panel sin que nadie lo viera, porque html-validate no
+          estaba en `verificar-todo.sh`. Es el mismo agujero que R-27. */}
+      <div class="panel__lista" id="lista" hidden>
         {tipos.map((tipo) => (
           <div class="fila" data-tipo={tipo.id}>
             <label class="fila__nombre" for={`precio-${tipo.id}`}>
@@ -97,7 +104,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
             <p class="fila__estado" data-estado={tipo.id} aria-live="polite"></p>
           </div>
         ))}
-      </form>
+      </div>
 
       <footer class="panel__pie">
         <p>
@@ -109,7 +116,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     </main>
 
     <script>
-      const lista = document.querySelector<HTMLFormElement>('#lista')!;
+      const lista = document.querySelector<HTMLElement>('#lista')!;
       const cargando = document.querySelector<HTMLElement>('#cargando')!;
       const meta = document.querySelector<HTMLElement>('#meta')!;
 

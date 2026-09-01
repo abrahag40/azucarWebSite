@@ -47,9 +47,9 @@ const pedir = async (ruta, opciones = {}) => {
 // ── 1. Las páginas que deben responder ──────────────────────────────────────
 // Si alguna cae, el sitio está roto para el huésped. Es motivo de reversión.
 const ESENCIALES = [
-  '/', '/alojamiento/', '/alojamiento/suite-mar', '/servicios/', '/ubicacion/',
+  '/', '/alojamiento/', '/alojamiento/bungalow-mar', '/servicios/', '/ubicacion/',
   '/preguntas-frecuentes/', '/politicas/', '/contacto/', '/aviso-de-privacidad/',
-  '/en/', '/en/rooms/', '/en/rooms/suite-mar', '/en/services/', '/en/contact/',
+  '/en/', '/en/rooms/', '/en/rooms/bungalow-mar', '/en/services/', '/en/contact/',
   '/sitemap.xml', '/robots.txt',
 ];
 for (const ruta of ESENCIALES) {

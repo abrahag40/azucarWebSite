@@ -10,6 +10,7 @@
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import MenuRestaurante from '../components/MenuRestaurante.astro';
+import { carta } from '../data/restaurante';
 import { usarT, type Idioma } from '../i18n/ui';
 import banner from '../assets/galeria/01-roof-top-atardecer.webp';
 interface Props { idioma: Idioma }
@@ -19,14 +20,53 @@ const t = usarT(idioma);
 <Base
   idioma={idioma}
   rutaActual="restaurante"
-  titulo={`${t('restaurante.titulo')} | Azúcar Hotel Tulum`}
+  titulo={`${t('restaurante.titulo')} | Azucar Hotel Tulum`}
   descripcion={t('restaurante.meta')}
 >
-  <BannerPagina imagen={banner} titulo={t('restaurante.titulo')} />
-  <section class="seccion">
+  {/* El nombre del local manda en el titular, y la categoría queda de
+      antetítulo: «Tenedor» es lo que el huésped tiene que recordar, no la
+      palabra «restaurante». Si `nombre` volviera a ser `null` —el estado en el
+      que estuvo mientras no supimos cómo se llamaba— el titular cae de vuelta
+      en «Restaurante» y la página sigue funcionando. */}
+  <BannerPagina
+    imagen={banner}
+    antetitulo={carta.nombre ? t('nav.restaurante') : undefined}
+    titulo={carta.nombre ? carta.nombre[idioma] : t('restaurante.titulo')}
+  />
+  <section class="seccion" aria-labelledby="cocina-titulo">
     <div class="contenedor">
       <p class="entradilla">{t('restaurante.entrada')}</p>
+      <div class="cocina">
+        <h2 id="cocina-titulo" class="cocina__titulo">{t('restaurante.cocinaTitulo')}</h2>
+        <p class="cocina__parrafo">{t('restaurante.cocinaP1')}</p>
+        <p class="cocina__parrafo">{t('restaurante.cocinaP2')}</p>
+        <p class="cocina__parrafo">{t('restaurante.cocinaP3')}</p>
+        <p class="cocina__nota">{t('restaurante.horario')}</p>
+        <p class="cocina__nota">{t('restaurante.alergias')}</p>
+      </div>
     </div>
   </section>
   <MenuRestaurante idioma={idioma} />
+
 </Base>
+
+<style>
+  .cocina { max-width: var(--container-text); margin-top: var(--space-7); }
+  .cocina__titulo { font-size: var(--text-2xl); margin-bottom: var(--space-5); }
+  .cocina__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-4);
+  }
+  /* Las dos notas prácticas se separan del cuerpo: son condiciones, no relato.
+     Mismo criterio que `DatosPracticos` en la ficha de alojamiento. */
+  .cocina__nota {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-ink);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-4);
+    margin-top: var(--space-4);
+  }
+</style>

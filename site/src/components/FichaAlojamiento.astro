@@ -21,6 +21,7 @@
  */
 import type { CollectionEntry } from 'astro:content';
 import DatosPracticos from './DatosPracticos.astro';
+import Aforo from './Aforo.astro';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -81,7 +82,12 @@ const datos: Dato[] = [
           <div class="resumen__fila">
             <dt>{d.etiqueta}</dt>
             <dd>
-              {d.valor}
+              {/* El aforo se pinta con siluetas ADEMÁS del texto — ver
+                  `Aforo.astro`. Es la única fila con pictograma porque es la
+                  única que se compara de un vistazo entre dos fichas. */}
+              {d.clave === 'capacidad'
+                ? <Aforo n={data.capacidadMaxima} etiqueta={d.valor} />
+                : d.valor}
               {!verificado.has(d.clave) && (
                 <span class="porconfirmar" title={t('ficha.porConfirmar')}>
                   <span aria-hidden="true">*</span>

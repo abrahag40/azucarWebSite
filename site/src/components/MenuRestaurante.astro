@@ -47,7 +47,7 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
     <div class="contenedor">
       <header class="carta__encabezado">
         {/* El nombre sólo se pinta si lo sabemos: el sitio vigente usa dos
-            distintos —«Blanc» y «Selvamar»— y elegir uno sería inventar. */}
+            distintos y ninguno era el bueno: es «Tenedor» (cliente, 2026-09-01). */}
         {carta.nombre && <p class="carta__antetitulo">{carta.nombre[idioma]}</p>}
         <h2 class="carta__titulo">{t('restaurante.carta')}</h2>
       </header>

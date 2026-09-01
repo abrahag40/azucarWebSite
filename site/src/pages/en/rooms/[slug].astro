@@ -44,8 +44,8 @@ const { data } = entrada;
  * «· Vista al mar» o «· Vista a la selva».
  */
 const tituloSeo = data.vistaCorta
-  ? `${data.nombre[IDIOMA]} · ${data.vistaCorta[IDIOMA]} | Azúcar Hotel Tulum`
-  : `${data.nombre[IDIOMA]} | Azúcar Hotel Tulum`;
+  ? `${data.nombre[IDIOMA]} · ${data.vistaCorta[IDIOMA]} | Azucar Hotel Tulum`
+  : `${data.nombre[IDIOMA]} | Azucar Hotel Tulum`;
 const t = usarT(IDIOMA);
 
 // schema.org/HotelRoom enlazado al Hotel (historia H2.4). No se declara precio
@@ -58,7 +58,7 @@ const schemaHabitacion = {
   description: data.descripcion[IDIOMA],
   bed: { '@type': 'BedDetails', typeOfBed: data.camas[IDIOMA] },
   occupancy: { '@type': 'QuantitativeValue', maxValue: data.capacidadMaxima },
-  containedInPlace: { '@type': 'Hotel', name: 'Azúcar Hotel Tulum' },
+  containedInPlace: { '@type': 'Hotel', name: 'Azucar Hotel Tulum' },
 };
 ---
 <Base
@@ -73,8 +73,19 @@ const schemaHabitacion = {
     antetitulo={data.categoria === 'suite' ? t('alojamiento.suites') : t('alojamiento.habitaciones')}
     titulo={data.nombre[IDIOMA]}
   />
-  <FichaAlojamiento entrada={entrada} idioma={IDIOMA} />
+  {/* 🔴 LAS FOTOS VAN PRIMERO — cliente, 2026-09-01.
+      Antes la ficha (descripción, datos, amenidades) iba delante de la galería.
+      El orden nuevo es el que ya usa cualquier OTA y el que pide la evidencia:
+      quien abre la ficha de una habitación decide primero con los ojos y sólo
+      después lee. Poner la descripción delante obliga a un scroll de peaje
+      antes de la información que de verdad se vino a buscar.
+
+      Nota de accesibilidad: el orden VISUAL y el orden del MARCADO siguen
+      coincidiendo —se movió el componente, no se reordenó con `order`—, así que
+      el recorrido del teclado y el del lector de pantalla ven lo mismo que el
+      ojo (WCAG 1.3.2 y 2.4.3). */}
   <Galeria imagenes={data.galeria} nombre={data.nombre[IDIOMA]} idioma={IDIOMA} />
+  <FichaAlojamiento entrada={entrada} idioma={IDIOMA} />
   {/* Después de las fotos, no antes: la salida hacia otra habitación va al
       final del recorrido, cuando ya se enseñó todo lo de ésta. */}
   <VecinasAlojamiento anterior={anterior} siguiente={siguiente} idioma={IDIOMA} />

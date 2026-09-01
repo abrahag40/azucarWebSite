@@ -22,8 +22,8 @@ export const GET: APIRoute = async () => {
     .sort((a, b) => a.data.orden - b.data.orden);
 
   const secciones = [
-    '', 'alojamiento', 'servicios', 'galeria', 'reservar', 'ubicacion',
-    'preguntas-frecuentes', 'politicas', 'contacto', 'aviso-de-privacidad',
+    '', 'nosotros', 'alojamiento', 'servicios', 'eventos', 'galeria', 'reservar',
+    'ubicacion', 'preguntas-frecuentes', 'politicas', 'contacto', 'aviso-de-privacidad',
     // Sólo si la página existe: la ruta se genera condicionalmente según
     // `carta.publicable`, y un sitemap que apunta a un 404 es peor que uno
     // incompleto — Search Console lo reporta como error.

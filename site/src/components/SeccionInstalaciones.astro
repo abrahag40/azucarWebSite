@@ -1,0 +1,123 @@
+---
+/**
+ * Las instalaciones con nombre propio, una sección anclada por cada una.
+ *
+ * ── POR QUÉ SECCIONES ANCLADAS Y NO CUATRO PÁGINAS ─────────────────────────
+ * El cliente pidió cinco apartados bajo «Amenidades». Cuatro páginas nuevas
+ * significan cuatro `<title>`, cuatro `description`, cuatro `canonical` y ocho
+ * URLs contando el inglés — para textos de dos párrafos que aún no están
+ * confirmados. Google llama a eso *thin content* y lo penaliza; nosotros lo
+ * llamaríamos ceremonia (CLAUDE.md §2.5).
+ *
+ * Anclas dentro de la página que ya existe: el menú lleva exactamente al sitio,
+ * la URL se puede compartir, y el día que una de estas instalaciones tenga
+ * contenido de verdad se promueve a página propia sin romper nada — el ancla se
+ * convierte en una redirección de una línea.
+ *
+ * `Restaurante y Bar` NO está aquí: tiene página propia porque tiene una carta
+ * entera detrás.
+ */
+import { Image } from 'astro:assets';
+import { instalaciones } from '../data/hotel';
+import { usarT, type Idioma } from '../i18n/ui';
+import fotoSelvamar from '../assets/galeria/06-alberca-roof-top.webp';
+import fotoWhitePearl from '../assets/galeria/01-roof-top-atardecer.webp';
+import fotoDaypass from '../assets/galeria/05-camastros-palapa.webp';
+import fotoSpa from '../assets/galeria/08-patio-arboles.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+const fotos: Record<string, ImageMetadata> = {
+  'rooftop-selvamar': fotoSelvamar,
+  'rooftop-white-pearl': fotoWhitePearl,
+  daypass: fotoDaypass,
+  spa: fotoSpa,
+};
+---
+<section class="seccion" aria-labelledby="instalaciones-titulo">
+  <div class="contenedor">
+    <header class="encabezado encabezado--centrado">
+      <h2 id="instalaciones-titulo">{t('instalaciones.titulo')}</h2>
+    </header>
+
+    <div class="instalaciones">
+      {instalaciones.map((x, i) => (
+        <article
+          id={x.id}
+          class:list={['instalacion', i % 2 === 1 && 'instalacion--invertida']}
+          aria-labelledby={`${x.id}-titulo`}
+        >
+          <Image
+            class="instalacion__foto"
+            src={fotos[x.id]}
+            alt=""
+            widths={[480, 800]}
+            sizes="(min-width: 56rem) 26rem, 92vw"
+            loading="lazy"
+            quality={50}
+          />
+          <div class="instalacion__texto">
+            <h3 id={`${x.id}-titulo`} class="instalacion__titulo">
+              {x.titulo[idioma]}
+              {x.proximamente && <em class="etiqueta-pronto">{t('nav.proximamente')}</em>}
+            </h3>
+            {x.parrafos.map((p) => <p class="instalacion__parrafo">{p[idioma]}</p>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .instalaciones { display: grid; gap: var(--space-8); }
+  /* SIN `scroll-margin-top`. Lo llevaba, y sobraba: `base.css` ya declara
+     `scroll-padding-top: var(--desplazamiento-ancla)` en el `html`, que cubre
+     TODOS los destinos de ancla del sitio. Los dos se SUMAN —no se anulan— y el
+     resultado medido era 240 px de hueco muerto sobre el título al que acabas
+     de saltar, el doble de lo necesario. Se vio midiendo, no mirando: 240
+     píxeles de aire parecen una decisión de diseño hasta que sabes que 120 eran
+     el número. */
+  .instalacion {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .instalacion__foto {
+    width: 100%; height: auto;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+  .instalacion__titulo {
+    display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-4);
+  }
+  .instalacion__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-3);
+  }
+  .etiqueta-pronto {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    font-style: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: 0 var(--space-2);
+  }
+
+  /* Dos columnas alternando lado, como la sección `about` de Cappa. Debajo de
+     56rem se apilan y la foto va siempre arriba: en un teléfono la fotografía
+     es la que hace entrar en el texto, no al revés. */
+  @media (min-width: 56rem) {
+    .instalacion { grid-template-columns: 26rem minmax(0, 1fr); gap: var(--space-8); }
+    .instalacion--invertida .instalacion__foto { order: 2; }
+  }
+</style>

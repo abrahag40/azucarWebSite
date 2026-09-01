@@ -127,7 +127,7 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
     <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:4px;overflow:hidden;">
 
       <div style="background:#222222;padding:28px 32px;text-align:center;">
-        <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:0.12em;color:#ffffff;text-transform:uppercase;">Azúcar Hotel Tulum</span>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:0.12em;color:#ffffff;text-transform:uppercase;">Azucar Hotel Tulum</span>
       </div>
 
       <div style="padding:32px;font-family:Arial,Helvetica,sans-serif;color:#222222;font-size:16px;line-height:1.6;">
@@ -146,7 +146,7 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
       </div>
 
       <div style="padding:20px 32px;text-align:center;background:#f8f5f0;">
-        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azúcar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum</p>
+        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum</p>
       </div>
 
     </div>

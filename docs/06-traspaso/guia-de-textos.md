@@ -81,8 +81,9 @@ Baja hasta `export const carta` y verás la estructura. Cada plato es un bloque 
 - **Sin descripción:** borra las cuatro líneas de `descripcion`.
 - **El precio va sin `$` ni comas:** `320`, nunca `"$320"` ni `3,200`.
 
-**El nombre del restaurante** está arriba, en `nombre:`. Ahora dice `Selvamar` — el sitio viejo
-lo llama así en un sitio y «Blanc» en otro, así que confirma cuál es.
+**El nombre del restaurante** está arriba, en `nombre:`. Dice **`Tenedor`**, que es el nombre
+oficial confirmado por el cliente el 2026-09-01. («Selvamar» resultó ser el nombre del roof top,
+no del restaurante; «Blanc» era un nombre viejo.)
 
 **Para ocultar la página entera** (por ejemplo, si el restaurante cierra por temporada):
 cambia `publicable: true` por `publicable: false`. La página desaparece del menú y la URL da
@@ -91,6 +92,37 @@ cambia `publicable: true` por `publicable: false`. La página desaparece del men
 🔴 **Sobre los impuestos:** la página dice debajo de la carta «Los precios incluyen impuestos».
 Si los precios que pongas son sin impuestos, súmaselos antes — o quita los precios y deja sólo
 los nombres.
+
+---
+
+## 1-bis. Amenidades con nombre propio y página de Eventos
+
+⚠️ **Dos de estos textos son inventados y hay que sustituirlos antes de producción.**
+
+**Archivo:** `site/src/data/hotel.ts`, al final, en `instalaciones`.
+
+Son los cinco apartados que cuelgan de «Amenidades» en el menú. Cada bloque tiene `id` (el
+ancla de la URL, no lo cambies sin avisar), `titulo` y `parrafos`.
+
+| Apartado | ¿De dónde sale el texto? |
+|---|---|
+| Rooftop SelvaMar | ✅ De la web vigente del hotel |
+| Spa | ✅ Aparece en su lista de amenidades. Marcado **«próximamente»** porque no hay nada más |
+| Day Pass / Beach Club | ⚠️ **Inventado.** No existe en la web vigente |
+| Rooftop «White Pearl» | ⚠️ **Inventado.** El único roof top con nombre allí es «Selvamar» |
+
+- **Para que un apartado deje de anunciarse como «próximamente»:** borra la línea
+  `proximamente: true,`. Entonces el menú vuelve a enlazarlo.
+- **Para quitar un apartado entero:** borra su bloque aquí **y** su línea en `enlaces` dentro de
+  `site/src/components/Header.astro`.
+
+**Archivo:** `site/src/data/eventos.ts` — la página `/eventos/` **completa** es contenido de
+ejemplo. `tipos` son las cuatro tarjetas; `informacion` y `visitaGuiada` son los dos bloques que
+enlaza el menú.
+
+🔴 **No hay ni una cifra en ninguno de los dos archivos, y es a propósito:** ni precios de day
+pass, ni aforo máximo de un evento. Un aforo equivocado en una boda no se arregla con una
+disculpa. Cuando el hotel confirme los números, se añaden aquí.
 
 ---
 

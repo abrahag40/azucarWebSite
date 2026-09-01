@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Suite Agua",
-    "en": "Suite Agua"
+    "es": "Bungalow Agua",
+    "en": "Bungalow Agua"
   },
   "categoria": "suite",
   "orden": 3,
@@ -12,12 +12,12 @@
     "en": "1 king size bed"
   },
   "vista": {
-    "es": "Vista al mar y a otras áreas del hotel",
-    "en": "Ocean view and hotel grounds view"
+    "es": "Vistas al mar y a otras áreas del hotel",
+    "en": "Ocean and hotel grounds views"
   },
   "vistaCorta": {
-    "es": "Vista al mar",
-    "en": "Ocean view"
+    "es": "Vistas al mar",
+    "en": "Ocean views"
   },
   "descripcionCorta": {
     "es": "Jacuzzi privado y vista lateral al mar.",
@@ -43,6 +43,10 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/suite-agua.webp",

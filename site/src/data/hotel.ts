@@ -50,15 +50,15 @@ export const contacto = {
 
 /** Presentación. Fuente: `/nosotros/` y `/en/about-us/`. */
 export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[] } = {
-  antetitulo: { es: 'Azúcar Hotel Tulum', en: 'Azúcar Hotel Tulum' },
+  antetitulo: { es: 'Azucar Hotel Tulum', en: 'Azucar Hotel Tulum' },
   titulo: {
     es: 'Un sueño hecho realidad en 2008',
     en: 'A dream that came true in 2008',
   },
   parrafos: [
     {
-      es: 'Azúcar Hotel Tulum nació de un sueño y se hizo realidad en 2008 gracias a nuestros huéspedes y a todos los que formamos el equipo de trabajo. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
-      en: 'Azúcar Hotel Tulum was born from a dream and became a reality in 2008 thanks to our guests and everyone on the team. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',
+      es: 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008 gracias a nuestros huéspedes y a todos los que formamos el equipo de trabajo. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
+      en: 'Azucar Hotel Tulum was born from a dream and became a reality in 2008 thanks to our guests and everyone on the team. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',
     },
     {
       es: 'Este lugar ha sido creado con mucho amor a estas tierras y a la gente que nos visita. La calidez y el trato personalizado nos han caracterizado siempre.',
@@ -145,5 +145,98 @@ export const amenidades: { icono: string; titulo: Texto; texto: Texto }[] = [
       es: 'Recepción, concierge y seguridad las 24 horas, todos los días.',
       en: 'Reception, concierge and security 24 hours a day, every day.',
     },
+  },
+];
+
+/**
+ * Instalaciones con nombre propio — los apartados de «Amenidades» del menú.
+ *
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║  ⚠️  DOS DE LAS CUATRO SON CONTENIDO DE EJEMPLO                           ║
+ * ║                                                                          ║
+ * ║  El cliente pidió estos cuatro apartados en el menú (2026-09-01). De los  ║
+ * ║  cuatro, sólo DOS tienen respaldo en algo que el hotel ya publique:       ║
+ * ║                                                                          ║
+ * ║    ✅ rooftop-selvamar — su FAQ y su página de amenidades lo describen    ║
+ * ║    ✅ spa             — aparece en su lista de amenidades. Se anuncia     ║
+ * ║                         como «próximamente» porque no hay una sola línea  ║
+ * ║                         que diga qué es ni si está abierto                ║
+ * ║    ⚠️ daypass          — INVENTADO. No existe en ninguna de las 26        ║
+ * ║                         páginas capturadas del sitio vigente              ║
+ * ║    ⚠️ rooftop-white-pearl — INVENTADO. El único roof top con nombre en su ║
+ * ║                         sitio es «Selvamar»                               ║
+ * ║                                                                          ║
+ * ║  Los precios y las condiciones del Day Pass son especialmente delicados:  ║
+ * ║  publicar un precio que no es el del hotel es la queja que este proyecto  ║
+ * ║  vino a curar. POR ESO NO HAY NINGUNA CIFRA aquí.                         ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
+ *
+ * ── CÓMO EDITAR ────────────────────────────────────────────────────────────
+ * `id` es el ancla de la URL (`/servicios/#daypass`) y lo usa el menú. Si lo
+ * cambias aquí, cámbialo también en `Header.astro`; el guardián «fragmentos de
+ * URL sanos» de `verificar-todo.sh` avisa si dejan de coincidir.
+ *
+ * `proximamente: true` pinta la etiqueta y **quita el enlace del menú**: se
+ * anuncia sin prometer una página que no dice nada.
+ */
+export const instalaciones: {
+  id: string;
+  titulo: Texto;
+  parrafos: Texto[];
+  proximamente?: boolean;
+  ejemplo?: boolean;
+}[] = [
+  {
+    id: 'rooftop-selvamar',
+    titulo: { es: 'Rooftop SelvaMar · alberca y jacuzzi', en: 'SelvaMar Rooftop · pool and jacuzzi' },
+    parrafos: [
+      {
+        es: 'El roof top del hotel se llama SelvaMar y hace honor al nombre: de un lado el Caribe, del otro la selva de Tulum. Arriba están el jacuzzi extra grande climatizado, los camastros y las hamacas.',
+        en: 'The hotel rooftop is called SelvaMar and lives up to the name: the Caribbean on one side, the Tulum jungle on the other. Up there are the extra-large heated jacuzzi, the loungers and the hammocks.',
+      },
+      {
+        es: 'Abajo, a pie de playa, la alberca infinita da directamente al mar.',
+        en: 'Below, at beach level, the infinity pool opens straight onto the sea.',
+      },
+    ],
+  },
+  {
+    id: 'rooftop-white-pearl',
+    titulo: { es: 'Rooftop «White Pearl»', en: '“White Pearl” Rooftop' },
+    ejemplo: true,
+    parrafos: [
+      {
+        es: 'La terraza alta del hotel, reservada para atardeceres y celebraciones pequeñas. Blanco, madera y el mar de fondo.',
+        en: 'The hotel’s upper terrace, kept for sunsets and small celebrations. White, wood and the sea behind.',
+      },
+    ],
+  },
+  {
+    id: 'daypass',
+    titulo: { es: 'Day Pass / Beach Club', en: 'Day Pass / Beach Club' },
+    ejemplo: true,
+    parrafos: [
+      {
+        es: 'Acceso por el día a la playa privada, a la alberca infinita y al roof top, sin quedarse a dormir. Incluye camastro y servicio de restaurante y bar.',
+        en: 'Day access to the private beach, the infinity pool and the rooftop, without staying the night. Includes a sun lounger and restaurant and bar service.',
+      },
+      {
+        // 🔴 Regla 3: ninguna cifra hasta que responda C3. Un precio de day
+        // pass sin impuestos reproduce exactamente la queja del sitio viejo.
+        es: 'El cupo es limitado y se confirma por escrito. Escríbenos con la fecha y te decimos disponibilidad y precio, impuestos incluidos.',
+        en: 'Places are limited and confirmed in writing. Write to us with the date and we will tell you availability and price, taxes included.',
+      },
+    ],
+  },
+  {
+    id: 'spa',
+    titulo: { es: 'Spa', en: 'Spa' },
+    proximamente: true,
+    parrafos: [
+      {
+        es: 'Estamos preparando el espacio de spa del hotel. En cuanto abra lo publicamos aquí con sus servicios y horarios.',
+        en: 'We are getting the hotel spa space ready. As soon as it opens we will publish its services and hours here.',
+      },
+    ],
   },
 ];

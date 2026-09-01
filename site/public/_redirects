@@ -24,7 +24,10 @@
 # redirigen a sí mismas y no hacen falta. Sólo se listan las que cambian.
 /habitaciones/               /alojamiento/          301
 /amenidades-y-facilidades/   /servicios/            301
-/nosotros/                   /                      301
+# `/nosotros/` VUELVE A EXISTIR (cliente, 2026-09-01): el apartado está en el
+# menú y tiene página propia otra vez, así que la URL conserva su dirección y
+# esta regla desaparece. Mandarla a la portada era correcto mientras el
+# contenido sólo viviera allí; ahora sería enviar al visitante a otro sitio.
 /reservaciones/              /reservar/             301
 /politica-de-privacidad/     /aviso-de-privacidad/  301
 
@@ -33,7 +36,7 @@
 # /en/contact/ se conservan idénticas: no necesitan regla.
 /en/home/                    /en/                   301
 /en/amenities-facilities/    /en/services/          301
-/en/about-us/                /en/                   301
+/en/about-us/                /en/about/             301
 /en/reservations/            /en/booking/           301
 # /en/privacy-policy/ conserva su URL: no necesita regla. La página está
 # pendiente (H4.8), igual que su equivalente en español.

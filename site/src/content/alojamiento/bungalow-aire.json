@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Suite Aire",
-    "en": "Suite Aire"
+    "es": "Bungalow Aire",
+    "en": "Bungalow Aire"
   },
   "categoria": "suite",
   "orden": 4,
@@ -12,12 +12,12 @@
     "en": "1 king size bed"
   },
   "vista": {
-    "es": "Vista panorámica al mar y a la alberca infinita",
-    "en": "Panoramic ocean and infinity pool view"
+    "es": "Vistas paradisíacas al mar y a la alberca infinita",
+    "en": "Paradise ocean and infinity pool views"
   },
   "vistaCorta": {
-    "es": "Vista panorámica al mar",
-    "en": "Panoramic ocean view"
+    "es": "Vistas paradisíacas al mar",
+    "en": "Paradise ocean views"
   },
   "descripcionCorta": {
     "es": "Vista panorámica desde un roof top propio.",
@@ -47,6 +47,10 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "diferenciador": {

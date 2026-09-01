@@ -1,0 +1,103 @@
+---
+/**
+ * Eventos y celebraciones.
+ *
+ * ⚠️ El contenido es de EJEMPLO — ver la cabecera de `src/data/eventos.ts`.
+ *
+ * Las dos secciones ancladas son el destino del submenú «Eventos». Sus `id`
+ * salen de `anclas`, así que se traducen: `/eventos/#informacion` y
+ * `/en/events/#information`. El guardián «fragmentos de URL sanos» de
+ * `verificar-todo.sh` comprueba que el `id` existe en la página; si alguien
+ * renombra el ancla en un sitio y no en el otro, el build lo dice.
+ *
+ * 🔴 LOS BOTONES ABREN EL CORREO, no un formulario. Es la misma decisión que
+ * `booking/`: montar hoy un endpoint que reciba nombre, correo y teléfono
+ * iniciaría un tratamiento de datos personales sin aviso conforme a la LFPDPPP
+ * (E-PRIV abierto). Un `mailto:` no guarda nada en ningún servidor nuestro.
+ */
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import { eventos } from '../data/eventos';
+import { contacto } from '../data/hotel';
+import { usarT, idAncla, type Idioma } from '../i18n/ui';
+import banner from '../assets/galeria/02-arco-playa.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+const correo = (asunto: string) =>
+  `mailto:${contacto.correo}?subject=${encodeURIComponent(asunto)}`;
+---
+<Base
+  idioma={idioma}
+  rutaActual="eventos"
+  titulo={`${t('eventos.pagTitulo')} | Azucar Hotel Tulum`}
+  descripcion={t('eventos.meta')}
+>
+  <BannerPagina imagen={banner} titulo={t('eventos.pagTitulo')} />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="entradilla">{eventos.entrada[idioma]}</p>
+      <ul class="tipos" role="list">
+        {eventos.tipos.map((x) => (
+          <li class="tipo">
+            <h2 class="tipo__titulo">{x.titulo[idioma]}</h2>
+            <p class="tipo__texto">{x.texto[idioma]}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section
+    id={idAncla(idioma, 'eventosInfo')}
+    class="seccion seccion--calida bloque"
+    aria-labelledby="eventos-info-titulo"
+  >
+    <div class="contenedor">
+      <h2 id="eventos-info-titulo">{eventos.informacion.titulo[idioma]}</h2>
+      {eventos.informacion.parrafos.map((p) => <p class="bloque__parrafo">{p[idioma]}</p>)}
+      <a class="boton boton--primario" href={correo(t('eventos.asunto'))}>{t('eventos.escribir')}</a>
+    </div>
+  </section>
+
+  <section
+    id={idAncla(idioma, 'eventosVisita')}
+    class="seccion bloque"
+    aria-labelledby="eventos-visita-titulo"
+  >
+    <div class="contenedor">
+      <h2 id="eventos-visita-titulo">{eventos.visitaGuiada.titulo[idioma]}</h2>
+      {eventos.visitaGuiada.parrafos.map((p) => <p class="bloque__parrafo">{p[idioma]}</p>)}
+      <a class="boton boton--secundario" href={correo(t('eventos.asuntoVisita'))}>{t('eventos.agendar')}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tipos {
+    list-style: none; padding: 0;
+    display: grid; gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .tipo {
+    border-top: 2px solid var(--color-accent);
+    padding-top: var(--space-4);
+  }
+  .tipo__titulo { font-size: var(--text-xl); margin-bottom: var(--space-3); }
+  .tipo__texto { color: var(--color-ink-muted); line-height: var(--leading-body); }
+
+  /* Sin `scroll-margin-top`: `base.css` ya reserva la altura de la cabecera
+     con `scroll-padding-top` en el `html`, y los dos se suman. */
+  .bloque .contenedor { max-width: var(--container-text); }
+  .bloque__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-4);
+  }
+  .bloque .boton { margin-top: var(--space-3); }
+
+  @media (min-width: 44rem) { .tipos { grid-template-columns: repeat(2, 1fr); } }
+</style>

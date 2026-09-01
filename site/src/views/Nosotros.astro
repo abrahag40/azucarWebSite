@@ -1,0 +1,44 @@
+---
+/**
+ * Nosotros.
+ *
+ * El cliente pidió este apartado en el menú (2026-09-01). La página ya existía
+ * a medias: `SeccionPresentacion` pinta este mismo contenido en la portada, y
+ * el mapa de 301 mandaba `/nosotros/` del sitio viejo a la portada por eso.
+ *
+ * Ahora vuelve a tener dirección propia, y el contenido NO se duplica: se
+ * reutiliza el mismo componente, alimentado por el mismo `presentacion` de
+ * `src/data/hotel.ts`. Es contenido literal del `/nosotros/` vigente, no hay
+ * una frase inventada.
+ *
+ * 🔴 CONSECUENCIA EN EL MAPA DE 301: la regla `/nosotros/ → /` deja de tener
+ * sentido y se retira. Redirigir una URL a otra que ya no es su destino natural
+ * es peor que no redirigirla.
+ */
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import SeccionPresentacion from '../components/SeccionPresentacion.astro';
+import FranjaImagen from '../components/FranjaImagen.astro';
+import FranjaLlamada from '../components/FranjaLlamada.astro';
+import { usarT, type Idioma } from '../i18n/ui';
+import banner from '../assets/galeria/09-entrada-piedra.webp';
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="nosotros"
+  titulo={`${t('nosotros.titulo')} | Azucar Hotel Tulum`}
+  descripcion={t('nosotros.meta')}
+>
+  <BannerPagina imagen={banner} titulo={t('nosotros.titulo')} />
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="entradilla">{t('nosotros.entrada')}</p>
+    </div>
+  </section>
+  <SeccionPresentacion idioma={idioma} />
+  <FranjaImagen idioma={idioma} />
+  <FranjaLlamada idioma={idioma} />
+</Base>

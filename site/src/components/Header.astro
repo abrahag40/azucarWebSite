@@ -17,57 +17,92 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import logo from '../assets/logo-azucar.webp';
 import Icono from './Icono.astro';
-import { usarT, ruta, idiomas, type Idioma } from '../i18n/ui';
+import { usarT, ruta, ancla, idiomas, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma; rutaActual?: string; sobreHero?: boolean }
 const { idioma, rutaActual = '', sobreHero = false } = Astro.props;
 const t = usarT(idioma);
 
-// Sólo se enlaza lo que EXISTE, y esa regla se comprueba sola: si la página de
-// restaurante dejara de generarse —`carta.publicable` a `false`— este enlace
-// llevaría a un 404 y lo cazaría el guardián «sin enlaces a recursos
-// inexistentes» de `verificar-todo.sh`. Un menú que promete páginas que no
-// están es la primera grieta de confianza.
-const enlaces: { clave: string; path: string; submenu?: boolean }[] = [
-  { clave: 'nav.alojamiento', path: 'alojamiento', submenu: true },
-  { clave: 'nav.servicios',   path: 'servicios' },
-  // Vuelve al menú: C0 resuelta y la página existe (ver src/data/restaurante.ts).
-  { clave: 'nav.restaurante', path: 'restaurante' },
-  { clave: 'nav.galeria',     path: 'galeria' },
-  { clave: 'nav.ubicacion',   path: 'ubicacion' },
-  { clave: 'nav.faq',         path: 'preguntas-frecuentes' },
-  { clave: 'nav.contacto',    path: 'contacto' },
-];
-/* El alias vive aquí y no en la plantilla: dentro del marcado, `<typeof t>` lo
-   interpreta el compilador de Astro como una ETIQUETA y rompe el análisis. */
-type ClaveUI = Parameters<typeof t>[0];
-const otro: Idioma = idioma === 'es' ? 'en' : 'es';
+// ── EL MENÚ, TAL Y COMO LO PIDIÓ EL CLIENTE (2026-09-01) ───────────────────
+//
+// Antes había SIETE apartados planos y un solo desplegable, el de alojamiento,
+// con los ocho tipos cableados a mano dentro de la plantilla. El cliente pidió
+// una jerarquía distinta —«Amenidades» y «Eventos» con hijos propios— y eso ya
+// no cabía en un `submenu: true` booleano.
+//
+// Se normaliza ANTES de la plantilla: aquí se resuelven etiquetas y `href`, y
+// abajo sólo hay un bucle que no sabe de dónde viene cada hijo. Es la razón de
+// que los ocho tipos de alojamiento (que vienen de una colección) y los cinco
+// apartados de amenidades (que vienen del diccionario) se pinten con el mismo
+// marcado sin un solo `if` extra en el HTML.
+//
+// 🔴 REGLA QUE NO SE ROMPE: **sólo se enlaza lo que existe**. Un `href` en
+// `null` se pinta como texto, no como enlace — es el caso del Spa, que se
+// anuncia como «próximamente» porque el hotel no ha dicho una sola palabra
+// sobre él más allá de la palabra suelta en su lista de amenidades. Un
+// apartado de menú que lleva a una página vacía cuesta más confianza que un
+// apartado que dice honestamente que aún no está.
+//
+// Y los que SÍ enlazan se comprueban solos: los `#anclas` los verifica el
+// guardián «fragmentos de URL sanos» de `verificar-todo.sh`, que falla si el
+// `id` no existe en la página de destino.
+type Hijo = { etiqueta: string; href: string | null; nota?: string };
+type Entrada = { etiqueta: string; href: string; path: string; hijos?: Hijo[] };
 
-/**
- * Submenú de «Alojamiento» — los ocho tipos reales.
- *
- * ── POR QUÉ ÉSTE Y NINGÚN OTRO ──────────────────────────────────────────────
- * Cappa tiene cuatro desplegables: «Home» con quince portadas alternativas,
- * «Rooms & Suites» con tres maquetas distintas de la misma página, «Pages» con
- * un cajón de sastre y «News» con tres formatos de blog. **Los cuatro son
- * andamiaje de demo**, no arquitectura de información: existen para enseñar
- * variantes al comprador de la plantilla.
- *
- * Copiarlos literalmente sería copiar el andamio. Lo que sí es real es el
- * MECANISMO —un desplegable en la navegación— y aquí hay exactamente un sitio
- * donde gana algo: los ocho tipos de alojamiento, que ya existen y que de otro
- * modo están a dos clics. Es lo que «Rooms & Suites» sería si la plantilla no
- * fuera una demo.
- */
 const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   .sort((a, b) => a.data.orden - b.data.orden);
+
+const enlaces: Entrada[] = [
+  { etiqueta: t('nav.nosotros'), path: 'nosotros', href: ruta(idioma, 'nosotros') },
+  {
+    etiqueta: t('nav.alojamiento'),
+    path: 'alojamiento',
+    href: ruta(idioma, 'alojamiento'),
+    hijos: [
+      { etiqueta: t('nav.verTodo'), href: ruta(idioma, 'alojamiento') },
+      ...tipos.map((x) => ({
+        etiqueta: x.data.nombre[idioma],
+        href: ruta(idioma, `alojamiento/${x.id}`),
+      })),
+    ],
+  },
+  {
+    etiqueta: t('nav.amenidades'),
+    path: 'servicios',
+    href: ruta(idioma, 'servicios'),
+    hijos: [
+      { etiqueta: t('nav.verTodoAmenidades'), href: ruta(idioma, 'servicios') },
+      { etiqueta: t('nav.restaurante'), href: ruta(idioma, 'restaurante') },
+      // Sin `href`: el spa no está. Ver `instalaciones` en `src/data/hotel.ts`.
+      { etiqueta: t('nav.spa'), href: null, nota: t('nav.proximamente') },
+      { etiqueta: t('nav.daypass'), href: `${ruta(idioma, 'servicios')}#daypass` },
+      { etiqueta: t('nav.rooftopSelvamar'), href: `${ruta(idioma, 'servicios')}#rooftop-selvamar` },
+      { etiqueta: t('nav.rooftopWhitePearl'), href: `${ruta(idioma, 'servicios')}#rooftop-white-pearl` },
+    ],
+  },
+  { etiqueta: t('nav.galeria'), path: 'galeria', href: ruta(idioma, 'galeria') },
+  {
+    etiqueta: t('nav.eventos'),
+    path: 'eventos',
+    href: ruta(idioma, 'eventos'),
+    hijos: [
+      { etiqueta: t('nav.verTodoEventos'), href: ruta(idioma, 'eventos') },
+      { etiqueta: t('nav.eventosInfo'), href: `${ruta(idioma, 'eventos')}${ancla(idioma, 'eventosInfo')}` },
+      { etiqueta: t('nav.eventosVisita'), href: `${ruta(idioma, 'eventos')}${ancla(idioma, 'eventosVisita')}` },
+    ],
+  },
+  { etiqueta: t('nav.faq'), path: 'preguntas-frecuentes', href: ruta(idioma, 'preguntas-frecuentes') },
+  { etiqueta: t('nav.politicas'), path: 'politicas', href: ruta(idioma, 'politicas') },
+];
+
+const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 ---
 <header class:list={['cabecera', sobreHero && 'cabecera--sobre-hero']}>
   <div class="contenedor cabecera__fila">
     {/* El logotipo REAL del hotel, tomado de su sitio vigente
         (`logo_azucar_dorado-png.webp`, 310 × 193, con transparencia).
 
-        Antes había un wordmark tipográfico —«Azúcar» en Gilda Display con
+        Antes había un wordmark tipográfico —«Azucar» en Gilda Display con
         «Hotel Tulum» debajo— que compuse para tener algo mientras. No era el
         logotipo del hotel: la cúpula dorada, la palabra manuscrita «Hotel» y
         las líneas turquesa son su identidad, y ninguna estaba ahí.
@@ -79,7 +114,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
       <Image
         class="marca__logo"
         src={logo}
-        alt="Azúcar Hotel Tulum"
+        alt="Azucar Hotel Tulum"
         widths={[112, 224]}
         sizes="112px"
         loading="eager"
@@ -99,7 +134,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
       <ul class="nav__lista">
         {enlaces.map((e) => (
           <li>
-            {e.submenu ? (
+            {e.hijos ? (
               /* <details> y no un <button> con JavaScript: el navegador ya
                  gestiona el estado, el teclado —Enter y Espacio— y anuncia
                  «contraído / expandido» al lector de pantalla sin sincronizar un
@@ -107,30 +142,36 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
                  y no lo actualiza nunca: quien use lector de pantalla oye
                  «contraído» también con el menú abierto. */
               <details class="desplegable">
-                <summary class="desplegable__disparador">
-                  <span>{t(e.clave as ClaveUI)}</span>
+                <summary
+                  class="desplegable__disparador"
+                  aria-current={rutaActual === e.path ? 'page' : undefined}
+                >
+                  <span>{e.etiqueta}</span>
                   <span class="desplegable__flecha" aria-hidden="true"></span>
                 </summary>
                 <ul class="desplegable__panel">
-                  <li>
-                    <a
-                      class="desplegable__todos"
-                      href={ruta(idioma, e.path)}
-                      aria-current={rutaActual === e.path ? 'page' : undefined}
-                    >{t('nav.verTodo')}</a>
-                  </li>
-                  {tipos.map((x) => (
+                  {e.hijos.map((h) => (
                     <li>
-                      <a href={ruta(idioma, `alojamiento/${x.id}`)}>{x.data.nombre[idioma]}</a>
+                      {h.href ? (
+                        <a href={h.href}>{h.etiqueta}</a>
+                      ) : (
+                        /* Sin `href` no es un enlace: es texto. Un <a> sin
+                           destino no recibe foco de teclado y anuncia «enlace»
+                           a un lector de pantalla sin llevar a ningún sitio. */
+                        <span class="desplegable__inerte">
+                          {h.etiqueta}
+                          <em class="etiqueta-pronto">{h.nota}</em>
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
               </details>
             ) : (
               <a
-                href={ruta(idioma, e.path)}
+                href={e.href}
                 aria-current={rutaActual === e.path ? 'page' : undefined}
-              >{t(e.clave as ClaveUI)}</a>
+              >{e.etiqueta}</a>
             )}
           </li>
         ))}
@@ -160,7 +201,7 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
         <ul class="menu__lista">
           {enlaces.map((e) => (
             <li>
-              {e.submenu ? (
+              {e.hijos ? (
                 /* En el cajón el mismo submenú es un acordeón ANIDADO, no un
                    panel flotante: es lo que hace Cappa en móvil —su submenú pasa
                    a `position: static`— y es lo correcto, porque un panel
@@ -169,26 +210,32 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
                    y dejarlo produce el «hover pegajoso» de la primera pulsación. */
                 <details class="submenu">
                   <summary class="submenu__disparador">
-                    <span>{t(e.clave as ClaveUI)}</span>
+                    <span>{e.etiqueta}</span>
                     <span class="submenu__flecha" aria-hidden="true"></span>
                   </summary>
                   <ul class="submenu__lista">
-                    <li>
-                      <a
-                        href={ruta(idioma, e.path)}
-                        aria-current={rutaActual === e.path ? 'page' : undefined}
-                      >{t('nav.verTodo')}</a>
-                    </li>
-                    {tipos.map((x) => (
-                      <li><a href={ruta(idioma, `alojamiento/${x.id}`)}>{x.data.nombre[idioma]}</a></li>
+                    {e.hijos.map((h) => (
+                      <li>
+                        {h.href ? (
+                          <a
+                            href={h.href}
+                            aria-current={rutaActual === e.path && h.href === e.href ? 'page' : undefined}
+                          >{h.etiqueta}</a>
+                        ) : (
+                          <span class="submenu__inerte">
+                            {h.etiqueta}
+                            <em class="etiqueta-pronto">{h.nota}</em>
+                          </span>
+                        )}
+                      </li>
                     ))}
                   </ul>
                 </details>
               ) : (
                 <a
-                  href={ruta(idioma, e.path)}
+                  href={e.href}
                   aria-current={rutaActual === e.path ? 'page' : undefined}
-                >{t(e.clave as ClaveUI)}</a>
+                >{e.etiqueta}</a>
               )}
             </li>
           ))}
@@ -302,10 +349,15 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
      medidos. Un logo encogido no se lee como decisión, se lee como error. */
   .marca { display: flex; align-items: center; text-decoration: none; flex: none; }
   .marca__logo {
-    /* 112 px de ancho: a 310 × 193 el logotipo queda en 70 px de alto, que cabe
-       holgado en la fila de 88 px y deja el aire de la plantilla. Alto
-       automático desde la proporción real, así no hay CLS. */
-    width: 112px;
+    /* 132 px de ancho — el cliente pidió ampliarlo (2026-09-01).
+       A 310 × 193 eso son **90 px de alto**, y la fila mide 104 px: quedan 7 px
+       de aire arriba y abajo. No es un número redondo elegido a ojo, es el
+       máximo que cabe con el aire de la plantilla; `--alto-cabecera` subió de
+       88 a 104 px justo para esto, y `--desplazamiento-ancla` va detrás porque
+       se calcula a partir de él (si no, la cabecera pegajosa taparía el destino
+       de cada `#ancla`).
+       Alto automático desde la proporción real, así no hay CLS. */
+    width: 144px;
     height: auto;
   }
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
@@ -397,23 +449,53 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   .cabecera--sobre-hero .nav__lista > li > a,
   .cabecera--sobre-hero .cabecera__idioma { color: #fff; }
 
-  /* Sobre la fotografía del héroe el logotipo se pinta en BLANCO SÓLIDO.
-     El del hotel es dorado sobre marrón oscuro y sólo existe esa versión —se
-     buscó en toda la captura del sitio vigente—, porque su cabecera es blanca y
-     nunca necesitaron otra. Sobre una foto oscura, los marrones desaparecen.
+  /* 🟡 EL LOGOTIPO VA EN DORADO TAMBIÉN SOBRE LA FOTO — cliente, 2026-09-01.
+     Antes se aplastaba a blanco con `brightness(0) invert(1)`: se conservaba la
+     silueta y se perdía el color, porque los marrones del logotipo desaparecen
+     sobre una foto oscura.
 
-     `brightness(0)` lo aplasta a negro puro y `invert(1)` lo pasa a blanco: se
-     conserva la SILUETA, que es lo que hace reconocible una marca, y se pierde
-     el color, que aquí no se podía leer de todos modos.
+     Ahora se pinta el logotipo REAL, y para que el marrón no se pierda se le
+     sube el brillo y la saturación en vez de sustituirlo por otro color: los
+     trazos dorados suben a dorado claro y la palabra «AZUCAR» deja de ser un
+     marrón apagado. La sombra proyectada es lo que le da borde contra
+     cualquier zona clara de la fotografía — sin ella, sobre el muro blanco del
+     fondo el logotipo se deshace.
 
-     Lo correcto sería una versión clara del logotipo. Es un archivo, no código:
-     queda anotado para pedírselo al hotel. */
-  .cabecera--sobre-hero .marca__logo { filter: brightness(0) invert(1); }
+     Los valores salen de probarlos en el navegador sobre la foto real, no de
+     un cálculo: a 1.35 de brillo la palabra seguía leyéndose marrón sobre la
+     madera clara de la terraza. A 1.7 es oro.
+
+     ⚠️ Sigue existiendo UN SOLO archivo de logotipo, dorado sobre transparente,
+     y esto es un apaño de CSS sobre él. Lo correcto es una versión clara
+     dibujada para fondos oscuros. Es un archivo, no código: queda pedido. */
+  .cabecera--sobre-hero .marca__logo {
+    filter: brightness(1.7) saturate(1.35)
+            drop-shadow(0 1px 4px rgb(0 0 0 / 0.7));
+  }
+  /* 🔴 SOBRE LA FOTO EL TEXTO NO CAMBIA DE COLOR AL PASAR EL RATÓN, Y ES
+     DELIBERADO. El cliente pidió que el menú cambie de color en hover «como en
+     la plantilla», y en el resto del sitio eso es exactamente lo que hace: el
+     enlace pasa a pistacho. Aquí no puede.
+
+     La cuenta, hecha sobre los píxeles reales de `hero-roof-top.webp` con el
+     velo del héroe compuesto: el blanco da **4.93:1** en el punto más
+     desfavorable, justo por encima del 4.5:1 que exige WCAG 1.4.3. Para que
+     otro color pasara ahí haría falta una luminancia relativa ≥ 0.908 — es
+     decir, un blanco con un tinte tan leve que no se distinguiría del blanco.
+     Cualquier pistacho reconocible como verde cae a 2.6:1.
+
+     El estado de hover es texto y le aplica el mismo mínimo que a cualquier
+     otro. Así que sobre la foto el cambio se hace con el SUBRAYADO, que es un
+     componente gráfico y sólo necesita 3:1, y el texto se queda en blanco.
+     Cambiar de color y quedarse en 2.6:1 sería elegir el gusto por encima de
+     la legibilidad de quien mira la pantalla a pleno sol en una playa. */
   .cabecera--sobre-hero .nav__lista > li > a:hover,
   .cabecera--sobre-hero .nav__lista > li > a[aria-current='page'] {
     color: #fff;
     border-bottom-color: var(--color-accent);
   }
+  .cabecera--sobre-hero .desplegable__disparador:hover,
+  .cabecera--sobre-hero .desplegable[open] > .desplegable__disparador { color: #fff; }
   .cabecera--sobre-hero .menu__icono,
   .cabecera--sobre-hero .menu__icono::before,
   .cabecera--sobre-hero .menu__icono::after { background: #fff; }
@@ -560,11 +642,52 @@ const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
     background: var(--color-surface-warm);
     color: var(--color-accent-text);
   }
-  .desplegable__todos {
+  /* El «Ver todo…» es SIEMPRE el primer hijo del panel, así que se destaca por
+     posición y no por una clase que hubiera que recordar poner. Un selector
+     estructural no se puede olvidar al añadir un submenú nuevo. */
+  .desplegable__panel > li:first-child > a {
     font-weight: 500;
     border-bottom: 1px solid var(--color-border);
-    border-radius: 0 !important;
+    border-radius: 0;
     margin-bottom: var(--space-2);
+  }
+  .submenu__lista > li:first-child > a { font-weight: 500; }
+
+  /* Apartado anunciado pero SIN destino — hoy, el Spa. No es un enlace y no
+     debe parecerlo: ni cursor de mano, ni foco de teclado, ni el anuncio
+     «enlace» de un lector de pantalla. Se ve apagado porque lo está. */
+  /* Cada uno hereda la métrica de SU lista, no una propia: el panel de
+     escritorio y el acordeón del cajón tienen alturas y tipografías distintas,
+     y un apartado inerte con medidas de más se desalinea del resto — se veía
+     en el cajón, con «Spa» sangrado respecto a sus hermanos. */
+  .desplegable__inerte,
+  .submenu__inerte {
+    display: flex; align-items: center; gap: var(--space-2);
+    color: var(--color-ink-muted);
+    font-family: var(--font-ui);
+  }
+  .desplegable__inerte {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+  }
+  .submenu__inerte {
+    min-height: 48px;
+    font-size: var(--text-base);
+    letter-spacing: 0.04em;
+  }
+  .etiqueta-pronto {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    font-style: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: 0 var(--space-2);
+    white-space: nowrap;
   }
 
   /* Abierto por CLIC o teclado — el estado nativo del <details>. */

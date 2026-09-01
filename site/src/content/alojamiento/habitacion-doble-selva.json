@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación Doble · Vista a la selva",
-    "en": "Double Room · Jungle view"
+    "es": "Habitación Doble · Vistas a la selva",
+    "en": "Double Room · Jungle views"
   },
   "categoria": "habitacion",
   "orden": 8,
@@ -35,6 +35,10 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-selva.webp",

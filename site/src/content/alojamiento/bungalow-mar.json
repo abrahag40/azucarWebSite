@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Suite Mar",
-    "en": "Suite Mar"
+    "es": "Bungalow Mar",
+    "en": "Bungalow Mar"
   },
   "categoria": "suite",
   "orden": 1,
@@ -12,12 +12,12 @@
     "en": "1 king size bed"
   },
   "vista": {
-    "es": "Vista frontal al mar y a la alberca infinita",
-    "en": "Ocean front view and infinity pool view"
+    "es": "Vistas frontales al mar y a la alberca infinita",
+    "en": "Ocean front and infinity pool views"
   },
   "vistaCorta": {
-    "es": "Vista frontal al mar",
-    "en": "Ocean front view"
+    "es": "Vistas frontales al mar",
+    "en": "Ocean front views"
   },
   "descripcionCorta": {
     "es": "Jacuzzi en la terraza, frente al mar.",
@@ -43,6 +43,14 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Televisión",
+      "en": "TV"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "diferenciador": {

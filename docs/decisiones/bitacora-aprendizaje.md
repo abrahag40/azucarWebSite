@@ -2187,6 +2187,150 @@ un sitio en línea, lo segundo es lo único que el cliente ve.
 
 ---
 
+## L-088 · R-27 cerrada: dos listas de guardias, y ninguna sabía de la otra
+
+**Contexto.** El CI tenía sus propias guardias de la Definition of Done escritas a mano dentro
+de `.github/workflows/site.yml`, en paralelo a las de `scripts/verificar-todo.sh`. Las dos
+listas se escribieron en momentos distintos y **nunca se compararon**.
+
+**El resultado, medido:** el CI exigía `description`, `canonical`, `hreflang` y `width/height`
+en cada imagen. El script local no comprobaba ninguna de las cuatro. Así que «todo en verde»
+aquí no significaba nada sobre allí, y sólo se descubrió cuando el CI se desbloqueó tras seis
+commits parado (L-087) y falló en comprobaciones que en esta máquina llevaban meses pasando.
+
+**La técnica que faltaba tiene nombre: *single source of truth* aplicada a la configuración.**
+Es la misma idea que el proyecto ya aplica al contenido —regla 6 de CLAUDE.md, «el contenido se
+modela como datos, nunca incrustado en el marcado»— y que no se había aplicado a las
+comprobaciones. Un guardián duplicado no es un guardián reforzado: son dos guardianes que
+divergen, y el día que divergen nadie se entera.
+
+**Lo que se hizo.** Las guardias se mudaron a `verificar-todo.sh` y el workflow quedó reducido a
+tres pasos: instalar, correr el script, publicar el informe. Correr `./scripts/verificar-todo.sh`
+en local es ahora, literalmente, correr el CI.
+
+Una sola excepción, y declarada en el propio workflow: la comprobación del lockfile levanta un
+contenedor Docker para reproducir la instalación de Linux, y el CI **ya está** en Linux — el
+`npm ci` del propio job es la prueba directa. Se salta con `SALTAR_LOCKFILE=1`. Una excepción
+escrita y razonada no es una divergencia; una excepción implícita sí.
+
+**Y apareció el pez que el agujero escondía.** Al unificar, se añadió también `html-validate`,
+que estaba en la lista de «comprobaciones periódicas, no de cada cambio». Encontró de inmediato
+un `<form>` sin botón de envío en el panel de precios (WCAG H32): quien pulsara Enter dentro de
+un campo esperaba guardar y no pasaba nada. Llevaba ahí desde que se construyó el panel.
+
+> **El patrón:** *una comprobación que sólo se corre cuando uno se acuerda no es una
+> comprobación, es una intención.* Y el corolario que ya va por la tercera vez en este
+> proyecto: el hueco entre dos guardianes es exactamente donde se instalan los defectos.
+
+**Antipatrón evitado:** «lo copio al workflow para no depender del script». Duplicar una
+comprobación por comodidad de arranque produce dos verdades, y la más laxa siempre gana, porque
+es la que se corre a diario.
+
+---
+
+## L-089 · Un hover de color que no se puede pintar, y por qué se dice en voz alta
+
+**Petición del cliente (2026-09-01):** «los textos de menú que en el hover cambien de color como
+en la plantilla».
+
+En las páginas interiores es trivial y está hecho: la cabecera es sólida, el enlace pasa a
+pistacho y cumple 5.9:1. **En la portada no se puede**, y la cuenta es la que manda.
+
+Sobre la fotografía del héroe, el blanco da **4.93:1** en el punto más desfavorable —medido
+sobre los píxeles reales de `hero-roof-top.webp` componiendo el velo, 18 muestras—, apenas por
+encima del 4.5:1 que exige WCAG 1.4.3. Despejando la fórmula de contraste, para que otro color
+pasara ahí haría falta una luminancia relativa **≥ 0.908**: un blanco con un tinte tan leve que
+nadie lo llamaría verde. Cualquier pistacho reconocible como tal cae a **2.6:1**.
+
+El estado `:hover` es texto, y le aplica el mismo mínimo que a cualquier otro estado. Así que en
+la portada el cambio se hace con el **subrayado** —que es un componente gráfico y sólo necesita
+3:1— y el texto se queda en blanco.
+
+**Lo que se aprende no es el número, es el reflejo.** La petición era legítima y la respuesta no
+es «no se puede» a secas: es «se puede en 36 de las 38 páginas, aquí está la cuenta de por qué
+en las dos restantes no, y esto es lo que se hace en su lugar». Un requisito que choca con un
+criterio de accesibilidad se responde con la medición, no con el gusto de nadie.
+
+**Antipatrón evitado:** cumplir la petición al pie de la letra y dejar el menú en 2.6:1 sobre la
+foto. Nadie lo habría notado en la demo —se ve bonito— y lo habría notado quien mira el teléfono
+a pleno sol en una playa de Tulum, que es exactamente el usuario de este sitio.
+
+---
+
+## L-090 · Cambiar de color de marca sin perder la disciplina que lo sostenía
+
+**Petición del cliente:** «mejorar color de tipografía por colores más verde pistache
+(branding?)». El signo de interrogación es del cliente.
+
+El acento venía del oro de Cappa (`#aa8453`) y de él salieron **tres** tokens, no uno, por una
+razón que no es estética: un color de marca casi nunca cumple a la vez el 3:1 que WCAG 1.4.11
+pide a los componentes y el 4.5:1 que 1.4.3 pide al texto. Por eso había un tono decorativo, uno
+para texto y uno para hover.
+
+Al cambiar de familia se conservó **entera esa estructura**, y se volvió a medir contra los tres
+fondos del sitio —no sólo contra blanco, que fue el error de L-036—:
+
+| token | | blanco | cálida | alterna | uso |
+|---|---|---|---|---|---|
+| `--color-accent` | `#6F9440` | 3.51 | 3.23 | 3.04 | bordes, iconos, rellenos |
+| `--color-accent-text` | `#4A6E2C` | 5.90 | 5.43 | 5.11 | cualquier acento con texto |
+| `--color-accent-hover` | `#3A5C24` | 7.67 | 7.06 | 6.64 | hover y foco |
+
+El oro daba 3.42 / 4.53 / 6.53 en esas mismas casillas: el verde no baja el contraste en ninguna
+y sube medio punto la del texto. **axe-core: 0 violaciones en 10 páginas** tras el cambio.
+
+**Y el cambio destapó un defecto anterior.** `.boton--secundario:hover` pintaba blanco sobre el
+acento *decorativo* — 3.42:1 con el oro, insuficiente para texto. Llevaba así desde el sprint 1
+y **axe nunca lo vio, porque axe no prueba estados de hover**. Lo encontró la aritmética al
+recalcular la tabla, no una herramienta.
+
+> **El patrón:** cuando se cambia un token de color hay que reproducir la MEDICIÓN, no el valor.
+> Y la medición se hace contra el fondo más desfavorable en el que ese token se vaya a usar —
+> incluidos los estados que ninguna herramienta automática visita.
+
+**Lo que este cambio NO resuelve, y queda dicho:** el logotipo sigue siendo dorado y turquesa.
+Verde de interfaz junto a oro de marca convive, pero no es una identidad. Si el pistacho es la
+marca nueva, hace falta un logotipo nuevo — y eso es un archivo, no código. Revertir, en cambio,
+son **tres líneas**: ningún componente conoce el color, sólo el token. Ésa es exactamente la
+razón de que los tokens existan.
+
+---
+
+## L-091 · Reutilizar un componente hereda también sus reglas locales
+
+`SeccionPresentacion` llevaba desde el sprint 1 una línea aparentemente inocua:
+
+```css
+.presentacion { scroll-margin-top: calc(-1 * var(--desplazamiento-ancla)); }
+```
+
+Un margen **negativo** que anula el `scroll-padding-top` global. Correcto en la portada: allí la
+cabecera es `absolute`, se va con el héroe y no tapa nada, así que reservarle 120 px deja una
+franja de foto arriba que se lee como un salto a medias.
+
+Al crear `/nosotros/` el 2026-09-01 se reutilizó ese mismo componente —bien: el contenido es el
+mismo y duplicarlo habría creado dos verdades—. Pero allí la cabecera **sí** es pegajosa, y con
+el margen negativo un salto a `#el-hotel` aterrizaba 120 px demasiado alto, con el título debajo
+de la cabecera.
+
+Se acotó con un selector estructural, `:global(.hero) + .presentacion`: la regla ya no dice
+«esta sección», dice «esta sección **cuando va detrás del héroe**», que es lo que siempre quiso
+decir.
+
+**En la misma sesión, el defecto simétrico:** las secciones nuevas de instalaciones y eventos
+llevaban `scroll-margin-top` propio *además* del `scroll-padding-top` global. **Los dos se
+suman, no se anulan** — 240 px medidos de hueco muerto sobre el título al que acabas de saltar,
+el doble de lo necesario. Doscientos cuarenta píxeles de aire parecen una decisión de diseño
+hasta que sabes que ciento veinte era el número.
+
+> **El patrón:** una regla CSS escrita para un contexto viaja con el componente al siguiente.
+> Antes de reutilizar, hay que preguntarse qué supuestos del sitio original están cocidos
+> dentro. Y `scroll-margin` y `scroll-padding` se suman: declarar el global y el local es
+> pedir el doble.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2216,5 +2360,8 @@ un sitio en línea, lo segundo es lo único que el cliente ve.
 | R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |
 | R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
 | R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
-| R-27 | **`verificar-todo.sh` y el workflow del CI no comprueban lo mismo.** Los guardias de la DoD —`description`, `canonical`, `hreflang`— viven sólo en el CI, así que «todo en verde» en local no garantiza que el CI pase | Medio | Que el workflow invoque `verificar-todo.sh` y los guardias vivan en un solo sitio (L-087) |
+| R-27 | ~~**`verificar-todo.sh` y el workflow del CI no comprueban lo mismo**~~ **CERRADA 2026-09-01.** Los guardias se mudaron al script y el workflow sólo lo invoca. De paso entró `html-validate`, que estaba fuera y escondía un `<form>` sin botón de envío en el panel | ~~Medio~~ Ninguno | Correr `./scripts/verificar-todo.sh` es ahora correr el CI (L-088) |
+| R-28 | **El código postal del cliente no coincide con el de su propio sitio.** Dictó «77760» para el antetítulo del héroe; sus 26 páginas capturadas publican «CP 77780». Uno de los dos está mal | Medio | Se usa el del cliente, por ser la fuente más reciente. Pregunta **C-CP**: un código postal equivocado rompe entregas y mapas |
+| R-29 | **Dos de las cinco «amenidades» que el cliente pidió en el menú no existen en ninguna parte.** Day Pass / Beach Club y el Rooftop «White Pearl» no aparecen en sus 26 páginas; el texto publicado es nuestro | Medio | Marcado como contenido de ejemplo en `instalaciones` (`src/data/hotel.ts`). Confirmar o retirar antes de producción |
+| R-30 | **La página de Eventos es enteramente contenido inventado.** El sitio vigente no menciona eventos, y no sabemos tipos, aforos ni precios | Medio | Cero cifras publicadas, a propósito. Aviso en la cabecera de `src/data/eventos.ts` |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación Doble · Vista al mar",
-    "en": "Double Room · Ocean view"
+    "es": "Habitación Doble · Vista parcial jardín y/o mar",
+    "en": "Double Room · Partial garden &/or ocean views"
   },
   "categoria": "habitacion",
   "orden": 7,
@@ -12,8 +12,8 @@
     "en": "2 double beds"
   },
   "vista": {
-    "es": "Vistas parciales al mar y al jardín",
-    "en": "Partial ocean and garden views"
+    "es": "Vistas parciales al jardín y/o al mar",
+    "en": "Partial garden &/or ocean views"
   },
   "descripcionCorta": {
     "es": "Dos camas, con vista parcial al mar.",
@@ -35,6 +35,10 @@
     {
       "es": "Wi-Fi",
       "en": "Wi-Fi"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-mar.webp",

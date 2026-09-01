@@ -46,10 +46,10 @@ const R = {
   tipo: 'Alojamiento', sinPreferencia: 'Sin preferencia', huespedes: 'Huéspedes',
   adultos: 'adultos', menores: 'menores', nombre: 'Nombre', correo: 'Correo',
   telefono: 'Teléfono', comentarios: 'Comentarios',
-  tipos: { 'suite-mar': 'Suite Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
+  tipos: { 'bungalow-mar': 'Bungalow Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
 };
 const base = {
-  llegada: '2026-03-10', salida: '2026-03-13', tipo: 'suite-mar',
+  llegada: '2026-03-10', salida: '2026-03-13', tipo: 'bungalow-mar',
   adultos: 2, menores: 0, nombre: 'Ana Ruiz', correo: 'ana@example.com',
 };
 const textos = { saludo: 'Buenas tardes', intro: 'Esto es lo que recibimos.', cierre: 'Sujeta a confirmación.', idioma: 'es' };
@@ -58,7 +58,7 @@ test('el HTML incluye el saludo, el nombre y las noches calculadas', () => {
   const html = correoAcuseHtml(base, R, textos);
   assert.match(html, /Buenas tardes, Ana Ruiz\./);
   assert.match(html, /2026-03-13 \(3 noches\)/);
-  assert.match(html, /Suite Mar/);
+  assert.match(html, /Bungalow Mar/);
 });
 
 test('escapa HTML del nombre y los comentarios -- no se inyecta marcado', () => {

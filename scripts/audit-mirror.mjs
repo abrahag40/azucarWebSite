@@ -233,8 +233,8 @@ const indexables = pages.filter(p => !esError(p));
 const sinTitle = pages.filter(p => !p.title);
 const sinDesc = pages.filter(p => !p.description);
 // Los duplicados se buscan DENTRO de cada idioma, no entre idiomas.
-// `/alojamiento/suite-agua` y `/en/rooms/suite-agua` comparten titulo porque
-// "Suite Agua" es un nombre propio y no se traduce; no son duplicados, son
+// `/alojamiento/bungalow-agua` y `/en/rooms/bungalow-agua` comparten titulo porque
+// "Bungalow Agua" es un nombre propio y no se traduce; no son duplicados, son
 // versiones declaradas como alternativas por hreflang, y Google las trata como
 // tales. Contarlas como duplicado marcaba como fallo el marcado correcto.
 const porIdioma = new Map();
