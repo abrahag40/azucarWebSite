@@ -112,6 +112,11 @@ const schema = {
     streetAddress: 'Carretera a Boca Paila km 7.5, Zona Hotelera',
     addressLocality: 'Tulum',
     addressRegion: 'Quintana Roo',
+    // 77780, confirmado por el cliente el 2026-09-01. Faltaba: un
+    // `PostalAddress` sin `postalCode` es una dirección incompleta para Google,
+    // y el NAP —nombre, dirección, teléfono— es lo que coteja contra Business
+    // Profile para el posicionamiento local.
+    postalCode: '77780',
     addressCountry: 'MX',
   },
   geo: { '@type': 'GeoCoordinates', latitude: 20.1489, longitude: -87.4483 },

@@ -44,7 +44,7 @@ test('saludoPorHoraUTC: noche en Tulum, con el envolvimiento de medianoche', () 
 const R = {
   asunto: 'Solicitud de reserva', llegada: 'Llegada', salida: 'Salida', noches: 'noches',
   tipo: 'Alojamiento', sinPreferencia: 'Sin preferencia', huespedes: 'Huéspedes',
-  adultos: 'adultos', menores: 'menores', nombre: 'Nombre', correo: 'Correo',
+  adultos: 'adultos', menores: 'menores', adulto: 'adulto', menor: 'menor', nombre: 'Nombre', correo: 'Correo',
   telefono: 'Teléfono', comentarios: 'Comentarios',
   tipos: { 'bungalow-mar': 'Bungalow Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
 };

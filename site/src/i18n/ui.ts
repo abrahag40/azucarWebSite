@@ -90,6 +90,11 @@ export const ui = {
     'reserva.sinPreferencia': 'Sin preferencia',
     'reserva.adultos': 'Adultos',
     'reserva.menores': 'Menores',
+    // Singulares para el correo: decía «1 menores». En español sobra la «s»,
+    // pero en inglés es «child» / «children», así que la forma correcta es un
+    // dato del diccionario y no una regla que el código pueda deducir.
+    'reserva.adulto': 'Adulto',
+    'reserva.menor': 'Menor',
     'reserva.nombre': 'Nombre completo',
     'reserva.correo': 'Correo electrónico',
     'reserva.telefono': 'Teléfono',
@@ -137,13 +142,15 @@ export const ui = {
     // de ser `null`, este saludo empieza a usarse sin tocar mas codigo.
     'flotante.saludo': 'Hola, estoy viendo "{pagina}" y tengo una pregunta.',
 
-    // ⚠️ EL CÓDIGO POSTAL NO CUADRA CON EL SITIO VIGENTE.
-    // El cliente dictó «Tulum KM 7.5 · 77760». Su propio sitio publica «CP
-    // 77780» en el pie de las 26 páginas capturadas. Uno de los dos está mal y
-    // no podemos saber cuál desde aquí. Se usa el del cliente —es la fuente más
-    // reciente y con más autoridad— y queda anotado como C-CP para que lo
-    // confirme: un código postal equivocado rompe entregas y mapas.
-    'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77760',
+    // ✅ CÓDIGO POSTAL RESUELTO: **77780**, confirmado por el cliente el
+    // 2026-09-01. Es el que publica su propio sitio en el pie de las 26 páginas
+    // capturadas; el 77760 que había dictado era el error. Cierra C-CP y R-28.
+    //
+    // La contradicción se detectó porque el dato nuevo se contrastó contra la
+    // captura del sitio viejo en vez de darlo por bueno. Ese es el valor de
+    // conservar el mirror: sirve de segunda fuente contra la que chocar lo que
+    // llega, y un código postal equivocado rompe entregas, mapas y el NAP local.
+    'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77780',
     // Titular corto a propósito: 36 caracteres caían en tres renglones y el
     // héroe perdía fuerza. Se conserva el núcleo del lema del hotel —«el mar es
     // dulce»— y se cede el lema completo a la franja de imagen, que tiene ancho
@@ -264,7 +271,7 @@ export const ui = {
     'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Términos y condiciones',
     'footer.politicas': 'Políticas del hotel',
-    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
+    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780, México',
 
     'amenidades.antetitulo': 'Servicios',
     // ── Secciones nuevas de la portada, tomadas de Cappa ────────────────────
@@ -357,6 +364,8 @@ export const ui = {
     'reserva.sinPreferencia': 'No preference',
     'reserva.adultos': 'Adults',
     'reserva.menores': 'Children',
+    'reserva.adulto': 'Adult',
+    'reserva.menor': 'Child',
     'reserva.nombre': 'Full name',
     'reserva.correo': 'Email',
     'reserva.telefono': 'Phone',
@@ -393,7 +402,7 @@ export const ui = {
     'flotante.contacto': 'Contact the hotel',
     'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 
-    'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77760',
+    'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77780',
     'hero.titulo': 'The Sweetest Temptation',
     'hero.entrada': 'A handcrafted hotel, made with love by Maya hands and with materials that come from the sand itself. Founded in 2008.',
     'hero.bajar': 'Scroll to content',
@@ -502,7 +511,7 @@ export const ui = {
     'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Terms and conditions',
     'footer.politicas': 'Hotel policies',
-    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
+    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780, Mexico',
 
     'amenidades.antetitulo': 'Our services',
     'galeriaHome.antetitulo': 'The property',

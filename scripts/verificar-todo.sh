@@ -145,6 +145,43 @@ paso "HTML válido (html-validate)" bash -c '
   fi
   exit "$estado"'
 
+# La PLANTILLA DE CORREO usa los colores del sitio copiados a mano, porque los
+# clientes de correo no resuelven `var()`. Eso significa que puede quedarse
+# atrás sin que nada avise, y ya pasó: al cambiar el acento de oro a pistacho
+# el correo siguió mandando en oro. Ningún guardián comparaba un `.ts` con un
+# `.css`, así que se descubrió por casualidad, preparando muestras.
+#
+# Esta comprobación cierra el hueco: todo color del correo tiene que estar
+# declarado en `tokens.css`, salvo los cuatro neutros que el correo usa y el
+# sitio no (blanco, dos grises de texto secundario y el negro de la cabecera).
+# Si alguien cambia un token y no actualiza el correo, el valor viejo deja de
+# existir en `tokens.css` y esto falla.
+paso "la plantilla de correo usa los colores del sitio" bash -c '
+  neutros="#ffffff #444444 #999999 #000000"
+  faltan=""
+  # Se miran solo las lineas que PINTAN algo, no los comentarios: la cabecera
+  # del propio archivo cita el oro viejo para explicar el cambio, y contarlo
+  # como uso vigente hacia fallar la comprobacion por su propia documentacion.
+  # Es la misma trampa que en el lado de `tokens.css`, en el otro archivo.
+  usados=$(grep -vE "^[[:space:]]*(\*|//)" site/src/booking/correoHtml.ts \
+    | grep -oiE "(color|background|border[a-z-]*): *[^;\"]*#[0-9a-f]{6}" \
+    | grep -oiE "#[0-9a-f]{6}" | tr "A-F" "a-f" | sort -u)
+  for c in $usados; do
+    case " $neutros " in *" $c "*) continue ;; esac
+    # Solo las DECLARACIONES, nunca los comentarios: la nota que explica el
+    # cambio de paleta cita los tres valores del oro viejo, y con un grep a
+    # secas esta comprobacion los daba por vigentes. Calibrada rompiendola a
+    # proposito — paso en verde con el color equivocado antes de acotar esto.
+    grep -oiE -- "--color[a-z-]*: *#[0-9a-f]{6}" site/src/styles/tokens.css \
+      | grep -oiE "#[0-9a-f]{6}" | tr "A-F" "a-f" | grep -qx "$c" \
+      || faltan="$faltan $c"
+  done
+  [ -z "$faltan" ] || {
+    echo "Color(es) del correo que ya no existen en tokens.css:$faltan"
+    echo "La plantilla de correo se quedo atras respecto a la paleta del sitio."
+    echo "Actualiza site/src/booking/correoHtml.ts — el mapa esta en su cabecera."
+    exit 1; }'
+
 paso "guardias de la Definition of Done" bash -c '
   fallos=0
   # El panel de precios (ADR-0007) queda fuera: es una herramienta INTERNA,

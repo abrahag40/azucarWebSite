@@ -325,7 +325,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | **Core Web Vitals** | **LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms** — los tres dentro de umbral |
 | **axe-core 4.13** | **0 violaciones**, re-medido el 2026-09-01 sobre 10 páginas tras el cambio de paleta a pistacho |
 | **html-validate** | **0 incidencias** en 45 páginas · **ya no es periódico: es un guardián de `verificar-todo.sh`**, y al entrar encontró un `<form>` sin botón de envío en el panel |
-| Pruebas unitarias | 9 casos sobre `componerSolicitud` · 0 dependencias nuevas |
+| Pruebas unitarias | **29 casos** sobre `componerSolicitud`, el correo HTML y la concordancia de número · 0 dependencias nuevas |
 
 ### ✅ Contradicción del restaurante — resuelta, con un matiz
 
@@ -395,7 +395,7 @@ Ver L-090.
 |---|---|
 | Day Pass / Beach Club · Rooftop «White Pearl» | **Inventados.** No existen en las 26 páginas capturadas (R-29) |
 | La página de Eventos entera | **Inventada.** Sin cifras, a propósito (R-30) |
-| Código postal **77760** | Contradice el **77780** que publica su propio sitio (R-28, pregunta **C-CP**) |
+| ~~Código postal~~ | ✅ **RESUELTO 2026-09-01: es 77780.** El 77760 dictado era el error; se detectó al contrastarlo con la captura del sitio viejo |
 | La carta del restaurante | Sigue siendo de ejemplo. Lo que sí se resolvió es el **nombre** |
 | Las ocho fotos de «Qué hacer en Tulum» | **No existen.** Hay glifos dibujados en su lugar, y el hueco listo (R-31) |
 
@@ -416,7 +416,6 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
 | **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
 | **E-PRIV** | Aviso de privacidad conforme a LFPDPPP | Requisito de **entrada** del sprint 3 |
-| **C-CP** | ¿77760 o 77780? El cliente dictó uno y su sitio publica el otro | Antetítulo del héroe y datos de contacto |
 | **C-AMEN** | ¿Existen el Day Pass / Beach Club y el rooftop «White Pearl»? ¿Y qué eventos hace el hotel? | Publicar `/eventos/` y dos de las cinco amenidades |
 | **R-01** | Licencia de iconos de Cappa | Sustituibles por un set libre |
 | — | ID de GA4 (`G-…`) | H1.7 |
@@ -481,10 +480,11 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **92 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **93 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
+| **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
 ---
 

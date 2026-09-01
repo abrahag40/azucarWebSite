@@ -39,8 +39,24 @@ export interface Rotulos {
   tipo: string;
   sinPreferencia: string;
   huespedes: string;
+  /** Plural: «adultos» / «adults». */
   adultos: string;
+  /** Plural: «menores» / «children». */
   menores: string;
+  /**
+   * Singulares. Existen porque el correo decía «1 menores» —y en inglés, «1
+   * children», que es peor—. Lo enseñó una muestra generada para revisar el
+   * correo, no una prueba: las nueve que había comprobaban la ARITMÉTICA de las
+   * noches, que es lo que puede equivocarse en silencio, y nunca miraron la
+   * concordancia. Un dato correcto mal redactado sigue siendo un correo que se
+   * lee mal, y éste es el primer contacto del huésped con el hotel.
+   *
+   * En español bastaba con quitar la «s»; en inglés no —«child» / «children»—,
+   * y ésa es la razón de que sea un dato del diccionario y no una regla de
+   * código: la pluralización no se puede deducir de la cadena.
+   */
+  adulto: string;
+  menor: string;
   nombre: string;
   correo: string;
   telefono: string;
@@ -81,6 +97,18 @@ export function noches(llegada: string, salida: string): number {
  * —fechas, tipo, personas— y al final los datos de contacto. Un manager mirando
  * la notificación en el móvil decide con las tres primeras líneas.
  */
+/**
+ * «2 adultos, 1 menor» — con la concordancia bien. Exportada porque el correo
+ * HTML del huésped pinta exactamente lo mismo y no puede tener su propia copia:
+ * dos redacciones del mismo dato acaban divergiendo, y el huésped recibe los
+ * dos correos.
+ */
+export function huespedes(s: Solicitud, r: Rotulos): string {
+  const parte = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+  const adultos = parte(s.adultos, r.adulto, r.adultos);
+  return s.menores ? `${adultos}, ${parte(s.menores, r.menor, r.menores)}` : adultos;
+}
+
 export function componerSolicitud(s: Solicitud, r: Rotulos): { asunto: string; cuerpo: string } {
   const n = noches(s.llegada, s.salida);
   const tipo = s.tipo ? (r.tipos[s.tipo] ?? s.tipo) : r.sinPreferencia;
@@ -89,7 +117,7 @@ export function componerSolicitud(s: Solicitud, r: Rotulos): { asunto: string; c
     `${r.llegada}: ${s.llegada}`,
     `${r.salida}: ${s.salida}${n ? ` (${n} ${r.noches})` : ''}`,
     `${r.tipo}: ${tipo}`,
-    `${r.huespedes}: ${s.adultos} ${r.adultos}${s.menores ? `, ${s.menores} ${r.menores}` : ''}`,
+    `${r.huespedes}: ${huespedes(s, r)}`,
     '',
     `${r.nombre}: ${s.nombre}`,
     `${r.correo}: ${s.correo}`,

@@ -35,7 +35,7 @@ const fuente = readFileSync(new URL('./solicitud.ts', import.meta.url), 'utf8')
   .replace(/\((\w+): \w+, (\w+): \w+, (\w+): \w+\)/g, '($1, $2, $3)')
   .replace(/: (number|string|boolean|void)\b(?=\s*[{;])/g, '')
   .replace(/: string\[\]/g, '');
-const { noches, componerSolicitud, enlaceCorreo, camposInvalidos } = await import(
+const { noches, componerSolicitud, huespedes, enlaceCorreo, camposInvalidos } = await import(
   'data:text/javascript;base64,' + Buffer.from(fuente).toString('base64')
 );
 
@@ -64,7 +64,7 @@ test('noches: fecha vacía o mal formada da 0 y no lanza', () => {
 const R = {
   asunto: 'Solicitud de reserva', llegada: 'Llegada', salida: 'Salida', noches: 'noches',
   tipo: 'Alojamiento', sinPreferencia: 'Sin preferencia', huespedes: 'Huéspedes',
-  adultos: 'adultos', menores: 'menores', nombre: 'Nombre', correo: 'Correo',
+  adultos: 'adultos', menores: 'menores', adulto: 'adulto', menor: 'menor', nombre: 'Nombre', correo: 'Correo',
   telefono: 'Teléfono', comentarios: 'Comentarios',
   tipos: { 'bungalow-mar': 'Bungalow Mar' }, cierre: 'Solicitud sujeta a confirmación del hotel.',
 };
@@ -143,4 +143,31 @@ test('camposInvalidos: correo sin arroba o sin dominio se rechaza', () => {
 test('camposInvalidos: acumula más de un campo inválido a la vez', () => {
   const invalidos = camposInvalidos({ ...base, nombre: '', correo: 'x' }, HOY);
   assert.deepEqual(invalidos.sort(), ['correo', 'nombre']);
+});
+
+/* ── Concordancia de número ──────────────────────────────────────────────────
+   El correo decía «1 menores», y en inglés habría dicho «1 children». Lo
+   enseñó una MUESTRA generada para revisar el correo a ojo, no una prueba: las
+   nueve que había vigilaban la aritmética de las noches —lo que puede
+   equivocarse en silencio— y ninguna miraba la redacción.
+   La lección no es «faltaban pruebas»: es que hay defectos que sólo se ven
+   mirando el resultado, y por eso se generan muestras. Estas cuatro existen
+   para que, una vez visto, no vuelva. */
+test('un solo huésped va en singular', () => {
+  assert.equal(huespedes({ ...base, adultos: 1, menores: 0 }, R), '1 adulto');
+  assert.equal(huespedes({ ...base, adultos: 2, menores: 1 }, R), '2 adultos, 1 menor');
+});
+
+test('varios huéspedes van en plural', () => {
+  assert.equal(huespedes({ ...base, adultos: 2, menores: 3 }, R), '2 adultos, 3 menores');
+});
+
+test('sin menores no se menciona a los menores', () => {
+  assert.equal(huespedes({ ...base, adultos: 4, menores: 0 }, R), '4 adultos');
+});
+
+test('el plural del inglés no se deduce quitando una s', () => {
+  const EN = { ...R, adultos: 'adults', menores: 'children', adulto: 'adult', menor: 'child' };
+  assert.equal(huespedes({ ...base, adultos: 1, menores: 1 }, EN), '1 adult, 1 child');
+  assert.equal(huespedes({ ...base, adultos: 2, menores: 2 }, EN), '2 adults, 2 children');
 });

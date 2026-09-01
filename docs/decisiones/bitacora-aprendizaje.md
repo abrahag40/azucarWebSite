@@ -2383,6 +2383,67 @@ que acabas de escribir, hay que comprobar que estás midiendo lo que acabas de e
 
 ---
 
+## L-093 · Lo que la paleta no sabe que existe, y lo que una muestra ve y una prueba no
+
+Dos hallazgos del mismo día (2026-09-01), y los dos aparecieron al preparar **muestras del
+correo para mirarlas**, no al ejecutar nada.
+
+### 1. La plantilla de correo se quedó en el oro viejo
+
+El día anterior el acento del sitio pasó de oro (`#856741`) a pistacho (`#4A6E2C`) cambiando
+tres tokens. **El correo de acuse siguió mandando en oro.** No es un descuido evitable con
+cuidado: los clientes de correo no resuelven `var()`, así que `correoHtml.ts` lleva cada color
+escrito a mano y es estructuralmente incapaz de enterarse de un cambio en `tokens.css`.
+
+Ningún guardián lo vio, porque ninguno compara un `.ts` con un `.css`. Se descubrió por
+casualidad.
+
+**Lo que se hizo:** una comprobación nueva en `verificar-todo.sh` — todo color que la plantilla
+de correo *pinte* tiene que estar declarado en `tokens.css`, salvo cuatro neutros que el correo
+usa y el sitio no. Si alguien cambia un token y no actualiza el correo, el valor viejo deja de
+existir y esto falla.
+
+**Y la calibración tuvo dos vueltas, las dos por el mismo motivo.** Al romperla a propósito
+pasó en verde con el color equivocado: el grep encontraba `#856741` en `tokens.css`… dentro del
+**comentario** que explica el cambio de paleta. Acotado a las declaraciones, falló bien. Al
+volver a probar, falló con el archivo correcto: ahora el grep encontraba el oro en el
+**comentario de `correoHtml.ts`** que documenta este mismo problema. Acotado también a las
+líneas que pintan, quedó bien.
+
+> Dos veces seguidas, la documentación de un cambio se hizo pasar por el cambio. Cualquier
+> comprobación que lea código fuente tiene que distinguir lo que el código HACE de lo que el
+> código CUENTA — y esa distinción sólo se descubre calibrando.
+
+### 2. «1 menores»
+
+El correo del manager y el del huésped escribían `${n} ${r.menores}` sin mirar `n`. Con un solo
+menor decía **«1 menores»**, y en inglés habría dicho **«1 children»**, que es peor.
+
+Las nueve pruebas unitarias del módulo estaban bien enfocadas —vigilan la aritmética de las
+noches, que es lo único que puede equivocarse en silencio— y ninguna miraba la redacción. **No
+falta una prueba: falta mirar el resultado.** Un dato correcto mal escrito sigue siendo el
+primer contacto del huésped con el hotel.
+
+La corrección es interesante por lo que enseña del i18n: en español bastaba con quitar la «s»,
+pero en inglés es `child` / `children`. **La pluralización no se puede deducir de la cadena**,
+así que el singular es un dato del diccionario, no una regla del código. Cuatro pruebas nuevas
+—una de ellas específicamente sobre el plural irregular inglés— para que, una vez visto, no
+vuelva.
+
+### La técnica, que tiene nombre
+
+Generar **muestras deliberadas** de un artefacto que no se puede revisar en el navegador. Las
+seis variantes del generador no son ejemplos bonitos: cada una ejerce una rama distinta —el
+mínimo que el formulario acepta, acentos y `ñ` (el defecto del `charset` que ya se coló una
+vez), HTML inyectado en un comentario, un texto largo de verdad, y el inglés completo—.
+
+Es lo mismo que un *golden file*, sólo que revisado por una persona en vez de por un `assert`:
+para lo que se puede afirmar, hay pruebas; para lo que hay que ver, hay muestras. El correo cae
+entero en el segundo grupo, porque se ve distinto en Gmail, en Outlook y en Mail de iOS.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2413,7 +2474,7 @@ que acabas de escribir, hay que comprobar que estás midiendo lo que acabas de e
 | R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
 | R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
 | R-27 | ~~**`verificar-todo.sh` y el workflow del CI no comprueban lo mismo**~~ **CERRADA 2026-09-01.** Los guardias se mudaron al script y el workflow sólo lo invoca. De paso entró `html-validate`, que estaba fuera y escondía un `<form>` sin botón de envío en el panel | ~~Medio~~ Ninguno | Correr `./scripts/verificar-todo.sh` es ahora correr el CI (L-088) |
-| R-28 | **El código postal del cliente no coincide con el de su propio sitio.** Dictó «77760» para el antetítulo del héroe; sus 26 páginas capturadas publican «CP 77780». Uno de los dos está mal | Medio | Se usa el del cliente, por ser la fuente más reciente. Pregunta **C-CP**: un código postal equivocado rompe entregas y mapas |
+| R-28 | ~~**El código postal del cliente no coincide con el de su propio sitio**~~ **CERRADA 2026-09-01: es 77780**, el de su sitio; el 77760 dictado era el error. Se detectó porque el dato nuevo se contrastó contra el mirror en vez de darlo por bueno — el archivo del sitio viejo vale como segunda fuente | ~~Medio~~ Ninguno | Corregido en el héroe, en el pie y en `schema.org`, donde además faltaba `postalCode` |
 | R-29 | **Dos de las cinco «amenidades» que el cliente pidió en el menú no existen en ninguna parte.** Day Pass / Beach Club y el Rooftop «White Pearl» no aparecen en sus 26 páginas; el texto publicado es nuestro | Medio | Marcado como contenido de ejemplo en `instalaciones` (`src/data/hotel.ts`). Confirmar o retirar antes de producción |
 | R-31 | **«Qué hacer en Tulum» no tiene ni una fotografía.** El archivo del hotel son 244 imágenes de la propiedad: ni un cenote, ni una ruina. Las ocho tarjetas van ilustradas con glifos propios | Medio | Pedir al hotel ocho fotografías del entorno, o comprarlas con licencia. El campo `imagen` está listo: poner la foto es una línea (L-092) |
 | R-32 | **El menú llegó a su techo: ocho apartados.** El noveno no cabe ni bajando el tracking, y el umbral de escritorio ya subió a 72rem por el logotipo más grande y el apartado nuevo | Bajo | Si hace falta un apartado más, sale otro. La aritmética está en `Header.astro` |

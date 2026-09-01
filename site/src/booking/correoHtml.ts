@@ -26,6 +26,27 @@
  * correo, la marca se resuelve con tipografia y color, no con una imagen que
  * se rompe sola.
  *
+ * ── 🔴 LOS COLORES ESTAN COPIADOS A MANO, Y ESO YA FALLO UNA VEZ ──────────
+ * Aqui no hay variables CSS: los clientes de correo no resuelven `var()`, asi
+ * que cada color va escrito con su valor. La consecuencia es que este archivo
+ * **no se entera** cuando cambia la paleta del sitio.
+ *
+ * Paso el 2026-09-01: el acento del sitio paso de oro (#856741) a pistacho
+ * (#4A6E2C) y este correo siguio mandando en oro durante un dia, sin que
+ * ninguna comprobacion dijera nada — ningun guardian compara un `.ts` con un
+ * `.css`. Se descubrio al preparar muestras para revisar, no automaticamente.
+ *
+ * **Si vuelves a tocar `--color-accent-text` en `tokens.css`, actualiza los
+ * dos usos de abajo.** El mapa es este:
+ *
+ *   tokens.css              este archivo
+ *   --color-ink        #222222   titulares y valores
+ *   --color-ink-muted  #666666   etiquetas
+ *   --color-accent-text #4A6E2C  antetitulo de comentarios y caja de cierre
+ *   --color-surface-warm #f8f5f0 fondo de las cajas
+ *   --color-surface-alt  #f1eeeb fondo del lienzo
+ *   --color-border       #e4dfd8 lineas de la tabla
+ *
  * ── COMPATIBILIDAD DE CLIENTES DE CORREO ───────────────────────────────────
  * Todo el estilo va en `style=""` inline: los clientes de correo -sobre todo
  * Outlook de escritorio- ignoran o recortan las hojas de estilo en `<head>`.
@@ -35,7 +56,7 @@
  * Georgia/Times para los titulares, una pila sans para el cuerpo. La marca no
  * se pierde -mismo color, misma jerarquia-, sólo el tipo de letra exacto.
  */
-import { noches, type Solicitud, type Rotulos } from './solicitud.ts';
+import { noches, huespedes, type Solicitud, type Rotulos } from './solicitud.ts';
 
 export type SaludoHora = 'manana' | 'tarde' | 'noche';
 
@@ -100,16 +121,15 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
     fila(r.llegada, s.llegada),
     fila(r.salida, `${s.salida}${n ? ` (${n} ${r.noches})` : ''}`),
     fila(r.tipo, tipoTexto),
-    fila(
-      r.huespedes,
-      `${s.adultos} ${r.adultos}${s.menores ? `, ${s.menores} ${r.menores}` : ''}`,
-    ),
+    // La misma función que el correo del manager: el huésped recibe los dos y
+    // no pueden decir cosas distintas.
+    fila(r.huespedes, huespedes(s, r)),
   ];
   if (s.telefono?.trim()) filas.push(fila(r.telefono, s.telefono.trim()));
 
   const comentariosHtml = s.comentarios?.trim()
     ? `<div style="margin-top:20px;padding:16px 18px;background:#f8f5f0;border-radius:4px;">
-         <p style="margin:0 0 6px;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:#856741;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(r.comentarios)}</p>
+         <p style="margin:0 0 6px;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:#4A6E2C;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(r.comentarios)}</p>
          <p style="margin:0;font-size:15px;color:#222222;font-family:Arial,Helvetica,sans-serif;line-height:1.6;">${conSaltos(escaparHtml(s.comentarios.trim()))}</p>
        </div>`
     : '';
@@ -141,12 +161,12 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
         ${comentariosHtml}
 
         <div style="margin-top:24px;padding:14px 18px;background:#f8f5f0;border-radius:4px;">
-          <p style="margin:0;font-size:14px;color:#856741;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(textos.cierre)}</p>
+          <p style="margin:0;font-size:14px;color:#4A6E2C;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(textos.cierre)}</p>
         </div>
       </div>
 
       <div style="padding:20px 32px;text-align:center;background:#f8f5f0;">
-        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum</p>
+        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780</p>
       </div>
 
     </div>
