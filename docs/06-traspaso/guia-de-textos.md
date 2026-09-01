@@ -126,6 +126,39 @@ disculpa. Cuando el hotel confirme los números, se añaden aquí.
 
 ---
 
+## 1-ter. «Qué hacer en Tulum»
+
+**Archivo:** `site/src/data/actividades.ts`
+
+Los ocho lugares de la página `/actividades/`. Cada bloque tiene `titulo` y `texto` en los dos
+idiomas, y dos campos que hoy están vacíos a propósito.
+
+🔴 **Dos reglas que no se rompen al editar este archivo:**
+
+1. **Sólo lugares públicos, nunca negocios.** Caben las ruinas, un cenote, Sian Ka'an, el
+   pueblo. **No caben** beach clubs, operadores de tours, restaurantes ni hoteles vecinos.
+   Además de ser lo que se pidió, es lo que le conviene al hotel: recomendar un negocio es
+   responder por él, y si el tour sale mal la reseña la recibe quien lo recomendó.
+2. **Ninguna distancia ni tiempo de traslado** hasta que el hotel los confirme. El campo
+   `distancia` está en `null` en los ocho. Un huésped que organiza su día con un tiempo
+   inventado llega tarde a su vuelo.
+
+**Para poner una distancia:** cambia `distancia: null,` por
+`distancia: { es: 'A 10 minutos en coche', en: '10 minutes by car' },`. La línea aparece sola en
+la tarjeta.
+
+**Para poner una fotografía** (hoy hay un dibujo porque no hay ninguna foto de estos lugares):
+
+1. Guarda la imagen en `site/src/assets/actividades/`.
+2. Arriba del archivo, junto a los demás `import`, añade:
+   `import cenotes from '../assets/actividades/cenotes.webp';`
+3. En el bloque correspondiente cambia `imagen: null,` por `imagen: cenotes,`.
+
+La foto sustituye al dibujo automáticamente. **Al poner la primera foto hay que mirar la
+tarjeta**: el texto va en blanco encima y su legibilidad depende de la imagen, no del código.
+
+---
+
 ## 2. Textos de interfaz — botones, menús, títulos
 
 **Archivo:** `site/src/i18n/ui.ts`

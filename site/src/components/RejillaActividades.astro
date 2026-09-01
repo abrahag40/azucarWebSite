@@ -1,0 +1,191 @@
+---
+/**
+ * «Qué hacer en Tulum» — rejilla de cuatro, con el texto DENTRO de la tarjeta.
+ *
+ * Formato pedido por el cliente (2026-09-01): «un layout con imágenes dividido
+ * en grid de 4 donde se muestren fotos y dentro de esas fotos una breve
+ * descripción, algo así como las imágenes que se usan para las recámaras».
+ *
+ * ── DOS MODOS, Y HOY SÓLO CORRE UNO ────────────────────────────────────────
+ * Cada tarjeta pinta la fotografía si la hay y un GLIFO si no. Hoy no hay
+ * ninguna —el archivo del hotel son 244 imágenes de la propiedad, ni un cenote
+ * ni una ruina—, así que las ocho salen ilustradas. El motivo largo está en la
+ * cabecera de `src/data/actividades.ts`.
+ *
+ * El modo con fotografía está escrito y no se ha podido medir, porque no hay
+ * con qué. Queda anotado dentro del CSS lo que hay que comprobar el día que
+ * lleguen: el contraste del texto blanco depende de la FOTO, no del color.
+ *
+ * ── POR QUÉ NO SON ENLACES ─────────────────────────────────────────────────
+ * Ninguna de las ocho lleva a ninguna parte, y es deliberado. Enlazar a la
+ * página de un cenote o de un operador es dar publicidad gratuita —lo que el
+ * cliente pidió evitar— y además convierte al hotel en responsable de lo que
+ * pase al otro lado del enlace. Son tarjetas informativas, no un directorio.
+ */
+import { Image } from 'astro:assets';
+import Icono from './Icono.astro';
+import { actividades } from '../data/actividades';
+import type { Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+---
+<ul class="actividades" role="list">
+  {actividades.map((a) => (
+    <li>
+      <article class:list={['act', !a.imagen && 'act--glifo']}>
+        {/* Espaciador vacío que sólo aporta la PROPORCIÓN. Ver la nota de
+            `.act__marco` en el CSS: es lo que hace que 3/4 sea un mínimo y no
+            una jaula. */}
+        <span class="act__marco" aria-hidden="true"></span>
+        {a.imagen ? (
+          <Image
+            class="act__foto"
+            src={a.imagen}
+            alt=""
+            widths={[320, 480, 640]}
+            sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw"
+            loading="lazy"
+            quality={50}
+          />
+        ) : (
+          /* `aria-hidden`: el glifo no aporta nada que el título no diga ya, y
+             anunciar «imagen» ocho veces antes de cada título es ruido puro
+             (WCAG 1.1.1, gráfico decorativo acompañado de texto). */
+          <span class="act__glifo" aria-hidden="true"><Icono nombre={a.icono} tam={96} /></span>
+        )}
+        <div class="act__texto">
+          {/* <h2> y no <h3>: bajo el <h1> del banner no hay ningún otro
+              encabezado, así que estas ocho son las secciones de primer nivel
+              de la página. Lo cazó el auditor de accesibilidad —«salto de h1 a
+              h3», WCAG 1.3.1—, y es exactamente el defecto que un lector de
+              pantalla convierte en «falta un apartado aquí en medio». El nivel
+              del encabezado es estructura, no tamaño: el tamaño lo pone el CSS
+              y se queda igual. */}
+          <h2 class="act__titulo">{a.titulo[idioma]}</h2>
+          <p class="act__desc">{a.texto[idioma]}</p>
+          {/* `distancia` está en `null` en las ocho hasta que responda C-LLEG.
+              Cuando llegue el dato, esta línea aparece sola. */}
+          {a.distancia && <p class="act__distancia">{a.distancia[idioma]}</p>}
+        </div>
+      </article>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .actividades {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; gap: var(--space-5);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* 🔴 LA PROPORCIÓN ES UN MÍNIMO, NO UNA JAULA. Y se descubrió midiendo.
+     La primera versión era `display: flex` con `justify-content: flex-end` y
+     `aspect-ratio: 3/4` sobre la propia tarjeta. Se ve perfecta con estos
+     textos y a estos anchos — y **recorta en silencio** en cuanto el contenido
+     crece: alineado al final, el texto que no cabe se sale por ARRIBA y
+     `overflow: hidden` se lo come. Calibrado a propósito con un párrafo tres
+     veces más largo: la tarjeta seguía midiendo 290 px y **185 px de texto
+     quedaban fuera, empezando por el título**.
+
+     No hacía falta un texto absurdo para provocarlo: a 1024 px de ancho la
+     tarjeta más larga ya sólo tenía 22 px de holgura. Una traducción más larga,
+     una palabra más, o alguien con el tamaño de letra del navegador subido —que
+     es una preferencia de accesibilidad, no un caso raro— y se pierde el
+     titular sin que nada avise.
+
+     La solución es un espaciador vacío que comparte celda con el texto: la
+     altura de la celda es el MAYOR de los dos. Si el texto cabe, manda la
+     proporción 3/4 —la misma de las tarjetas de habitación, que es la
+     referencia que dio el cliente—; si no cabe, manda el texto y la tarjeta
+     crece. La rejilla iguala después las alturas de cada fila.
+
+     El patrón general: `overflow: hidden` sobre una altura fija no contiene un
+     desbordamiento, lo ESCONDE. Cualquier caja de altura fija con texto dentro
+     necesita una vía de escape. */
+  .act {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: var(--radius);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .act__marco, .act__texto { grid-area: 1 / 1; }
+  /* El espaciador no pinta nada: sólo reclama el alto de la proporción. */
+  .act__marco { aspect-ratio: 3 / 4; }
+  .act__texto { align-self: end; }
+
+  /* --- Modo GLIFO (el único que corre hoy) ---------------------------------
+     Fondo cálido y texto en tinta: 15.9:1, sin nada que medir. El glifo va
+     grande y muy tenue detrás del texto — ilustra sin competir con él. */
+  .act--glifo { background: linear-gradient(150deg, var(--color-surface-warm), var(--color-surface-alt)); }
+  .act__glifo {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    align-content: start;
+    padding-top: var(--space-7);
+    color: var(--color-accent);
+    opacity: 0.42;
+    z-index: -1;
+  }
+  .act--glifo .act__titulo { color: var(--color-ink); }
+  .act--glifo .act__desc { color: var(--color-ink-muted); }
+
+  /* --- Modo FOTOGRAFÍA -----------------------------------------------------
+     🔴 SIN MEDIR, PORQUE NO HAY FOTOGRAFÍAS TODAVÍA.
+     El texto va en blanco sobre un velo negro en degradado. La banda donde
+     REALMENTE cae el texto llega a 0.80 de opacidad, y ese número no es
+     estético: compuesto sobre el peor caso posible —una foto blanca pura— da
+     un fondo sRGB de 51, es decir 12.3:1 con el blanco. A 0.55 daría 4.4:1 y
+     no pasaría el 4.5:1 de WCAG 1.4.3.
+
+     El día que se añada una foto hay que VOLVER A MIRARLO con la foto puesta:
+     el degradado protege el texto, pero un recorte distinto puede dejar la
+     primera línea fuera de la banda densa. Es exactamente el riesgo R-22 de la
+     cabecera sobre el héroe, en otra tarjeta. */
+  .act__foto {
+    position: absolute; inset: 0; z-index: -1;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .act:not(.act--glifo)::after {
+    content: '';
+    position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.86) 0%,
+      rgb(0 0 0 / 0.80) 38%,
+      rgb(0 0 0 / 0.35) 62%,
+      rgb(0 0 0 / 0.05) 100%);
+  }
+  .act:not(.act--glifo) .act__titulo,
+  .act:not(.act--glifo) .act__desc,
+  .act:not(.act--glifo) .act__distancia { color: #fff; }
+
+  /* --- Texto ---------------------------------------------------------------
+     `position: relative` sin z-index propio: los dos fondos van a `z-index:-1`
+     dentro del `isolate` de la tarjeta, así que el texto queda encima sin
+     necesidad de apilar nada. */
+  .act__texto { position: relative; padding: var(--space-5); }
+  .act__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: 1.25;
+    margin-bottom: var(--space-2);
+  }
+  .act__desc { font-size: var(--text-sm); line-height: var(--leading-body); }
+  .act__distancia {
+    margin-top: var(--space-3);
+    font-family: var(--font-ui); font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide); text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  /* Dos columnas en tableta, CUATRO en escritorio — la rejilla que pidió el
+     cliente. 64rem y no 60: a 60rem cada tarjeta caía a 232 px de ancho y el
+     título de tres palabras se partía en cuatro renglones. */
+  @media (min-width: 40rem) { .actividades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .actividades { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+</style>

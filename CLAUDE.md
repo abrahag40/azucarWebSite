@@ -313,7 +313,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **44** públicas (22 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/` |
+| Páginas | **46** públicas (23 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/` |
 | Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
@@ -375,6 +375,16 @@ nada.
 
 **Las suites pasan a llamarse Bungalows**, en el nombre y en la URL — `/alojamiento/bungalow-mar/`.
 
+**`/actividades/` — «Qué hacer en Tulum»**, apartado suelto del menú y no colgado de
+Amenidades: lo de esa página no es del hotel. Ocho lugares en rejilla de cuatro, **sólo sitios
+públicos y ningún negocio** —recomendar un negocio es responder por él— y **ninguna distancia
+ni tiempo**, porque C-LLEG sigue sin responder. Van ilustradas con glifos dibujados: de esos
+ocho lugares no hay una sola fotografía en el archivo del hotel (R-31).
+
+**El menú tocó techo.** Ocho apartados es el máximo: el umbral de escritorio subió de 68rem a
+**72rem**, con la aritmética escrita en `Header.astro`, porque el logotipo creció 32 px y entró
+un apartado nuevo. El noveno no cabe ni bajando el tracking (R-32).
+
 **La paleta pasa de oro a pistacho** conservando entera la disciplina de contraste que la
 sostenía: tres tokens medidos contra los tres fondos del sitio. Revertir son tres líneas.
 Ver L-090.
@@ -387,6 +397,7 @@ Ver L-090.
 | La página de Eventos entera | **Inventada.** Sin cifras, a propósito (R-30) |
 | Código postal **77760** | Contradice el **77780** que publica su propio sitio (R-28, pregunta **C-CP**) |
 | La carta del restaurante | Sigue siendo de ejemplo. Lo que sí se resolvió es el **nombre** |
+| Las ocho fotos de «Qué hacer en Tulum» | **No existen.** Hay glifos dibujados en su lugar, y el hueco listo (R-31) |
 
 ### ⚠️ Datos sin verificar
 
@@ -470,7 +481,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **91 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **92 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

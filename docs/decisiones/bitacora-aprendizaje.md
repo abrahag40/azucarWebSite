@@ -2331,6 +2331,58 @@ hasta que sabes que ciento veinte era el número.
 
 ---
 
+## L-092 · `overflow: hidden` sobre una altura fija no contiene: esconde
+
+Al construir «Qué hacer en Tulum» (2026-09-01) las tarjetas se escribieron del modo obvio:
+
+```css
+.act {
+  display: flex; flex-direction: column; justify-content: flex-end;
+  aspect-ratio: 3 / 4;      /* la proporción de las tarjetas de habitación */
+  overflow: hidden;
+}
+```
+
+Se ve perfecta con los ocho textos escritos y a 1152 px de ancho. **Y recorta en silencio en
+cuanto el contenido crece**: con el texto alineado al final, lo que no cabe se sale por ARRIBA,
+y `overflow: hidden` se lo come empezando por el título.
+
+**Calibrado a propósito**, que es la única forma de verlo: se triplicó un párrafo desde la
+consola. La tarjeta seguía midiendo 290 px y **185 px de texto quedaban fuera**.
+
+Y no hacía falta un texto absurdo. Medido a 1024 px de ancho, la tarjeta más larga —«Reserva de
+Sian Ka'an»— tenía **22 px de holgura**. Una traducción algo más larga, una palabra más, o
+alguien con el tamaño de letra del navegador subido —que es una preferencia de accesibilidad,
+no un caso raro— y se pierde el titular sin que nada avise. Ningún guardián del proyecto lo
+habría cazado: el HTML es válido, axe no ve texto recortado por CSS y el auditor mira el
+marcado, no la geometría.
+
+**La solución: que la proporción sea un mínimo, no una jaula.** Un espaciador vacío comparte
+celda de rejilla con el texto, así que la altura es el mayor de los dos:
+
+```css
+.act { display: grid; grid-template-columns: minmax(0, 1fr); }
+.act__marco, .act__texto { grid-area: 1 / 1; }
+.act__marco { aspect-ratio: 3 / 4; }   /* sólo reclama alto */
+.act__texto { align-self: end; }
+```
+
+Verificado en los dos sentidos: con el texto normal la tarjeta mide 290 px —manda la
+proporción—; con el texto triplicado crece a 476 px y **no queda nada fuera**.
+
+> **El patrón:** cualquier caja de altura fija con texto dentro necesita una vía de escape.
+> `overflow: hidden` no es una contención, es una venda: convierte un defecto visible en uno
+> invisible, que es peor.
+
+**Nota de método, y por poco cuesta la lección entera.** La primera comprobación tras el arreglo
+dijo que seguía recortando. Estuve a un paso de concluir que la técnica no servía. El navegador
+estaba sirviendo el CSS anterior desde su caché: al preguntar por el DOM, el espaciador nuevo
+**no existía** en la página que estaba midiendo. Antes de creerse una medición que contradice lo
+que acabas de escribir, hay que comprobar que estás midiendo lo que acabas de escribir.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2363,5 +2415,7 @@ hasta que sabes que ciento veinte era el número.
 | R-27 | ~~**`verificar-todo.sh` y el workflow del CI no comprueban lo mismo**~~ **CERRADA 2026-09-01.** Los guardias se mudaron al script y el workflow sólo lo invoca. De paso entró `html-validate`, que estaba fuera y escondía un `<form>` sin botón de envío en el panel | ~~Medio~~ Ninguno | Correr `./scripts/verificar-todo.sh` es ahora correr el CI (L-088) |
 | R-28 | **El código postal del cliente no coincide con el de su propio sitio.** Dictó «77760» para el antetítulo del héroe; sus 26 páginas capturadas publican «CP 77780». Uno de los dos está mal | Medio | Se usa el del cliente, por ser la fuente más reciente. Pregunta **C-CP**: un código postal equivocado rompe entregas y mapas |
 | R-29 | **Dos de las cinco «amenidades» que el cliente pidió en el menú no existen en ninguna parte.** Day Pass / Beach Club y el Rooftop «White Pearl» no aparecen en sus 26 páginas; el texto publicado es nuestro | Medio | Marcado como contenido de ejemplo en `instalaciones` (`src/data/hotel.ts`). Confirmar o retirar antes de producción |
+| R-31 | **«Qué hacer en Tulum» no tiene ni una fotografía.** El archivo del hotel son 244 imágenes de la propiedad: ni un cenote, ni una ruina. Las ocho tarjetas van ilustradas con glifos propios | Medio | Pedir al hotel ocho fotografías del entorno, o comprarlas con licencia. El campo `imagen` está listo: poner la foto es una línea (L-092) |
+| R-32 | **El menú llegó a su techo: ocho apartados.** El noveno no cabe ni bajando el tracking, y el umbral de escritorio ya subió a 72rem por el logotipo más grande y el apartado nuevo | Bajo | Si hace falta un apartado más, sale otro. La aritmética está en `Header.astro` |
 | R-30 | **La página de Eventos es enteramente contenido inventado.** El sitio vigente no menciona eventos, y no sabemos tipos, aforos ni precios | Medio | Cero cifras publicadas, a propósito. Aviso en la cabecera de `src/data/eventos.ts` |
 | R-16 | La agencia anterior **provisionó una propiedad real en ResNexus** (`18DC254A-…`) con unidades cargadas. Se desconoce si sigue activa, si se paga y quién tiene los accesos | Medio-alto | Preguntas añadidas al bloque B de la entrevista |

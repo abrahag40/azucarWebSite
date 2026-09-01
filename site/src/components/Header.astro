@@ -91,6 +91,10 @@ const enlaces: Entrada[] = [
       { etiqueta: t('nav.eventosVisita'), href: `${ruta(idioma, 'eventos')}${ancla(idioma, 'eventosVisita')}` },
     ],
   },
+  // Apartado SUELTO, no colgado de «Amenidades» (cliente, 2026-09-01). Lo de
+  // esa página no es del hotel: las amenidades son lo que el hotel ofrece y por
+  // lo que responde; esto es el entorno, sobre el que no responde nadie.
+  { etiqueta: t('nav.actividades'), path: 'actividades', href: ruta(idioma, 'actividades') },
   { etiqueta: t('nav.faq'), path: 'preguntas-frecuentes', href: ruta(idioma, 'preguntas-frecuentes') },
   { etiqueta: t('nav.politicas'), path: 'politicas', href: ruta(idioma, 'politicas') },
 ];
@@ -363,10 +367,11 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {
-    /* `--space-4` y no `--space-5`: con siete apartados los seis huecos suman
-       144 px a 24 px cada uno, y ése era el otro empujón que sacaba el menú de
-       pantalla. A 16 px la barra sigue respirando y se ahorran 48 px. */
-    display: flex; align-items: center; gap: var(--space-4);
+    /* 12 px, tercer ajuste de este hueco y todos por la misma razón: el menú va
+       al límite y cada apartado nuevo se paga aquí. Fue 24 px con seis
+       apartados, 16 con siete y ahora 12 con ocho. Los siete huecos suman 84 px
+       en vez de 168. Ver la nota del umbral, más abajo. */
+    display: flex; align-items: center; gap: var(--space-3);
     list-style: none; padding: 0; margin: 0;
   }
   /* `> li > a`: SÓLO los enlaces de primer nivel.
@@ -379,7 +384,11 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .nav__lista > li > a {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
-    letter-spacing: 0.16em;
+    /* 0.12em. Cappa usa 0.20em y aquí ya se había bajado a 0.16 por espacio;
+       con ocho apartados hacen falta otros 35 px medidos. Sigue siendo tracking
+       ancho —se lee como navegación de hotel, no como texto corrido— y sólo
+       aplica en escritorio, que es donde vive esta barra. */
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-ink);
     text-decoration: none;
@@ -545,19 +554,34 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     color: var(--color-ink); text-decoration: none;
   }
 
-  /* 🔴 UMBRAL MEDIDO, Y LA SEGUNDA VEZ SE MIDIÓ MEJOR.
-     Al añadir «Restaurante» subí esto de 68rem a 76rem para que cupieran siete
-     apartados. Cabían — pero 76rem son 1216 px, y en cualquier portátil por
-     debajo de eso el menú horizontal DESAPARECÍA y salía la hamburguesa. El
-     enlace nuevo existía y no se veía: subir el umbral no arregló el problema,
-     lo escondió detrás de una pantalla más grande.
-     La corrección de verdad fue hacer que el menú QUEPA: «Preguntas
-     frecuentes» pasó a «FAQ» en la barra (−124 px) y el hueco entre apartados
-     bajó de 24 a 16 px (−48 px). Con eso el contenido suma ~983 px y vuelve a
-     caber en el umbral original, ya probado.
-     Si algún día se añade otro apartado: no subas este número. Acorta una
-     etiqueta, o plantéate si el menú ya tiene demasiadas entradas. */
-  @media (min-width: 68rem) {
+  /* 🔴 UMBRAL MEDIDO — TERCERA VEZ, Y ESTA VEZ SÍ SUBE. CON LA CUENTA DELANTE.
+     La nota anterior decía, en mis propias palabras: «si algún día se añade
+     otro apartado, NO subas este número; acorta una etiqueta». La regla era
+     buena y por eso lo primero fue intentar cumplirla. No da.
+
+     Lo que cambió desde entonces son DOS decisiones del cliente (2026-09-01),
+     no un descuido: el logotipo creció de 112 a 144 px de ancho —+32— y el menú
+     pasó de siete apartados a ocho. Entre las dos se comieron el margen.
+
+     Medido en el navegador, no estimado. Ancho que necesita la fila:
+
+       logotipo 144 + navegación 684 + acciones 229 + 2 huecos de 24  = 1105 px
+       con hueco de 12 px y tracking 0.12em                          = 1040 px
+
+     A 1088 px —el umbral viejo— el contenedor sólo ofrece 1001 px de ancho
+     útil, así que 1040 DESBORDA. El primer umbral donde cabe con margen real es
+     72rem = 1152 px, que deja 1065 útiles: **25 px de sobra**.
+
+     Antes de subirlo se probó lo que decía la nota vieja: bajar el tracking a
+     0.10em y el hueco a 10 px da 1007 px y ni así entra en 1088. Acortar más
+     etiquetas significaba tocar las que el cliente dictó.
+
+     Qué se pierde: entre 1088 y 1152 px sale la hamburguesa. Son los portátiles
+     de 1152×720; a partir de 1280 —la resolución más común— no cambia nada.
+
+     🔴 LA REGLA SIGUE EN PIE, Y AHORA MÁS: **ocho apartados es el techo**. El
+     noveno no cabe ni tocando el tracking. Si hace falta uno más, sale otro. */
+  @media (min-width: 72rem) {
     .menu { display: none; }
     .nav { display: block; }
     .cabecera__acciones { display: flex; }
@@ -594,7 +618,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     cursor: pointer; list-style: none;
     font-family: var(--font-ui);
     font-size: var(--text-sm);
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-ink);
     /* la altura mínima es del enlace de al lado; ver `.nav__lista a` */

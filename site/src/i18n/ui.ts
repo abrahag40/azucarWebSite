@@ -33,7 +33,7 @@ export const ui = {
     // «FAQ»: «Políticas y privacidad» mide 205 px y no cabe siete veces.
     'nav.politicas': 'Políticas',
     'nav.galeria': 'Galería',
-    'nav.actividades': 'Qué hacer en Tulum',
+    'nav.actividades': 'Actividades',
     'nav.ubicacion': 'Cómo llegar',
     // Marca de lo que aún no existe. Se anuncia, no se enlaza: un apartado del
     // menú que lleva a una página vacía es peor que un apartado que dice
@@ -188,6 +188,10 @@ export const ui = {
     'galeria.cerrar': 'Cerrar el visor',
 
     'instalaciones.titulo': 'Nuestros espacios',
+    'actividades.titulo': 'Qué hacer en Tulum',
+    'actividades.meta': 'Las ruinas frente al mar, los cenotes, Sian Ka’an, Cobá y la bahía de Akumal: qué hay alrededor de Azucar Hotel Tulum y por qué merece el viaje.',
+    'actividades.entrada': 'El hotel está en la franja de arena entre el mar y la laguna. Esto es lo que hay alrededor.',
+    'actividades.cierre': 'En recepción te ayudamos a organizar cualquiera de estas salidas: horarios, cómo llegar y qué llevar.',
     'nosotros.titulo': 'Nosotros',
     'nosotros.meta': 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Un Small Luxury Hotel frente al Caribe, en la zona hotelera de Tulum.',
     'nosotros.entrada': 'Un hotel artesanal frente al Caribe, hecho por manos mayas desde 2008.',
@@ -313,7 +317,7 @@ export const ui = {
     'nav.eventosVisita': 'Guided visit',
     'nav.politicas': 'Policies',
     'nav.galeria': 'Gallery',
-    'nav.actividades': 'What to do in Tulum',
+    'nav.actividades': 'Activities',
     'nav.ubicacion': 'Getting here',
     'nav.proximamente': 'coming soon',
     'nav.faq': 'FAQ',
@@ -430,6 +434,10 @@ export const ui = {
     'galeria.cerrar': 'Close the viewer',
 
     'instalaciones.titulo': 'Our spaces',
+    'actividades.titulo': 'What to do in Tulum',
+    'actividades.meta': 'The seafront ruins, the cenotes, Sian Ka’an, Cobá and Akumal Bay: what surrounds Azucar Hotel Tulum and why it is worth the trip.',
+    'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon. This is what is around it.',
+    'actividades.cierre': 'At reception we will help you arrange any of these outings: times, how to get there and what to bring.',
     'nosotros.titulo': 'About us',
     'nosotros.meta': 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. A Small Luxury Hotel facing the Caribbean, in Tulum\u2019s hotel zone.',
     'nosotros.entrada': 'A handcrafted hotel facing the Caribbean, made by Maya hands since 2008.',
@@ -573,6 +581,7 @@ export const segmentos = {
   ubicacion:   { es: 'ubicacion',   en: 'location' },
   contacto:    { es: 'contacto',    en: 'contact' },
   nosotros:    { es: 'nosotros',    en: 'about' },
+  actividades: { es: 'actividades', en: 'activities' },
   eventos:     { es: 'eventos',     en: 'events' },
   restaurante: { es: 'restaurante', en: 'restaurant' },
   reservar:    { es: 'reservar',    en: 'booking' },

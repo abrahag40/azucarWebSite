@@ -1,0 +1,59 @@
+---
+/**
+ * Qué hacer en Tulum.
+ *
+ * Apartado suelto en el menú, por decisión del cliente (2026-09-01), y no
+ * colgado de «Amenidades»: lo de aquí NO es del hotel. Las amenidades son lo
+ * que el hotel ofrece y responde por ello; esto es el entorno, sobre el que no
+ * responde nadie. Mezclarlos habría sugerido que el hotel organiza —y por tanto
+ * garantiza— salidas que no organiza.
+ *
+ * El contenido y sus dos reglas duras —sólo lugares públicos, ninguna
+ * distancia— están en `src/data/actividades.ts`.
+ */
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import RejillaActividades from '../components/RejillaActividades.astro';
+import FranjaLlamada from '../components/FranjaLlamada.astro';
+import { usarT, type Idioma } from '../i18n/ui';
+import banner from '../assets/galeria/04-vista-selva-mar.webp';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="actividades"
+  titulo={`${t('actividades.titulo')} | Azucar Hotel Tulum`}
+  descripcion={t('actividades.meta')}
+>
+  {/* La foto del banner es del hotel y muestra la selva y el mar desde el roof
+      top: ilustra el ENTORNO sin fingir ser ninguno de los ocho lugares. */}
+  <BannerPagina imagen={banner} titulo={t('actividades.titulo')} />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <p class="entradilla">{t('actividades.entrada')}</p>
+      <div class="rejilla">
+        <RejillaActividades idioma={idioma} />
+      </div>
+      <p class="cierre">{t('actividades.cierre')}</p>
+    </div>
+  </section>
+
+  <FranjaLlamada idioma={idioma} />
+</Base>
+
+<style>
+  .rejilla { margin-top: var(--space-8); }
+  .cierre {
+    margin-top: var(--space-8);
+    max-width: var(--container-text);
+    color: var(--color-ink);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-4);
+    font-family: var(--font-ui);
+    letter-spacing: var(--tracking-wide);
+  }
+</style>
