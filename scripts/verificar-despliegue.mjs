@@ -47,9 +47,11 @@ const pedir = async (ruta, opciones = {}) => {
 // ── 1. Las páginas que deben responder ──────────────────────────────────────
 // Si alguna cae, el sitio está roto para el huésped. Es motivo de reversión.
 const ESENCIALES = [
-  '/', '/alojamiento/', '/alojamiento/bungalow-mar', '/servicios/', '/ubicacion/',
+  '/', '/nosotros/', '/alojamiento/', '/alojamiento/bungalow-mar', '/servicios/',
+  '/eventos/', '/restaurante', '/ubicacion/',
   '/preguntas-frecuentes/', '/politicas/', '/contacto/', '/aviso-de-privacidad/',
-  '/en/', '/en/rooms/', '/en/rooms/bungalow-mar', '/en/services/', '/en/contact/',
+  '/en/', '/en/about/', '/en/rooms/', '/en/rooms/bungalow-mar', '/en/services/',
+  '/en/events/', '/en/restaurant', '/en/contact/',
   '/sitemap.xml', '/robots.txt',
 ];
 for (const ruta of ESENCIALES) {
@@ -63,9 +65,13 @@ for (const ruta of ESENCIALES) {
 const REDIRECCIONES = {
   '/habitaciones/': '/alojamiento/',
   '/amenidades-y-facilidades/': '/servicios/',
-  '/nosotros/': '/',
+  // `/nosotros/` YA NO REDIRIGE: desde el 2026-09-01 vuelve a tener pagina
+  // propia, a peticion del cliente. Esta comprobacion la esperaba en 301 y por
+  // eso el despliegue dio dos fallos con el criterio de reversion cumplido —
+  // sin que nada estuviera roto. Un guardian desactualizado grita igual que uno
+  // que acierta, y ensena a ignorarlo.
   '/en/home/': '/en/',
-  '/en/about-us/': '/en/',
+  '/en/about-us/': '/en/about/',
   '/en/amenities-facilities/': '/en/services/',
   '/politica-de-privacidad/': '/aviso-de-privacidad/',
 };

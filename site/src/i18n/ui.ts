@@ -648,5 +648,17 @@ export function ruta(idioma: Idioma, path = '') {
   // Sin ella Cloudflare Pages responde 308 y redirige a la version con barra:
   // un salto de red extra en los enlaces mas pulsados del sitio. Las fichas
   // (`alojamiento/bungalow-mar`) son archivos, no directorios, y no la llevan.
+  //
+  // 🔴 `restaurante` es la excepcion, y tambien por como se COMPILA. Su ruta es
+  // `[...pagina].astro` —un parametro *rest*, para poder no generar la pagina
+  // cuando `carta.publicable` es `false` devolviendo `[]` en `getStaticPaths`—
+  // y con el parametro vacio Astro emite `restaurante.html`, no
+  // `restaurante/index.html`. Enlazarla con barra producia un 308 medido en
+  // produccion, justo el salto que este `return` existe para evitar.
+  //
+  // Es la misma regla de siempre —barra si el destino es un directorio— sobre
+  // una pagina que resulta no serlo. Si algun dia se convierte en `index.astro`,
+  // esta excepcion se retira.
+  if (traducido === segmentos.restaurante[idioma]) return ruta;
   return resto.length === 0 ? `${ruta}/` : ruta;
 }
