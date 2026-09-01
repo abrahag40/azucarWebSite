@@ -34,7 +34,7 @@
  * pequeno, para cuando llegue el momento.
  */
 import { componerSolicitud, camposInvalidos, type Solicitud, type Rotulos } from '../../src/booking/solicitud';
-import { correoAcuseHtml, saludoPorHoraUTC } from '../../src/booking/correoHtml';
+import { correoAcuseHtml, correoManagerHtml, saludoPorHoraUTC } from '../../src/booking/correoHtml';
 import { usarT, type Idioma } from '../../src/i18n/ui';
 
 /** Sólo lo que este archivo necesita de un almacén KV -- no hace falta el
@@ -120,7 +120,17 @@ export const onRequestPost = async (contexto: { request: Request; env: Entorno }
   const { asunto, cuerpo: cuerpoManager } = componerSolicitud(cuerpo.solicitud, cuerpo.rotulos);
 
   try {
-    await enviarCorreo(env, env.CORREO_MANAGER, asunto, cuerpoManager);
+    // El manager recibe las DOS versiones. El HTML es lo que pidió el cliente
+    // el 2026-09-01; el texto plano sigue viajando siempre, porque es el que
+    // se lee cuando el cliente de correo no muestra HTML y el que evita que
+    // los filtros de spam castiguen a un transaccional por venir a medias.
+    //
+    // `responderA`: la respuesta va DIRECTA al huésped. Sin esto, «Responder»
+    // en el correo del manager contesta a `CORREO_REMITENTE` —un buzón que no
+    // lee nadie— y la respuesta se pierde sin que nadie se entere. Es un campo
+    // de una línea que arregla el fallo más caro posible de este flujo.
+    const managerHtml = correoManager(cuerpo.idioma, cuerpo.solicitud, cuerpo.rotulos);
+    await enviarCorreo(env, env.CORREO_MANAGER, asunto, cuerpoManager, managerHtml, cuerpo.solicitud.correo);
     const acuse = correoAcuse(cuerpo.idioma, cuerpo.solicitud, cuerpo.rotulos, cuerpoManager);
     await enviarCorreo(env, acuse.destino, acuse.asunto, acuse.texto, acuse.html);
   } catch (err) {
@@ -186,15 +196,32 @@ function correoAcuse(
   return { destino: s.correo, asunto: t('reserva.acuseAsunto'), texto, html };
 }
 
+/** El aviso al manager en HTML. Los rótulos de los datos son los mismos que
+ *  ya viajan en la petición; sólo el envoltorio sale del diccionario. */
+function correoManager(idioma: Idioma, s: Solicitud, r: Rotulos): string {
+  const t = usarT(idioma);
+  return correoManagerHtml(s, r, {
+    antetitulo: t('manager.antetitulo'),
+    intro: t('manager.intro'),
+    contacto: t('manager.contacto'),
+    responder: t('manager.responder'),
+    aviso: t('manager.aviso'),
+    cierre: t('manager.cierre'),
+    idioma,
+  });
+}
+
 async function enviarCorreo(
   env: Entorno,
   destino: string,
   asunto: string,
   texto: string,
   html?: string,
+  responderA?: string,
 ): Promise<void> {
-  const cuerpo: Record<string, string> = { from: env.CORREO_REMITENTE!, to: destino, subject: asunto, text: texto };
+  const cuerpo: Record<string, string | string[]> = { from: env.CORREO_REMITENTE!, to: destino, subject: asunto, text: texto };
   if (html) cuerpo.html = html;
+  if (responderA) cuerpo.reply_to = responderA;
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {

@@ -90,7 +90,9 @@ export function noches(llegada: string, salida: string): number {
 /**
  * El mensaje que el hotel recibe.
  *
- * Texto plano y no HTML: llega igual a cualquier cliente de correo, se lee en el
+ * Esta funcion compone el TEXTO PLANO, que desde el 2026-09-01 ya no es la unica
+ * version del correo al manager -tambien va en HTML, ver `correoHtml.ts`- pero
+ * sigue viajando SIEMPRE junto a el: llega igual a cualquier cliente de correo, se lee en el
  * teléfono del manager —que es donde se va a leer— y no puede romperse.
  *
  * El orden no es casual: **primero lo que el hotel necesita para responder**

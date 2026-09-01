@@ -325,7 +325,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | **Core Web Vitals** | **LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms** — los tres dentro de umbral |
 | **axe-core 4.13** | **0 violaciones**, re-medido el 2026-09-01 sobre 10 páginas tras el cambio de paleta a pistacho |
 | **html-validate** | **0 incidencias** en 45 páginas · **ya no es periódico: es un guardián de `verificar-todo.sh`**, y al entrar encontró un `<form>` sin botón de envío en el panel |
-| Pruebas unitarias | **29 casos** sobre `componerSolicitud`, el correo HTML y la concordancia de número · 0 dependencias nuevas |
+| Pruebas unitarias | **35 casos** sobre `componerSolicitud`, los dos correos HTML y la concordancia de número · 0 dependencias nuevas |
 
 ### ✅ Contradicción del restaurante — resuelta, con un matiz
 
@@ -480,7 +480,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **93 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **94 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

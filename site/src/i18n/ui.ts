@@ -124,6 +124,16 @@ export const ui = {
     // Correo de acuse al huésped (H3.5, ADR-0006). Deliberadamente NO promete
     // cotización ni tiempo de respuesta: eso depende de C3 y B1/B2, que siguen
     // sin responder. Repite el resumen que ya compone `componerSolicitud`.
+    // ── Aviso al manager (correo interno del hotel) ─────────────────────────
+    'manager.antetitulo': 'Nueva solicitud',
+    'manager.intro': 'Comprueba la disponibilidad y responde al huésped con el total, impuestos incluidos.',
+    'manager.contacto': 'Contacto del huésped',
+    'manager.responder': 'Responder al huésped',
+    // 🔴 El hallazgo crítico del proyecto, repetido donde ocurre el trabajo:
+    // el sitio vigente captura número de tarjeta y CVV (R-13, PCI-DSS 3.3.1 y
+    // 4.2.1). Un runbook se lee una vez; esto se lee en cada solicitud.
+    'manager.aviso': 'Nunca pidas número de tarjeta ni CVV, ni por correo ni por teléfono. Para apartar, envía el enlace de pago del hotel.',
+    'manager.cierre': 'Esta solicitud no compromete disponibilidad: nada queda apartado hasta que tú lo confirmes.',
     'reserva.acuseAsunto': 'Recibimos tu solicitud — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hola {nombre},',
     'reserva.acuseIntro': 'Esto es lo que recibimos. El hotel revisa la disponibilidad a mano y te responde por este mismo correo con el total, impuestos incluidos.',
@@ -392,6 +402,12 @@ export const ui = {
     'reserva.cierre': 'I understand this is a request subject to confirmation by the hotel.',
     'reserva.aviso': 'Request subject to confirmation by the hotel',
     'reserva.whatsapp': 'Message us on WhatsApp',
+    'manager.antetitulo': 'New request',
+    'manager.intro': 'Check availability and reply to the guest with the total, taxes included.',
+    'manager.contacto': 'Guest contact',
+    'manager.responder': 'Reply to the guest',
+    'manager.aviso': 'Never ask for a card number or CVV, by email or by phone. To hold the room, send the hotel payment link.',
+    'manager.cierre': 'This request does not hold anything: nothing is reserved until you confirm it.',
     'reserva.acuseAsunto': 'We received your request — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hi {nombre},',
     'reserva.acuseIntro': 'Here is what we received. The hotel checks availability by hand and will reply to this same email with the total, taxes included.',

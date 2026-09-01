@@ -2444,6 +2444,73 @@ entero en el segundo grupo, porque se ve distinto en Gmail, en Outlook y en Mail
 
 ---
 
+## L-094 · El mismo aspecto, jerarquías opuestas: diseñar por el trabajo, no por la marca
+
+El cliente pidió (2026-09-01) que el correo del manager llevara diseño, sobre la misma plantilla
+que el del huésped. La tentación evidente era duplicar el del huésped cambiando el destinatario.
+Sería un error, y el motivo es la única pregunta que importa al diseñar un correo transaccional:
+**¿qué viene a hacer aquí quien lo abre?**
+
+| | Acuse al huésped | Aviso al manager |
+|---|---|---|
+| Trabajo | Tranquilizarse | **Actuar**, muchas veces desde un teléfono y con prisa |
+| Primer elemento | Saludo por su nombre | **Las fechas**, grandes |
+| Los datos | Ordenados para leer | Ordenados para **cotejar** contra el cuadrante |
+| El contacto | No aparece | `mailto:` y `tel:` **pulsables** |
+| Remate | Es una solicitud, no una reserva | El aviso de **no pedir datos de tarjeta** |
+
+El envoltorio sí se comparte —franja oscura, serifa, superficies cálidas, acento del sitio—
+porque los manda el mismo hotel y el huésped recibe los dos. Lo que no se comparte es la
+jerarquía. *Una marca coherente no es la misma página repetida: es el mismo vocabulario
+resolviendo problemas distintos.*
+
+### Tres decisiones que sólo se ven pensando en el teléfono del manager
+
+1. **Las fechas arriba y grandes.** Sin PMS, la disponibilidad vive en su cabeza y en una
+   libreta (ADR-0003): el cotejo es lo primero que hace. Buscar las fechas entre seis filas es
+   tiempo de respuesta perdido, y el tiempo de respuesta es lo que convierte una solicitud en
+   una reserva.
+
+2. **`reply_to` con el correo del huésped.** Una línea en la llamada a Resend. Sin ella,
+   «Responder» contesta a `CORREO_REMITENTE` —un buzón que no lee nadie— y **la respuesta se
+   pierde sin que nadie se entere**: ni el manager, que cree haber contestado, ni el huésped,
+   que cree que no le contestaron. Es el fallo más caro imaginable de este flujo y cuesta un
+   campo.
+
+3. **El aviso de PCI-DSS dentro del correo.** Es el hallazgo crítico del proyecto (R-13) y el
+   runbook operativo lo pone arriba del todo. Pero **un runbook se lee una vez**; esto se lee en
+   cada solicitud, que es justo el momento en el que alguien podría pedir una tarjeta «para
+   apartar». Un recordatorio tiene que vivir donde ocurre el trabajo, no donde está documentado
+   el trabajo. Y lleva una prueba unitaria: no para que se vea, sino para que nadie lo quite
+   porque estorba.
+
+### El texto plano no se sustituye, se acompaña
+
+El argumento con el que este correo se escribió en texto plano —«llega igual a cualquier cliente
+de correo, se lee en el teléfono del manager»— **seguía siendo bueno**. Así que no se retiró: se
+mandan las dos partes, `text` y `html`. Es además lo que evita que los filtros de spam castiguen
+a un transaccional por venir a medias.
+
+> Cuando una petición choca con una decisión anterior, lo primero es mirar si el argumento de
+> entonces sigue en pie. Aquí seguía — y resultó que las dos cosas cabían.
+
+### 🟢 Y el guardián nuevo funcionó a la primera de verdad
+
+La caja del aviso necesitaba un rojo suave de fondo, `#fdf3f3`, que el sitio no tenía. La
+comprobación escrita la víspera (L-093) **falló inmediatamente**: «color del correo que ya no
+existe en `tokens.css`».
+
+Y tenía razón en algo que yo no había pensado. La respuesta correcta no era añadirlo a la lista
+de excepciones, sino **declarar `--color-error-suave` en `tokens.css`**: un color que el correo
+pinta y el sitio no conoce es exactamente cómo se separan los dos, que es el problema que ese
+guardián existe para impedir. Medido de paso: 6.91:1 del rojo de error sobre él.
+
+Es la primera vez en este proyecto que un guardián escrito el día anterior corrige el diseño del
+día siguiente, en vez de limitarse a confirmar lo que ya se sabía.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

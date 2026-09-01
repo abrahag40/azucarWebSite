@@ -52,6 +52,12 @@
      `surface-alt` y 6.92:1 en `surface-warm`. La lección L-036 fue exactamente
      esta —un token verificado contra blanco que fallaba en las cálidas—. */
   --color-error:         #9b2c2c;
+  /* Superficie de aviso. Nació en el aviso de datos de tarjeta del correo al
+     manager (2026-09-01) y se declara AQUÍ, no allí, porque el guardián de la
+     paleta lo exigió y tenía razón: un color que el correo pinta y el sitio no
+     conoce es exactamente cómo se separan las dos. Medido: el rojo de error da
+     6.91:1 sobre este fondo, muy por encima del 4.5:1 de WCAG 1.4.3. */
+  --color-error-suave:   #fdf3f3;
 
   /* #adadad y #999 de Cappa se descartan como color de texto: 2.24:1 y 2.85:1.
      Sólo sobreviven como bordes, donde no hay requisito de contraste de texto. */

@@ -40,7 +40,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { componerSolicitud } from '../site/src/booking/solicitud.ts';
-import { correoAcuseHtml, saludoPorHoraUTC } from '../site/src/booking/correoHtml.ts';
+import { correoAcuseHtml, correoManagerHtml, saludoPorHoraUTC } from '../site/src/booking/correoHtml.ts';
 import { ui } from '../site/src/i18n/ui.ts';
 
 const args = process.argv.slice(2);
@@ -83,6 +83,15 @@ function rotulos(idioma) {
           'bungalow-cielo': 'Bungalow Cielo',
           'habitacion-king-mar': 'King Room · Partial garden &/or ocean views',
         },
+  };
+}
+
+function textosManager(idioma) {
+  const t = ui[idioma];
+  return {
+    antetitulo: t['manager.antetitulo'], intro: t['manager.intro'],
+    contacto: t['manager.contacto'], responder: t['manager.responder'],
+    aviso: t['manager.aviso'], cierre: t['manager.cierre'], idioma,
   };
 }
 
@@ -162,12 +171,14 @@ for (const v of VARIANTES) {
   const r = rotulos(v.idioma);
   const { asunto, cuerpo } = componerSolicitud(v.s, r);
   const html = correoAcuseHtml(v.s, r, textos(v.idioma, v.horaUTC));
+  const htmlAdmin = correoManagerHtml(v.s, r, textosManager(v.idioma));
 
-  const fHuesped = join(salida, `${v.id}--huesped.html`);
-  const fAdmin = join(salida, `${v.id}--admin.txt`);
-  writeFileSync(fHuesped, html, 'utf8');
-  writeFileSync(fAdmin, `Asunto: ${asunto}\n\n${cuerpo}\n`, 'utf8');
-  generadas.push({ ...v, asunto, cuerpo, html, fHuesped, fAdmin });
+  writeFileSync(join(salida, `${v.id}--huesped.html`), html, 'utf8');
+  writeFileSync(join(salida, `${v.id}--admin.html`), htmlAdmin, 'utf8');
+  // El texto plano se sigue generando: no es un resto del pasado, es la
+  // alternativa que viaja SIEMPRE junto al HTML en los dos correos.
+  writeFileSync(join(salida, `${v.id}--admin.txt`), `Asunto: ${asunto}\n\n${cuerpo}\n`, 'utf8');
+  generadas.push({ ...v, asunto, cuerpo, html, htmlAdmin });
   console.log(`  ✓ ${v.id}`);
 }
 
@@ -198,17 +209,22 @@ const indice = `<!doctype html><html lang="es"><head><meta charset="utf-8">
  @media(min-width:64rem){.col+.col{border-top:0;border-left:1px solid #e4dfd8}}
  .col>h3{font:600 12px/1.4 system-ui;letter-spacing:.1em;text-transform:uppercase;color:#666;margin:0 0 10px}
  iframe{width:100%;height:660px;border:1px solid #e4dfd8;border-radius:4px;background:#fff}
+ details{margin-top:12px}
+ summary{cursor:pointer;font-size:13px;color:#4A6E2C;padding:6px 0}
  pre{white-space:pre-wrap;word-break:break-word;background:#f8f5f0;border:1px solid #e4dfd8;
    border-radius:4px;padding:14px;font:13px/1.6 ui-monospace,Menlo,monospace;margin:0;overflow-x:auto}
 </style></head><body><div class="env">
 <h1>Muestras de correo</h1>
-<p class="sub">Los dos correos del flujo de solicitud, en seis situaciones distintas. Izquierda: lo que recibe el <strong>huésped</strong>. Derecha: lo que recibe el <strong>manager</strong>.</p>
+<p class="sub">Los dos correos del flujo de solicitud, en seis situaciones distintas. Izquierda: lo que recibe el <strong>huésped</strong>. Derecha: lo que recibe el <strong>manager</strong> — los dos en HTML desde el 2026-09-01, y los dos con su alternativa en texto plano viajando siempre debajo.</p>
 ${generadas.map((v) => `<section class="v">
   <h2>${v.id}</h2>
   <p class="nota">${v.nota}</p>
   <div class="par">
     <div class="col"><h3>Huésped · HTML</h3><iframe srcdoc="${v.html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" title="${v.id}"></iframe></div>
-    <div class="col"><h3>Manager · texto plano</h3><pre>Asunto: ${v.asunto.replace(/&/g,'&amp;').replace(/</g,'&lt;')}\n\n${v.cuerpo.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</pre></div>
+    <div class="col"><h3>Manager · HTML</h3>
+      <iframe srcdoc="${v.htmlAdmin.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" title="${v.id} manager"></iframe>
+      <details><summary>Ver la alternativa en texto plano, que viaja siempre</summary>
+      <pre>Asunto: ${v.asunto.replace(/&/g,'&amp;').replace(/</g,'&lt;')}\n\n${v.cuerpo.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</pre></details></div>
   </div>
 </section>`).join('\n')}
 </div></body></html>`;
@@ -236,7 +252,7 @@ const DE = process.env.MUESTRAS_DE ?? 'Azucar Hotel Tulum <onboarding@resend.dev
 for (const v of generadas) {
   for (const envio of [
     { asunto: `[MUESTRA ${v.id}] Huésped · ${v.asunto}`, html: v.html, texto: undefined },
-    { asunto: `[MUESTRA ${v.id}] Manager · ${v.asunto}`, html: undefined, texto: v.cuerpo },
+    { asunto: `[MUESTRA ${v.id}] Manager · ${v.asunto}`, html: v.htmlAdmin, texto: v.cuerpo },
   ]) {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',

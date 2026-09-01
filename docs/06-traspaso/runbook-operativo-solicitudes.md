@@ -47,6 +47,20 @@ Dentro viene siempre lo mismo, en este orden:
 | **Algo que debamos saber** | Aniversarios, hora de llegada, accesibilidad |
 | Una línea final | El huésped dice que entiende que **es una solicitud, no una reserva** |
 
+**Arriba del todo van las fechas, en grande.** Es lo primero que necesitas mirar y por eso está
+puesto ahí: no tienes que buscarlo entre lo demás.
+
+**El correo y el teléfono del huésped se pulsan.** Tocando el correo se abre la respuesta con el
+asunto ya escrito; tocando el teléfono, se marca. Y si le das a **Responder** sin más, la
+respuesta va **directa al huésped** — no a un buzón que no lee nadie.
+
+> 🚫 **Dentro del correo verás el aviso de no pedir datos de tarjeta.** Está ahí a propósito, en
+> cada solicitud: es la regla que más caro sale romper y el sitio viejo la rompía. No es un
+> error del correo ni hace falta quitarlo.
+
+**Si tu correo no enseña imágenes ni colores, no pasa nada:** el mismo mensaje viaja también en
+texto sencillo y se lee igual. Nunca vas a perder una solicitud por eso.
+
 > **El sitio no muestra disponibilidad ni precios.** Es a propósito: como la
 > disponibilidad se lleva a mano, publicarla en línea acabaría en reservas que no
 > existen. El huésped ya sabe que tú le vas a contestar con las dos cosas.

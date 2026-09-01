@@ -15,7 +15,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { saludoPorHoraUTC, correoAcuseHtml } from './correoHtml.ts';
+import { saludoPorHoraUTC, correoAcuseHtml, correoManagerHtml } from './correoHtml.ts';
 
 test('saludoPorHoraUTC: mañana en Tulum (UTC-5)', () => {
   // 12:00 UTC = 07:00 en Tulum
@@ -98,4 +98,57 @@ test('declara su propia codificación y su idioma -- sin esto los acentos se ven
 
   const enIngles = correoAcuseHtml(base, R, { ...textos, idioma: 'en' });
   assert.match(enIngles, /<html lang="en">/);
+});
+
+
+/* ── Aviso al manager en HTML (cliente, 2026-09-01) ──────────────────────────
+   Lo que se comprueba aquí NO es que se vea bonito -eso son las muestras de
+   `scripts/muestras-correo.mjs`, que hay que MIRAR-. Es lo que un `assert`
+   sí puede afirmar y una mirada se deja: que el texto del huésped nunca se
+   ejecute, que los enlaces de acción existan, y que el aviso de tarjeta esté.
+   Ese último no es cosmético: es el hallazgo crítico del proyecto (R-13), y
+   una prueba es lo que impide que alguien lo quite "porque estorba". */
+const TM = {
+  antetitulo: 'Nueva solicitud', intro: 'Comprueba la disponibilidad.',
+  contacto: 'Contacto del huésped', responder: 'Responder al huésped',
+  aviso: 'Nunca pidas número de tarjeta ni CVV.',
+  cierre: 'Nada queda apartado hasta que tú lo confirmes.', idioma: 'es',
+};
+
+test('manager: el correo del huésped se puede pulsar, con el asunto ya puesto', () => {
+  const html = correoManagerHtml(base, R, TM);
+  assert.match(html, /href="mailto:ana@example\.com\?subject=/);
+  assert.match(html, /Responder al huésped/);
+});
+
+test('manager: el teléfono se limpia para `tel:` y se muestra tal cual lo escribieron', () => {
+  const html = correoManagerHtml({ ...base, telefono: '+52 (998) 123-4567' }, R, TM);
+  assert.match(html, /href="tel:\+529981234567"/, 'el enlace va sin espacios ni paréntesis');
+  assert.match(html, /\+52 \(998\) 123-4567/, 'lo visible conserva el formato del huésped');
+});
+
+test('manager: sin teléfono no hay fila de teléfono ni enlace roto', () => {
+  const html = correoManagerHtml({ ...base, telefono: '' }, R, TM);
+  assert.ok(!html.includes('tel:'), 'no debe quedar un tel: vacío');
+});
+
+test('manager: el texto del huésped NO se ejecuta', () => {
+  const html = correoManagerHtml(
+    { ...base, nombre: '<b>x</b>', comentarios: '<script>alert(1)</script>' }, R, TM,
+  );
+  assert.ok(!html.includes('<script>alert(1)</script>'), 'el script llegaría al buzón del hotel');
+  assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+  assert.match(html, /&lt;b&gt;x&lt;\/b&gt;/);
+});
+
+test('manager: el aviso de datos de tarjeta SIEMPRE viaja', () => {
+  // R-13, PCI-DSS 3.3.1 y 4.2.1. Va en el correo y no sólo en el runbook
+  // porque el runbook se lee una vez y esto se lee en cada solicitud.
+  assert.match(correoManagerHtml(base, R, TM), /Nunca pidas número de tarjeta ni CVV\./);
+});
+
+test('manager: las fechas van arriba, antes que ningún otro dato', () => {
+  const html = correoManagerHtml(base, R, TM);
+  assert.ok(html.indexOf('2026-03-10') < html.indexOf('Contacto del huésped'),
+    'el manager comprueba las fechas primero: si no van arriba, el diseño no hace su trabajo');
 });
