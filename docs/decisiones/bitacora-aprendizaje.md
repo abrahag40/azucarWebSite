@@ -3255,6 +3255,55 @@ exactamente los que le faltaban al héroe.
 
 ---
 
+## L-112 · Un hueco entre versales no se juzga solo: compite con el tracking
+
+Segunda vez que el cliente dice que el menú se ve apretado. La primera lo arreglé cambiando la
+PROPORCIÓN entre la flecha y su etiqueta (L-110) —y era correcto, la flecha ya no flota— pero el
+hueco entre apartados se quedó en 16 px y seguía leyéndose corto. **Dos veces es señal de que el
+número está mal, no la percepción.**
+
+La explicación es tipográfica y no de gusto: **estas etiquetas van en versales con
+`letter-spacing`**. El aire dentro de las palabras compite con el que las separa, así que un
+hueco que sería generoso en texto corrido se queda corto en cuanto las letras se abren. Con
+tracking a 0.12em, 16 px de separación equivalen ópticamente a bastante menos.
+
+Por eso los dos números se tocan a la vez, y sólo tienen sentido juntos:
+
+| | antes | ahora |
+|---|---|---|
+| hueco entre apartados | 16 px | **24 px** |
+| tracking de las etiquetas | 0.12em | **0.10em** |
+| razón flecha: dentro / fuera | 3.2 : 1 | **4.8 : 1** |
+
+Menos aire dentro hace que el mismo hueco se lea como más. **Bajar el tracking mejora la
+percepción y además paga parte del coste**, que es la clase de ajuste que sólo aparece cuando se
+entiende por qué molesta, no cuando se sube el número que molesta.
+
+### Y los 40 px se pagaron con palancas medidas una a una
+
+Antes de tocar nada se midió cuánto costaba cada opción, probándola aislada sobre el ancho mínimo
+de la cabecera:
+
+| palanca | efecto |
+|---|---|
+| hueco 16 → 24 | **+40 px** |
+| tracking 0.12 → 0.10em | −16 px |
+| hueco de la fila 16 → 8 | −16 px *(gratis: con `space-between` es sólo un mínimo)* |
+| relleno del selector de idioma 8 → 4 | −8 px |
+| relleno del botón 20 → 16 | −8 px |
+
+Resultado: mínimo **1062 px** contra un umbral de 1088. **26 px de holgura — más de los 18 que
+había antes de ensanchar el menú.** El menú respira más y la cabecera está menos apretada que al
+empezar.
+
+> **El patrón:** cuando algo no cabe, la pregunta no es «¿de dónde recorto?» sino «¿cuánto vale
+> cada recorte posible?». Medir las palancas por separado convierte una discusión de gusto en una
+> lista de precios, y entonces se elige la combinación que menos duele. Aquí ninguna de las cuatro
+> cesiones es perceptible; el hueco que compran, sí.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

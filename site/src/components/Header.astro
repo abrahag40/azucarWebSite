@@ -397,15 +397,16 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 
   .cabecera__fila {
     display: flex; align-items: center; justify-content: space-between;
-    /* 16 px y no 24, y es **gratis visualmente**. Con `space-between` este
-       `gap` sólo es un MÍNIMO: en cuanto sobra ancho —de 1200 px en adelante,
+    /* 8 px, y sigue siendo **gratis visualmente**. Con `space-between` este
+       `gap` sólo es un MÍNIMO: en cuanto sobra ancho —de 1150 px en adelante,
        que es donde vive casi todo el mundo— los huecos reales los decide el
-       espacio libre y este número no se nota. Donde sí actúa es en el extremo
+       espacio libre y este número no se ve. Donde actúa es en el extremo
        estrecho, y ahí cada píxel es rango de pantallas que conservan el menú
        horizontal en vez de la hamburguesa.
-       Medido: el ancho mínimo de la fila era 1159 px con el umbral en 1152 —es
-       decir, se pasaba por 7—. Estos 16 px lo bajan a 1143 y dejan margen real. */
-    gap: var(--space-4);
+       Es la palanca más barata de toda la cabecera, y por eso se usa dos veces:
+       24→16 para que el menú cupiera en 68rem, y 16→8 para pagar parte del
+       hueco nuevo entre apartados. */
+    gap: var(--space-2);
     min-height: var(--alto-cabecera);
   }
   /* `flex: none` — el logo NUNCA se encoge. Es el único hijo de la fila sin
@@ -443,25 +444,30 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {
-    /* 🔴 16 px, y esta vez el número NO sale de que quepa: sale de que se lea.
-       Quinto ajuste de este hueco —24 con seis apartados, 16 con siete, 12 con
-       ocho, 11 con siete, y ahora 16 con seis— y el primero que SUBE.
+    /* 🔴 24 px — `--space-5`, el valor que este hueco tuvo la primera vez.
+       Sexto ajuste, y el segundo consecutivo que SUBE: 24 con seis apartados,
+       16 con siete, 12 con ocho, 11 con siete, 16 con seis y ahora 24 otra vez.
+       El recorrido entero fue ceder ante el ancho y recuperar cuando hubo con
+       qué.
 
-       Los cuatro anteriores fueron cediendo ante el ancho, y el resultado fue
-       una barra apretada en la que la flecha de cada desplegable quedaba a 8 px
-       de su etiqueta y a 11 del apartado siguiente. La ley de proximidad de la
-       Gestalt dice que un elemento pertenece a aquello de lo que está más
-       cerca; a 1.4 a 1 no pertenecía a ninguno, y se leía como una flecha
-       suelta delante de la palabra equivocada.
+       Con 16 px seguía leyéndose apretado, y la explicación es tipográfica, no
+       de gusto: **estas etiquetas van en versales con `letter-spacing`**. El
+       espaciado dentro de las palabras compite con el espacio entre ellas, así
+       que un hueco que sería generoso en texto normal se queda corto en cuanto
+       las letras se separan. Por eso los dos números se tocan a la vez —el
+       hueco sube a 24 y el tracking baja a 0.10em—: lo que manda es la RAZÓN
+       entre ambos, no el hueco solo.
 
-       El arreglo son dos números, no uno: **16 px fuera y 5 dentro** (ver
-       `.desplegable__disparador`). Proporción 3.2 a 1, que es el rango en el
-       que la agrupación deja de ser ambigua.
+       La razón con la flecha del desplegable sube a **4.8 a 1** (5 px dentro,
+       24 fuera), muy por encima del 2.5 a 1 en el que la agrupación deja de ser
+       ambigua.
 
-       Y esto se puede pagar porque el menú bajó a seis apartados: el ancho
-       mínimo de la cabecera sube de 1057 a 1070 px y el umbral está en 1088.
-       Antes, con ocho, no había con qué. */
-    display: flex; align-items: center; gap: 16px;
+       De dónde salen los 40 px que cuesta, medidos uno a uno: tracking
+       0.12→0.10em (−16), hueco de la fila 16→8 (−16, gratis: con
+       `space-between` es sólo un mínimo) y cuatro píxeles a cada lado del
+       selector de idioma y del botón (−16). Mínimo final **1062 px** contra un
+       umbral de 1088: 26 px de holgura, más de la que había antes de subirlo. */
+    display: flex; align-items: center; gap: var(--space-5);
     list-style: none; padding: 0; margin: 0;
   }
   /* `> li > a`: SÓLO los enlaces de primer nivel.
@@ -474,11 +480,14 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .nav__lista > li > a {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
-    /* 0.12em. Cappa usa 0.20em y aquí ya se había bajado a 0.16 por espacio;
-       con ocho apartados hacen falta otros 35 px medidos. Sigue siendo tracking
-       ancho —se lee como navegación de hotel, no como texto corrido— y sólo
-       aplica en escritorio, que es donde vive esta barra. */
-    letter-spacing: 0.12em;
+    /* 0.10em. Cappa usa 0.20em y aquí se fue bajando por espacio: 0.16, luego
+       0.12 y ahora 0.10. Esta vez el motivo no es sólo el ancho — es que el
+       aire DENTRO de las palabras compite con el que las separa, y con 0.12em
+       la barra se leía apretada aunque el hueco entre apartados fuera de 16 px.
+       Menos tracking hace que el mismo hueco se lea como más, y de paso libera
+       16 px que son parte de lo que paga subirlo a 24. Sigue siendo espaciado
+       de navegación —no de texto corrido— y sólo aplica en escritorio. */
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     color: var(--color-ink);
     text-decoration: none;
@@ -527,9 +536,10 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
      leyéndose desproporcionada frente a «Contacto» o «Alojamiento» de al lado. */
   .cabecera__acciones .boton {
     min-height: 40px;
-    /* 20 px de relleno lateral y no 24: ocho píxeles que en un botón de 170 px
-       no ve nadie, y que son la mitad de la holgura de toda la fila. */
-    padding: var(--space-2) 20px;
+    /* 16 px de relleno lateral. Segunda rebaja —venía de 24, luego 20— y por el
+       mismo motivo: en un botón cuya etiqueta ya mide 130 px, ocho píxeles de
+       relleno no cambian su presencia y en la fila son parte de la holgura. */
+    padding: var(--space-2) 16px;
     font-size: var(--text-sm);
   }
   /* `inline-flex` y no el `inline` por defecto: en un <a> inline el padding
@@ -542,7 +552,10 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     font-family: var(--font-ui); font-size: var(--text-sm);
     letter-spacing: var(--tracking-nav); text-transform: uppercase;
     color: var(--color-ink); text-decoration: none;
-    padding-inline: var(--space-2);
+    /* 4 px en vez de 8: el enlace conserva sus 44 px de alto —que es lo que
+       exige WCAG 2.5.8— y sigue midiendo 45 px de ancho, muy por encima del
+       mínimo de 24. Son ocho píxeles que nadie ve y que el menú sí nota. */
+    padding-inline: 4px;
   }
   .cabecera__idioma { transition: color 0.35s ease; }
   .cabecera__idioma:hover { color: var(--color-accent-text); }
@@ -735,7 +748,9 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     cursor: pointer; list-style: none;
     font-family: var(--font-ui);
     font-size: var(--text-sm);
-    letter-spacing: 0.12em;
+    /* El mismo que `.nav__lista > li > a`: si los dos no coinciden, «Alojamiento»
+       vuelve a ser el único apartado que no viste como sus hermanos. */
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     color: var(--color-ink);
     /* la altura mínima es del enlace de al lado; ver `.nav__lista a` */
