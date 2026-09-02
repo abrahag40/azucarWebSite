@@ -428,20 +428,25 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {
-    /* 11 px, y es un número medido, no una talla de la escala.
-       Cuarto ajuste de este hueco: 24 px con seis apartados, 16 con siete, 12
-       con ocho y ahora 11 con siete otra vez. Que baje aun quitando un apartado
-       tiene explicación: «Antes de viajar» mide 121 px y las dos etiquetas que
-       sustituye sumaban 97.
-       Medido a 1152 px —el umbral de escritorio— la fila encajaba con **cero
-       holgura**: los huecos entre logotipo, menú y acciones se quedaban en su
-       mínimo de 24 px exactos, sin un píxel de sobra. Nada comprimido, pero
-       tampoco margen: una traducción más larga, otra métrica de fuente o
-       alguien con el tamaño de letra del navegador subido —que es una
-       preferencia de accesibilidad, no un caso raro— y desborda.
-       De 12 a 11 en los seis huecos son 6 px; con los 8 del botón, 14 px de
-       holgura real. Ninguno de los dos se nota; el desbordamiento sí. */
-    display: flex; align-items: center; gap: 11px;
+    /* 🔴 16 px, y esta vez el número NO sale de que quepa: sale de que se lea.
+       Quinto ajuste de este hueco —24 con seis apartados, 16 con siete, 12 con
+       ocho, 11 con siete, y ahora 16 con seis— y el primero que SUBE.
+
+       Los cuatro anteriores fueron cediendo ante el ancho, y el resultado fue
+       una barra apretada en la que la flecha de cada desplegable quedaba a 8 px
+       de su etiqueta y a 11 del apartado siguiente. La ley de proximidad de la
+       Gestalt dice que un elemento pertenece a aquello de lo que está más
+       cerca; a 1.4 a 1 no pertenecía a ninguno, y se leía como una flecha
+       suelta delante de la palabra equivocada.
+
+       El arreglo son dos números, no uno: **16 px fuera y 5 dentro** (ver
+       `.desplegable__disparador`). Proporción 3.2 a 1, que es el rango en el
+       que la agrupación deja de ser ambigua.
+
+       Y esto se puede pagar porque el menú bajó a seis apartados: el ancho
+       mínimo de la cabecera sube de 1057 a 1070 px y el umbral está en 1088.
+       Antes, con ocho, no había con qué. */
+    display: flex; align-items: center; gap: 16px;
     list-style: none; padding: 0; margin: 0;
   }
   /* `> li > a`: SÓLO los enlaces de primer nivel.
@@ -703,7 +708,15 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
        «Alojamiento» era el único enlace de la barra que no vestía igual que
        los demás. Mismas cinco declaraciones que `.nav__lista > li > a`, línea
        por línea. */
-    display: inline-flex; align-items: center; gap: var(--space-2);
+    /* 🔴 5 px, y es la mitad del arreglo. El otro 5 está en `.nav__lista`.
+       La flecha estaba a **8 px de su etiqueta y a 11 del siguiente apartado**:
+       una proporción de 1.4 a 1. Por la ley de proximidad de la Gestalt, un
+       elemento pertenece a aquello de lo que está más cerca, y a 1.4 a 1 no
+       pertenece a ninguno de los dos — flota entre ambos, que es exactamente
+       lo que se veía: «las flechas están muy cerca del siguiente item».
+       Con 5 px dentro y 16 fuera la proporción pasa a **3.2 a 1**: la flecha
+       queda inequívocamente pegada a su palabra. */
+    display: inline-flex; align-items: center; gap: 5px;
     cursor: pointer; list-style: none;
     font-family: var(--font-ui);
     font-size: var(--text-sm);

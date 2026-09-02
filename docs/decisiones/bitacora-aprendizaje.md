@@ -3161,6 +3161,43 @@ día como «no lo veo para acceder desde el menú».
 
 ---
 
+## L-110 · «Pixel perfect» es una proporción, no un número
+
+El cliente dijo que el menú se veía apretado y que **las flechas de despliegue estaban muy cerca
+del siguiente apartado**. La descripción era exacta, y el diagnóstico salió de medir las dos
+distancias que rodean a cada flecha:
+
+| | medido |
+|---|---|
+| etiqueta → su propia flecha | **8 px** |
+| flecha → siguiente apartado | **11 px** |
+| proporción | **1.4 a 1** |
+
+Ahí está todo. Por la **ley de proximidad de la Gestalt**, un elemento pertenece visualmente a
+aquello de lo que está más cerca. A 1.4 a 1 la flecha no pertenece a ninguno de los dos: flota
+entre dos palabras y el ojo la asigna, mitad de las veces, a la equivocada. No era que faltara
+espacio en general — era que **el espacio estaba mal repartido**.
+
+El arreglo son dos números que sólo tienen sentido juntos: **5 px dentro y 16 fuera**, proporción
+**3.2 a 1**. A partir de 2.5 a 1 la agrupación deja de ser ambigua; por debajo de 2, discute.
+
+> Ajustar «a ojo» habría subido el hueco entre apartados y dejado la flecha igual de suelta,
+> porque el problema no era la distancia absoluta sino la **relación entre la de dentro y la de
+> fuera**. Cuando algo «se ve apretado», mide las dos distancias que compiten antes de tocar una.
+
+### Y es el primer ajuste de este hueco que SUBE
+
+Quinta vez que se toca: 24 px con seis apartados, 16 con siete, 12 con ocho, 11 con siete… y
+ahora **16 con seis**. Los cuatro anteriores fueron cesiones al ancho — cada apartado nuevo se
+pagaba aquí— y el precio acumulado fue una barra apretada donde la agrupación se rompió.
+
+Se puede pagar porque agrupar el menú liberó ancho: el mínimo de la cabecera sube de 1057 a
+1070 px contra un umbral de 1088, y quedan 18 px. **Reducir el número de apartados no sirvió sólo
+para que cupieran: sirvió para poder volver a separarlos bien.**
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
