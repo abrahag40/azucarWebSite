@@ -73,7 +73,30 @@ const prefijosDinamicos = (fuente) => {
 
 /** Clases que la plantilla de un componente escribe en el marcado. */
 const usadas = (fuente) => {
-  const plantilla = fuente.split(/<style[\s>]/)[0];
+  // Sólo la PLANTILLA, nunca el frontmatter ni los comentarios.
+  //
+  // Los `{/* … */}` se quitan porque un comentario que menciona una clase para
+  // explicar por qué NO se usa contaba como si la usara. Es la misma trampa
+  // que ya se corrigió del lado del CSS y estaba a medio arreglar: se
+  // limpiaban los `/* */` de las hojas y no los de las plantillas. Se descubrió
+  // al documentar dentro de un componente que `class="entradilla"` era el
+  // nombre EQUIVOCADO — el script leyó la cita y dio la clase por viva.
+  //
+  // 🔴 Y HAY QUE CORTAR EL FRONTMATTER PRIMERO. El primer intento aplicaba el
+  // borrado de comentarios a todo lo anterior al `<style>`, frontmatter
+  // incluido. Ahí hay JavaScript lleno de `{` y de `/* */`, así que el patrón
+  // enganchaba una llave de un objeto con el `*/` de un comentario TREINTA
+  // líneas más abajo y se comía marcado real por el camino: `.solicitud`, que
+  // está en el `<form>`, apareció de golpe como definida y no usada.
+  // Lo cazó el propio script en la misma ejecución en que se estrenaba el
+  // arreglo — la mejor demostración posible de para qué sirve.
+  const cuerpo = fuente.startsWith('---')
+    ? fuente.slice(fuente.indexOf('\n---', 3) + 4)
+    : fuente;
+  const plantilla = cuerpo
+    .split(/<style[\s>]/)[0]
+    .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ');
   const s = new Set();
   for (const m of plantilla.matchAll(/class(?::list)?\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([\s\S]*?)\}\s*(?=[\s/>]))/g)) {
     const crudo = m[1] ?? m[2] ?? m[3] ?? '';
@@ -123,6 +146,8 @@ const INTENCIONALES = new Map([
   ['solicitud__formulario', 'columna de la rejilla de /reservar/'],
   ['legal__apartado', 'agrupador semántico dentro del texto legal'],
   ['politicas__grupo', 'agrupador semántico dentro de las políticas'],
+  ['instalacion__texto', 'columna de la rejilla de instalaciones; la coloca el padre'],
+  ['whatsapp-flotante__icono', 'el <svg> del botón flotante lleva sus medidas propias'],
 ]);
 
 const globales = new Set();
@@ -174,7 +199,7 @@ if (rojas.length) {
     console.log(`    .${c}\n      usada en  ${rel(f)}\n      definida en  ${otros.join(', ')}  ← no llega\n`);
 }
 if (amarillas.length) {
-  console.log(`  ⚠ ${amarillas.length} clase(s) usadas y no definidas en ninguna parte:\n`);
+  console.log(`  ✗ ${amarillas.length} clase(s) usadas y no definidas en NINGUNA parte:\n`);
   const porClase = new Map();
   for (const { f, c } of amarillas) porClase.set(c, [...(porClase.get(c) ?? []), rel(f)]);
   for (const [c, fs] of porClase) console.log(`    .${c}  —  ${fs.join(', ')}`);
@@ -193,4 +218,24 @@ if (repetidas.length) {
 if (!rojas.length && !amarillas.length && !repetidas.length && !muertas.length)
   console.log(`  ✓ Ninguna clase huérfana. (${INTENCIONALES.size} declaradas sin estilo a propósito.)\n`);
 
-process.exit(rojas.length ? 1 : 0);
+/* 🔴 LAS AMARILLAS TAMBIÉN FALLAN, DESDE EL 2026-09-02.
+   Eran un aviso, y un aviso que no rompe nada no lo lee nadie: `.entradilla`
+   estaba en esta lista —usada en CUATRO vistas y definida en ninguna parte— y
+   el script la venía señalando sin consecuencia. La clase correcta es
+   `.entrada-pagina`; el párrafo de presentación de /nosotros/, /eventos/,
+   /restaurante/ y /actividades/ llevaba semanas sin un solo estilo. Lo notó el
+   cliente —«el texto de inicio se ve demasiado simple»—, no el script, que lo
+   sabía y lo susurraba.
+
+   Una clase sin estilo NO da error, NO rompe el build y NO la ve ningún auditor
+   de accesibilidad ni de HTML: se degrada, y el resultado tiene aspecto de
+   decisión de diseño. Es exactamente lo que esta herramienta existe para
+   cazar, así que ahora falla.
+
+   Si una clase es un envoltorio sin estilo a propósito, va a `INTENCIONALES`
+   con su motivo escrito. Si el motivo no se puede escribir, no era intencional.
+
+   Las otras dos listas siguen siendo avisos, y con razón: `:global()` hace que
+   una clase se defina legítimamente fuera de su componente, y dos componentes
+   pueden compartir nombre sin pisarse porque Astro los aísla. */
+process.exit(rojas.length || amarillas.length ? 1 : 0);

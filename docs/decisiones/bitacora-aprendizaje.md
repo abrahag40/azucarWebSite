@@ -2647,6 +2647,102 @@ estaba puesto; el guardián mentía.
 
 ---
 
+## L-098 · Un aviso que no rompe nada no lo lee nadie — ni yo
+
+El cliente escribió: «el texto de inicio se ve demasiado simple». Lo era: el párrafo de
+presentación de `/actividades/`, `/nosotros/`, `/eventos/` y `/restaurante/` llevaba
+`class="entradilla"`, **una clase que no existe en ninguna hoja del sitio**. La buena es
+`.entrada-pagina`. Cuatro páginas con un párrafo sin un solo estilo, durante semanas.
+
+Lo humillante es que **el proyecto ya tenía la herramienta que lo detecta y venía diciéndolo**.
+`verificar-estilos.mjs` la listaba en cada ejecución:
+
+```
+⚠ 6 clase(s) usadas y no definidas en ninguna parte:
+  .entradilla  —  views/Actividades.astro, views/Eventos.astro, views/Nosotros.astro, views/Restaurante.astro
+```
+
+Un aviso, no un fallo. `process.exit(rojas.length ? 1 : 0)` — las amarillas no rompían nada. Y
+una comprobación que no rompe nada se convierte en decoración de la consola: la vi salir docenas
+de veces y no la leí ni una.
+
+**Es literalmente la lección que el propio script lleva escrita en su cabecera**, sobre por qué
+existe la lista de excepciones: *«un aviso que siempre devuelve trece avisos se deja de leer a la
+segunda semana, y entonces el aviso número catorce —el que sí importa— pasa desapercibido»*
+(L-047). Estaba aplicada a las excepciones y no al aviso principal.
+
+Ahora las amarillas fallan. Las tres clases que legítimamente no llevan estilo —envoltorios de
+rejilla— van a `INTENCIONALES` con su motivo escrito, que es la regla de siempre: **si no se
+puede escribir el motivo, no era intencional**.
+
+> **El patrón, y va por la tercera vez en este proyecto:** la diferencia entre una herramienta y
+> un guardián es el código de salida. Una clase que no existe no da error, no rompe el build, no
+> la ve ningún auditor de accesibilidad ni de HTML — se degrada, y el resultado **tiene aspecto
+> de decisión de diseño**. Por eso lo encontró el cliente y no la máquina que ya lo sabía.
+
+### Y al arreglarlo, el arreglo se rompió a sí mismo — dos veces
+
+**Primero:** documenté dentro del componente que `class="entradilla"` era el nombre equivocado…
+y el script leyó la cita del comentario y volvió a dar la clase por viva. El propio script
+limpiaba los `/* */` de las hojas de estilo —esa trampa ya estaba corregida— pero no los
+`{/* */}` de las plantillas. Estaba a medio arreglar.
+
+**Y al limpiarlos, el patrón se comió marcado real.** Aplicaba el borrado a todo lo anterior al
+`<style>`, frontmatter incluido: ahí hay JavaScript lleno de `{` y de `/* */`, así que enganchó
+una llave de un objeto con el `*/` de un comentario treinta líneas más abajo. `.solicitud`, que
+está en el `<form>`, apareció de golpe como definida y no usada.
+
+Lo cazó **el propio script, en la misma ejecución en la que se estrenaba el arreglo**. Es la
+mejor demostración posible de para qué sirve: la herramienta que buscaba clases huérfanas
+encontró la que ella misma acababa de dejar huérfana.
+
+> Cualquier análisis que lea código fuente con expresiones regulares tiene que **cortar primero
+> los ámbitos** —frontmatter, comentarios, cadenas— y buscar después. Es la cuarta vez en dos
+> días que una comprobación falla por leer el código como si fuera texto plano.
+
+---
+
+## L-099 · Tres columnas caben más texto que cuatro
+
+El cliente pidió pasar la rejilla de actividades de cuatro columnas a tres, «para aumentar el
+tamaño de la imagen». La intuición dice que menos columnas = menos contenido a la vista. La
+aritmética dice lo contrario:
+
+| | 4 columnas | 3 columnas |
+|---|---|---|
+| ancho de tarjeta | 280 px | **384 px** (+37 %) |
+| caracteres por línea | ~30 | **~48** |
+| renglones del mismo texto | 6-7 | **3-4** |
+| alto ocupado por el texto | ~200 px | ~150 px |
+
+**El mismo texto, sin quitar una palabra, ocupa un tercio menos de alto** — porque la línea es
+más larga. La queja era «hay tanto texto que no se ven las fotos», y la causa no era la cantidad
+de texto: era el ancho de la columna. Ensanchar la tarjeta resuelve las dos mitades a la vez.
+
+De paso, ~48 caracteres por línea entra en la medida de lectura recomendada (45-75); a 30 el ojo
+salta de renglón cada tres palabras, que es lo que hacía que el bloque **pareciera** más largo de
+lo que era.
+
+> **El patrón:** cuando un bloque de texto se ve demasiado largo, medir el ANCHO antes de
+> recortar el contenido. La sensación de longitud la produce el número de renglones, no el número
+> de palabras.
+
+### La animación que no promete lo que no cumple
+
+Se pidió también hover en las tarjetas. Estas tarjetas **no son enlaces a propósito** —no
+recomendamos negocios, así que no llevan a ninguna parte—, y ahí cualquier efecto de los
+habituales —elevarse, proyectar sombra, subrayar el título— **promete una navegación que no
+existe**. Se mueve sólo la fotografía, con un zoom lento de 1.5 s: se lee como que la imagen está
+viva, no como un botón.
+
+`scale` va sobre la imagen y no sobre la tarjeta, porque escalar la tarjeta movería también el
+texto, y un texto que se desplaza bajo el cursor es justo lo que impide leerlo.
+
+> Una animación de hover es una promesa. Antes de elegirla hay que saber qué pasa al hacer clic.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

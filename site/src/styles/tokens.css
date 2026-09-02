@@ -141,6 +141,13 @@
 
   --radius-sm: 2px;
   --radius:    4px;
+  /* Radio GRANDE, para tarjetas que son sobre todo fotografía. Nace en «Qué
+     hacer en Tulum» a petición del cliente («las fotografías muy cuadradas»).
+     Cappa es de esquina viva y por eso el resto del sitio se queda en 4px: una
+     tarjeta de 384px de ancho con 14px de radio se lee como pieza aparte; el
+     mismo radio en un botón de 40px lo convertiría en otra cosa.
+     Si algún día se quiere redondear todo el sitio, se cambia `--radius`. */
+  --radius-lg: 14px;
 
   /* --- Movimiento -------------------------------------------------------- */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);

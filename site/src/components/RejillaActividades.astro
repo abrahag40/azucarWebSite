@@ -108,18 +108,21 @@ const { idioma } = Astro.props;
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    border-radius: var(--radius);
+    /* Radio grande, pedido por el cliente. Ver `--radius-lg` en `tokens.css`:
+       el resto del sitio sigue en 4 px porque Cappa es de esquina viva, y una
+       tarjeta que es sobre todo fotografía admite lo que un botón no. */
+    border-radius: var(--radius-lg);
     overflow: hidden;
     isolation: isolate;
   }
   .act__marco, .act__texto { grid-area: 1 / 1; }
   /* El espaciador no pinta nada: sólo reclama el alto de la proporción. */
-  /* 5/7 y no 3/4 desde que hay fotografías (2026-09-02). Estas tarjetas llevan
-     el texto DENTRO, así que texto y foto se reparten la misma caja: con 3/4 el
-     texto ocupaba 200 de 373 px y la fotografía quedaba en una franja. El
-     cliente pidió fotos, no fondos. Un poco más de alto —y textos recortados a
-     una sola frase— devuelven la imagen a dos tercios de la tarjeta. */
-  .act__marco { aspect-ratio: 5 / 7; }
+  /* 4/5 desde que la rejilla es de tres. Con tarjetas de 384 px, 5/7 daba 538
+     px de alto: una columna tan alta que la última fila se quedaba sola en la
+     pantalla. 4/5 da 480 px, el texto ocupa ~150 y a la fotografía le quedan
+     dos tercios largos. La proporción sigue siendo un mínimo, no una jaula:
+     si el texto crece, manda el texto (ver la nota de arriba). */
+  .act__marco { aspect-ratio: 4 / 5; }
   .act__texto { align-self: end; }
 
   /* --- Modo GLIFO (respaldo desde que hay fotografías) ---------------------
@@ -169,10 +172,33 @@ const { idioma } = Astro.props;
 
      El degradado de la tarjeta se queda, mucho más suave: ya no protege nada,
      sólo asienta la imagen contra el borde inferior. */
+  /* --- Animación de hover ---------------------------------------------------
+     🔴 SÓLO LA FOTOGRAFÍA SE MUEVE, y es una decisión, no una limitación.
+     Estas tarjetas NO son enlaces —no llevan a ninguna parte a propósito: ver
+     la nota de arriba sobre no dar publicidad gratuita—, así que cualquier
+     efecto que sugiera «púlsame» —elevarse, proyectar sombra, subrayar el
+     título— promete una navegación que no existe. Un zoom lento sobre la
+     imagen se lee como que la foto está viva, no como un botón.
+
+     `scale` sobre la imagen y no sobre la tarjeta: escalar la tarjeta entera
+     movería también el texto, y un texto que se desplaza bajo el cursor es
+     justo lo que hace difícil leerlo.
+
+     1.5 s y no 0.4: a esta escala un zoom rápido da un tirón. La curva sale de
+     `--ease` del sitio. */
   .act__foto {
     position: absolute; inset: 0; z-index: -1;
     width: 100%; height: 100%;
     object-fit: cover;
+    transition: scale 1.5s var(--ease);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .act:hover .act__foto { scale: 1.07; }
+  }
+  /* WCAG 2.3.3: quien pide menos movimiento no recibe ninguno. */
+  @media (prefers-reduced-motion: reduce) {
+    .act__foto { transition: none; }
+    .act:hover .act__foto { scale: 1; }
   }
   .act:not(.act--glifo)::after {
     content: '';
@@ -201,16 +227,37 @@ const { idioma } = Astro.props;
      dentro del `isolate` de la tarjeta, así que el texto queda encima sin
      necesidad de apilar nada. */
   .act__texto { position: relative; padding: var(--space-5); }
+  /* El titular sube de 20 a 24 px al haber más ancho: en una tarjeta de 384 px
+     un título de 20 px competía de tú a tú con el párrafo y la tarjeta se leía
+     como un bloque uniforme. `text-wrap: balance` reparte las dos líneas en vez
+     de dejar una palabra suelta abajo, que es el defecto clásico de un titular
+     con serifa a dos renglones. */
   .act__titulo {
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    line-height: 1.25;
-    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+    line-height: 1.2;
+    text-wrap: balance;
+    margin-bottom: var(--space-3);
   }
   /* `line-height` más corto que el del cuerpo del sitio: sobre una fotografía
      un bloque muy aireado se lee PEOR, no mejor — el ojo pierde el renglón
-     cuando el fondo tiene detalle. */
-  .act__desc { font-size: var(--text-sm); line-height: 1.5; }
+     cuando el fondo tiene detalle.
+
+     `text-wrap: pretty` evita la línea huérfana de una sola palabra al final.
+     Y NO se justifica: el texto justificado en una columna de ~48 caracteres
+     abre ríos de espacio entre palabras, y sobre una fotografía esos huecos se
+     ven el doble. Alineado a la izquierda, el borde derecho irregular es lo
+     que da al ojo la referencia para volver al principio del renglón.
+
+     `opacity: 0.92` en vez de un gris: sobre foto, un blanco al 92 % conserva
+     el contraste medido (el velo no cambia) y quita la dureza del blanco puro
+     en un párrafo largo. */
+  .act__desc {
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    text-wrap: pretty;
+    opacity: 0.92;
+  }
   .act__distancia {
     margin-top: var(--space-3);
     font-family: var(--font-ui); font-size: var(--text-sm);
@@ -221,6 +268,17 @@ const { idioma } = Astro.props;
   /* Dos columnas en tableta, CUATRO en escritorio — la rejilla que pidió el
      cliente. 64rem y no 60: a 60rem cada tarjeta caía a 232 px de ancho y el
      título de tres palabras se partía en cuatro renglones. */
+  /* 🔴 TRES columnas y no cuatro, a petición del cliente y con la aritmética
+     de su lado. A cuatro, cada tarjeta medía 280 px y el texto ocupaba más de
+     la mitad: el reproche era «hay tanto texto que no se ven las fotos», y
+     tenía razón. A tres, la tarjeta pasa a **384 px** —un 37 % más ancha— y el
+     mismo texto cabe en menos renglones porque la línea es más larga: de ~30 a
+     ~48 caracteres. Menos alto de texto y más ancho de foto, sin quitar una
+     palabra.
+
+     Los ocho lugares quedan en 3 + 3 + 2 en vez de 4 + 4. Una última fila
+     incompleta no es un defecto: las tarjetas conservan su tamaño y la fila se
+     alinea a la izquierda, que es como se lee. */
   @media (min-width: 40rem) { .actividades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 64rem) { .actividades { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .actividades { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 </style>

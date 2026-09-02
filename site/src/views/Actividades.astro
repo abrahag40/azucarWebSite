@@ -35,7 +35,13 @@ const t = usarT(idioma);
 
   <section class="seccion">
     <div class="contenedor">
-      <p class="entradilla">{t('actividades.entrada')}</p>
+      {/* La entradilla llevaba `class="entradilla"` — una clase que NO EXISTE
+          en ninguna hoja del sitio. El párrafo salía sin un solo estilo en
+          ésta y en otras tres páginas, y así lo vio el cliente: «el texto de
+          inicio se ve demasiado simple». La clase buena es `entrada-pagina`.
+          `verificar-estilos.mjs` lo venía avisando sin romper nada; desde hoy
+          rompe. */}
+      <p class="entrada-pagina entrada-pagina--destacada">{t('actividades.entrada')}</p>
       <div class="rejilla">
         <RejillaActividades idioma={idioma} />
       </div>
@@ -48,6 +54,21 @@ const t = usarT(idioma);
 </Base>
 
 <style>
+  /* La entradilla de ESTA página pesa más que en las demás: es la que hace el
+     trabajo de encuadre —«el mar es sólo una de las ocho razones»— y de ella
+     depende que se lean las ocho tarjetas. Sube a `--text-lg`, se le da la
+     medida de lectura y se le pone la regla de acento que el sitio usa para
+     marcar lo que hay que leer (misma que `.cocina__nota` y `.bloque`).
+     No se centra: un párrafo de dos líneas centrado sobre una rejilla alineada
+     a la izquierda deja dos ejes distintos compitiendo. */
+  .entrada-pagina--destacada {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--color-ink);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-5);
+    max-width: 46rem;
+  }
   .rejilla { margin-top: var(--space-8); }
   .cierre {
     margin-top: var(--space-8);
