@@ -6,15 +6,15 @@
  * en grid de 4 donde se muestren fotos y dentro de esas fotos una breve
  * descripción, algo así como las imágenes que se usan para las recámaras».
  *
- * ── DOS MODOS, Y HOY SÓLO CORRE UNO ────────────────────────────────────────
- * Cada tarjeta pinta la fotografía si la hay y un GLIFO si no. Hoy no hay
- * ninguna —el archivo del hotel son 244 imágenes de la propiedad, ni un cenote
- * ni una ruina—, así que las ocho salen ilustradas. El motivo largo está en la
- * cabecera de `src/data/actividades.ts`.
+ * ── DOS MODOS, Y AHORA CORREN LOS DOS ──────────────────────────────────────
+ * Cada tarjeta pinta la fotografía si la hay y un GLIFO si no. Desde el
+ * 2026-09-02 las ocho llevan fotografía de licencia libre —el archivo del
+ * hotel no tenía ni un cenote ni una ruina— y el modo glifo se queda como
+ * respaldo: si alguien quita una imagen, la tarjeta no se rompe, se dibuja.
  *
- * El modo con fotografía está escrito y no se ha podido medir, porque no hay
- * con qué. Queda anotado dentro del CSS lo que hay que comprobar el día que
- * lleguen: el contraste del texto blanco depende de la FOTO, no del color.
+ * 🔴 El texto va en blanco sobre la foto, y su contraste depende de la
+ * FOTOGRAFÍA, no de un color. Lo garantiza el velo en degradado de abajo, con
+ * la cuenta escrita al lado. Al añadir una foto nueva hay que mirarla.
  *
  * ── POR QUÉ NO SON ENLACES ─────────────────────────────────────────────────
  * Ninguna de las ocho lleva a ninguna parte, y es deliberado. Enlazar a la
@@ -114,10 +114,15 @@ const { idioma } = Astro.props;
   }
   .act__marco, .act__texto { grid-area: 1 / 1; }
   /* El espaciador no pinta nada: sólo reclama el alto de la proporción. */
-  .act__marco { aspect-ratio: 3 / 4; }
+  /* 5/7 y no 3/4 desde que hay fotografías (2026-09-02). Estas tarjetas llevan
+     el texto DENTRO, así que texto y foto se reparten la misma caja: con 3/4 el
+     texto ocupaba 200 de 373 px y la fotografía quedaba en una franja. El
+     cliente pidió fotos, no fondos. Un poco más de alto —y textos recortados a
+     una sola frase— devuelven la imagen a dos tercios de la tarjeta. */
+  .act__marco { aspect-ratio: 5 / 7; }
   .act__texto { align-self: end; }
 
-  /* --- Modo GLIFO (el único que corre hoy) ---------------------------------
+  /* --- Modo GLIFO (respaldo desde que hay fotografías) ---------------------
      Fondo cálido y texto en tinta: 15.9:1, sin nada que medir. El glifo va
      grande y muy tenue detrás del texto — ilustra sin competir con él. */
   .act--glifo { background: linear-gradient(150deg, var(--color-surface-warm), var(--color-surface-alt)); }
@@ -134,17 +139,36 @@ const { idioma } = Astro.props;
   .act--glifo .act__desc { color: var(--color-ink-muted); }
 
   /* --- Modo FOTOGRAFÍA -----------------------------------------------------
-     🔴 SIN MEDIR, PORQUE NO HAY FOTOGRAFÍAS TODAVÍA.
-     El texto va en blanco sobre un velo negro en degradado. La banda donde
-     REALMENTE cae el texto llega a 0.80 de opacidad, y ese número no es
-     estético: compuesto sobre el peor caso posible —una foto blanca pura— da
-     un fondo sRGB de 51, es decir 12.3:1 con el blanco. A 0.55 daría 4.4:1 y
-     no pasaría el 4.5:1 de WCAG 1.4.3.
+     🔴 EL VELO CUELGA DEL TEXTO, NO DE LA TARJETA. Y el motivo es una medición
+     que salió mal.
 
-     El día que se añada una foto hay que VOLVER A MIRARLO con la foto puesta:
-     el degradado protege el texto, pero un recorte distinto puede dejar la
-     primera línea fuera de la banda densa. Es exactamente el riesgo R-22 de la
-     cabecera sobre el héroe, en otra tarjeta. */
+     La primera versión ponía el degradado sobre la TARJETA, con la banda densa
+     en el 38 % inferior. Se veía bien. Medido con las ocho fotos puestas,
+     resultó que el texto no siempre cabe en ese 38 %: las tarjetas cuyo título
+     ocupa dos líneas empujan el párrafo hacia arriba, y ahí el velo ya se ha
+     aclarado. Los números, con el ancho de escritorio:
+
+       tarjeta con título de 1 línea   texto arranca al 51 %   alfa 0.55   4.7:1
+       «La carretera de Boca Paila»    texto arranca al 58 %   alfa 0.42   3.0:1
+       «Zona arqueológica de Tulum»    texto arranca al 64 %   alfa 0.33   **2.3:1**
+
+     Dos de las ocho por debajo del 4.5:1 de WCAG 1.4.3, y la peor a menos de la
+     mitad. A ojo no se notaba porque esas dos fotos son oscuras justo ahí — es
+     decir, cumplían por SUERTE, no por diseño. Cambiar una foto por otra más
+     clara habría roto el texto sin tocar una línea de CSS.
+
+     La solución no es subir la banda: es que el velo deje de depender de la
+     altura del texto. Ahora el degradado va sobre `.act__texto`, que es
+     exactamente la caja que contiene las letras, con un desvanecido de 2.5rem
+     por arriba y ese mismo relleno para que la primera línea nunca caiga
+     dentro del desvanecido. Mida lo que mida el texto, el velo lo cubre.
+
+     Alfa 0.75 sobre el peor caso posible —una fotografía blanca pura— da un
+     fondo sRGB de 64: **10.4:1** con el blanco. Ya no hay que volver a medir
+     al cambiar una foto, que era el verdadero problema.
+
+     El degradado de la tarjeta se queda, mucho más suave: ya no protege nada,
+     sólo asienta la imagen contra el borde inferior. */
   .act__foto {
     position: absolute; inset: 0; z-index: -1;
     width: 100%; height: 100%;
@@ -155,10 +179,18 @@ const { idioma } = Astro.props;
     position: absolute; inset: 0; z-index: -1;
     background: linear-gradient(
       to top,
-      rgb(0 0 0 / 0.86) 0%,
-      rgb(0 0 0 / 0.80) 38%,
-      rgb(0 0 0 / 0.35) 62%,
-      rgb(0 0 0 / 0.05) 100%);
+      rgb(0 0 0 / 0.30) 0%,
+      rgb(0 0 0 / 0.12) 45%,
+      rgb(0 0 0 / 0) 100%);
+  }
+  /* El velo que de verdad garantiza el contraste, colgado del propio texto. */
+  .act:not(.act--glifo) .act__texto {
+    padding-top: 2.5rem;
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.75) 0%,
+      rgb(0 0 0 / 0.75) calc(100% - 2.5rem),
+      rgb(0 0 0 / 0) 100%);
   }
   .act:not(.act--glifo) .act__titulo,
   .act:not(.act--glifo) .act__desc,
@@ -175,7 +207,10 @@ const { idioma } = Astro.props;
     line-height: 1.25;
     margin-bottom: var(--space-2);
   }
-  .act__desc { font-size: var(--text-sm); line-height: var(--leading-body); }
+  /* `line-height` más corto que el del cuerpo del sitio: sobre una fotografía
+     un bloque muy aireado se lee PEOR, no mejor — el ojo pierde el renglón
+     cuando el fondo tiene detalle. */
+  .act__desc { font-size: var(--text-sm); line-height: 1.5; }
   .act__distancia {
     margin-top: var(--space-3);
     font-family: var(--font-ui); font-size: var(--text-sm);

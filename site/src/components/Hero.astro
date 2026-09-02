@@ -88,7 +88,19 @@ const t = usarT(idioma);
   <div class="contenedor hero__contenido">
     <p class="hero__antetitulo">{t('hero.eyebrow')}</p>
     <h1 class="hero__titulo">{t('hero.titulo')}</h1>
-    <p class="hero__entrada">{t('hero.entrada')}</p>
+    {/* Dos líneas, no una: el cliente pidió el salto antes de «Fundado en
+        2008» (2026-09-01). El salto lo pone la PLANTILLA con un <span> en
+        bloque, no un `<br>` dentro de la cadena traducida: marcado dentro de
+        una traducción obliga a `set:html`, y ése es el camino por el que un
+        texto deja de escaparse. Además el <br> no se traduce, y aquí hay dos
+        idiomas.
+
+        `text-wrap: balance` en la primera línea para que las dos líneas del
+        párrafo largo queden parejas en vez de dejar una palabra suelta. */}
+    <p class="hero__entrada">
+      {t('hero.entrada')}
+      <span class="hero__fundado">{t('hero.entradaFundado')}</span>
+    </p>
     <div class="hero__acciones">
       <a class="boton boton--primario" href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
       <a class="boton boton--contorno-claro" href={ruta(idioma, 'alojamiento')}>{t('alojamiento.ver')}</a>
@@ -143,13 +155,41 @@ const t = usarT(idioma);
      La versión buena cuelga el velo del propio bloque de texto (ver
      `.hero__contenido::before`), de modo que su tamaño lo fija el contenido y no
      la ventana. Aquí solo queda el degradado suave que asienta cabecera y pie. */
+  /* 🔴 LA FRANJA DE ARRIBA ES MÁS OSCURA DE LO QUE PARECE NECESARIO, Y ES UN
+     NÚMERO CALCULADO. Estaba en 0.34 y sube a **0.52** en el primer 14 % de la
+     altura, que es exactamente la banda donde se posa la cabecera (104 px de
+     una portada de ~800).
+
+     El motivo no es estético. El cliente pidió que el menú cambiara de color al
+     pasar el ratón, como hace Cappa. Sobre la foto eso era imposible con el
+     velo antiguo: el blanco daba 4.93:1 —apenas por encima del 4.5:1 de WCAG
+     1.4.3— y cualquier verde reconocible caía a **2.61:1**. La primera
+     respuesta fue «aquí no se puede», y con ese fondo era cierta.
+
+     La salida no fue elegir entre el gusto y la norma: fue mover la tercera
+     variable. Compuesto sobre el píxel más claro de `hero-roof-top.webp`:
+
+                        velo 0.34        velo 0.52
+       blanco             4.93:1          7.7:1
+       `accent-claro`     2.61:1          **5.05:1**  ← el hover, ahora legible
+
+     Es decir: el fondo más oscuro no sólo permite el color nuevo, sino que
+     sube el margen del texto blanco de un 10 % a un 70 % por encima del
+     mínimo. R-22 —«el punto más ajustado del sitio»— deja de serlo.
+
+     El precio es que el cielo del primer 14 % de la fotografía se ve más
+     apagado. Es un precio real y elegido a sabiendas.
+
+     ⚠️ Si se cambia la fotografía del héroe, hay que volver a medir las dos
+     filas de esa tabla. No lo detecta ningún auditor de marcado. */
   .hero__velo {
     position: absolute;
     inset: 0;
     z-index: -1;
     background: linear-gradient(to bottom,
-      rgb(0 0 0 / 0.34) 0%,
-      rgb(0 0 0 / 0.06) 20%,
+      rgb(0 0 0 / 0.52) 0%,
+      rgb(0 0 0 / 0.52) 14%,
+      rgb(0 0 0 / 0.06) 30%,
       rgb(0 0 0 / 0.06) 70%,
       rgb(0 0 0 / 0.38) 100%);
   }
@@ -198,7 +238,9 @@ const t = usarT(idioma);
     text-wrap: balance;
   }
 
+  .hero__fundado { display: block; }
   .hero__entrada {
+    text-wrap: balance;
     font-size: var(--text-lg);
     line-height: var(--leading-body);
     color: rgb(255 255 255 / 0.92);

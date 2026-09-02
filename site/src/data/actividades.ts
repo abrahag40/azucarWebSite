@@ -5,57 +5,102 @@
  * ║  🔴 DOS REGLAS QUE NO SE ROMPEN EN ESTE ARCHIVO                          ║
  * ║                                                                          ║
  * ║  1. **SÓLO LUGARES PÚBLICOS, NUNCA NEGOCIOS.** Petición literal del      ║
- * ║     cliente (2026-09-01): «sin dar publicidad gratuita». Aquí caben las  ║
- * ║     ruinas, los cenotes, Sian Ka'an, una laguna o el pueblo. NO caben    ║
- * ║     beach clubs, operadores de tours, restaurantes ni hoteles vecinos —  ║
- * ║     y menos aún uno solo de cada, que es como una página de contenido se ║
- * ║     convierte en un anuncio que nadie pagó.                              ║
+ * ║     cliente: «sin dar publicidad gratuita». Caben las ruinas, los        ║
+ * ║     cenotes, Sian Ka'an, una laguna o el pueblo. NO caben beach clubs,   ║
+ * ║     operadores de tours, restaurantes ni hoteles vecinos.                ║
  * ║                                                                          ║
  * ║     Es además lo que le conviene al hotel: recomendar un negocio es      ║
  * ║     responder por él. Si el tour sale mal, la reseña la recibe quien lo  ║
  * ║     recomendó.                                                           ║
  * ║                                                                          ║
- * ║  2. **NINGUNA DISTANCIA NI TIEMPO DE TRASLADO.** `distancia` está en     ║
- * ║     `null` en las ocho, a propósito. C-LLEG —los tiempos y costos desde  ║
- * ║     el aeropuerto y las referencias físicas— sigue sin responder, y      ║
- * ║     publicar aquí un «a 15 minutos» inventado sería exactamente el dato  ║
- * ║     sin confirmar que la regla 7 prohíbe. Un huésped que calcula su día  ║
- * ║     con un tiempo falso llega tarde a su vuelo.                          ║
+ * ║  2. **NINGUNA DISTANCIA NI TIEMPO DE TRASLADO.** `distancia` sigue en    ║
+ * ║     `null` en las ocho. C-LLEG —los tiempos desde el aeropuerto y las    ║
+ * ║     referencias físicas— sigue sin responder, y un «a 15 minutos»        ║
+ * ║     inventado es exactamente el dato sin confirmar que la regla 7        ║
+ * ║     prohíbe. Un huésped que calcula su día con un tiempo falso llega     ║
+ * ║     tarde a su vuelo.                                                    ║
  * ║                                                                          ║
- * ║     En cuanto el hotel confirme, se rellena `distancia` y la tarjeta la  ║
- * ║     pinta sola. No hay que tocar ningún componente.                      ║
+ * ║     El ORDEN sí es geográfico —de lo más cercano a lo más lejano, como   ║
+ * ║     pidió el cliente— y eso no exige publicar ninguna cifra.             ║
  * ╚══════════════════════════════════════════════════════════════════════════╝
  *
- * ── ⚠️ POR QUÉ HAY GLIFOS Y NO FOTOGRAFÍAS ─────────────────────────────────
- * Porque de estos ocho lugares **no existe una sola fotografía** en lo que el
- * hotel entregó: las 244 imágenes del archivo son todas de la propiedad —
- * habitaciones, playa, roof top, jardines—. Ni un cenote, ni una ruina.
+ * ── CÓMO ESTÁN ESCRITOS ESTOS TEXTOS ───────────────────────────────────────
+ * El cliente pidió «una breve psicología de venta y neuromarketing». Eso aquí
+ * no significa adjetivos: significa cuatro recursos concretos, y cada uno se
+ * puede señalar en el texto.
  *
- * Las tres salidas posibles eran: (a) dejar las tarjetas vacías, (b) ilustrar
- * «Cenotes» con una foto de la alberca del hotel, o (c) dibujar. La (b) es la
- * peor de las tres y es la que más se ve por ahí: es engañar con una imagen, y
- * es justo lo que este proyecto no hace. La (a) parece un sitio a medio hacer.
+ *   · **ANCLAJE NUMÉRICO.** Una cifra verificable y grande fija el recuerdo
+ *     mejor que cualquier adjetivo. «Ocho mil años bajo el agua» se recuerda;
+ *     «impresionantes cenotes» no. Todas las cifras de aquí son comprobables.
  *
- * Así que se dibujaron ocho glifos con el mismo trazo del resto del sitio
- * (`Icono.astro`). No son un marcador de posición: son una ilustración que
- * funciona hoy. Y el día que lleguen las fotos, se rellena `imagen` y la
- * tarjeta cambia sola — sin rediseñar nada.
+ *   · **SIGNIFICADO EN MAYA.** Sian Ka'an, Akumal, sacbé. Un nombre que se
+ *     traduce deja de ser un topónimo y pasa a ser una historia — y ata el
+ *     lugar a la cultura local, que es lo que el cliente pidió.
+ *
+ *   · **UNICIDAD, NO SUPERLATIVO.** «La única ciudad maya amurallada frente al
+ *     mar» es un hecho que se puede comprobar. «El lugar más bonito del
+ *     Caribe» es una opinión que el lector descuenta al leerla.
+ *
+ *   · **DETALLE SENSORIAL CONCRETO.** El agua a la altura de la rodilla, el
+ *     olor del comal, la piedra caliza blanca. El cerebro procesa lo concreto;
+ *     lo abstracto lo archiva.
+ *
+ * 🔴 **Y UNA COSA QUE NO SE HACE: nombrar el sargazo.** El encargo era
+ * enseñar que hay mucho que hacer además de la playa, precisamente por eso.
+ * Nombrar un problema para decir que no importa es fijarlo en la cabeza de
+ * quien lee — se llama *efecto del oso blanco*, y es el error clásico de este
+ * tipo de texto. Aquí el mar simplemente no es el protagonista: la entradilla
+ * dice que es «una de las ocho razones», y las otras siete hablan solas.
+ *
+ * ── LAS FOTOGRAFÍAS Y SUS LICENCIAS ────────────────────────────────────────
+ * De estos ocho lugares NO hay una sola foto en el archivo del hotel: sus 244
+ * imágenes son todas de la propiedad. Así que son fotografías de terceros con
+ * licencia libre, de Wikimedia Commons y de Flickr vía Openverse.
+ *
+ * 🔴 **`credito` NO ES DECORACIÓN, ES LA CONDICIÓN DE USO.** Las licencias
+ * Creative Commons BY y BY-SA permiten el uso comercial —incluido éste— **a
+ * cambio de citar al autor y la licencia**. Si se borra el crédito, la
+ * fotografía pasa a estar usada sin permiso. La página los publica al final,
+ * en «Créditos fotográficos», y `verificar-todo.sh` comprueba que ninguna foto
+ * de terceros se quede sin el suyo.
+ *
+ * Dominio público = sin condiciones. Se cita igual, por honestidad, pero ahí
+ * no hay obligación.
  *
  * ── CÓMO EDITAR ────────────────────────────────────────────────────────────
  *   titulo / texto  — los dos idiomas, siempre.
- *   icono           — una clave de `Icono.astro`.
- *   imagen          — `null` hoy. Para poner una foto: se guarda en
- *                     `src/assets/actividades/`, se importa arriba y se pone
- *                     aquí. La foto sustituye al glifo automáticamente.
- *   distancia       — `null` hoy. Ver la regla 2 de arriba.
+ *   imagen          — se importa arriba; el orden de los imports da igual.
+ *   credito         — OBLIGATORIO si la imagen no es del hotel.
+ *   distancia       — sigue en `null`. Ver la regla 2.
  *
- * Para AÑADIR un lugar: copia un bloque `{ … },` entero. Para QUITARLO,
- * bórralo. El orden aquí es el orden en la página, y son cuatro por fila.
+ * Para sustituir una foto por una del hotel: se cambia el import y se pone
+ * `credito: null`. El pie de créditos se encoge solo.
  */
 import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
+import fotoPueblo from '../assets/actividades/pueblo.jpg';
+import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
+import fotoBocaPaila from '../assets/actividades/boca-paila.jpg';
+import fotoSianKaan from '../assets/actividades/sian-kaan.jpg';
+import fotoKaanLuum from '../assets/actividades/kaan-luum.jpg';
+import fotoCenotes from '../assets/actividades/cenotes.jpg';
+import fotoCoba from '../assets/actividades/coba.jpg';
+import fotoAkumal from '../assets/actividades/akumal.jpg';
+
 type Texto = Record<Idioma, string>;
+
+export interface Credito {
+  /** Cómo se titula el archivo en su origen. */
+  obra: string;
+  autor: string;
+  /** Nombre corto de la licencia, p. ej. «CC BY-SA 4.0». */
+  licencia: string;
+  /** El texto legal de la licencia. `null` para dominio público. */
+  licenciaUrl: string | null;
+  /** La página de origen, para que el crédito se pueda comprobar. */
+  fuente: string;
+}
 
 export interface Actividad {
   id: string;
@@ -63,96 +108,158 @@ export interface Actividad {
   texto: Texto;
   icono: string;
   imagen: ImageMetadata | null;
+  /** `null` sólo si la fotografía es del propio hotel. */
+  credito: Credito | null;
   distancia: Texto | null;
 }
 
+/* El ORDEN es el que pidió el cliente: de lo más cercano al hotel a lo más
+   lejano. No es maquetación — es como se planea un viaje: lo que está a la
+   vuelta de la esquina se hace, lo que está a dos horas se decide. Poner Cobá
+   primero sería enseñar el obstáculo antes que la puerta. */
 export const actividades: Actividad[] = [
+  {
+    id: 'pueblo',
+    icono: 'mercado',
+    distancia: null,
+    imagen: fotoPueblo,
+    credito: {
+      obra: 'Street Dancers — Tulum QR 2020',
+      autor: 'Bernard DUPONT',
+      licencia: 'CC BY-SA 2.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by-sa/2.0/',
+      fuente: 'https://commons.wikimedia.org/wiki/File:Street_Dancers_-_Tulum_QR_2020.jpg',
+    },
+    titulo: { es: 'El pueblo de Tulum', en: 'Tulum town' },
+    texto: {
+      es: 'Cruzando la carretera federal está el Tulum que vive todo el año: el mercado, el olor del comal a las siete de la mañana y los precios de quien no está de paso.',
+      en: 'Across the highway is the Tulum that lives here all year: the market, the smell of the comal at seven in the morning, and the prices of people who are not passing through.',
+    },
+  },
   {
     id: 'zona-arqueologica',
     icono: 'piramide',
-    imagen: null,
     distancia: null,
+    imagen: fotoZona,
+    credito: {
+      obra: 'Tulum, Mexico (076B5427 8 9 fused)',
+      autor: 'Bruce Tuten',
+      licencia: 'CC BY 2.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by/2.0/',
+      fuente: 'https://commons.wikimedia.org/wiki/File:Tulum,_Mexico_076B5427_8_9_fused_(15781369495).jpg',
+    },
     titulo: { es: 'Zona arqueológica de Tulum', en: 'Tulum archaeological site' },
     texto: {
-      es: 'La única ciudad maya amurallada construida frente al mar. El Castillo se asoma al acantilado sobre una playa a la que se puede bajar.',
-      en: 'The only walled Maya city built facing the sea. El Castillo looks out from the cliff over a beach you can walk down to.',
-    },
-  },
-  {
-    id: 'cenotes',
-    icono: 'cenote',
-    imagen: null,
-    distancia: null,
-    titulo: { es: 'Los cenotes', en: 'The cenotes' },
-    texto: {
-      es: 'Pozos de agua dulce abiertos en la roca, conectados bajo tierra por el sistema de cuevas inundadas más largo del mundo. Los hay de caverna y a cielo descubierto.',
-      en: 'Freshwater sinkholes opened in the rock, linked underground by the longest flooded cave system in the world. Some are caverns, some are fully under the sky.',
-    },
-  },
-  {
-    id: 'sian-kaan',
-    icono: 'manglar',
-    imagen: null,
-    distancia: null,
-    titulo: { es: 'Reserva de Sian Ka’an', en: 'Sian Ka’an Reserve' },
-    texto: {
-      es: 'Patrimonio de la Humanidad de la UNESCO. Manglar, canales de agua salobre y la barrera de coral, empezando justo al sur por la misma carretera de Boca Paila.',
-      en: 'A UNESCO World Heritage Site. Mangrove, brackish canals and the coral reef, starting just south along the same Boca Paila road.',
-    },
-  },
-  {
-    id: 'kaan-luum',
-    icono: 'laguna',
-    imagen: null,
-    distancia: null,
-    titulo: { es: 'Laguna Kaan Luum', en: 'Kaan Luum Lagoon' },
-    texto: {
-      es: 'Agua turquesa y poco profunda casi por completo, con un cenote hondo de color azul oscuro en el centro. El contraste se ve desde la orilla.',
-      en: 'Turquoise water, shallow almost everywhere, with a deep dark-blue cenote at its centre. The contrast is visible from the shore.',
-    },
-  },
-  {
-    id: 'coba',
-    icono: 'arbol',
-    imagen: null,
-    distancia: null,
-    titulo: { es: 'Cobá', en: 'Cobá' },
-    texto: {
-      es: 'Una ciudad maya tierra adentro, dentro de la selva y junto a dos lagunas. Sus calzadas de piedra blanca —los sacbés— salían de aquí hacia todo el norte de la península.',
-      en: 'A Maya city inland, inside the jungle and beside two lagoons. Its white stone causeways — the sacbés — ran from here across the whole northern peninsula.',
-    },
-  },
-  {
-    id: 'akumal',
-    icono: 'tortuga',
-    imagen: null,
-    distancia: null,
-    titulo: { es: 'Bahía de Akumal', en: 'Akumal Bay' },
-    texto: {
-      es: 'Una bahía poco profunda con praderas de pasto marino donde las tortugas verdes vienen a comer. El acceso está regulado y tiene temporada.',
-      en: 'A shallow bay with seagrass meadows where green turtles come to feed. Access is regulated and there is a season.',
+      es: 'La única ciudad maya amurallada frente al mar. Seguía siendo un puerto activo en 1518: los españoles la vieron desde sus barcos y la compararon con Sevilla.',
+      en: 'The only walled Maya city facing the sea. Still an active port in 1518: the Spanish saw it from their ships and compared it to Seville.',
     },
   },
   {
     id: 'boca-paila',
     icono: 'bici',
-    imagen: null,
     distancia: null,
+    imagen: fotoBocaPaila,
+    credito: {
+      obra: 'Boca Paila, east',
+      autor: 'Wasquewhat',
+      licencia: 'CC BY-SA 4.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      fuente: 'https://commons.wikimedia.org/wiki/File:Boca_Paila,east.jpg',
+    },
     titulo: { es: 'La carretera de Boca Paila', en: 'The Boca Paila road' },
     texto: {
-      es: 'La franja de arena entre el mar y la laguna, que es donde está el hotel. Se recorre entera en bicicleta, con la playa a un lado y la selva al otro.',
-      en: 'The strip of sand between the sea and the lagoon, which is where the hotel sits. You can ride the whole of it by bicycle, beach on one side, jungle on the other.',
+      es: 'Una franja de arena con el mar de un lado y la laguna del otro, y el hotel justo en medio. Se recorre entera en bicicleta, sin una sola cuesta.',
+      en: 'A strip of sand with the sea on one side and the lagoon on the other, and the hotel right in the middle. You can ride all of it, without a single hill.',
     },
   },
   {
-    id: 'pueblo',
-    icono: 'mercado',
-    imagen: null,
+    id: 'sian-kaan',
+    icono: 'manglar',
     distancia: null,
-    titulo: { es: 'El pueblo de Tulum', en: 'Tulum town' },
+    imagen: fotoSianKaan,
+    credito: {
+      obra: "Sian Ka'an Biosphere Reserve",
+      autor: 'Ken Thomas',
+      licencia: 'Dominio público',
+      licenciaUrl: null,
+      fuente: "https://commons.wikimedia.org/wiki/File:SianKa'anBR-27527-1.jpg",
+    },
+    titulo: { es: 'Reserva de Sian Ka’an', en: 'Sian Ka’an Reserve' },
     texto: {
-      es: 'Tierra adentro, al otro lado de la carretera federal, está el Tulum que vive todo el año: el mercado, las tortillerías y los precios de quien no está de paso.',
-      en: 'Inland, across the federal highway, is the Tulum that lives here all year: the market, the tortillerías and the prices of people who are not passing through.',
+      es: 'En maya, «donde nace el cielo». Patrimonio de la Humanidad desde 1987, con canales que los mayas excavaron a mano y que mil años después siguen abiertos.',
+      en: 'In Maya, “where the sky is born”. A World Heritage Site since 1987, with canals the Maya dug by hand that are still open a thousand years later.',
+    },
+  },
+  {
+    id: 'kaan-luum',
+    icono: 'laguna',
+    distancia: null,
+    imagen: fotoKaanLuum,
+    credito: {
+      obra: 'Laguna Kaan Luum',
+      autor: 'Tinker & Rove',
+      licencia: 'CC BY 2.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by/2.0/',
+      fuente: 'https://www.flickr.com/photos/145712985@N08/33445217974',
+    },
+    titulo: { es: 'Laguna Kaan Luum', en: 'Kaan Luum Lagoon' },
+    texto: {
+      es: 'Se camina con el agua a la rodilla decenas de metros y el fondo desaparece de golpe: en el centro hay un cenote hondo, y su borde se ve desde la orilla.',
+      en: 'You wade out knee-deep for dozens of metres and the bottom vanishes: at its centre lies a deep cenote, and you can see its edge from the shore.',
+    },
+  },
+  {
+    id: 'cenotes',
+    icono: 'cenote',
+    distancia: null,
+    imagen: fotoCenotes,
+    credito: {
+      obra: 'Cenote, Solidaridad, Quintana Roo, Mayo 2011',
+      autor: 'Laslovarga',
+      licencia: 'CC BY-SA 3.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by-sa/3.0/',
+      fuente: 'https://commons.wikimedia.org/wiki/File:Cenote,_Solidaridad,_Quintana_Roo,_Mexico,_Mayo_2011.jpg',
+    },
+    titulo: { es: 'Los cenotes', en: 'The cenotes' },
+    texto: {
+      es: 'Cuevas que el mar inundó hace ocho mil años, sobre el sistema sumergido más largo del mundo. Para los mayas eran la entrada al inframundo y su única agua dulce.',
+      en: 'Caves the sea flooded eight thousand years ago, above the longest submerged cave system on earth. To the Maya they were the underworld’s door — and their only fresh water.',
+    },
+  },
+  {
+    id: 'coba',
+    icono: 'arbol',
+    distancia: null,
+    imagen: fotoCoba,
+    credito: {
+      obra: 'Coba Nohoch Mul',
+      autor: 'Ken Thomas',
+      licencia: 'Dominio público',
+      licenciaUrl: null,
+      fuente: 'https://commons.wikimedia.org/wiki/File:Coba_Nohoch_Mul-27527.jpg',
+    },
+    titulo: { es: 'Cobá', en: 'Cobá' },
+    texto: {
+      es: 'Una ciudad maya dentro de la selva. De aquí salía el sacbé más largo que se conoce: cien kilómetros de piedra caliza en línea recta, levantados a mano.',
+      en: 'A Maya city inside the jungle. The longest known sacbé started here: a hundred kilometres of white limestone, dead straight, built by hand.',
+    },
+  },
+  {
+    id: 'akumal',
+    icono: 'tortuga',
+    distancia: null,
+    imagen: fotoAkumal,
+    credito: {
+      obra: 'Green Sea Turtle grazing seagrass',
+      autor: 'P. Lindgren',
+      licencia: 'CC BY-SA 3.0',
+      licenciaUrl: 'https://creativecommons.org/licenses/by-sa/3.0/',
+      fuente: 'https://commons.wikimedia.org/wiki/File:Green_Sea_Turtle_grazing_seagrass.jpg',
+    },
+    titulo: { es: 'Bahía de Akumal', en: 'Akumal Bay' },
+    texto: {
+      es: 'Akumal es «lugar de las tortugas» en maya, y sigue siéndolo: comen en las praderas de pasto marino de su bahía. El acceso está regulado y tiene temporada.',
+      en: 'Akumal means “place of the turtles” in Maya, and it still is: they feed on the seagrass meadows of its bay. Access is regulated and has a season.',
     },
   },
 ];

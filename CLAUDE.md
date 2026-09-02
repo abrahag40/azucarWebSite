@@ -465,6 +465,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/01-descubrimiento/auditoria-sitio-actual.md` | Auditoría técnica del sitio vigente |
 | `docs/01-descubrimiento/aviso-cliente-datos-de-tarjeta.md` | Aviso PCI-DSS + acuse de decisión |
 | `docs/01-descubrimiento/analisis-propuesta-resnexus.md` | Inteligencia competitiva |
+| **`docs/01-descubrimiento/tripadvisor-fotos-y-cuentas.md`** | **Cómo quitar fotos y limpiar accesos en TripAdvisor, y por qué la ficha no se borra** |
 | `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
 | `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
@@ -480,7 +481,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **94 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **97 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

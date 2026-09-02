@@ -182,6 +182,37 @@ paso "la plantilla de correo usa los colores del sitio" bash -c '
     echo "Actualiza site/src/booking/correoHtml.ts — el mapa esta en su cabecera."
     exit 1; }'
 
+# LAS FOTOGRAFÍAS DE «QUÉ HACER EN TULUM» SON DE TERCEROS, con licencia libre
+# pero NO gratuita de obligaciones: Creative Commons BY y BY-SA permiten el uso
+# comercial a cambio de citar autor y licencia. Sin la cita, están usadas sin
+# permiso — y eso es un problema legal del hotel, no un detalle de maquetación.
+#
+# Esta comprobación exige que cada autor declarado en `actividades.ts` aparezca
+# realmente en la página construida, en los DOS idiomas. Cubre los dos olvidos
+# posibles: añadir una foto sin crédito, y quitar el bloque de créditos de la
+# plantilla sin darse cuenta de lo que sostenía.
+paso "cada foto de terceros lleva su crédito" bash -c '
+  faltan=""
+  autores=$(grep -oE "autor: .[^,]+.," site/src/data/actividades.ts \
+    | sed "s/autor: .//; s/.,$//" | sort -u)
+  [ -n "$autores" ] || { echo "no se encontro ningun autor en actividades.ts"; exit 1; }
+  while IFS= read -r a; do
+    for pagina in site/dist/actividades/index.html site/dist/en/activities/index.html; do
+      [ -f "$pagina" ] || { echo "no existe $pagina"; exit 1; }
+      # El HTML escapa `&` como `&amp;`, asi que un `grep -F` del nombre tal
+      # cual falla con autores como «Tinker & Rove». Se compara el nombre YA
+      # escapado, que es lo que de verdad viaja en la pagina. Lo enseno la
+      # calibracion: el guardian marco como sin credito la unica foto cuyo
+      # autor lleva un ampersand, y el credito estaba puesto.
+      escapado=$(printf %s "$a" | sed "s/&/\&amp;/g")
+      grep -qF "$escapado" "$pagina" || faltan="$faltan\n  $a  (falta en $pagina)"
+    done
+  done <<< "$autores"
+  [ -z "$faltan" ] || {
+    printf "Fotografia(s) sin credito publicado:%b\n" "$faltan"
+    echo "Las licencias CC BY y BY-SA exigen citar autor y licencia."
+    exit 1; }'
+
 paso "guardias de la Definition of Done" bash -c '
   fallos=0
   # El panel de precios (ADR-0007) queda fuera: es una herramienta INTERNA,

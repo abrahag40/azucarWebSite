@@ -1,0 +1,91 @@
+---
+/**
+ * Créditos fotográficos.
+ *
+ * 🔴 ESTO NO ES UN ADORNO: ES LA CONDICIÓN DE USO DE LAS FOTOGRAFÍAS.
+ * Las licencias Creative Commons BY y BY-SA permiten el uso comercial —el de
+ * este sitio— **a cambio de citar autor y licencia**. Sin este bloque, las
+ * ocho fotografías de «Qué hacer en Tulum» estarían usadas sin permiso.
+ *
+ * Por eso va en la propia página y no en un aviso legal aparte: la licencia
+ * pide una atribución «razonable para el medio», y lo razonable en una página
+ * web es que esté en la página donde se ven las fotos.
+ *
+ * Y por eso `verificar-todo.sh` comprueba que cada foto de terceros tenga su
+ * crédito: el día que alguien añada una novena actividad con una imagen y se
+ * olvide de la atribución, el build lo dirá en vez de publicarla.
+ */
+import { actividades } from '../data/actividades';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+const conCredito = actividades.filter((a) => a.credito);
+---
+{conCredito.length > 0 && (
+  <section class="seccion seccion--calida" aria-labelledby="creditos-titulo">
+    <div class="contenedor">
+      <h2 id="creditos-titulo" class="creditos__titulo">{t('actividades.creditos')}</h2>
+      <p class="creditos__nota">{t('actividades.creditosNota')}</p>
+      <ul class="creditos" role="list">
+        {conCredito.map((a) => (
+          <li class="credito">
+            <span class="credito__lugar">{a.titulo[idioma]}</span>
+            {/* `rel="nofollow"`: son enlaces de atribución, no
+                recomendaciones. Pasarles autoridad de enlace no es lo que
+                estamos haciendo aquí. */}
+            <a class="credito__obra" href={a.credito!.fuente} rel="nofollow noopener" target="_blank">
+              {a.credito!.obra}
+            </a>
+            <span class="credito__autor">{a.credito!.autor}</span>
+            {a.credito!.licenciaUrl ? (
+              <a class="credito__licencia" href={a.credito!.licenciaUrl} rel="license nofollow noopener" target="_blank">
+                {a.credito!.licencia}
+              </a>
+            ) : (
+              <span class="credito__licencia">{a.credito!.licencia}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .creditos__titulo { font-size: var(--text-xl); margin-bottom: var(--space-3); }
+  .creditos__nota {
+    color: var(--color-ink-muted);
+    max-width: var(--container-text);
+    margin-bottom: var(--space-6);
+  }
+  .creditos { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
+  .credito {
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .credito__lugar {
+    font-family: var(--font-ui);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink);
+    /* Ancho fijo desde tableta para que la columna de lugares se lea como
+       columna y no como un párrafo desordenado. */
+    flex: 0 0 auto;
+  }
+  .credito__obra { color: var(--color-ink-muted); }
+  .credito__autor { color: var(--color-ink-muted); }
+  .credito__autor::before { content: '© '; }
+  .credito__licencia {
+    margin-inline-start: auto;
+    font-family: var(--font-ui);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-accent-text);
+    white-space: nowrap;
+  }
+  @media (min-width: 44rem) { .credito__lugar { flex: 0 0 16rem; } }
+</style>

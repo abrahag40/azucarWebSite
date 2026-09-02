@@ -2511,6 +2511,142 @@ día siguiente, en vez de limitarse a confirmar lo que ya se sabía.
 
 ---
 
+## L-095 · Cuando la petición es imposible, la respuesta útil es la de al lado
+
+El cliente pidió «investigar cómo quitar fotos de TripAdvisor y eliminar cuentas». Las dos mitades
+resultaron ser preguntas distintas de las que parecían.
+
+**Las fotos son tres cosas, no una.** Las que subió el hotel se borran en dos minutos desde el
+Centro de Gestión. Las que subieron los huéspedes **no se pueden borrar**, y es política
+deliberada de TripAdvisor: si el propietario pudiera, ninguna ficha valdría nada. Y las que puso
+un socio de distribución no salen de ninguna de las dos partes — hay que quitarlas en el origen.
+La respuesta útil para la segunda clase no es un procedimiento, es una estrategia: **no se
+pelean, se entierran** subiendo fotografía propia reciente, que el hotel ya tiene.
+
+**«Eliminar cuentas» eran dos cosas, y sólo una es la que se quiere.** Quitarle a alguien el
+acceso a la ficha del hotel es un ajuste de permisos que se hace en un minuto. Cerrar la cuenta
+personal de esa persona sólo lo puede hacer ella, con su contraseña — y pedírsela sería
+exactamente lo que nunca hay que hacer.
+
+**Y borrar la ficha del hotel no se puede.** TripAdvisor sólo retira la de un negocio cerrado o
+vendido, con pruebas. Decirlo y parar habría sido correcto y también inútil: lo que se puede
+hacer —y es casi seguro lo que se quería— es **quedarse y mandar sobre el contenido**: reclamar la
+ficha, fusionar duplicados (nunca borrarlos, la fusión conserva las reseñas), limpiar accesos y
+subir fotos buenas.
+
+> **El patrón:** ante un encargo imposible, la entrega no es la negativa. Es averiguar qué
+> problema hay detrás y resolver ése. «No se puede borrar la ficha» es media respuesta; «no se
+> puede, y esto es lo que sí controlas» es la respuesta entera.
+
+### Y una nota de método sobre la propia investigación
+
+**El Centro de Ayuda de TripAdvisor no se puede leer con un `fetch`**: se pinta con JavaScript y
+devuelve una cáscara con el título y nada más. Lo que hay en el documento sale de resúmenes
+indexados y de respuestas de su personal en el foro de soporte — que es una fuente más débil.
+
+Eso se dice en la cabecera del documento en vez de presentarlo como oficial. **Una fuente que no
+se ha podido leer entera se marca**, aunque el contenido sea probablemente correcto: quien lo
+lea dentro de seis meses tiene que saber qué comprobar antes de escribirle a nadie.
+
+
+---
+
+## L-096 · El hover que «no se podía»: cambiar la variable que nadie había puesto sobre la mesa
+
+El cliente pidió por segunda vez que el menú cambiara de color al pasar el ratón, «como en la
+plantilla». La primera vez respondí que sobre la fotografía del héroe no se podía, con la cuenta
+delante: el blanco daba 4.93:1 y cualquier verde reconocible caía a **2.61:1**, muy por debajo del
+4.5:1 de WCAG 1.4.3.
+
+La cuenta era correcta. **La respuesta no.**
+
+Estaba tratando el problema como una elección entre dos cosas —el color que quiere el cliente o
+el contraste que exige la norma— cuando había una tercera variable que ninguno de los dos había
+tocado: **el fondo**. El velo del héroe pasó de 0.34 a 0.52 de negro en su primer 14 %, que es
+justo la banda donde se posa la cabecera. Con ese fondo:
+
+| | velo 0.34 | velo 0.52 |
+|---|---|---|
+| blanco (texto normal) | 4.93:1 | **7.7:1** |
+| pistacho claro (hover) | 2.61:1 | **5.05:1** |
+
+El cliente tiene su hover **y** el contraste sube: el texto blanco pasa de un 10 % de margen sobre
+el mínimo a un 70 %. **R-22 —«el punto más ajustado del sitio»— deja de serlo.** El precio es que
+el cielo del primer 14 % de la foto se ve más apagado, y es un precio elegido a sabiendas.
+
+> **El patrón, y es de negociación antes que de CSS:** cuando una petición choca con un criterio
+> duro, casi nunca hay que elegir entre los dos. Hay que buscar la variable que nadie ha nombrado.
+> Aquí eran quince píxeles de degradado.
+
+### De paso, lo que el cliente veía y yo no
+
+Al mirarlo de cerca resultó que el hover **sí** cambiaba de color en las 36 páginas interiores
+desde el primer día. Lo que fallaba era otra cosa: nuestro hover encendía además un
+`border-bottom`, y **esa raya se comía el protagonismo del color**. Cappa no la tiene —su
+`.nav-link:hover` es exactamente `color: #aa8453` y nada más—; nosotros la habíamos añadido.
+
+Se retiró del hover y se dejó sólo para `aria-current`, que es la página actual. Un mismo adorno
+para «estás aquí» y para «el ratón está encima» dice dos cosas con un solo signo, y el lector
+acaba sin distinguir ninguna. Se añadió también la transición de 0.35 s que Cappa sí tiene
+(`transition: all .4s`), porque sin ella el cambio se lee como un parpadeo y no como una
+respuesta.
+
+> **Cuando alguien insiste en que algo «no funciona» y las mediciones dicen que sí, la pregunta
+> no es quién tiene razón: es qué está viendo esa persona que yo no estoy mirando.** Aquí era una
+> raya de un píxel tapando el efecto entero.
+
+---
+
+## L-097 · Las fotos y el texto se reparten la misma caja, y eso hay que medirlo
+
+Las ocho tarjetas de «Qué hacer en Tulum» llevan el texto **dentro** de la fotografía, como pidió
+el cliente. El velo que garantiza el contraste iba sobre la TARJETA, con la banda densa en su 38 %
+inferior. Se veía bien.
+
+Medido con las ocho fotos puestas, no lo estaba:
+
+| tarjeta | el texto arranca al | alfa del velo ahí | contraste |
+|---|---|---|---|
+| título de una línea | 51 % | 0.55 | 4.7:1 |
+| «La carretera de Boca Paila» | 58 % | 0.42 | 3.0:1 |
+| «Zona arqueológica de Tulum» | 64 % | 0.33 | **2.3:1** |
+
+Dos de ocho por debajo del mínimo, y la peor a la mitad. **La causa es que el título de dos
+líneas empuja el párrafo por encima de la banda densa** — el velo no sabía cuánto texto había.
+
+Y a ojo no se notaba, porque esas dos fotos son oscuras justo ahí. **Cumplían por suerte, no por
+diseño**: cambiar una foto por otra más clara habría roto el texto sin tocar una línea de CSS.
+
+La solución no fue subir la banda —eso arregla estas ocho y no la novena—: fue **colgar el velo
+del propio texto**. Ahora el degradado va sobre la caja que contiene las letras, con un
+desvanecido de 2.5 rem arriba y ese mismo relleno para que la primera línea nunca caiga dentro
+del desvanecido. Mida lo que mida el texto, el velo lo cubre: 10.4:1 sobre el peor caso posible,
+una fotografía blanca pura.
+
+> **El patrón:** un velo dimensionado contra el CONTENEDOR protege lo que hoy hay dentro. Un velo
+> dimensionado contra el CONTENIDO protege lo que haya. La diferencia sólo aparece cuando el
+> contenido cambia — es decir, cuando ya nadie está mirando.
+
+### Y las fotos no son gratis aunque sean gratuitas
+
+De estos ocho lugares no hay una sola fotografía en el archivo del hotel: sus 244 imágenes son
+todas de la propiedad. Las ocho salen de Wikimedia Commons y de Flickr, con licencia libre — que
+**no quiere decir sin obligaciones**: Creative Commons BY y BY-SA permiten el uso comercial *a
+cambio de citar autor y licencia*.
+
+Por eso el crédito no es un pie de página opcional: **es la condición de uso**. Si se borra, las
+ocho fotografías pasan a estar usadas sin permiso. Hay un guardián en `verificar-todo.sh` que
+comprueba que cada autor declarado aparezca de verdad en la página construida, en los dos
+idiomas, y falló en su primera calibración por un motivo que merece la pena: **el único autor con
+un `&` en el nombre**. El HTML lo escapa como `&amp;` y el `grep -F` no lo encontraba. El crédito
+estaba puesto; el guardián mentía.
+
+> Cualquier comprobación que busque texto dentro de HTML tiene que buscarlo **escapado**. Es la
+> tercera vez en dos días que una comprobación falla por leer el código como si fuera texto plano.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2518,7 +2654,7 @@ día siguiente, en vez de limitarse a confirmar lo que ya se sabía.
 | R-01 | **Licencia de la plantilla Cappa.** Publicar producción sobre un demo raspado sin licencia es exposición legal para nosotros y para el cliente | Alto | Definir quién compra la licencia **antes** de escribir código de producción |
 | R-02 | Motor de reservas / PMS actual desconocido. Define el alcance completo | Alto | Pregunta prioritaria en la entrevista |
 | R-03 | ~~Calidad de la fotografía~~ **CERRADO** — el mirror confirma 244 WebP de 2025 bien dimensionadas. Queda sólo la cesión de derechos | ~~Alto~~ Bajo | Preguntar únicamente por los derechos (C5.3) |
-| R-04 | Posible ficha duplicada en TripAdvisor | Medio | Validar y proponer consolidación como victoria rápida |
+| R-04 | Posible ficha duplicada en TripAdvisor. **Sigue sin verificarse quién controla la ficha del hotel** — puede estar en manos de la agencia anterior, como la propiedad de ResNexus (R-16) | Medio | Procedimiento completo investigado en [`tripadvisor-fotos-y-cuentas.md`](../01-descubrimiento/tripadvisor-fotos-y-cuentas.md). Fusionar duplicados, **nunca borrarlos**: la fusión conserva las reseñas. Primera acción: abrir la ficha y mirar quién la controla |
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
@@ -2534,7 +2670,7 @@ día siguiente, en vez de limitarse a confirmar lo que ya se sabía.
 | R-14 | Los 10 enlaces a `goo.gl` pueden estar rotos: Google discontinuó el acortador | Bajo | Verificar y sustituir por URLs directas |
 | R-15 | ~~Token secreto de Mapbox en ResNexus~~ **CERRADO** — son tokens `pk.` públicos, uso previsto por Mapbox. Redactados igualmente por higiene del repositorio | Ninguno | Sin acción |
 | R-23 | **Quien pase la URL por PageSpeed verá SEO 92 y «robots.txt is not valid».** Es un artefacto de nuestra propia CSP —`connect-src 'none'` bloquea la lectura que hace Lighthouse—; el archivo es válido y a Googlebot no le afecta | Bajo | Explicación lista en `medicion-calidad.md`. Se resuelve solo en el sprint 3, cuando `connect-src` pase a `'self'` para el formulario |
-| R-22 | **El contraste de la cabecera sobre el héroe queda en 4.93:1** frente al 4.5 exigido: un 10 % de margen que depende de la fotografía, no del CSS | Medio | Documentado en `Header.astro`. Volver a medir si se cambia la foto del héroe (L-048) |
+| R-22 | ~~**El contraste de la cabecera sobre el héroe queda en 4.93:1**~~ **MITIGADA 2026-09-02: sube a 7.7:1.** Al oscurecer la franja superior del velo para que el hover pudiera cambiar de color, el margen del texto blanco pasó de un 10 % a un 70 % sobre el mínimo | ~~Medio~~ Bajo | Sigue dependiendo de la fotografía: si se cambia la del héroe, hay que volver a medir las dos filas de la tabla de `.hero__velo` (L-048, L-096) |
 | R-21 | **El hotel no publica ningún enlace de WhatsApp**, pero SÍ muestra su icono. En la cabecera de su sitio hay una imagen —`tel_whats.webp`— con un teléfono y el logo de WhatsApp junto a los dos números, y ni un solo `wa.me`. Es decir: probablemente uno de los dos números tenga WhatsApp, y no hay forma de saber cuál | Medio | Pregunta **B4**, ahora más precisa: no es «¿tienen WhatsApp?» sino «¿cuál de los dos números es el de WhatsApp?» |
 | R-20 | **El CI y el despliegue dan veredictos distintos.** Cloudflare Pages corre `build`, no `check` ni los guardias; el sitio se publica aunque el CI esté en rojo. Estuvo trece commits así | Alto | Corregido el fallo. Antes del lanzamiento, protección de rama que exija el CI en verde (L-040) |
 | R-24 | **Dos de los ocho tipos de alojamiento no tienen ninguna fotografía de cama.** «Habitación King · Vista a la selva» y «Habitación Doble · Vista a la selva» sólo cuentan con fotos de baño, pasillo y balcón en todo el acervo entregado por el hotel — revisadas las 10 y 12 disponibles, ninguna muestra la habitación en sí | Medio | Pedir al hotel fotografía real de esas dos habitaciones (L-071). Mientras tanto, la ficha usa la mejor vista disponible como portada |

@@ -166,11 +166,21 @@ export const ui = {
     // dulce»— y se cede el lema completo a la franja de imagen, que tiene ancho
     // para lucirlo. Cappa resuelve su héroe en 24 caracteres y dos líneas.
     'hero.titulo': 'El único lugar donde el mar es dulce',
-    'hero.entrada': 'Somos un hotel artesanal, trabajado con amor por manos mayas y con materiales provenientes de la arena. Fundado en 2008.',
+    // ⚠️ EL CLIENTE ESCRIBIÓ «Fundado en 2088». Es 2008: lo dicen su propio
+    // sitio, la ficha de `presentacion` y el resto de esta página. Se corrige
+    // sin preguntar porque el dato correcto está confirmado en tres sitios y
+    // 2088 no es una fecha posible; queda anotado para que lo sepa.
+    //
+    // Va en DOS claves y no en una con `<br>` dentro. Meter marcado en una
+    // cadena del diccionario obligaría a pintarla con `set:html`, y ese es
+    // exactamente el camino por el que un texto deja de escaparse. El salto de
+    // línea es presentación: lo pone la plantilla, que es su sitio.
+    'hero.entrada': 'Somos un hotel orgullosamente artesanal, construido por manos mayas con amor y respeto a la naturaleza.',
+    'hero.entradaFundado': 'Fundado en 2008.',
     'hero.bajar': 'Bajar al contenido',
 
     'alojamiento.titulo': 'Alojamiento',
-    'alojamiento.entrada': 'Bungalows con jacuzzi privado y habitaciones frente al Caribe.',
+    'alojamiento.entrada': 'Bungalows con jacuzzi privado y habitaciones frente a las playas de Tulum.',
     'alojamiento.ver': 'Ver alojamiento',
     'alojamiento.detalle': 'Ver detalle',
     'alojamiento.suites': 'Bungalows',
@@ -207,7 +217,13 @@ export const ui = {
     'instalaciones.titulo': 'Nuestros espacios',
     'actividades.titulo': 'Qué hacer en Tulum',
     'actividades.meta': 'Las ruinas frente al mar, los cenotes, Sian Ka’an, Cobá y la bahía de Akumal: qué hay alrededor de Azucar Hotel Tulum y por qué merece el viaje.',
-    'actividades.entrada': 'El hotel está en la franja de arena entre el mar y la laguna. Esto es lo que hay alrededor.',
+    // «Una de las ocho razones» hace el trabajo que el cliente pidió —enseñar
+    // que hay mucho más que la playa— SIN nombrar el sargazo. Nombrar un
+    // problema para restarle importancia lo fija en la cabeza de quien lee.
+    'actividades.entrada': 'El hotel está en la franja de arena entre el mar y la laguna, y el mar es sólo una de las ocho razones para estar aquí. Éstas son las otras siete.',
+    'actividades.creditos': 'Créditos fotográficos',
+    'actividades.creditosNota': 'Las fotografías de esta página son de terceros y se publican bajo licencia libre, con la atribución que cada licencia exige.',
+    'actividades.creditoObra': 'Obra',
     'actividades.cierre': 'En recepción te ayudamos a organizar cualquiera de estas salidas: horarios, cómo llegar y qué llevar.',
     'nosotros.titulo': 'Nosotros',
     'nosotros.meta': 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Un Small Luxury Hotel frente al Caribe, en la zona hotelera de Tulum.',
@@ -420,11 +436,12 @@ export const ui = {
 
     'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77780',
     'hero.titulo': 'The Sweetest Temptation',
-    'hero.entrada': 'A handcrafted hotel, made with love by Maya hands and with materials that come from the sand itself. Founded in 2008.',
+    'hero.entrada': 'We are a proudly handcrafted hotel, built by Maya hands with love and respect for nature.',
+    'hero.entradaFundado': 'Founded in 2008.',
     'hero.bajar': 'Scroll to content',
 
     'alojamiento.titulo': 'Rooms & Bungalows',
-    'alojamiento.entrada': 'Bungalows with a private jacuzzi and rooms facing the Caribbean.',
+    'alojamiento.entrada': 'Bungalows with a private jacuzzi and rooms facing the beaches of Tulum.',
     'alojamiento.ver': 'View rooms',
     'alojamiento.detalle': 'View details',
     'alojamiento.suites': 'Bungalows',
@@ -461,7 +478,10 @@ export const ui = {
     'instalaciones.titulo': 'Our spaces',
     'actividades.titulo': 'What to do in Tulum',
     'actividades.meta': 'The seafront ruins, the cenotes, Sian Ka’an, Cobá and Akumal Bay: what surrounds Azucar Hotel Tulum and why it is worth the trip.',
-    'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon. This is what is around it.',
+    'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon — and the sea is only one of eight reasons to be here. These are the other seven.',
+    'actividades.creditos': 'Photo credits',
+    'actividades.creditosNota': 'The photographs on this page are by third parties and are published under free licences, with the attribution each licence requires.',
+    'actividades.creditoObra': 'Work',
     'actividades.cierre': 'At reception we will help you arrange any of these outings: times, how to get there and what to bring.',
     'nosotros.titulo': 'About us',
     'nosotros.meta': 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. A Small Luxury Hotel facing the Caribbean, in Tulum\u2019s hotel zone.',

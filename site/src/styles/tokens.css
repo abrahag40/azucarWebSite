@@ -39,6 +39,13 @@
   --color-accent:        #6F9440;  /* 3.51:1 — decorativo, bordes, iconos, fondos */
   --color-accent-text:   #4A6E2C;  /* 5.90:1 blanco · 5.11:1 superficie alterna */
   --color-accent-hover:  #3A5C24;  /* 7.67:1 — estado hover/focus */
+  /* Pistacho CLARO, y existe por un motivo muy concreto: es el único que puede
+     usarse como TEXTO sobre la fotografía del héroe. Los tres de arriba son
+     para fondos claros; sobre una foto oscura, `accent-text` es ilegible.
+     Su contraste no depende sólo de él sino del velo del héroe — la cuenta
+     completa está en `.hero__velo`, dentro de `Hero.astro`. Con el velo
+     actual da **5.05:1** en el punto más desfavorable. */
+  --color-accent-claro:  #C6DDA0;  /* 5.05:1 sobre el héroe con su velo */
 
   --color-ink:           #222222;  /* 15.91:1 — texto principal */
   --color-ink-muted:     #666666;  /*  5.74:1 — texto secundario, cumple AA */

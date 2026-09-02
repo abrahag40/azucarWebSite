@@ -395,8 +395,26 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     padding-block: var(--space-2);
     border-bottom: 1px solid transparent;
     white-space: nowrap;
+    /* Cappa: `transition: all .4s` en su `.nav-link` (línea 851 de su
+       `style.css`). Se copia sólo el color —animar `all` incluye layout y es
+       caro—, y se respeta a quien pide menos movimiento. Sin transición el
+       cambio es tan brusco que se lee como un parpadeo, no como respuesta. */
+    transition: color 0.35s ease;
   }
-  .nav__lista > li > a:hover,
+  @media (prefers-reduced-motion: reduce) {
+    .nav__lista > li > a { transition: none; }
+  }
+
+  /* 🎨 EL HOVER ES SÓLO UN CAMBIO DE COLOR, COMO EN LA PLANTILLA.
+     Medido en el CSS de Cappa, `.navbar .navbar-nav .nav-link:hover { color:
+     #aa8453 }` — su oro, sin subrayado ni nada más. Aquí tenía además un
+     `border-bottom` que se encendía al pasar el ratón, y esa raya se comía el
+     protagonismo del color: el cliente pidió el hover dos veces porque lo que
+     veía era la línea, no la fuente.
+     El subrayado NO desaparece: se queda para `aria-current`, marcando la
+     página actual. Un mismo adorno para «estás aquí» y para «el ratón está
+     encima» dice dos cosas con un solo signo. */
+  .nav__lista > li > a:hover { color: var(--color-accent-text); }
   .nav__lista > li > a[aria-current='page'] {
     color: var(--color-accent-text);
     border-bottom-color: var(--color-accent);
@@ -434,6 +452,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     color: var(--color-ink); text-decoration: none;
     padding-inline: var(--space-2);
   }
+  .cabecera__idioma { transition: color 0.35s ease; }
   .cabecera__idioma:hover { color: var(--color-accent-text); }
 
   /* --- Variante sobre fotografía -------------------------------------------
@@ -481,30 +500,28 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     filter: brightness(1.7) saturate(1.35)
             drop-shadow(0 1px 4px rgb(0 0 0 / 0.7));
   }
-  /* 🔴 SOBRE LA FOTO EL TEXTO NO CAMBIA DE COLOR AL PASAR EL RATÓN, Y ES
-     DELIBERADO. El cliente pidió que el menú cambie de color en hover «como en
-     la plantilla», y en el resto del sitio eso es exactamente lo que hace: el
-     enlace pasa a pistacho. Aquí no puede.
+  /* 🟢 SOBRE LA FOTO EL COLOR TAMBIÉN CAMBIA — Y COSTÓ CAMBIAR EL FONDO.
+     La primera vez dije que aquí no se podía, y tenía razón con el fondo de
+     entonces: el blanco daba 4.93:1 sobre la foto —apenas por encima del 4.5:1
+     de WCAG 1.4.3— y cualquier verde reconocible caía a 2.6:1.
 
-     La cuenta, hecha sobre los píxeles reales de `hero-roof-top.webp` con el
-     velo del héroe compuesto: el blanco da **4.93:1** en el punto más
-     desfavorable, justo por encima del 4.5:1 que exige WCAG 1.4.3. Para que
-     otro color pasara ahí haría falta una luminancia relativa ≥ 0.908 — es
-     decir, un blanco con un tinte tan leve que no se distinguiría del blanco.
-     Cualquier pistacho reconocible como verde cae a 2.6:1.
+     El cliente lo pidió otra vez, así que en lugar de repetir la negativa se
+     movió la tercera variable: **el velo del héroe**. Su franja superior pasó
+     de 0.34 a 0.52 de negro (ver `.hero__velo` en `Hero.astro`), y con ese
+     fondo el pistacho claro `--color-accent-claro` sí pasa. El número medido
+     está anotado allí, no aquí, porque el que manda es el del fondo.
 
-     El estado de hover es texto y le aplica el mismo mínimo que a cualquier
-     otro. Así que sobre la foto el cambio se hace con el SUBRAYADO, que es un
-     componente gráfico y sólo necesita 3:1, y el texto se queda en blanco.
-     Cambiar de color y quedarse en 2.6:1 sería elegir el gusto por encima de
-     la legibilidad de quien mira la pantalla a pleno sol en una playa. */
+     La lección: un requisito que choca con un criterio de accesibilidad casi
+     nunca se resuelve eligiendo entre los dos. Se resuelve cambiando lo que
+     ninguno de los dos había puesto sobre la mesa. */
   .cabecera--sobre-hero .nav__lista > li > a:hover,
-  .cabecera--sobre-hero .nav__lista > li > a[aria-current='page'] {
-    color: #fff;
-    border-bottom-color: var(--color-accent);
-  }
   .cabecera--sobre-hero .desplegable__disparador:hover,
-  .cabecera--sobre-hero .desplegable[open] > .desplegable__disparador { color: #fff; }
+  .cabecera--sobre-hero .desplegable[open] > .desplegable__disparador,
+  .cabecera--sobre-hero .cabecera__idioma:hover { color: var(--color-accent-claro); }
+  .cabecera--sobre-hero .nav__lista > li > a[aria-current='page'] {
+    color: var(--color-accent-claro);
+    border-bottom-color: var(--color-accent-claro);
+  }
   .cabecera--sobre-hero .menu__icono,
   .cabecera--sobre-hero .menu__icono::before,
   .cabecera--sobre-hero .menu__icono::after { background: #fff; }
@@ -720,6 +737,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   /* Mismo color de acento que `.nav__lista > li > a:hover`: sin esto,
      «Alojamiento» era el único disparador que no cambiaba de color al pasar el
      ratón ni al abrirse, aunque ya compartiera su tipografía. */
+  .desplegable__disparador { transition: color 0.35s ease; }
   .desplegable__disparador:hover,
   .desplegable[open] > .desplegable__disparador { color: var(--color-accent-text); }
 
