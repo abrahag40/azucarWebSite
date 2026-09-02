@@ -37,7 +37,7 @@
  * y se usa para una petición. Es la misma regla de CLAUDE.md §6 —«nada de
  * credenciales del cliente en el repositorio»— aplicada también a lo temporal.
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { componerSolicitud } from '../site/src/booking/solicitud.ts';
 import { correoAcuseHtml, correoManagerHtml, saludoPorHoraUTC } from '../site/src/booking/correoHtml.ts';
@@ -72,18 +72,28 @@ function rotulos(idioma) {
     // salía con «Habitación King…» dentro. Era un defecto del script, no del
     // sitio —`FormularioSolicitud.astro` los saca de `x.data.nombre[idioma]`—,
     // pero una muestra que miente sobre el producto no sirve para revisarlo.
-    tipos: idioma === 'es'
-      ? {
-          'bungalow-mar': 'Bungalow Mar',
-          'bungalow-cielo': 'Bungalow Cielo',
-          'habitacion-king-mar': 'Habitación King · Vista parcial jardín y/o mar',
-        }
-      : {
-          'bungalow-mar': 'Bungalow Mar',
-          'bungalow-cielo': 'Bungalow Cielo',
-          'habitacion-king-mar': 'King Room · Partial garden &/or ocean views',
-        },
+    // 🔴 LOS NOMBRES SE LEEN DE LA FUENTE, no se copian aquí.
+    // Estaban escritos a mano y se quedaron desfasados en cuanto el hotel
+    // confirmó su nomenclatura comercial: la muestra decía «Habitación King»
+    // mientras el sitio ya decía «Habitación Deluxe King». Una muestra que
+    // miente sobre el producto no sirve para revisar el producto — es
+    // exactamente el mismo defecto que ya tuvo este guion con el idioma de los
+    // tipos, y la segunda vez ya no es un descuido, es un patrón.
+    tipos: nombresDeTipos(idioma),
   };
+}
+
+/** Los nombres reales, leídos de `src/content/alojamiento/*.json`. */
+function nombresDeTipos(idioma) {
+  const dir = 'site/src/content/alojamiento';
+  return Object.fromEntries(
+    readdirSync(dir)
+      .filter((f) => f.endsWith('.json'))
+      .map((f) => {
+        const d = JSON.parse(readFileSync(`${dir}/${f}`, 'utf8'));
+        return [f.replace(/\.json$/, ''), d.nombre[idioma]];
+      }),
+  );
 }
 
 function textosManager(idioma) {
