@@ -47,16 +47,37 @@ const t = usarT(idioma);
 // guardián «fragmentos de URL sanos» de `verificar-todo.sh`, que falla si el
 // `id` no existe en la página de destino.
 type Hijo = { etiqueta: string; href: string | null; nota?: string };
-type Entrada = { etiqueta: string; href: string; path: string; hijos?: Hijo[] };
+type Entrada = {
+  etiqueta: string;
+  /** Página propia del apartado. Ausente en los que sólo agrupan. */
+  href?: string;
+  /**
+   * Las rutas que este apartado POSEE, para marcar «estás aquí».
+   *
+   * Es una lista y no una sola ruta por dos motivos que aparecieron a la vez:
+   *
+   *   · «Antes de viajar» no tiene página propia — agrupa cuatro que sí la
+   *     tienen. Sin esto, estar en /politicas/ no encendía nada en la barra.
+   *   · Y estando en la ficha de un bungalow tampoco se encendía «Alojamiento»,
+   *     porque `rutaActual` es `alojamiento/bungalow-mar` y no `alojamiento`.
+   *     Llevaba así desde el sprint 2 y nadie lo había visto: quien navega por
+   *     el catálogo no tenía ni una pista de dónde estaba.
+   *
+   * El prefijo se compara con `/` detrás a propósito: sin él, `politicas`
+   * marcaría también una futura `politicas-de-grupo`.
+   */
+  rutas: string[];
+  hijos?: Hijo[];
+};
 
 const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
   .sort((a, b) => a.data.orden - b.data.orden);
 
 const enlaces: Entrada[] = [
-  { etiqueta: t('nav.nosotros'), path: 'nosotros', href: ruta(idioma, 'nosotros') },
+  { etiqueta: t('nav.nosotros'), rutas: ['nosotros'], href: ruta(idioma, 'nosotros') },
   {
     etiqueta: t('nav.alojamiento'),
-    path: 'alojamiento',
+    rutas: ['alojamiento'],
     href: ruta(idioma, 'alojamiento'),
     hijos: [
       { etiqueta: t('nav.verTodo'), href: ruta(idioma, 'alojamiento') },
@@ -68,7 +89,7 @@ const enlaces: Entrada[] = [
   },
   {
     etiqueta: t('nav.amenidades'),
-    path: 'servicios',
+    rutas: ['servicios', 'restaurante'],
     href: ruta(idioma, 'servicios'),
     hijos: [
       { etiqueta: t('nav.verTodoAmenidades'), href: ruta(idioma, 'servicios') },
@@ -80,10 +101,10 @@ const enlaces: Entrada[] = [
       { etiqueta: t('nav.rooftopWhitePearl'), href: `${ruta(idioma, 'servicios')}#rooftop-white-pearl` },
     ],
   },
-  { etiqueta: t('nav.galeria'), path: 'galeria', href: ruta(idioma, 'galeria') },
+  { etiqueta: t('nav.galeria'), rutas: ['galeria'], href: ruta(idioma, 'galeria') },
   {
     etiqueta: t('nav.eventos'),
-    path: 'eventos',
+    rutas: ['eventos'],
     href: ruta(idioma, 'eventos'),
     hijos: [
       { etiqueta: t('nav.verTodoEventos'), href: ruta(idioma, 'eventos') },
@@ -94,10 +115,39 @@ const enlaces: Entrada[] = [
   // Apartado SUELTO, no colgado de «Amenidades» (cliente, 2026-09-01). Lo de
   // esa página no es del hotel: las amenidades son lo que el hotel ofrece y por
   // lo que responde; esto es el entorno, sobre el que no responde nadie.
-  { etiqueta: t('nav.actividades'), path: 'actividades', href: ruta(idioma, 'actividades') },
-  { etiqueta: t('nav.faq'), path: 'preguntas-frecuentes', href: ruta(idioma, 'preguntas-frecuentes') },
-  { etiqueta: t('nav.politicas'), path: 'politicas', href: ruta(idioma, 'politicas') },
+  { etiqueta: t('nav.actividades'), rutas: ['actividades'], href: ruta(idioma, 'actividades') },
+  /**
+   * ── «ANTES DE VIAJAR» — el único apartado SIN página propia ───────────────
+   * Nace el 2026-09-02: ocho apartados eran demasiados y el cliente pidió
+   * juntar FAQ y Políticas. Aquí caben cuatro, y no por hacer sitio: son las
+   * cuatro páginas que consulta quien YA decidió venir, frente a las otras
+   * seis, que existen para convencer. Agruparlas por INTENCIÓN y no por tipo
+   * de contenido es lo que hace que la barra se lea de un vistazo.
+   *
+   * 🔴 Y recupera dos páginas. «Cómo llegar» y «Contacto» salieron de la barra
+   * el 2026-09-01 porque no cabían, y se quedaron sólo en el pie. Vuelven aquí
+   * sin salir de él: quien las busca las encuentra en los dos sitios.
+   *
+   * NO tiene `href`: no hay una página «Antes de viajar» y no se va a inventar
+   * una para que el rótulo lleve a algún lado. El `<summary>` abre el panel,
+   * que es lo que hace en los otros tres desplegables — la diferencia es que
+   * aquí tampoco hay un «Ver todo».
+   */
+  {
+    etiqueta: t('nav.antesDeViajar'),
+    rutas: ['preguntas-frecuentes', 'politicas', 'ubicacion', 'contacto', 'aviso-de-privacidad'],
+    hijos: [
+      { etiqueta: t('nav.faq'), href: ruta(idioma, 'preguntas-frecuentes') },
+      { etiqueta: t('nav.politicas'), href: ruta(idioma, 'politicas') },
+      { etiqueta: t('nav.ubicacion'), href: ruta(idioma, 'ubicacion') },
+      { etiqueta: t('nav.contacto'), href: ruta(idioma, 'contacto') },
+    ],
+  },
 ];
+
+/** «Estás aquí»: la ruta actual, o cualquier página colgada de ella. */
+const esActual = (e: Entrada) =>
+  e.rutas.some((r) => rutaActual === r || rutaActual.startsWith(`${r}/`));
 
 const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 ---
@@ -148,7 +198,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
               <details class="desplegable">
                 <summary
                   class="desplegable__disparador"
-                  aria-current={rutaActual === e.path ? 'page' : undefined}
+                  aria-current={esActual(e) ? 'page' : undefined}
                 >
                   <span>{e.etiqueta}</span>
                   <span class="desplegable__flecha" aria-hidden="true"></span>
@@ -174,7 +224,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
             ) : (
               <a
                 href={e.href}
-                aria-current={rutaActual === e.path ? 'page' : undefined}
+                aria-current={esActual(e) ? 'page' : undefined}
               >{e.etiqueta}</a>
             )}
           </li>
@@ -223,7 +273,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
                         {h.href ? (
                           <a
                             href={h.href}
-                            aria-current={rutaActual === e.path && h.href === e.href ? 'page' : undefined}
+                            aria-current={h.href === e.href && esActual(e) ? 'page' : undefined}
                           >{h.etiqueta}</a>
                         ) : (
                           <span class="submenu__inerte">
@@ -238,7 +288,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
               ) : (
                 <a
                   href={e.href}
-                  aria-current={rutaActual === e.path ? 'page' : undefined}
+                  aria-current={esActual(e) ? 'page' : undefined}
                 >{e.etiqueta}</a>
               )}
             </li>
@@ -344,7 +394,15 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 
   .cabecera__fila {
     display: flex; align-items: center; justify-content: space-between;
-    gap: var(--space-5);
+    /* 16 px y no 24, y es **gratis visualmente**. Con `space-between` este
+       `gap` sólo es un MÍNIMO: en cuanto sobra ancho —de 1200 px en adelante,
+       que es donde vive casi todo el mundo— los huecos reales los decide el
+       espacio libre y este número no se nota. Donde sí actúa es en el extremo
+       estrecho, y ahí cada píxel es rango de pantallas que conservan el menú
+       horizontal en vez de la hamburguesa.
+       Medido: el ancho mínimo de la fila era 1159 px con el umbral en 1152 —es
+       decir, se pasaba por 7—. Estos 16 px lo bajan a 1143 y dejan margen real. */
+    gap: var(--space-4);
     min-height: var(--alto-cabecera);
   }
   /* `flex: none` — el logo NUNCA se encoge. Es el único hijo de la fila sin
@@ -367,11 +425,20 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {
-    /* 12 px, tercer ajuste de este hueco y todos por la misma razón: el menú va
-       al límite y cada apartado nuevo se paga aquí. Fue 24 px con seis
-       apartados, 16 con siete y ahora 12 con ocho. Los siete huecos suman 84 px
-       en vez de 168. Ver la nota del umbral, más abajo. */
-    display: flex; align-items: center; gap: var(--space-3);
+    /* 11 px, y es un número medido, no una talla de la escala.
+       Cuarto ajuste de este hueco: 24 px con seis apartados, 16 con siete, 12
+       con ocho y ahora 11 con siete otra vez. Que baje aun quitando un apartado
+       tiene explicación: «Antes de viajar» mide 121 px y las dos etiquetas que
+       sustituye sumaban 97.
+       Medido a 1152 px —el umbral de escritorio— la fila encajaba con **cero
+       holgura**: los huecos entre logotipo, menú y acciones se quedaban en su
+       mínimo de 24 px exactos, sin un píxel de sobra. Nada comprimido, pero
+       tampoco margen: una traducción más larga, otra métrica de fuente o
+       alguien con el tamaño de letra del navegador subido —que es una
+       preferencia de accesibilidad, no un caso raro— y desborda.
+       De 12 a 11 en los seis huecos son 6 px; con los 8 del botón, 14 px de
+       holgura real. Ninguno de los dos se nota; el desbordamiento sí. */
+    display: flex; align-items: center; gap: 11px;
     list-style: none; padding: 0; margin: 0;
   }
   /* `> li > a`: SÓLO los enlaces de primer nivel.
@@ -437,7 +504,9 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
      leyéndose desproporcionada frente a «Contacto» o «Alojamiento» de al lado. */
   .cabecera__acciones .boton {
     min-height: 40px;
-    padding: var(--space-2) var(--space-5);
+    /* 20 px de relleno lateral y no 24: ocho píxeles que en un botón de 170 px
+       no ve nadie, y que son la mitad de la holgura de toda la fila. */
+    padding: var(--space-2) 20px;
     font-size: var(--text-sm);
   }
   /* `inline-flex` y no el `inline` por defecto: en un <a> inline el padding

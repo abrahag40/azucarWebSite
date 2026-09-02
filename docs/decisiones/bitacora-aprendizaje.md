@@ -2959,6 +2959,101 @@ que suene a folleto contamina las ocho.
 
 ---
 
+## L-105 · Agrupar por intención, y el desbordamiento que ninguna medición veía
+
+El cliente pidió juntar FAQ y Políticas «porque el menú tiene muchos items», y preguntó cómo se
+llamaría el apartado. Las dos mitades de la respuesta valen lo mismo.
+
+### El rótulo: neutro o de tarea
+
+«Información» mide 96 px y «Antes de viajar» 120. Los 24 px de diferencia compran algo concreto:
+un rótulo neutro **no predice su contenido** —en un sitio web todo es información, que es la
+crítica clásica de Nielsen Norman a etiquetas como *Recursos*, *Más* o *Información*—, mientras
+que uno de tarea dice qué hay dentro y además reutiliza el vocabulario que la ficha de habitación
+ya emplea con «Antes de reservar».
+
+### Lo que de verdad arregló: dos páginas que habíamos perdido
+
+Agrupar dos apartados ahorra un hueco, no una pantalla. **El valor estaba en el sitio que
+libera.** «Cómo llegar» y «Contacto» habían salido de la barra el 2026-09-01 por falta de espacio
+y se habían quedado sólo en el pie — justo las dos páginas que busca quien **ya decidió venir**.
+
+Y ahí está el criterio que hace que el menú se lea de un vistazo: las cuatro que entran —FAQ,
+Políticas, Cómo llegar, Contacto— no comparten formato ni sección; comparten **intención**. Son
+lo que se consulta después de decidir, frente a los otros seis apartados, que existen para
+convencer. *Agrupar por intención del lector y no por tipo de contenido.*
+
+De paso, dentro de un panel desplegable no hay límite de ancho, así que «FAQ» y «Políticas»
+recuperan sus nombres completos. Aquellas abreviaturas eran una concesión al ancho de la barra,
+no una decisión editorial, y llevaban meses pareciendo lo segundo.
+
+### Y un defecto de años que salió al medir: «estás aquí» no funcionaba
+
+«Antes de viajar» no tiene página propia, así que estando en `/politicas/` no se encendía nada en
+la barra. Al arreglarlo —cambiando `path: string` por `rutas: string[]`— apareció el mismo fallo
+en un sitio mucho peor: **estando en la ficha de un bungalow tampoco se encendía «Alojamiento»**,
+porque `rutaActual` es `alojamiento/bungalow-mar` y se comparaba con `alojamiento` por igualdad.
+
+Llevaba así desde el sprint 2. Quien recorría el catálogo —el recorrido más importante del
+sitio— no tenía ni una pista de dónde estaba.
+
+> Un dato que se compara por igualdad cuando en realidad es una jerarquía falla en silencio para
+> todos los hijos. Y los hijos suelen ser la mayoría de las páginas.
+
+---
+
+## L-106 · El ancho no se suma: se le pregunta al navegador. Y con la fuente equivocada.
+
+Para saber si el menú nuevo cabía sumé a mano: logotipo + navegación + acciones + huecos. Me dio
+1081, luego 1075, luego 1066 — **tres cifras distintas del mismo layout**, según qué anchura
+capturaba y si el `getComputedStyle().width` devolvía caja de contenido o de borde.
+
+La medición que vale es una línea:
+
+```js
+f.style.width = 'max-content';           // el ancho intrínseco de la fila
+const minimo = f.getBoundingClientRect().width;
+```
+
+**1159 px**, con el umbral de escritorio en 1152: se pasaba por 7. Ninguna de mis tres sumas lo
+decía, y el navegador no se equivoca sobre su propio layout.
+
+El ajuste también salió de medir. El hueco de `.cabecera__fila` bajó de 24 a 16 px, y es
+**gratis visualmente**: con `justify-content: space-between` ese `gap` es sólo un MÍNIMO — de
+1200 px en adelante los huecos reales los decide el espacio libre y el número no se nota. Donde
+actúa es en el extremo estrecho, que es exactamente donde hacía falta. Mínimo: 1143 px.
+
+### 🔴 Y entonces la pregunta que lo cambió todo: ¿y si la fuente no ha cargado?
+
+Todas las caras del sitio son `font-display: swap`, así que mientras el `.woff2` viaja el
+navegador pinta con el respaldo. Forzando el respaldo y volviendo a medir el mismo mínimo:
+
+| tipografía del menú | ancho mínimo de la cabecera | contra el umbral de 1152 |
+|---|---|---|
+| Barlow Condensed (la de marca) | 1143 px | **cabe**, 9 px |
+| `'Arial Narrow'` (primer respaldo) | 1279 px | **se pasa por 127** |
+| `system-ui` (segundo respaldo) | 1387 px | **se pasa por 235** |
+
+En cada carga en frío entre 1152 y 1279 px de ancho, la cabecera **se desbordaba** durante el
+instante que tarda la fuente en llegar. Y sólo se precargaba Gilda Display —la de los titulares—,
+no Barlow Condensed, que es la del menú entero.
+
+**Por qué no lo vio nunca ninguna medición:** todos nuestros scripts empiezan por
+`await document.fonts.ready`. Lighthouse, axe y el ojo miden **después** de que las fuentes
+carguen. Habíamos automatizado la ceguera a este defecto.
+
+La corrección es precargar la fuente del menú: 14 KB, en paralelo con el CSS. No cierra la
+ventana del todo —si la fuente no llega nunca, el respaldo se queda y con él el
+desbordamiento—, así que queda como riesgo con sus tres números, no como resuelto.
+
+> **El patrón, y es el más general de los tres días:** una medición hecha en el estado final
+> ignora todos los estados por los que se pasa para llegar. La fuente cargando, el observador que
+> aún no ha disparado, el panel sin viewport. **El defecto casi nunca vive en el estado final** —
+> vive en el camino, que es justo lo que nadie instrumenta.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2970,6 +3065,7 @@ que suene a folleto contamina las ocho.
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
+| R-35 | **La cabecera se desborda si la tipografía del menú no carga.** Ancho mínimo medido: 1143 px con Barlow Condensed, **1279 con `Arial Narrow` y 1387 con `system-ui`**, contra un umbral de escritorio de 1152. Mitigado precargando la fuente (14 KB), pero si no llega nunca el respaldo se queda | Medio | La cura estructural es que el menú no dependa del ancho exacto de una tipografía. Mientras tanto: **siete apartados es el techo**, y ninguna etiqueta más larga que «Antes de viajar» (L-106) |
 | R-33 | **Tres roof tops con nombre y ninguna descripción: «Selvamar» (jacuzzi), «Blanc» (mirador, según la gerencia) y «White Pearl» (pedido por el cliente).** Puede que Blanc y White Pearl sean el mismo sitio | Medio | Pendiente de confirmar con el hotel. White Pearl sigue marcado como contenido de ejemplo |
 | R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada | Medio | `build:prod` bloqueado a propósito. Pedidas las fotos a la gerencia |
 | R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |

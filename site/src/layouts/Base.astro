@@ -196,6 +196,42 @@ const schema = {
       type="font/woff2"
       crossorigin
     />
+    {/* 🔴 SEGUNDA PRECARGA — Barlow Condensed 400, la tipografía del MENÚ. Y no
+        es una optimización: es lo que evita que la cabecera se rompa.
+
+        Todas las caras son `font-display: swap`, así que mientras el `.woff2`
+        viaja el navegador pinta con el respaldo. Medido con el ancho mínimo que
+        necesita la fila de cabecera en español:
+
+          con Barlow Condensed   1143 px   ← cabe en el umbral de 1152
+          con 'Arial Narrow'     1279 px   ← se pasa por 127
+          con system-ui          1387 px   ← se pasa por 235
+
+        Es decir: en cada carga en frío entre 1152 y 1279 px de ancho, la
+        cabecera se desbordaba durante el instante que tarda la fuente. No lo
+        veía ninguna medición porque todas se hacen con las fuentes ya
+        cargadas — `await document.fonts.ready` es la primera línea de casi
+        todos nuestros scripts de medida.
+
+        Precargarla la pide en paralelo con el CSS en vez de esperar a que el
+        CSS se analice para descubrirla, y prácticamente cierra esa ventana.
+
+        ⚠️ NO la cierra del todo: si la fuente no llega —red caída a mitad,
+        bloqueador— el respaldo se queda, y con él el desbordamiento. Queda
+        anotado como riesgo con sus tres números medidos, en vez de darlo por
+        resuelto. La cura estructural sería que el menú no dependiera del ancho
+        exacto de una tipografía, y eso es otro cambio.
+
+        Sigue sin precargarse Barlow (el cuerpo): su respaldo mide parecido y no
+        rompe nada, y precargar las cinco competiría con la foto del héroe, que
+        es el elemento LCP real. */}
+    <link
+      rel="preload"
+      href="/fuentes/barlow-condensed-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     {/* is:inline — no es un script de cliente: es metadato que debe quedar
         literal en el HTML. Sin la directiva, Astro intenta procesarlo. */}

@@ -29,9 +29,22 @@ export const ui = {
     'nav.eventos': 'Eventos',
     'nav.eventosInfo': 'Solicitud de información',
     'nav.eventosVisita': 'Visita guiada',
-    // Etiqueta corta en la barra, título largo en la página. Mismo criterio que
-    // «FAQ»: «Políticas y privacidad» mide 205 px y no cabe siete veces.
-    'nav.politicas': 'Políticas',
+    // ── «Antes de viajar» — el apartado que agrupa lo práctico ──────────────
+    // Nace el 2026-09-02 porque ocho apartados eran demasiados. Agrupa FAQ,
+    // Políticas, Cómo llegar y Contacto: las cuatro páginas que consulta quien
+    // YA decidió venir, frente a las otras seis, que existen para convencer.
+    //
+    // Se eligió sobre «Información» —96 px frente a 120— sabiendo que costaba
+    // 24 px, porque un rótulo neutro no predice su contenido: en un sitio web
+    // todo es información. «Antes de viajar» dice qué hay dentro, y usa el
+    // vocabulario que la ficha de habitación ya emplea con «Antes de reservar».
+    'nav.antesDeViajar': 'Antes de viajar',
+    // 🔴 DENTRO DEL SUBMENÚ VUELVEN LOS NOMBRES COMPLETOS.
+    // «FAQ» y «Políticas» eran abreviaturas impuestas por el ancho de la barra
+    // —«Preguntas frecuentes» medía 164 px—. En un panel desplegable ese límite
+    // no existe, así que el menú y el encabezado de la página vuelven a decir
+    // lo mismo. La abreviatura era una concesión, no una decisión editorial.
+    'nav.politicas': 'Políticas y privacidad',
     'nav.galeria': 'Galería',
     'nav.actividades': 'Actividades',
     'nav.ubicacion': 'Cómo llegar',
@@ -47,7 +60,7 @@ export const ui = {
     // La PÁGINA sigue titulándose «Preguntas frecuentes» (`faq.titulo`): el
     // menú necesita ser breve, el encabezado puede ser descriptivo. Es la
     // misma abreviatura que usa Cappa («F.A.Qs») y la que espera cualquiera.
-    'nav.faq': 'FAQ',
+    'nav.faq': 'Preguntas frecuentes',
     'nav.contacto': 'Contacto',
     'nav.menu': 'Menú',
     'nav.principal': 'Navegación principal',
@@ -353,12 +366,13 @@ export const ui = {
     'nav.eventos': 'Events',
     'nav.eventosInfo': 'Information request',
     'nav.eventosVisita': 'Guided visit',
-    'nav.politicas': 'Policies',
+    'nav.antesDeViajar': 'Before you travel',
+    'nav.politicas': 'Policies and privacy',
     'nav.galeria': 'Gallery',
     'nav.actividades': 'Activities',
     'nav.ubicacion': 'Getting here',
     'nav.proximamente': 'coming soon',
-    'nav.faq': 'FAQ',
+    'nav.faq': 'Frequent questions',
     'nav.contacto': 'Contact',
     'nav.menu': 'Menu',
     'nav.principal': 'Main navigation',
