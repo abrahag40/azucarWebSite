@@ -38,7 +38,7 @@ const fotos: Record<string, ImageMetadata> = {
 ---
 <section class="seccion" aria-labelledby="instalaciones-titulo">
   <div class="contenedor">
-    <header class="encabezado encabezado--centrado">
+    <header data-revelar class="encabezado encabezado--centrado">
       <h2 id="instalaciones-titulo">{t('instalaciones.titulo')}</h2>
     </header>
 
@@ -47,6 +47,7 @@ const fotos: Record<string, ImageMetadata> = {
         <article
           id={x.id}
           class:list={['instalacion', i % 2 === 1 && 'instalacion--invertida']}
+          data-revelar
           aria-labelledby={`${x.id}-titulo`}
         >
           <Image

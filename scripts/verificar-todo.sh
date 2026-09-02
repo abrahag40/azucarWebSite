@@ -34,14 +34,26 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
-verde=$'\033[32m'; rojo=$'\033[31m'; gris=$'\033[90m'; fin=$'\033[0m'
+verde=$'\033[32m'; rojo=$'\033[31m'; ambar=$'\033[33m'; gris=$'\033[90m'; fin=$'\033[0m'
 fallos=0
+saltados=0
 
+# TRES estados, no dos. El tercero —«no se pudo comprobar»— existe porque una
+# comprobación que se salta y se pinta en verde es un falso verde, que es
+# exactamente lo que este script existe para no producir. Cualquier paso que
+# termine bien pero imprima una línea que empiece por `AVISO:` se muestra en
+# ámbar con su motivo, y el resumen final los cuenta aparte.
 paso() {
   local nombre="$1"; shift
   local salida
   if salida=$("$@" 2>&1); then
-    printf "  ${verde}✓${fin} %s\n" "$nombre"
+    if printf '%s' "$salida" | grep -q '^AVISO:'; then
+      printf "  ${ambar}⚠ %s — no se pudo comprobar${fin}\n" "$nombre"
+      printf "${gris}%s${fin}\n" "$(echo "$salida" | sed 's/^/      /')"
+      saltados=$((saltados + 1))
+    else
+      printf "  ${verde}✓${fin} %s\n" "$nombre"
+    fi
   else
     printf "  ${rojo}✗ %s${fin}\n" "$nombre"
     printf "${gris}%s${fin}\n" "$(echo "$salida" | tail -12 | sed 's/^/      /')"
@@ -100,10 +112,22 @@ paso "lockfile sincronizado (npm ci en Linux)" bash -c '
   # directa; levantar Docker dentro de Docker sería reproducir lo que acaba de
   # pasar de verdad.
   [ -z "${SALTAR_LOCKFILE:-}" ] || exit 0
-  command -v docker > /dev/null 2>&1 || {
-    echo "AVISO: sin Docker no se puede comprobar el lockfile como lo hace el CI."
+  # 🔴 DOS CONDICIONES, NO UNA: que el binario exista Y que el demonio responda.
+  # Comprobaba solo lo primero, y con Docker Desktop cerrado —el estado normal
+  # de una Mac recien encendida— el `docker run` fallaba y este guardian lo
+  # traducia a «package-lock.json desincronizado». Es decir: rojo, con un
+  # diagnostico FALSO y una receta que reescribe un lockfile que estaba bien.
+  #
+  # Un guardian que no puede comprobar debe avisar —eso ya estaba escrito aqui—
+  # pero AVISAR no es lo mismo que acusar. No distinguir «esta roto» de «no lo
+  # pude mirar» es peor que no mirar: manda a arreglar lo que no falla, y a la
+  # tercera vez deja de leerse.
+  command -v docker > /dev/null 2>&1 && docker info > /dev/null 2>&1 || {
+    echo "AVISO: no se pudo comprobar el lockfile — Docker no esta disponible."
+    echo "(¿instalado y el demonio arrancado? Docker Desktop tiene que estar abierto.)"
     echo "El CI y Cloudflare instalan con npm ci EN LINUX, y npm resuelve"
-    echo "distinto ahi que en macOS. Instala Docker o vigila el CI a mano."
+    echo "distinto ahi que en macOS: esta comprobacion solo vale hecha en Linux."
+    echo "El lockfile NO se ha declarado malo. Simplemente no se ha mirado."
     exit 0
   }
   docker run --rm -v "$PWD/site":/app -w /app node:22-slim \
@@ -295,7 +319,9 @@ paso "sin enlaces a recursos inexistentes" bash -c '
   [ "$rotos" -eq 0 ]'
 
 echo
-if [ "$fallos" -eq 0 ]; then
+if [ "$fallos" -eq 0 ] && [ "$saltados" -gt 0 ]; then
+  printf "  ${verde}Sin fallos${fin}, pero ${ambar}%s comprobación(es) no se pudieron hacer${fin}.\n\n" "$saltados"
+elif [ "$fallos" -eq 0 ]; then
   printf "  ${verde}Todo en verde.${fin}\n\n"
 else
   printf "  ${rojo}%s comprobación(es) fallaron.${fin}\n\n" "$fallos"

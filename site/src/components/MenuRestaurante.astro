@@ -101,7 +101,16 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
     font-size: var(--text-sm);
     letter-spacing: var(--tracking-antetitulo);
     text-transform: uppercase;
-    color: var(--color-accent);
+    /* 🔴 `accent-claro` Y NO `accent`, EN LOS TRES SITIOS DE ESTA CARTA.
+       Este bloque va sobre #1a1a1a, y el acento decorativo —#6F9440— es el
+       token que sólo garantiza 3:1 sobre BLANCO. Sobre este negro daba 4.96:1:
+       pasaba, pero por accidente y con el margen justo, usando un token cuyo
+       contrato dice explícitamente «decorativo, bordes, iconos, fondos».
+       `--color-accent-claro` existe justamente para texto sobre oscuro —nació
+       para el menú sobre la foto del héroe— y aquí da **11.8:1**.
+       Lo destapó axe-core al medir la página después del rediseño. El día que
+       alguien aclare este fondo, el token correcto ya está puesto. */
+    color: var(--color-accent-claro);
     margin: 0 0 var(--space-2);
   }
   .carta__titulo { font-size: var(--text-3xl); margin: 0; color: #fff; }
@@ -112,7 +121,7 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
     font-size: var(--text-lg);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-accent-claro);
     text-align: center;
     margin: 0 0 var(--space-6);
   }
@@ -161,7 +170,7 @@ const moneda = new Intl.NumberFormat(idioma === 'es' ? 'es-MX' : 'en-US', {
   .plato__precio {
     order: 3;
     flex: 0 0 auto;
-    color: var(--color-accent);
+    color: var(--color-accent-claro);
     font-variant-numeric: tabular-nums;
   }
   .plato__descripcion {

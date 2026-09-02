@@ -259,3 +259,34 @@ a:hover { color: var(--color-accent-hover); }
   margin-inline: auto;
   text-align: center;
 }
+
+/* ── Aparición progresiva al hacer scroll ───────────────────────────────────
+   El estado inicial SÓLO existe bajo `.revelar`, que pone un script de tres
+   líneas en el <head> (ver `Base.astro`). Sin JavaScript, o con
+   `prefers-reduced-motion`, esa clase no llega y estas reglas no se aplican:
+   la página se ve entera, desde el primer instante, sin nada que esperar.
+
+   Es la diferencia entre una animación y una barrera. Un `opacity: 0` escrito
+   sin esa condición deja el sitio EN BLANCO para quien no ejecuta scripts, y
+   es uno de los fallos de accesibilidad más caros que existen porque no lo
+   detecta ninguna herramienta: el HTML está ahí, sólo que invisible.
+
+   450 ms y no 900: el cliente pidió las apariciones «no tan lento». Una
+   animación de entrada que dura más de medio segundo deja de acompañar la
+   lectura y empieza a estorbarla — quien ya está bajando llega antes que el
+   contenido.
+
+   `translate` y `opacity`, nunca `height` ni `margin`: son las dos únicas
+   propiedades que no participan del layout, y por eso el CLS se queda en cero. */
+.revelar [data-revelar] {
+  opacity: 0;
+  translate: 0 14px;
+  transition:
+    opacity 0.45s var(--ease),
+    translate 0.45s var(--ease);
+  transition-delay: calc(var(--revela-i, 0) * 70ms);
+}
+.revelar [data-revelar].revelado {
+  opacity: 1;
+  translate: 0 0;
+}

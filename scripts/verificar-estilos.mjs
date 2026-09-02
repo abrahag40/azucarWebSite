@@ -147,6 +147,7 @@ const INTENCIONALES = new Map([
   ['legal__apartado', 'agrupador semántico dentro del texto legal'],
   ['politicas__grupo', 'agrupador semántico dentro de las políticas'],
   ['instalacion__texto', 'columna de la rejilla de instalaciones; la coloca el padre'],
+  ['cocina__lado', 'columna derecha de la rejilla del restaurante; la coloca el padre'],
   ['whatsapp-flotante__icono', 'el <svg> del botón flotante lleva sus medidas propias'],
 ]);
 

@@ -33,7 +33,8 @@ const { idioma } = Astro.props;
 <ul class="actividades" role="list">
   {actividades.map((a) => (
     <li>
-      <article class:list={['act', !a.imagen && 'act--glifo']}>
+      <article class:list={['act', !a.imagen && 'act--glifo']}
+        data-revelar>
         {/* Espaciador vacío que sólo aporta la PROPORCIÓN. Ver la nota de
             `.act__marco` en el CSS: es lo que hace que 3/4 sea un mínimo y no
             una jaula. */}

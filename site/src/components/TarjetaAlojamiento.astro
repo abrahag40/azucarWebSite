@@ -8,7 +8,7 @@ const { entrada, idioma } = Astro.props;
 const { data, id } = entrada;
 const t = usarT(idioma);
 ---
-<article class="tarjeta">
+<article class="tarjeta" data-revelar>
   <a class="tarjeta__medio" href={ruta(idioma, `alojamiento/${id}`)} tabindex="-1" aria-hidden="true">
     {data.imagenPrincipal ? (
       /* alt vacío, y el enlace de la foto oculto a la accesibilidad: es un

@@ -43,12 +43,22 @@ const t = usarT(idioma);
 )}
 
 <style>
+  /* 🔴 SIN `margin-top`. Lo llevaba —`--space-8`, 64 px— y se SUMABA al relleno
+     inferior de la ficha, que es `.seccion` y a 1280 px vale 96 px. Resultado
+     medido: **160 px de blanco** entre el último dato de la habitación y la
+     raya de «Anterior / Siguiente», más lo que ya deja la columna corta de la
+     rejilla. Se leía como que la página se había acabado.
+
+     Es el mismo error que el `scroll-margin` duplicado de las instalaciones
+     (L-091): dos elementos reservando el mismo hueco sin saber el uno del
+     otro. Aquí la separación la pone la sección de arriba, que para eso tiene
+     relleno; esto sólo necesita su propia raya y aire por debajo. */
   .vecinas {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-4);
-    margin-top: var(--space-8);
     padding-top: var(--space-6);
+    padding-bottom: var(--space-8);
     border-top: 1px solid var(--color-border);
   }
   .vecina {

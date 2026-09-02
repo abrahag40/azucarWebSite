@@ -24,7 +24,7 @@ const t = usarT(idioma);
 ---
 <section id={idAncla(idioma, 'elHotel')} class="seccion presentacion" aria-labelledby="presentacion-titulo">
   <div class="contenedor presentacion__rejilla">
-    <div class="presentacion__texto">
+    <div class="presentacion__texto" data-revelar>
       <p class="antetitulo">{presentacion.antetitulo[idioma]}</p>
       <h2 id="presentacion-titulo">{presentacion.titulo[idioma]}</h2>
       {presentacion.parrafos.map((p) => <p class="presentacion__parrafo">{p[idioma]}</p>)}
@@ -37,7 +37,7 @@ const t = usarT(idioma);
       </div>
     </div>
 
-    <div class="presentacion__fotos">
+    <div class="presentacion__fotos" data-revelar>
       <Image class="presentacion__foto presentacion__foto--alta" src={foto1} alt=""
         widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={50} />
       <Image class="presentacion__foto" src={foto2} alt=""

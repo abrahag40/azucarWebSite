@@ -243,6 +243,10 @@ const datos: Dato[] = [
     .resumen__fila { grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr); }
   }
   @media (min-width: 62rem) {
-    .ficha__rejilla { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--space-8); }
+    /* 1.35fr y no 1.6: la columna de texto tenía 60ch de medida máxima, así que
+       a partir de cierto ancho dejaba de crecer y el sobrante se quedaba como
+       hueco entre las dos columnas. Estrechándola, el resumen se acerca y el
+       bloque se lee como una unidad. */
+    .ficha__rejilla { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--space-8); }
   }
 </style>

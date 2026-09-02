@@ -202,6 +202,25 @@ const schema = {
     {indexable && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
     )}
+    {/* 🔴 ESTA LÍNEA VA EN EL <head> Y ES INLINE POR UN MOTIVO EXACTO.
+        Marca el documento como «con animación de aparición». El CSS de
+        `base.css` sólo esconde los elementos CUANDO esta clase existe, así que
+        quien tenga JavaScript desactivado —o quien pida menos movimiento— ve
+        la página entera desde el primer instante y sin una línea de más.
+
+        Y va aquí arriba, no al final del cuerpo, porque si se añadiera después
+        de pintar, el navegador enseñaría los elementos y acto seguido los
+        escondería para animarlos: un parpadeo en cada carga. Es el defecto
+        clásico de las animaciones de scroll, y se evita con estas tres líneas
+        en el sitio correcto.
+
+        La consulta de `prefers-reduced-motion` se hace AQUÍ y no sólo en CSS
+        para no observar nada innecesariamente después (WCAG 2.3.3). */}
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('revelar');
+      }
+    </script>
     <Analitica />
   </head>
   <body>
@@ -212,5 +231,76 @@ const schema = {
     </main>
     <Footer idioma={idioma} />
     <BotonWhatsApp idioma={idioma} titulo={titulo} />
+
+    <script>
+      /**
+       * Aparición progresiva al hacer scroll.
+       *
+       * ── POR QUÉ `data-revelar` Y NO UNA LISTA DE CLASES ────────────────────
+       * Este script vive en el layout y tendría que conocer los nombres de
+       * clase de media docena de componentes —`.amenidad`, `.tarjeta`,
+       * `.instalacion`…— para observarlos. Eso es exactamente el acoplamiento
+       * que `verificar-estilos.mjs` existe para impedir: el día que alguien
+       * renombre `.amenidad`, la animación dejaría de funcionar en silencio.
+       *
+       * Con un atributo, cada componente DECLARA qué se anima. El layout no
+       * sabe qué está mirando y no se entera de los renombrados.
+       *
+       * ── QUE NO CAUSE SALTO DE MAQUETACIÓN ────────────────────────────────
+       * Sólo `opacity` y `translate`. Ninguna de las dos participa del layout,
+       * así que el CLS sigue en cero — que es un umbral de la DoD, no un
+       * detalle. Animar `height` o `margin` habría movido la página bajo el
+       * dedo de quien está leyendo.
+       *
+       * ── UNA SOLA VEZ ──────────────────────────────────────────────────────
+       * `unobserve` en cuanto aparece. Un elemento que se desvanece al subir y
+       * vuelve a aparecer al bajar marea y hace ilegible una lectura de vuelta.
+       */
+      const objetivos = document.querySelectorAll('[data-revelar]');
+      if (document.documentElement.classList.contains('revelar') && objetivos.length) {
+        // Índice DENTRO DE SU GRUPO, para escalonar la entrada de una rejilla.
+        // Se topa a 4: con ocho tarjetas, la última entraría medio segundo
+        // tarde y se leería como que la página va lenta, no como un efecto.
+        const cuenta = new Map<Element, number>();
+        for (const el of objetivos) {
+          const padre = el.parentElement;
+          if (!padre) continue;
+          const i = cuenta.get(padre) ?? 0;
+          cuenta.set(padre, i + 1);
+          (el as HTMLElement).style.setProperty('--revela-i', String(Math.min(i, 4)));
+        }
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) {
+              if (!e.isIntersecting) continue;
+              e.target.classList.add('revelado');
+              observador.unobserve(e.target);
+            }
+          },
+          // `-6%` por abajo: el elemento aparece cuando ya ha entrado un poco,
+          // no en el píxel exacto del borde. Con 0 la animación arranca fuera
+          // del campo de atención y se la pierde medio mundo.
+          { rootMargin: '0px 0px -6% 0px', threshold: 0.04 },
+        );
+        for (const el of objetivos) observador.observe(el);
+
+        /* 🔴 RED DE SEGURIDAD, Y NO ES TEÓRICA.
+           Si `IntersectionObserver` no llega a disparar nunca, todo lo marcado
+           con `data-revelar` se queda en `opacity: 0` — es decir, la página se
+           queda EN BLANCO con el contenido dentro. Pasó al probar esto con el
+           panel del navegador oculto: doce elementos, cero revelados.
+
+           En un navegador real eso se resuelve solo en cuanto la pestaña se ve,
+           pero «se resuelve solo» no es una garantía que se pueda dar sobre un
+           mecanismo que decide si el sitio es legible. Dos segundos después de
+           cargar, se revela todo lo que quede pendiente, pase lo que pase.
+
+           Es el mismo principio que la clase del <head>: la animación puede
+           fallar; la lectura, no. */
+        setTimeout(() => {
+          for (const el of objetivos) el.classList.add('revelado');
+        }, 2000);
+      }
+    </script>
   </body>
 </html>

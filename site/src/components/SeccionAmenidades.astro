@@ -11,21 +11,57 @@ import { usarT, type Idioma } from '../i18n/ui';
 import { amenidades, facilidades } from '../data/hotel';
 import Icono from './Icono.astro';
 
-interface Props { idioma: Idioma }
-const { idioma } = Astro.props;
+/**
+ * ── DOS VARIANTES DEL MISMO CONTENIDO ──────────────────────────────────────
+ * `rejilla` (portada) — la de Cappa: tres columnas centradas, icono grande,
+ *   título y una frase. Es un CARTEL: se ve de un vistazo mientras se baja, y
+ *   su trabajo es que alguien siga bajando.
+ *
+ * `editorial` (página de Amenidades) — el mismo contenido numerado, alineado a
+ *   la izquierda y con filas separadas por una línea fina. Es un ÍNDICE: quien
+ *   llega aquí ya está interesado y viene a repasar, no a ser seducido otra
+ *   vez.
+ *
+ * El cliente lo dijo mejor que ningún argumento: «Amenidades es básicamente
+ * una copia del homepage». Lo era, y ése es el defecto — repetir la misma
+ * composición hace que la segunda vez parezca que no has avanzado. Mismo
+ * contenido, mismo concepto, distinta forma según lo que la página tiene que
+ * conseguir.
+ *
+ * La variante editorial además NO repite el encabezado: el banner de la página
+ * ya dice «Amenidades», y volver a titularlo es el otro motivo por el que se
+ * leía como un duplicado.
+ */
+interface Props { idioma: Idioma; variante?: 'rejilla' | 'editorial' }
+const { idioma, variante = 'rejilla' } = Astro.props;
 const t = usarT(idioma);
+const editorial = variante === 'editorial';
 ---
-<section class="seccion seccion--calida" aria-labelledby="amenidades-titulo">
+<section
+  class:list={['seccion', !editorial && 'seccion--calida']}
+  aria-labelledby="amenidades-titulo"
+>
   <div class="contenedor">
-    <header class="encabezado encabezado--centrado">
-      <p class="antetitulo">{t('amenidades.antetitulo')}</p>
-      <h2 id="amenidades-titulo">{t('amenidades.titulo')}</h2>
-    </header>
+    {editorial ? (
+      <h2 id="amenidades-titulo" class="sr-only">{t('amenidades.titulo')}</h2>
+    ) : (
+      <header data-revelar class="encabezado encabezado--centrado">
+        <p class="antetitulo">{t('amenidades.antetitulo')}</p>
+        <h2 id="amenidades-titulo">{t('amenidades.titulo')}</h2>
+      </header>
+    )}
 
-    <ul class="amenidades" role="list">
-      {amenidades.map((a) => (
-        <li class="amenidad">
-          <span class="amenidad__icono"><Icono nombre={a.icono} /></span>
+    <ul class:list={['amenidades', editorial && 'amenidades--editorial']} role="list">
+      {amenidades.map((a, i) => (
+        <li class="amenidad" data-revelar>
+          {editorial && (
+            /* El número no es decoración: convierte siete argumentos sueltos en
+               una lista con principio y final, y eso es lo que hace que se
+               recorra entera en vez de saltar al que llame la atención.
+               `aria-hidden`: el lector de pantalla ya anuncia «7 elementos». */
+            <span class="amenidad__numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          )}
+          <span class="amenidad__icono"><Icono nombre={a.icono} tam={editorial ? 26 : 34} /></span>
           <h3 class="amenidad__titulo">{a.titulo[idioma]}</h3>
           <p class="amenidad__texto">{a.texto[idioma]}</p>
         </li>
@@ -43,6 +79,70 @@ const t = usarT(idioma);
 </section>
 
 <style>
+  /* ── Variante EDITORIAL ───────────────────────────────────────────────────
+     Filas, no tarjetas. Cada amenidad es una franja con el número y el icono a
+     la izquierda y el texto a la derecha, separadas por una línea fina. En dos
+     columnas desde 60rem: siete filas a una sola columna son una página muy
+     larga para lo poco que dice cada una. */
+  /* `grid-template-columns` explícito: la variante de portada usa `auto-fit`
+     con un mínimo de 17rem, que en un contenedor de 1200 px da TRES columnas.
+     Sin anularlo, la variante editorial heredaba esas tres y las filas dejaban
+     de ser filas. */
+  .amenidades.amenidades--editorial {
+    gap: 0;
+    max-width: 72rem;
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* El centrado también se hereda, y en filas alineadas a la izquierda un texto
+     centrado deja el ojo sin margen del que colgarse. Hay que anularlo en los
+     tres sitios donde la variante de portada lo pone. */
+  .amenidades--editorial .amenidad { text-align: left; }
+  .amenidades--editorial .amenidad__texto { max-width: none; margin-inline: 0; }
+  .amenidades--editorial .amenidad {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--space-4);
+    row-gap: var(--space-1);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .amenidades--editorial .amenidad__numero {
+    grid-row: 1 / span 2;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: 1;
+    color: var(--color-accent);
+    /* `tabular-nums` para que los siete números ocupen lo mismo y la columna
+       de iconos no baile de una fila a otra. */
+    font-variant-numeric: tabular-nums;
+  }
+  .amenidades--editorial .amenidad__icono {
+    grid-row: 1 / span 2;
+    display: grid; place-items: center;
+    width: 44px; height: 44px;
+    margin: 0;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    color: var(--color-accent-text);
+    background: var(--color-surface-warm);
+  }
+  .amenidades--editorial .amenidad__titulo {
+    align-self: center;
+    margin: 0;
+    font-size: var(--text-lg);
+    /* Sin esto, «Jacuzzi en el roof top «Selvamar»» partía por «roof / top». */
+    text-wrap: balance;
+  }
+  .amenidades--editorial .amenidad__texto { margin: 0; }
+  @media (min-width: 60rem) {
+    .amenidades.amenidades--editorial {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-8);
+    }
+  }
+
   .facilidades__titulo {
     margin-top: var(--space-8);
     margin-bottom: var(--space-5);

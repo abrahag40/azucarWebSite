@@ -42,7 +42,7 @@ const correo = (asunto: string) =>
       <p class="entrada-pagina">{eventos.entrada[idioma]}</p>
       <ul class="tipos" role="list">
         {eventos.tipos.map((x) => (
-          <li class="tipo">
+          <li class="tipo" data-revelar>
             <h2 class="tipo__titulo">{x.titulo[idioma]}</h2>
             <p class="tipo__texto">{x.texto[idioma]}</p>
           </li>

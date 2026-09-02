@@ -16,6 +16,8 @@ const t = usarT(idioma);
   descripcion={t('servicios.meta')}
 >
   <BannerPagina imagen={banner} titulo={t('nav.amenidades')} />
-  <SeccionAmenidades idioma={idioma} />
+  {/* Variante EDITORIAL: mismo contenido que la portada, otra composición.
+      El porqué está en la cabecera de `SeccionAmenidades.astro`. */}
+  <SeccionAmenidades idioma={idioma} variante="editorial" />
   <SeccionInstalaciones idioma={idioma} />
 </Base>
