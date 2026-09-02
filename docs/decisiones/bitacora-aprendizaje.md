@@ -3054,6 +3054,113 @@ desbordamiento—, así que queda como riesgo con sus tres números, no como res
 
 ---
 
+## L-107 · Si la altura se mide en `svh`, todo lo que la consume tiene que estar en `svh`
+
+El cliente vio los botones del héroe cortados y pidió que **todo el contenido se vea sin
+scroll, sea cual sea la pantalla**. La causa era una mezcla de unidades, y es un error
+sorprendentemente fácil de cometer:
+
+```css
+.hero {
+  min-height: 100svh;                                  /* la altura disponible, en svh */
+  padding-block: 128px 160px;                          /* fija, no sabe de la pantalla */
+}
+.hero__titulo { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); }  /* escala con el ANCHO */
+```
+
+Las tres líneas compiten por el mismo espacio y **dos de ellas no saben cuánto hay**. En una
+pantalla ancha y baja las dos ignorantes ganan: medido a 1900 × 800, el héroe medía **922 px de
+alto en un viewport de 800**, y los botones y la flecha quedaban 122 px por debajo del pliegue.
+
+La corrección es una regla, no un ajuste: **el relleno, los márgenes y el cuerpo del titular
+pasan a medirse en `svh`**, con topes en `rem` para que en pantallas grandes no crezcan sin
+sentido. El titular, que ocupa cuatro renglones y es lo que más altura consume, gana un techo de
+ALTURA además del de anchura: `min(var(--text-hero), 8svh)`.
+
+### Y la única forma de saber si funciona es una matriz
+
+Un cambio así no se comprueba mirando: se comprueba en **22 tamaños de pantalla**, midiendo en
+cada uno si el héroe cabe y si la flecha queda dentro. Se automatizó con iframes dimensionados y
+el resultado fue una tabla, no una impresión.
+
+La primera pasada dejó tres fallos, y cada uno enseñó algo distinto:
+
+- **768 × 600** — ancha y baja. No la cubría ninguna de las dos reglas: demasiado ancha para las
+  de móvil, demasiado baja para las de escritorio. Hizo falta un tercer bloque seleccionado por
+  `max-height`, **no por anchura**, porque la dimensión que escasea ahí es la altura. *El
+  `@media` casi siempre pregunta por el ancho; a veces la pregunta correcta es la otra.*
+- **390 × 844 y 360 × 640** — teléfonos. El titular se parte en cinco renglones y los botones se
+  apilan: el mismo contenido ocupa el doble. Se recortó el relleno, se bajó el suelo del titular
+  —el `clamp` de escritorio tiene mínimo 2.5rem, y en una pantalla baja ese mínimo es el techo— y
+  **desapareció la flecha de bajada**, que es una afordancia de ratón: en táctil se desliza.
+- **320 × 568** — y aquí está el suelo. Con el titular ya en 29 px faltan 49. Reducir más haría
+  el texto ilegible, y el aviso de «solicitud sujeta a confirmación» no se puede esconder porque
+  es la promesa de ADR-0003. **Se documenta como límite medido, no se disimula.**
+
+Resultado: **21 de 22 tamaños**, del iPhone SE a 2560 × 1440.
+
+### Un aviso de método que costó una medición equivocada
+
+La segunda pasada de la matriz reusó las mismas cadenas de consulta que la primera, así que el
+navegador sirvió el **HTML cacheado**, que apuntaba al **CSS anterior**. La tabla informó de
+48 px donde la regla nueva daba 42, y estuve a punto de perseguir un fallo que no existía.
+
+> Cualquier arnés de medición que cargue páginas necesita una URL nueva por ejecución. Es la
+> quinta vez en cuatro días que un instrumento miente, y ya van tres causas distintas:
+> viewport de altura cero, demonio apagado y ahora caché.
+
+---
+
+## L-108 · «Es un degradado raro» era la fotografía
+
+El cliente señaló una franja clara en el borde derecho del héroe, junto al botón flotante, y la
+describió como un degradado mal hecho. Lo primero fue comprobar si era un elemento: con
+`elementsFromPoint` a lo largo de todo el borde, la pila resultó **idéntica en cada punto** —
+ninguna capa de más.
+
+Lo segundo fue mirar la imagen. Dibujándola en un `<canvas>` y leyendo sus píxeles reales, el
+borde derecho es **rgb(86,170,237)**: cielo abierto, mientras el centro es la pérgola en sombra.
+El velo del héroe tiene ahí sólo un 6 % de negro, así que el salto de luminosidad de la propia
+foto se lee como una franja pegada al borde.
+
+**No era un defecto de render, era la fotografía.** Pero el cliente tenía razón en que molestaba,
+y lo que molestaba tenía arreglo: un 26 % de negro en el 18 % derecho iguala la densidad de los
+dos lados sin tocar el centro — y de paso le da fondo al botón flotante, que hasta ahora se
+posaba sobre el punto más claro de toda la portada.
+
+> **El patrón:** cuando alguien reporta un defecto visual, la primera pregunta no es «¿qué CSS lo
+> causa?» sino **«¿lo causa algún CSS?»**. Descartar el DOM cuesta una línea y evita horas
+> buscando una regla que no existe. Y descartar no es descartar la queja: el problema era real,
+> sólo que estaba en otra capa.
+
+---
+
+## L-109 · El umbral que baja: agrupar el menú devuelve pantallas
+
+El umbral de escritorio de la cabecera ha cambiado cuatro veces: 68rem con seis apartados, 68 con
+siete, **72 con ocho** —porque no cabían— y ahora **68 otra vez con seis**.
+
+Que baje no es un ajuste: es la consecuencia medible de dos decisiones de contenido. Agrupar FAQ
+y Políticas bajo «Antes de viajar» y meter «Actividades» dentro de «Amenidades» llevó la barra de
+ocho apartados a seis, y el ancho mínimo de la cabecera de 1105 px a **1057**.
+
+| apartados | ancho mínimo | umbral posible | margen |
+|---|---|---|---|
+| ocho | 1105 px | 72rem (1152) | 25 px |
+| siete | 1143 px | 72rem (1152) | 9 px |
+| **seis** | **1057 px** | **68rem (1088)** | **31 px** |
+
+Con eso vuelve el menú horizontal entre 1088 y 1152 px: los portátiles de 1152×720 y las ventanas
+a media pantalla en monitores grandes — exactamente el caso que el cliente había reportado en su
+día como «no lo veo para acceder desde el menú».
+
+> Una decisión de arquitectura de información paga en píxeles, y los píxeles pagan en pantallas
+> que recuperan la navegación. La cadena entera se puede medir; conviene medirla, porque es el
+> argumento que convierte «hay muchos items» en «ganamos 64 px de portátiles».
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -3065,7 +3172,8 @@ desbordamiento—, así que queda como riesgo con sus tres números, no como res
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
-| R-35 | **La cabecera se desborda si la tipografía del menú no carga.** Ancho mínimo medido: 1143 px con Barlow Condensed, **1279 con `Arial Narrow` y 1387 con `system-ui`**, contra un umbral de escritorio de 1152. Mitigado precargando la fuente (14 KB), pero si no llega nunca el respaldo se queda | Medio | La cura estructural es que el menú no dependa del ancho exacto de una tipografía. Mientras tanto: **siete apartados es el techo**, y ninguna etiqueta más larga que «Antes de viajar» (L-106) |
+| R-35 | **La cabecera se desborda si la tipografía del menú no carga.** Con seis apartados el mínimo baja a 1057 px con Barlow Condensed y **1177 con `Arial Narrow`**, contra un umbral de 1088. Mitigado precargando la fuente (14 KB), pero si no llega nunca el respaldo se queda | Medio | La cura estructural es que el menú no dependa del ancho exacto de una tipografía. Mientras tanto: **siete apartados es el techo**, y ninguna etiqueta más larga que «Antes de viajar» (L-106) |
+| R-36 | **El héroe no cabe entero en pantallas de 320 px de ancho.** Medido: faltan 49 px con el titular ya en 29 px. Reducir más sería ilegible, y el aviso de «solicitud sujeta a confirmación» no se puede esconder | Bajo | Documentado como suelo medido en `Hero.astro`. Afecta a iPhone SE de 2016 y anteriores; de 360×640 en adelante entra todo (L-107) |
 | R-33 | **Tres roof tops con nombre y ninguna descripción: «Selvamar» (jacuzzi), «Blanc» (mirador, según la gerencia) y «White Pearl» (pedido por el cliente).** Puede que Blanc y White Pearl sean el mismo sitio | Medio | Pendiente de confirmar con el hotel. White Pearl sigue marcado como contenido de ejemplo |
 | R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada | Medio | `build:prod` bloqueado a propósito. Pedidas las fotos a la gerencia |
 | R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |

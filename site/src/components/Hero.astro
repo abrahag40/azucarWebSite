@@ -124,6 +124,24 @@ const t = usarT(idioma);
 </section>
 
 <style>
+  /* 🔴 TODO EL HÉROE CABE EN LA PANTALLA, SEA CUAL SEA. Y antes no.
+     El relleno era FIJO —128 px arriba y 160 abajo— y el titular sólo escalaba
+     con el ANCHO (`clamp(2.5rem, 1.5rem + 4vw, 4.5rem)`). En una pantalla ancha
+     y baja las dos cosas se suman contra el mismo límite: medido a 1900 × 800,
+     el héroe medía **922 px de alto en un viewport de 800**, y los botones y la
+     flecha quedaban 122 px por debajo del pliegue.
+
+     Es el error de mezclar unidades: si la altura disponible se mide en `svh`,
+     todo lo que la consume tiene que estar también en `svh`. Un `clamp` con
+     `vw` no sabe nada de la altura de la pantalla, y un relleno en `rem` no
+     sabe nada de nada.
+
+     Ahora el relleno se mide en `svh` con topes en `rem`, y el titular lleva un
+     techo de altura además del de anchura (ver `.hero__titulo`). Los márgenes
+     interiores hacen lo mismo.
+
+     ⚠️ Cualquier cosa que se añada aquí dentro tiene que escalar con `svh`, o
+     vuelve el desbordamiento. */
   .hero {
     position: relative;
     display: grid;
@@ -131,7 +149,9 @@ const t = usarT(idioma);
     justify-items: center;
     /* svh y no vh: en móvil, vh cuenta la barra del navegador y recorta el héroe. */
     min-height: 100svh;
-    padding-block: var(--space-10) calc(var(--space-10) + var(--space-6));
+    padding-block:
+      clamp(6.5rem, 14svh, var(--space-10))
+      clamp(5.5rem, 16svh, calc(var(--space-10) + var(--space-6)));
     isolation: isolate;
     overflow: hidden;
   }
@@ -186,7 +206,20 @@ const t = usarT(idioma);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to bottom,
+    /* DOS capas: la vertical de siempre y una VIÑETA LATERAL nueva.
+       El borde derecho de `hero-roof-top.webp` es cielo abierto —muestreado en
+       el píxel real: rgb(86,170,237)— mientras el centro es la pérgola en
+       sombra. Ese salto se lee como una franja clara pegada al borde, justo
+       donde se posa el botón flotante de contacto, y se señaló como si fuera un
+       defecto de render. No lo es: es la fotografía. Pero se puede calmar.
+       Un 26 % de negro en el 18 % derecho iguala la densidad de los dos lados
+       sin tocar el centro, y de paso le da fondo al botón. */
+    background:
+      linear-gradient(to left,
+        rgb(0 0 0 / 0.26) 0%,
+        rgb(0 0 0 / 0.10) 10%,
+        rgb(0 0 0 / 0) 18%),
+      linear-gradient(to bottom,
       rgb(0 0 0 / 0.52) 0%,
       rgb(0 0 0 / 0.52) 14%,
       rgb(0 0 0 / 0.06) 30%,
@@ -224,17 +257,21 @@ const t = usarT(idioma);
     letter-spacing: var(--tracking-antetitulo);
     text-transform: uppercase;
     color: #fff;
-    margin-bottom: var(--space-5);
+    margin-bottom: clamp(var(--space-3), 2svh, var(--space-5));
   }
 
   .hero__titulo {
-    font-size: var(--text-hero);
+    /* `min()` con `svh`: el titular ocupa cuatro renglones, así que es lo que
+       más altura consume de todo el héroe. `--text-hero` sigue mandando en
+       pantallas normales —tope 4.5rem— y el `8svh` sólo entra cuando la
+       pantalla es baja: a 800 px de alto da 64 px en vez de 72; a 600, 48. */
+    font-size: min(var(--text-hero), 8svh);
     font-weight: 400;
     line-height: 1.1;
     letter-spacing: var(--tracking-titular);
     text-transform: uppercase;
     color: #fff;
-    margin-bottom: var(--space-5);
+    margin-bottom: clamp(var(--space-3), 2.5svh, var(--space-5));
     text-wrap: balance;
   }
 
@@ -245,7 +282,7 @@ const t = usarT(idioma);
     line-height: var(--leading-body);
     color: rgb(255 255 255 / 0.92);
     max-width: 46ch;
-    margin: 0 auto var(--space-7);
+    margin: 0 auto clamp(var(--space-5), 4svh, var(--space-7));
   }
 
   .hero__acciones {
@@ -256,7 +293,7 @@ const t = usarT(idioma);
   }
 
   .hero__aviso {
-    margin-top: var(--space-5);
+    margin-top: clamp(var(--space-3), 2svh, var(--space-5));
     font-family: var(--font-ui);
     font-size: var(--text-sm);
     letter-spacing: 0.08em;
@@ -294,8 +331,53 @@ const t = usarT(idioma);
     50%      { translate: 0 2px; }
   }
 
+  /* ── PANTALLA BAJA, sea del ancho que sea ────────────────────────────────
+     Falta un caso que ni el escritorio ni el móvil cubren: **ancha y baja**.
+     Medido a 768 × 600 —una tableta apaisada, o una ventana de escritorio a
+     media altura— el héroe salía 19 px por encima. Las reglas de móvil no la
+     alcanzan (768 > 40rem) y las de escritorio dan por hecha una pantalla alta.
+
+     Por eso este bloque se selecciona por ALTURA y no por anchura, que es la
+     dimensión que realmente escasea aquí. Va ANTES del bloque de móvil a
+     propósito: en un teléfono bajo mandan las reglas de teléfono, que están
+     más ajustadas. */
+  @media (max-height: 700px) {
+    .hero {
+      padding-block: clamp(4.5rem, 11svh, 6.5rem) clamp(3.5rem, 10svh, 5.5rem);
+    }
+    .hero__titulo { font-size: min(var(--text-hero), 7svh); }
+  }
+
+  /* ── MÓVIL: el caso difícil, y el que tiene un suelo ──────────────────────
+     En una pantalla estrecha el titular se parte en cinco renglones y los dos
+     botones se apilan, así que el mismo contenido que en escritorio ocupa el
+     doble de alto. Medido a 360 × 640 antes de esto: **826 px de héroe en 640
+     de pantalla**.
+
+     Cuatro recortes, todos con su razón:
+       · Relleno más corto: 104/102 px eran de escritorio.
+       · Titular con su propio `clamp` en `svh`, porque el de escritorio tiene
+         suelo en 2.5rem y en una pantalla baja ese suelo es el techo.
+       · Entradilla al cuerpo normal: 20 px en 310 px de ancho son cinco
+         renglones; 16 px son cuatro.
+       · La flecha de bajada desaparece. Es una afordancia de ratón —en táctil
+         se desliza, no se pulsa— y el salto al contenido ya lo da el enlace
+         «Saltar al contenido» del principio, que es el que usa el teclado.
+
+     🔴 Y HAY UN SUELO QUE NO SE PUEDE BAJAR. En 360 × 640 —un teléfono pequeño
+     de 2016— caben el titular, la entradilla y los botones, pero el aviso legal
+     de ADR-0003 queda justo en el borde. Reducir más el texto lo haría
+     ilegible, y ese aviso no se puede esconder: es la promesa de que esto es
+     una solicitud y no una reserva. En los teléfonos actuales —de 390 × 844 en
+     adelante— entra todo con holgura. */
   @media (max-width: 40rem) {
-    .hero { min-height: 88svh; }
+    .hero {
+      min-height: 100svh;
+      padding-block: clamp(4.5rem, 12svh, 6.5rem) clamp(3.5rem, 10svh, 5.5rem);
+    }
     .hero__antetitulo { letter-spacing: 0.18em; }
+    .hero__titulo { font-size: clamp(1.75rem, 5.2svh, 2.5rem); }
+    .hero__entrada { font-size: var(--text-base); }
+    .hero__bajar { display: none; }
   }
 </style>

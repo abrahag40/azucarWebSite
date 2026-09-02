@@ -89,7 +89,7 @@ const enlaces: Entrada[] = [
   },
   {
     etiqueta: t('nav.amenidades'),
-    rutas: ['servicios', 'restaurante'],
+    rutas: ['servicios', 'restaurante', 'actividades'],
     href: ruta(idioma, 'servicios'),
     hijos: [
       { etiqueta: t('nav.verTodoAmenidades'), href: ruta(idioma, 'servicios') },
@@ -99,6 +99,13 @@ const enlaces: Entrada[] = [
       { etiqueta: t('nav.daypass'), href: `${ruta(idioma, 'servicios')}#daypass` },
       { etiqueta: t('nav.rooftopSelvamar'), href: `${ruta(idioma, 'servicios')}#rooftop-selvamar` },
       { etiqueta: t('nav.rooftopWhitePearl'), href: `${ruta(idioma, 'servicios')}#rooftop-white-pearl` },
+      /* «Qué hacer en Tulum» entra aquí el 2026-09-02, y es una VUELTA ATRÁS
+         explícita: el 2026-09-01 el cliente la quiso suelta y argumenté a favor
+         —lo de esa página no es del hotel, y las amenidades son aquello por lo
+         que el hotel responde—. El argumento sigue en pie; la decisión es suya
+         y ha cambiado. Se anota para que el archivo no se contradiga.
+         Va la ÚLTIMA del panel, después de lo que sí es del hotel. */
+      { etiqueta: t('nav.actividades'), href: ruta(idioma, 'actividades') },
     ],
   },
   { etiqueta: t('nav.galeria'), rutas: ['galeria'], href: ruta(idioma, 'galeria') },
@@ -112,10 +119,6 @@ const enlaces: Entrada[] = [
       { etiqueta: t('nav.eventosVisita'), href: `${ruta(idioma, 'eventos')}${ancla(idioma, 'eventosVisita')}` },
     ],
   },
-  // Apartado SUELTO, no colgado de «Amenidades» (cliente, 2026-09-01). Lo de
-  // esa página no es del hotel: las amenidades son lo que el hotel ofrece y por
-  // lo que responde; esto es el entorno, sobre el que no responde nadie.
-  { etiqueta: t('nav.actividades'), rutas: ['actividades'], href: ruta(idioma, 'actividades') },
   /**
    * ── «ANTES DE VIAJAR» — el único apartado SIN página propia ───────────────
    * Nace el 2026-09-02: ocho apartados eran demasiados y el cliente pidió
@@ -640,34 +643,34 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     color: var(--color-ink); text-decoration: none;
   }
 
-  /* 🔴 UMBRAL MEDIDO — TERCERA VEZ, Y ESTA VEZ SÍ SUBE. CON LA CUENTA DELANTE.
-     La nota anterior decía, en mis propias palabras: «si algún día se añade
-     otro apartado, NO subas este número; acorta una etiqueta». La regla era
-     buena y por eso lo primero fue intentar cumplirla. No da.
+  /* 🔴 UMBRAL MEDIDO — CUARTA VEZ, Y ESTA VEZ **BAJA**.
+     Historia corta de este número: 68rem con seis apartados, 68 con siete,
+     **72 con ocho** —porque no cabían— y otra vez **68 con seis**.
 
-     Lo que cambió desde entonces son DOS decisiones del cliente (2026-09-01),
-     no un descuido: el logotipo creció de 112 a 144 px de ancho —+32— y el menú
-     pasó de siete apartados a ocho. Entre las dos se comieron el margen.
+     Que baje es la consecuencia real de las dos decisiones del cliente del
+     2026-09-02: FAQ y Políticas se agruparon bajo «Antes de viajar», y
+     «Actividades» pasó dentro de «Amenidades». De ocho apartados a seis.
 
-     Medido en el navegador, no estimado. Ancho que necesita la fila:
+     Medido con `width: max-content` sobre la fila —preguntándoselo al
+     navegador, no sumándolo a mano, que es como salían tres cifras distintas—:
 
-       logotipo 144 + navegación 684 + acciones 229 + 2 huecos de 24  = 1105 px
-       con hueco de 12 px y tracking 0.12em                          = 1040 px
+       ancho mínimo de la cabecera        1057 px
+       umbral 68rem = 1088 px             **31 px de sobra**
+       umbral 72rem = 1152 px             95 px de sobra, y 64 px de portátiles
+                                          condenados a la hamburguesa sin motivo
 
-     A 1088 px —el umbral viejo— el contenedor sólo ofrece 1001 px de ancho
-     útil, así que 1040 DESBORDA. El primer umbral donde cabe con margen real es
-     72rem = 1152 px, que deja 1065 útiles: **25 px de sobra**.
+     Lo que se recupera: entre 1088 y 1152 px vuelve el menú horizontal. Son los
+     portátiles de 1152×720 y las ventanas a media pantalla en monitores
+     grandes, justo el caso que el cliente reportó en su día como «no lo veo
+     para acceder desde el menú».
 
-     Antes de subirlo se probó lo que decía la nota vieja: bajar el tracking a
-     0.10em y el hueco a 10 px da 1007 px y ni así entra en 1088. Acortar más
-     etiquetas significaba tocar las que el cliente dictó.
+     ⚠️ Con la tipografía de RESPALDO —mientras Barlow Condensed carga— el
+     mínimo sube a 1177 px y este umbral se queda corto. Por eso la fuente del
+     menú se precarga desde `Base.astro`; el riesgo residual es R-35.
 
-     Qué se pierde: entre 1088 y 1152 px sale la hamburguesa. Son los portátiles
-     de 1152×720; a partir de 1280 —la resolución más común— no cambia nada.
-
-     🔴 LA REGLA SIGUE EN PIE, Y AHORA MÁS: **ocho apartados es el techo**. El
-     noveno no cabe ni tocando el tracking. Si hace falta uno más, sale otro. */
-  @media (min-width: 72rem) {
+     🔴 LA REGLA, otra vez: si hace falta un apartado más, **sale otro**. Con
+     siete el mínimo era 1143 y ya no cabía aquí. */
+  @media (min-width: 68rem) {
     .menu { display: none; }
     .nav { display: block; }
     .cabecera__acciones { display: flex; }
