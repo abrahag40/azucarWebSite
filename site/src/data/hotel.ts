@@ -51,9 +51,11 @@ export const contacto = {
 /** Presentación. Fuente: `/nosotros/` y `/en/about-us/`. */
 export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[] } = {
   antetitulo: { es: 'Azucar Hotel Tulum', en: 'Azucar Hotel Tulum' },
+  // «Abril» lo precisó la gerencia el 2026-09-02. Es un dato pequeño y hace
+  // trabajo: una fecha exacta se lee como memoria, una aproximada como relato.
   titulo: {
-    es: 'Un sueño hecho realidad en 2008',
-    en: 'A dream that came true in 2008',
+    es: 'Un sueño hecho realidad en abril de 2008',
+    en: 'A dream that came true in April 2008',
   },
   parrafos: [
     {
@@ -65,6 +67,38 @@ export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[]
       en: 'This place was created with a lot of love for these lands and the people who visit us. Warmth and personalized service have always characterized us.',
     },
   ],
+};
+
+/**
+ * La bienvenida que escribió la gerencia del hotel (2026-09-02).
+ *
+ * Va aparte de `presentacion` y no dentro, porque hace otro trabajo: aquélla
+ * CUENTA la historia del hotel —cuándo nació, qué premios tiene—; ésta HABLA
+ * al huésped en segunda persona y termina invitándole a entrar. Mezcladas, la
+ * bienvenida se leería como un párrafo más de la historia y perdería lo único
+ * que la hace funcionar, que es el cambio de voz.
+ *
+ * ⚠️ FALTA SU PRIMERA FRASE, a propósito. El texto de la gerencia empieza con
+ * «somos un hotel construido artesanalmente por manos mexicanas»; el héroe del
+ * sitio dice «por manos mayas», que es lo que pidió el cliente el 2026-09-01.
+ * No son lo mismo y no es un matiz: es de quién dice el hotel que es la obra.
+ * Se deja fuera hasta que el cliente decida cuál de las dos vale.
+ */
+export const bienvenida: { parrafos: Texto[]; cierre: Texto } = {
+  parrafos: [
+    {
+      es: 'Aquí se funden las aguas turquesas del Caribe, la arena suave y blanca y la vegetación de la selva: en cada habitación, en cada bungalow y en cada rincón del hotel.',
+      en: 'Here the turquoise waters of the Caribbean, the soft white sand and the jungle vegetation blend together: in every room, in every bungalow and in every corner of the hotel.',
+    },
+    {
+      es: 'Nos emociona que, estando aquí, te sientas como en casa y puedas conectar todos tus sentidos con la naturaleza y con este lugar tan mágico.',
+      en: 'It moves us that, while you are here, you feel at home and can connect all your senses with nature and with this magical place.',
+    },
+  ],
+  cierre: {
+    es: 'Bienvenido a Azucar Hotel Tulum, el único lugar donde el mar es dulce.',
+    en: 'Welcome to Azucar Hotel Tulum, the sweetest temptation.',
+  },
 };
 
 /** Frase de la franja de imagen. Es el lema que el hotel ya usa en su sitio. */
@@ -98,10 +132,10 @@ export const amenidades: { icono: string; titulo: Texto; texto: Texto }[] = [
   },
   {
     icono: 'jacuzzi',
-    titulo: { es: 'Jacuzzi en roof top', en: 'Rooftop jacuzzi' },
+    titulo: { es: 'Jacuzzi en el roof top «Selvamar»', en: 'Jacuzzi on the “Selvamar” rooftop' },
     texto: {
-      es: 'Jacuzzi extra grande climatizado en el roof top común, con vistas panorámicas al mar y a la selva.',
-      en: 'Extra-large heated jacuzzi on the shared rooftop, with panoramic views of the ocean and the jungle.',
+      es: 'Jacuzzi extra grande climatizado, con vistas al mar y a la selva. Uso exclusivo para mayores de 18 años.',
+      en: 'Extra-large heated jacuzzi, with views of the sea and the jungle. For guests aged 18 and over.',
     },
   },
   // El RESTAURANTE vuelve. Estuvo retirado mientras duró la contradicción C0
@@ -116,10 +150,10 @@ export const amenidades: { icono: string; titulo: Texto; texto: Texto }[] = [
   // estuvieran en el mismo comentario.
   {
     icono: 'restaurante',
-    titulo: { es: 'Restaurante', en: 'Restaurant' },
+    titulo: { es: 'Restaurante y bar', en: 'Restaurant and bar' },
     texto: {
-      es: 'Cocina del hotel en el roof top, frente al mar.',
-      en: 'The hotel kitchen on the rooftop, facing the sea.',
+      es: 'Cocina del hotel en el roof top, frente al mar, con servicio al cuarto.',
+      en: 'The hotel kitchen on the rooftop, facing the sea, with room service.',
     },
   },
   {
@@ -239,4 +273,42 @@ export const instalaciones: {
       },
     ],
   },
+];
+
+
+/**
+ * Facilidades — el inventario práctico, tal y como lo envió la gerencia del
+ * hotel el 2026-09-02.
+ *
+ * ── POR QUÉ UNA LISTA Y NO MÁS TARJETAS ────────────────────────────────────
+ * `amenidades` son SIETE y llevan icono, título y una frase: son los
+ * argumentos de venta, lo que hace que alguien elija este hotel. Esto son
+ * DIECIOCHO datos de comprobación —¿hay elevador?, ¿hay cafetera?, ¿el
+ * estacionamiento es gratis?— y el huésped no viene a leerlos, viene a
+ * buscarlos.
+ *
+ * Convertirlos en dieciocho tarjetas más habría diluido las siete que sí
+ * persuaden y habría alargado la página a tres pantallas de iconos. Una lista
+ * densa se recorre con la vista en dos segundos, que es exactamente lo que se
+ * hace con ella. *Distinto trabajo, distinta forma.*
+ */
+export const facilidades: Texto[] = [
+  { es: 'Aire acondicionado', en: 'Air conditioning' },
+  { es: 'Ventilador', en: 'Ceiling fan' },
+  { es: 'Wi-Fi de alta velocidad', en: 'High-speed Wi-Fi' },
+  { es: 'Minibar', en: 'Minibar' },
+  { es: 'Cafetera', en: 'Coffee maker' },
+  { es: 'Secadora de pelo', en: 'Hairdryer' },
+  { es: 'Caja de seguridad 24 horas', en: '24-hour safe' },
+  { es: 'Servicio al cuarto', en: 'Room service' },
+  { es: 'Amenidades orgánicas en cada habitación', en: 'Organic amenities in every room' },
+  { es: 'Colchones, almohadas y blancos de lujo', en: 'Luxury mattresses, pillows and linens' },
+  { es: 'Elevador', en: 'Lift' },
+  { es: 'Escaleras de emergencia', en: 'Emergency stairs' },
+  { es: 'Sistema contra incendio en cada habitación', en: 'Fire suppression system in every room' },
+  { es: 'Seguridad 24 horas', en: '24-hour security' },
+  { es: 'Recepción y atención 24 horas', en: '24-hour reception and assistance' },
+  { es: 'Estacionamiento gratuito, sujeto a disponibilidad', en: 'Free parking, subject to availability' },
+  { es: 'Hermosos jardines', en: 'Beautiful gardens' },
+  { es: 'Ubicación privilegiada', en: 'Prime location' },
 ];

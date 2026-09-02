@@ -14,7 +14,6 @@
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import RejillaActividades from '../components/RejillaActividades.astro';
-import CreditosFotos from '../components/CreditosFotos.astro';
 import FranjaLlamada from '../components/FranjaLlamada.astro';
 import { usarT, type Idioma } from '../i18n/ui';
 import banner from '../assets/galeria/04-vista-selva-mar.webp';
@@ -49,7 +48,6 @@ const t = usarT(idioma);
     </div>
   </section>
 
-  <CreditosFotos idioma={idioma} />
   <FranjaLlamada idioma={idioma} />
 </Base>
 

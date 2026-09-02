@@ -29,32 +29,72 @@
   },
   "amenidades": [
     {
-      "es": "Roof top privado",
-      "en": "Private rooftop"
+      "es": "Terraza privada con sillas de madera y hamaca",
+      "en": "Private terrace with wooden chairs and a hammock"
     },
     {
-      "es": "Jacuzzi privado",
-      "en": "Private jacuzzi"
+      "es": "Jacuzzi privado, con agua a temperatura ambiente",
+      "en": "Private jacuzzi, at outdoor water temperature"
+    },
+    {
+      "es": "Roof top privado con cama para asolearse, jacuzzi y terraza de palma",
+      "en": "Private rooftop with sunbed, jacuzzi and palm-shaded terrace"
+    },
+    {
+      "es": "Cama king size",
+      "en": "King size bed"
     },
     {
       "es": "Aire acondicionado",
       "en": "Air conditioning"
     },
     {
-      "es": "Minibar",
-      "en": "Mini bar"
+      "es": "Wi-Fi gratuito",
+      "en": "Free Wi-Fi"
     },
     {
-      "es": "Wi-Fi",
-      "en": "Wi-Fi"
+      "es": "Colchón, almohadas y blancos de lujo",
+      "en": "Luxury mattress, pillows and linens"
     },
     {
       "es": "Televisión",
       "en": "TV"
     },
     {
+      "es": "Clóset",
+      "en": "Closet"
+    },
+    {
       "es": "Caja de seguridad",
       "en": "Safety box"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini fridge"
+    },
+    {
+      "es": "Cafetera",
+      "en": "Coffee maker"
+    },
+    {
+      "es": "Escritorio y tocador",
+      "en": "Desk and vanity"
+    },
+    {
+      "es": "Secadora de pelo",
+      "en": "Hairdryer"
+    },
+    {
+      "es": "Dos lavabos y dos espejos",
+      "en": "Two sinks and two mirrors"
+    },
+    {
+      "es": "Regadera",
+      "en": "Shower"
+    },
+    {
+      "es": "Acabados interiores y exteriores de lujo",
+      "en": "Luxury interior and exterior finishes"
     }
   ],
   "diferenciador": {
@@ -70,7 +110,11 @@
   ],
   "publicado": true,
   "verificado": [
+    "amenidades",
+    "camas",
+    "capacidad",
     "nombre",
+    "unidades",
     "vista"
   ]
 }

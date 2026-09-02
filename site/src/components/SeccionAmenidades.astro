@@ -8,7 +8,7 @@
  * vigente, en `src/data/hotel.ts`. Iconos: SVG propio, ver `Icono.astro`.
  */
 import { usarT, type Idioma } from '../i18n/ui';
-import { amenidades } from '../data/hotel';
+import { amenidades, facilidades } from '../data/hotel';
 import Icono from './Icono.astro';
 
 interface Props { idioma: Idioma }
@@ -31,10 +31,48 @@ const t = usarT(idioma);
         </li>
       ))}
     </ul>
+
+    {/* El inventario práctico, debajo de los siete argumentos. Ver la nota de
+        `facilidades` en `src/data/hotel.ts`: son datos que se BUSCAN, no que
+        se leen, y por eso van en lista densa y no en tarjetas. */}
+    <h3 class="facilidades__titulo">{t('amenidades.facilidades')}</h3>
+    <ul class="facilidades" role="list">
+      {facilidades.map((f) => <li>{f[idioma]}</li>)}
+    </ul>
   </div>
 </section>
 
 <style>
+  .facilidades__titulo {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-5);
+    font-size: var(--text-xl);
+    text-align: center;
+  }
+  .facilidades {
+    list-style: none; padding: 0; margin: 0 auto;
+    max-width: 60rem;
+    display: grid; gap: var(--space-2) var(--space-6);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* La viñeta es un guion de acento y no un punto: dieciocho puntos en columna
+     forman una línea vertical que compite con el texto. */
+  .facilidades li {
+    position: relative;
+    padding-left: var(--space-5);
+    font-size: var(--text-sm);
+    line-height: 1.8;
+    color: var(--color-ink-muted);
+  }
+  .facilidades li::before {
+    content: '';
+    position: absolute; left: 0; top: 0.85em;
+    width: 10px; height: 1px;
+    background: var(--color-accent);
+  }
+  @media (min-width: 40rem) { .facilidades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 60rem) { .facilidades { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
   .amenidades {
     list-style: none;
     padding: 0;

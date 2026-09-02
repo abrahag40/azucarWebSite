@@ -20,6 +20,7 @@ import BannerPagina from '../components/BannerPagina.astro';
 import SeccionPresentacion from '../components/SeccionPresentacion.astro';
 import FranjaImagen from '../components/FranjaImagen.astro';
 import FranjaLlamada from '../components/FranjaLlamada.astro';
+import { bienvenida } from '../data/hotel';
 import { usarT, type Idioma } from '../i18n/ui';
 import banner from '../assets/galeria/09-entrada-piedra.webp';
 interface Props { idioma: Idioma }
@@ -39,6 +40,37 @@ const t = usarT(idioma);
     </div>
   </section>
   <SeccionPresentacion idioma={idioma} />
+
+  {/* La bienvenida de la gerencia, DESPUÉS de la historia y no antes: primero
+      se sabe qué es este sitio, y sólo entonces la invitación a entrar tiene a
+      dónde invitar. Ver la nota de `bienvenida` en `src/data/hotel.ts`. */}
+  <section class="seccion seccion--calida bienvenida" aria-labelledby="bienvenida-titulo">
+    <div class="contenedor">
+      <h2 id="bienvenida-titulo" class="sr-only">{bienvenida.cierre[idioma]}</h2>
+      {bienvenida.parrafos.map((p) => <p class="bienvenida__parrafo">{p[idioma]}</p>)}
+      <p class="bienvenida__cierre">{bienvenida.cierre[idioma]}</p>
+    </div>
+  </section>
   <FranjaImagen idioma={idioma} />
   <FranjaLlamada idioma={idioma} />
 </Base>
+
+<style>
+  .bienvenida .contenedor { max-width: 52rem; }
+  .bienvenida__parrafo {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-5);
+  }
+  /* El cierre en la tipografía de titulares: es la frase que el hotel quiere
+     que quede, y con el mismo cuerpo que los párrafos se perdería entre ellos. */
+  .bienvenida__cierre {
+    margin-top: var(--space-6);
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+</style>

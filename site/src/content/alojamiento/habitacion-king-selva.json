@@ -5,7 +5,7 @@
   },
   "categoria": "habitacion",
   "orden": 6,
-  "unidades": 4,
+  "unidades": 1,
   "capacidadMaxima": 2,
   "camas": {
     "es": "1 cama king size",
@@ -25,20 +25,56 @@
   },
   "amenidades": [
     {
+      "es": "Hecha por artesanos mexicanos con materiales de la región",
+      "en": "Made by Mexican artisans with materials from the region"
+    },
+    {
+      "es": "1 cama king size con colchón, almohadas y sábanas de lujo",
+      "en": "1 king size bed with luxury mattress, pillows and sheets"
+    },
+    {
       "es": "Aire acondicionado",
       "en": "Air conditioning"
     },
     {
-      "es": "Minibar",
-      "en": "Mini bar"
+      "es": "Wi-Fi gratuito",
+      "en": "Free Wi-Fi"
     },
     {
-      "es": "Wi-Fi",
-      "en": "Wi-Fi"
+      "es": "Frigobar",
+      "en": "Mini fridge"
+    },
+    {
+      "es": "Cafetera",
+      "en": "Coffee maker"
+    },
+    {
+      "es": "Buró con banca continua, escritorio y tocador",
+      "en": "Bureau with continuous bench, desk and vanity"
+    },
+    {
+      "es": "Secadora de pelo",
+      "en": "Hairdryer"
+    },
+    {
+      "es": "Dos lavabos y dos espejos",
+      "en": "Two sinks and two mirrors"
+    },
+    {
+      "es": "Regadera",
+      "en": "Shower"
+    },
+    {
+      "es": "Clóset",
+      "en": "Closet"
     },
     {
       "es": "Caja de seguridad",
       "en": "Safety box"
+    },
+    {
+      "es": "Balcón con hamaca, con vistas a la avenida de la zona hotelera y a la selva",
+      "en": "Balcony with a hammock, overlooking the hotel-zone avenue and the jungle"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-selva.webp",
@@ -50,7 +86,11 @@
   ],
   "publicado": true,
   "verificado": [
+    "amenidades",
+    "camas",
+    "capacidad",
     "nombre",
+    "unidades",
     "vista"
   ],
   "diferenciador": {

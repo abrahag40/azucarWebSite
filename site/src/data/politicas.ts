@@ -1,7 +1,17 @@
 /**
  * Políticas del hotel (H4.7).
  *
- * PROCEDENCIA. Literal de `/politicas/` y `/en/policies/` del sitio vigente.
+ * PROCEDENCIA. Arranca literal de `/politicas/` y `/en/policies/` del sitio
+ * vigente, y el 2026-09-02 se AMPLÍA con el texto que envió la gerente del
+ * hotel. Lo que llegó nuevo —y no estaba en el sitio viejo— son tres bloques
+ * enteros: el uso de albercas y jacuzzi, las normas sobre fumar y sobre entrar
+ * alimentos, y los CARGOS concretos por toallas y por daños.
+ *
+ * Esos cargos son la razón de que este archivo importe: 150 USD por una toalla
+ * y el costo de la reparación más 250 USD por un desperfecto son cifras que un
+ * huésped puede discutir, y un hotel sólo las puede cobrar si estaban
+ * publicadas antes de la estancia. Publicarlas protege a las dos partes.
+ *
  * Se corrigen ortografía y puntuación —«hábiles», «políticas», «PM» duplicado en
  * «15:00PM»— y se agrupan por tema, porque el original es una lista plana de
  * dieciséis frases en la que el huésped no encuentra lo que busca.
@@ -92,6 +102,43 @@ export const politicas: GrupoPoliticas[] = [
         en: 'The hotel reserves the right to ask guests to leave if the policies and regulations are not respected.' },
       { es: 'El hotel no se hace responsable por accidentes, robos o extravío de pertenencias, ni por daños a terceros.',
         en: 'The hotel is not responsible for accidents, theft or loss of belongings, or for damage to third parties.' },
+    ],
+  },
+  {
+    /* NUEVO — texto de la gerencia, 2026-09-02. No estaba en el sitio vigente.
+       El jacuzzi de «Selvamar» sólo para mayores de 18 es la clase de condición
+       que un huésped con hijos necesita saber ANTES de reservar, no al llegar. */
+    clave: 'albercas',
+    titulo: { es: 'Albercas y jacuzzi', en: 'Pools and jacuzzi' },
+    puntos: [
+      { es: 'La alberca frente al mar puede usarla todo el mundo: niños, jóvenes y adultos.',
+        en: 'The oceanfront pool is open to everyone: children, young people and adults.' },
+      { es: 'El jacuzzi del roof top «Selvamar» es de uso exclusivo para mayores de 18 años.',
+        en: 'The jacuzzi on the “Selvamar” rooftop is for guests aged 18 and over only.' },
+      { es: 'No se permite entrar alimentos ni bebidas de ningún tipo a las albercas ni a los jacuzzis.',
+        en: 'No food or drinks of any kind are allowed in the pools or jacuzzis.' },
+    ],
+  },
+  {
+    /* NUEVO — texto de la gerencia, 2026-09-02. */
+    titulo: { es: 'Normas de la casa', en: 'House rules' },
+    puntos: [
+      { es: 'No se permite fumar en áreas cerradas —habitaciones o áreas comunes techadas— ni dentro de una alberca o de un jacuzzi.',
+        en: 'Smoking is not permitted in enclosed areas — rooms or roofed common areas — nor inside a pool or jacuzzi.' },
+      { es: 'No se permite introducir alimentos ni bebidas de fuera del hotel a la playa, al restaurante ni a las áreas comunes.',
+        en: 'Outside food and drinks may not be brought onto the beach, into the restaurant or into the hotel’s common areas.' },
+    ],
+  },
+  {
+    /* NUEVO — texto de la gerencia, 2026-09-02. Son las únicas CIFRAS de todo
+       el sitio, y están aquí a propósito: un cargo que el huésped no pudo leer
+       antes de llegar es un cargo difícil de sostener. */
+    titulo: { es: 'Cargos por pérdida o daño', en: 'Charges for loss or damage' },
+    puntos: [
+      { es: 'Toalla perdida o que salga del hotel: 150 USD.',
+        en: 'Towel lost or taken from the hotel: USD 150.' },
+      { es: 'Daño a la propiedad: el costo de la reparación más 250 USD.',
+        en: 'Damage to the property: the cost of the repair plus USD 250.' },
     ],
   },
   {

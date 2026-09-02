@@ -4,9 +4,27 @@
  * numérico sin haberlo marcado como verificado por el cliente.
  *
  * Por qué existe: los nombres y descripciones salen del sitio del cliente, pero
- * unidades, capacidad y camas son estimaciones nuestras mientras no responda la
- * pregunta C1 del brief. Publicarlas como si fueran ciertas es exactamente el
- * tipo de dato falso que ya le está costando reseñas al hotel.
+ * unidades, capacidad y camas eran estimaciones nuestras mientras no respondía
+ * la pregunta C1 del brief. Publicarlas como si fueran ciertas es exactamente
+ * el tipo de dato falso que ya le está costando reseñas al hotel.
+ *
+ * ✅ C1 RESPONDIDA el 2026-09-02: la gerencia del hotel envió el desglose por
+ * tipología. Son **24 unidades**, no las 21 que decía su propio sitio ni las 22
+ * que habíamos estimado:
+ *
+ *     3  bungalow con balcón y jacuzzi privado, vistas al mar
+ *     3  bungalow con balcón, roof top y jacuzzi, vista panorámica al mar
+ *     5  Deluxe King, vistas parciales al jardín y/o mar
+ *     1  Deluxe King, vista a la selva
+ *    10  Deluxe Doble Queen, vistas parciales al jardín y/o mar
+ *     2  Deluxe Doble Queen, vistas a la selva
+ *
+ * 🔴 Y POR ESO ESTE GUARDIÁN CAMBIA DE TRABAJO. Ya no vigila «¿el cliente
+ * confirmó?» —lo hizo— sino «¿el catálogo publicado suma lo que el hotel
+ * tiene?». Hoy no: faltan DOS bungalows, «Bungalow Arrecife» y «Villa Luna»,
+ * que la gerencia describe y de los que no se ha identificado ninguna
+ * fotografía en el archivo. Un catálogo que enseña 22 de 24 unidades no miente,
+ * pero está incompleto, y en producción eso se bloquea.
  *
  * Este script NO rompe el build en desarrollo: avisa. Se activa como error
  * cuando se pasa --estricto, que es como corre en el pipeline de producción.
@@ -37,11 +55,26 @@ for (const f of readdirSync(DIR).filter((n) => n.endsWith('.json'))) {
   }
 }
 
-console.log(`\n  Unidades declaradas: ${unidadesTotales} · reportadas públicamente: 21`);
-if (unidadesTotales !== 21) console.log(`  ⚠ No cuadran. Es una estimación nuestra hasta que el cliente confirme (C1).`);
+/** Confirmado por la gerencia del hotel el 2026-09-02. Ver la cabecera. */
+const UNIDADES_CONFIRMADAS = 24;
+
+console.log(`\n  Unidades publicadas: ${unidadesTotales} · confirmadas por el hotel: ${UNIDADES_CONFIRMADAS}`);
+let incompleto = false;
+if (unidadesTotales !== UNIDADES_CONFIRMADAS) {
+  incompleto = true;
+  const faltan = UNIDADES_CONFIRMADAS - unidadesTotales;
+  console.log(`  ⚠ Faltan ${faltan} unidad(es) en el catálogo: «Bungalow Arrecife» y «Villa Luna».`);
+  console.log(`    La gerencia las describe; falta identificar su fotografía en el archivo.`);
+}
 
 if (pendientes) {
   const msg = `${pendientes} ficha(s) con datos sin verificar por el cliente.`;
   if (ESTRICTO) { console.error(`\n  ✗ ${msg} No se publica.`); process.exit(1); }
   console.log(`\n  ℹ ${msg} Se permite en desarrollo; --estricto lo bloquea.`);
 }
+if (incompleto) {
+  const msg = `El catálogo publica ${unidadesTotales} de ${UNIDADES_CONFIRMADAS} unidades.`;
+  if (ESTRICTO) { console.error(`\n  ✗ ${msg} No se publica un inventario incompleto.`); process.exit(1); }
+  console.log(`\n  ℹ ${msg} Se permite en desarrollo; --estricto lo bloquea.`);
+}
+if (!pendientes && !incompleto) console.log(`\n  ✓ Catálogo completo y verificado.`);

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import ListaPoliticas from '../components/ListaPoliticas.astro';
+import CreditosFotos from '../components/CreditosFotos.astro';
 import { usarT, type Idioma } from '../i18n/ui';
 import banner from '../assets/franja-habitacion.webp';
 interface Props { idioma: Idioma }
@@ -18,6 +19,37 @@ const t = usarT(idioma);
   <section class="seccion">
     <div class="contenedor">
       <ListaPoliticas idioma={idioma} />
+      {/* El cierre de la gerencia. Cierra el bloque legal con la voz del hotel:
+          después de veinte condiciones, la última frase es la que decide con
+          qué tono se recuerda todo lo anterior. */}
+      <p class="politicas__cierre">{t('politicas.cierre')}</p>
     </div>
   </section>
+  {/* 🔴 LOS CRÉDITOS FOTOGRÁFICOS SE MUDAN AQUÍ, NO DESAPARECEN.
+      El cliente pidió quitarlos de «Qué hacer en Tulum» (2026-09-02), y de esa
+      página están fuera. Pero borrarlos del sitio no era una opción: seis de
+      las ocho fotografías son Creative Commons BY o BY-SA, que permiten el uso
+      comercial **a cambio** de citar autor y licencia. Sin la cita, el hotel
+      pasa a usarlas sin permiso — y el problema deja de ser de maquetación.
+
+      La licencia pide una atribución «razonable para el medio», y en un sitio
+      web lo razonable y habitual es una página de créditos accesible desde el
+      menú. Ésta lo está, es la página administrativa del sitio y ya recoge lo
+      que el hotel tiene que declarar.
+
+      Si se quieren fuera del sitio ENTERO, la vía no es borrar el crédito: es
+      cambiar esas seis fotografías por otras de dominio público, que no exigen
+      atribución. Dos de las ocho ya lo son. */}
+  <CreditosFotos idioma={idioma} />
 </Base>
+
+<style>
+  .politicas__cierre {
+    margin-top: var(--space-8);
+    max-width: var(--container-text);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--color-ink);
+  }
+</style>

@@ -197,7 +197,9 @@ paso "cada foto de terceros lleva su crédito" bash -c '
     | sed "s/autor: .//; s/.,$//" | sort -u)
   [ -n "$autores" ] || { echo "no se encontro ningun autor en actividades.ts"; exit 1; }
   while IFS= read -r a; do
-    for pagina in site/dist/actividades/index.html site/dist/en/activities/index.html; do
+    # Las paginas de POLITICAS, no las de actividades: el cliente pidio los
+    # creditos fuera de «Que hacer en Tulum» y se mudaron ahi (2026-09-02).
+    for pagina in site/dist/politicas/index.html site/dist/en/policies/index.html; do
       [ -f "$pagina" ] || { echo "no existe $pagina"; exit 1; }
       # El HTML escapa `&` como `&amp;`, asi que un `grep -F` del nombre tal
       # cual falla con autores como «Tinker & Rove». Se compara el nombre YA

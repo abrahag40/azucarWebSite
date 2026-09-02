@@ -214,6 +214,7 @@ export const ui = {
     'galeria.siguiente': 'Fotografía siguiente',
     'galeria.cerrar': 'Cerrar el visor',
 
+    'amenidades.facilidades': 'Todo lo que encontrarás',
     'instalaciones.titulo': 'Nuestros espacios',
     'actividades.titulo': 'Qué hacer en Tulum',
     'actividades.meta': 'Las ruinas frente al mar, los cenotes, Sian Ka’an, Cobá y la bahía de Akumal: qué hay alrededor de Azucar Hotel Tulum y por qué merece el viaje.',
@@ -240,7 +241,11 @@ export const ui = {
     'faq.titulo': 'Preguntas frecuentes',
     'faq.meta': 'Respuestas a lo que más nos preguntan antes de reservar: playa, desayuno, Wi-Fi, estacionamiento, mascotas, horarios de check-in y check-out.',
     'politicas.titulo': 'Políticas del hotel',
-    'politicas.meta': 'Condiciones de pago, identificación, horarios de check-in y check-out, cambios y cancelaciones del Azucar Hotel Tulum.',
+    'politicas.meta': 'Condiciones de pago, identificación, horarios, albercas, normas de la casa y cargos por daño del Azucar Hotel Tulum.',
+    // El cierre que escribió la gerencia. Va tal cual —sin mayúsculas
+    // sostenidas, que es como llegó: un texto legal enteramente en versales se
+    // lee peor y suena a grito, y aquí el tono es justamente el contrario.
+    'politicas.cierre': 'Gracias por tu comprensión. Deseamos que la armonía reine en Azucar Hotel Tulum y que cada viajero y cada huésped tenga una excelente estancia.',
     'ubicacion.titulo': 'Cómo llegar',
     'ubicacion.meta': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum. Cómo llegar desde el aeropuerto de Cancún y desde Tulum pueblo.',
     'ubicacion.direccion': 'Dirección',
@@ -475,6 +480,7 @@ export const ui = {
     'galeria.siguiente': 'Next photo',
     'galeria.cerrar': 'Close the viewer',
 
+    'amenidades.facilidades': 'Everything you will find',
     'instalaciones.titulo': 'Our spaces',
     'actividades.titulo': 'What to do in Tulum',
     'actividades.meta': 'The seafront ruins, the cenotes, Sian Ka’an, Cobá and Akumal Bay: what surrounds Azucar Hotel Tulum and why it is worth the trip.',
@@ -498,7 +504,8 @@ export const ui = {
     'faq.titulo': 'Frequent questions',
     'faq.meta': 'Answers to what guests ask most before booking: beach, breakfast, Wi-Fi, parking, pets, check-in and check-out times.',
     'politicas.titulo': 'Hotel policies',
-    'politicas.meta': 'Payment and identification conditions, check-in and check-out times, changes and cancellations at Azucar Hotel Tulum.',
+    'politicas.meta': 'Payment and identification conditions, times, pools, house rules and damage charges at Azucar Hotel Tulum.',
+    'politicas.cierre': 'Thank you for your understanding. We hope harmony reigns at Azucar Hotel Tulum and that every traveller and guest has an excellent stay.',
     'ubicacion.titulo': 'Getting here',
     'ubicacion.meta': 'Carretera a Boca Paila km 7.5, Hotel Zone, Tulum. How to get here from Cancún airport and from Tulum town.',
     'ubicacion.direccion': 'Address',
