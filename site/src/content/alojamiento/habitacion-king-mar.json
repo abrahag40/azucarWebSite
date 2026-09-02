@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación King · Vista parcial jardín y/o mar",
-    "en": "King Room · Partial garden &/or ocean views"
+    "es": "Habitación Deluxe King · Vista parcial jardín y/o mar",
+    "en": "Deluxe King Room · Partial garden &/or ocean views"
   },
   "categoria": "habitacion",
   "orden": 5,
@@ -96,5 +96,9 @@
   "diferenciador": {
     "es": "La habitación king orientada al mar, no a la selva.",
     "en": "The king room facing the sea rather than the jungle."
+  },
+  "vistaCorta": {
+    "es": "Jardín y/o mar",
+    "en": "Garden &/or ocean"
   }
 }

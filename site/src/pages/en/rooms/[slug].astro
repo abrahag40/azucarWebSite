@@ -35,16 +35,27 @@ const { entrada, anterior, siguiente } = Astro.props;
 const { data } = entrada;
 
 /**
- * El <title> lleva la vista corta cuando el nombre no la trae ya dentro.
+ * El <title> se arma con el NOMBRE BASE, no con el nombre completo.
  *
- * Las cuatro suites se llaman igual en español y en inglés —«Suite Agua» es un
- * NOMBRE PROPIO y traducirlo sería el error—, así que sus dos fichas tenían el
- * mismo <title>. Y además no decía nada: «Suite Agua» a secas no posiciona para
- * nada. Las cuatro habitaciones no lo necesitan porque su nombre ya termina en
- * «· Vista al mar» o «· Vista a la selva».
+ * Los nombres crecieron: «Habitación Deluxe Doble Queen · Vista parcial jardín
+ * y/o mar» son 60 caracteres, y con « | Azucar Hotel Tulum» detrás son 81. El
+ * límite práctico son 70 —`html-validate` lo comprueba— y Google recorta
+ * alrededor de 60, así que un título así se ve truncado de todos modos.
+ *
+ * Se parte el nombre por el separador « · » y se queda la primera mitad —el
+ * producto: «Habitación Deluxe Doble Queen», «Bungalow Mar»—, a la que se le
+ * añade `vistaCorta`. El nombre LARGO no se pierde: es el que se ve en la
+ * página, en el menú y en el listado. Es el título el que tiene un presupuesto
+ * de caracteres, no el producto.
+ *
+ * Y `vistaCorta` sigue siendo imprescindible por lo de siempre: sin ella,
+ * «Habitación Deluxe King · Vistas a la selva» y su versión inglesa tendrían el
+ * mismo título que sus hermanas de vista al mar, y dos páginas con el mismo
+ * <title> compiten entre sí en el buscador.
  */
+const base = data.nombre[IDIOMA].split(' · ')[0];
 const tituloSeo = data.vistaCorta
-  ? `${data.nombre[IDIOMA]} · ${data.vistaCorta[IDIOMA]} | Azucar Hotel Tulum`
+  ? `${base} · ${data.vistaCorta[IDIOMA]} | Azucar Hotel Tulum`
   : `${data.nombre[IDIOMA]} | Azucar Hotel Tulum`;
 const t = usarT(IDIOMA);
 

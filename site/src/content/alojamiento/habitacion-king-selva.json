@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación King · Vistas a la selva",
-    "en": "King Room · Jungle views"
+    "es": "Habitación Deluxe King · Vistas a la selva",
+    "en": "Deluxe King Room · Jungle views"
   },
   "categoria": "habitacion",
   "orden": 6,
@@ -96,5 +96,9 @@
   "diferenciador": {
     "es": "La habitación king orientada a la selva, no al mar.",
     "en": "The king room facing the jungle rather than the sea."
+  },
+  "vistaCorta": {
+    "es": "Selva",
+    "en": "Jungle"
   }
 }

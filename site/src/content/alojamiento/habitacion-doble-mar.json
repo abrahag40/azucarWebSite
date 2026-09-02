@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación Doble · Vista parcial jardín y/o mar",
-    "en": "Double Room · Partial garden &/or ocean views"
+    "es": "Habitación Deluxe Doble Queen · Vista parcial jardín y/o mar",
+    "en": "Deluxe Double Queen Room · Partial garden &/or ocean views"
   },
   "categoria": "habitacion",
   "orden": 7,
@@ -96,5 +96,9 @@
   "diferenciador": {
     "es": "Dos camas en lugar de una king, con la misma vista.",
     "en": "Two beds instead of one king, with the same view."
+  },
+  "vistaCorta": {
+    "es": "Jardín y/o mar",
+    "en": "Garden &/or ocean"
   }
 }

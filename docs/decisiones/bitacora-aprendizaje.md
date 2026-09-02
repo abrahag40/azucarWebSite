@@ -2743,6 +2743,80 @@ texto, y un texto que se desplaza bajo el cursor es justo lo que impide leerlo.
 
 ---
 
+## L-100 · Segmentar antes de implementar: un bloque de texto no es una tarea
+
+La gerencia del hotel envió un bloque de unas 400 líneas: tipologías, textos de marca, fichas de
+cada habitación, amenidades, políticas y un «Nosotros», en español y en inglés, sin estructura.
+El encargo de Abraham fue explícito y correcto: **«primero segmenta el contenido, divídelo, y
+luego implementa»**. Y añadió la instrucción que hizo falta de verdad: *«esta conversación fue
+antes de los cambios que tú y yo hicimos; lo reciente tiene prioridad — pídeme autorización antes
+de volver a cambiarlo»*.
+
+Sin esa segunda instrucción, el resultado previsible es un desastre silencioso: el texto de la
+gerencia dice «Suite Mar», «vista frontal al mar y a la alberca infinita» y «manos mexicanas», y
+todo eso **ya se había cambiado** —a Bungalow, a «vistas paradisíacas frente al mar» y a «manos
+mayas»— a petición del propio cliente días antes. Aplicarlo tal cual habría deshecho una semana
+de decisiones y habría parecido un error de lectura, no de método.
+
+### La segmentación, que es donde estaba el trabajo
+
+Ocho bloques con destinos distintos, y sólo dos eran obvios:
+
+| Bloque | Dónde va | Qué era en realidad |
+|---|---|---|
+| Tipologías y conteos | `content/alojamiento/*.json` | **La respuesta a C1**, el bloqueante más viejo del proyecto |
+| Fichas por habitación | `amenidades` de cada ficha | 13-17 datos por tipo, contra los 4 que teníamos |
+| Amenidades del hotel | `facilidades` en `hotel.ts` | Inventario, no argumentos de venta — **otra forma** |
+| Políticas | `data/politicas.ts` | Tres bloques nuevos, incluidos los únicos CARGOS del sitio |
+| Marca y bienvenida | `hotel.ts` + héroe | Con el conflicto de «manos» dentro |
+| Nosotros | ya estaba | Idéntico a lo publicado: cero trabajo |
+| Nombres «Deluxe» | fichas + `<title>` | Nombre comercial, no descripción |
+| Nota operativa | todas las fichas | «AC y Wi-Fi bajo la cama, cafetera bajo el frigobar» |
+
+**El hallazgo grande estaba escondido en la primera línea.** El bloque empezaba con un listado que
+parecía administrativo —«3 Bungalow con balcón…»— y era **C1 respondida**: 24 unidades con su
+desglose. C1 llevaba bloqueando `build:prod` desde el sprint 0. Nadie lo anunció como respuesta;
+venía como preámbulo.
+
+### Y las cuentas destaparon dos habitaciones que no existían en el sitio
+
+3 + 3 + 5 + 1 + 10 + 2 = 24. Nuestro catálogo suma 22. La diferencia son dos bungalows que la
+gerencia describe con todo detalle —«Bungalow Arrecife» y «Villa Luna»— y que **no estaban en
+ninguna parte**: ni en el sitio vigente, ni en la captura, ni en nuestro catálogo.
+
+No se descubrieron leyendo, se descubrieron **sumando**. Y el reparto encaja como un guante: tres
+bungalows con el jacuzzi en la terraza (Mar, Agua, Arrecife) y tres con roof top propio (Cielo,
+Aire, Luna).
+
+> **El patrón:** cuando llega un inventario, súmalo. Un total que no cuadra no es un detalle
+> contable — es un producto que existe y que el sitio no está vendiendo.
+
+### El guardián cambia de trabajo, no se retira
+
+`check-datos.mjs` vigilaba «¿el cliente confirmó estos números?». Confirmados. La tentación era
+darlo por cerrado; lo correcto era **reapuntarlo**: ahora vigila «¿el catálogo publicado suma lo
+que el hotel tiene?». Hoy no —22 de 24— y `build:prod` lo bloquea.
+
+Con eso el bloqueante **cambia de dueño**: deja de ser «el cliente no responde» y pasa a ser
+«nos faltan dos fotografías». Es una posición mucho mejor, y sólo se ve si el guardián sobrevive
+a la respuesta que lo motivó.
+
+> Un guardián que se borra el día que su pregunta se responde desperdicia la única infraestructura
+> que ya sabía dónde mirar.
+
+### Cuatro conflictos, cuatro preguntas, cero cambios por mi cuenta
+
+«Manos mexicanas» contra «manos mayas», «Suite» contra «Bungalow», «vista frontal» contra «vistas
+paradisíacas», el spa como existente contra el spa como «próximamente». Los cuatro se listaron
+con la fecha de cada versión y se preguntó. Ninguno se tocó.
+
+El de las manos no es un matiz de redacción: **es de quién dice el hotel que es la obra**. Un
+texto de marca escrito por la gerencia y otro dictado por la propiedad pueden no coincidir, y
+resolverlo por antigüedad de fichero habría sido decidirlo por accidente.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -2754,6 +2828,8 @@ texto, y un texto que se desplaza bajo el cursor es justo lo que impide leerlo.
 | R-05 | NAP inconsistente (teléfono con lada de Monterrey en hotel de Tulum) | Medio | Validar con el cliente |
 | R-06 | Titularidad del dominio `azucarhotel.com` desconocida. Puede estar a nombre de una agencia anterior | Alto | Verificar en el sprint 1, no en el lanzamiento |
 | R-07 | Sin acceso a Analytics no hay línea base y no se puede demostrar la mejora | Medio | Solicitar accesos en la primera semana |
+| R-33 | **Tres roof tops con nombre y ninguna descripción: «Selvamar» (jacuzzi), «Blanc» (mirador, según la gerencia) y «White Pearl» (pedido por el cliente).** Puede que Blanc y White Pearl sean el mismo sitio | Medio | Pendiente de confirmar con el hotel. White Pearl sigue marcado como contenido de ejemplo |
+| R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada | Medio | `build:prod` bloqueado a propósito. Pedidas las fotos a la gerencia |
 | R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |
 | R-18 | **El aviso de privacidad no cumple la LFPDPPP** y su versión inglesa no está traducida en el sitio vigente. Faltan domicilio del responsable, derechos ARCO y revocación del consentimiento | Alto | Requisito de **entrada** del sprint 3, que es cuando empezamos a tratar datos. Pregunta **E-PRIV** |
 | R-19 | **El sprint 3 lleva 34 páginas de retraso.** Todo el valor del proyecto —la reserva directa— depende de cuatro respuestas que aún no se han pedido | Alto | Mensaje consolidado escrito y listo. Depende del envío |

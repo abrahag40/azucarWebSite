@@ -1,7 +1,7 @@
 {
   "nombre": {
-    "es": "Habitación Doble · Vistas a la selva",
-    "en": "Double Room · Jungle views"
+    "es": "Habitación Deluxe Doble Queen · Vistas a la selva",
+    "en": "Deluxe Double Queen Room · Jungle views"
   },
   "categoria": "habitacion",
   "orden": 8,
@@ -96,5 +96,9 @@
   "diferenciador": {
     "es": "Dos camas en lugar de una king, orientadas a la selva.",
     "en": "Two beds instead of one king, facing the jungle."
+  },
+  "vistaCorta": {
+    "es": "Selva",
+    "en": "Jungle"
   }
 }

@@ -411,7 +411,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | # | Qué | Bloquea |
 |---|---|---|
 | ~~**C0**~~ | ~~¿Hay restaurante?~~ **RESUELTA 2026-08-25** por Abraham: el restaurante existe. Queda **el spa**, sobre el que no se ha dicho nada | Nada bloqueado. Falta la **carta** (los platos), que es dato aparte |
-| **C1** | Tabla de los 8 tipos | `build:prod` |
+| ~~**C1**~~ | ~~Tabla de los 8 tipos~~ ✅ **RESUELTA 2026-09-02**: 24 unidades con desglose por tipología, enviado por la gerencia | Ya no bloquea. Ahora `build:prod` lo bloquean las 2 unidades que faltan en el catálogo (R-34) |
 | **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
 | **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
@@ -481,7 +481,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **99 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **100 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
