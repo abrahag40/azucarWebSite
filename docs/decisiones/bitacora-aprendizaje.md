@@ -2817,6 +2817,148 @@ resolverlo por antigüedad de fichero habría sido decidirlo por accidente.
 
 ---
 
+## L-101 · «Es básicamente una copia del homepage»
+
+El cliente lo dijo así, y era exacto: la página de Amenidades usaba el mismo componente que la
+portada, con el mismo encabezado y la misma rejilla centrada. Repetir la composición hace que la
+segunda visita parezca que no ha avanzado — el visitante no piensa «qué coherente», piensa «ya vi
+esto».
+
+La corrección no fue cambiar el contenido, que es correcto y está confirmado por el hotel. Fue
+preguntarse **qué hace cada página**:
+
+| | Portada | Página de Amenidades |
+|---|---|---|
+| Trabajo | Que alguien **siga bajando** | Que alguien **repase** |
+| Estado del lector | No sabe si le interesa | Ya está interesado |
+| Forma | **Cartel**: rejilla centrada, icono de 72 px, una frase | **Índice**: filas numeradas, alineadas a la izquierda, línea fina |
+
+Mismo contenido, mismo concepto, distinta forma. Una variante (`variante="editorial"`) y no un
+componente nuevo: duplicarlo habría creado dos sitios donde editar la misma amenidad.
+
+Y se le quitó el encabezado a la variante de página, porque el banner ya dice «Amenidades». **Ese
+título repetido era la mitad del efecto de duplicado**, y es de las cosas que sólo se ven cuando
+alguien de fuera te lo señala.
+
+### El detalle técnico que casi lo tumba: un modificador no gana por ser modificador
+
+`.amenidades--editorial` y `.amenidades` tienen **la misma especificidad** (0,1,0). Cuál gana lo
+decide el orden en el archivo — y ganaba la base. El resultado era una variante a medias: el
+número y la línea aparecían, pero seguían tres columnas centradas.
+
+Se resuelve escribiendo `.amenidades.amenidades--editorial`, que sube a (0,2,0) y **no depende de
+dónde esté escrita la regla**.
+
+> Un modificador que sólo funciona si se escribe después de su base no es un modificador: es una
+> coincidencia de orden que el primer refactor rompe en silencio.
+
+---
+
+## L-102 · Una animación de entrada no puede poder dejar la página en blanco
+
+El cliente pidió que los elementos aparecieran al hacer scroll. Es un efecto trivial de escribir
+y con dos formas conocidas de arruinar un sitio.
+
+**1. El `opacity: 0` que se queda.** Si el estado inicial se escribe en CSS a secas, quien tenga
+JavaScript desactivado —o un bloqueador, o un error de red a mitad de carga— recibe un documento
+**completo e invisible**. Es de los fallos más caros que existen porque **no lo detecta ninguna
+herramienta**: el HTML está ahí, el marcado es correcto, el auditor da verde.
+
+Aquí el estado inicial vive bajo `.revelar`, una clase que pone un script de tres líneas **en el
+`<head>`**. Sin JavaScript no llega, las reglas no aplican y la página se ve entera. Y va en el
+`<head>` y no al final del cuerpo por lo segundo: añadida después de pintar, el navegador enseña
+el contenido y acto seguido lo esconde para animarlo — un parpadeo en cada carga.
+
+**2. El observador que no dispara.** Se probó con el panel del navegador oculto: **doce elementos
+marcados, cero revelados**. En un navegador normal eso se arregla solo al mostrarse la pestaña,
+pero «se arregla solo» no es una garantía aceptable sobre el mecanismo que decide si el sitio es
+legible. A los dos segundos se revela todo lo pendiente, pase lo que pase.
+
+> La animación puede fallar. La lectura, no. Cualquier efecto que empiece escondiendo contenido
+> necesita las dos salvaguardas: que no se aplique si no puede completarse, y que se rinda sola
+> si se atasca.
+
+**Y `data-revelar` en vez de una lista de clases.** El script vive en el layout y tendría que
+conocer `.amenidad`, `.tarjeta`, `.instalacion`… — exactamente el acoplamiento que
+`verificar-estilos.mjs` existe para impedir. Con un atributo, cada componente **declara** qué se
+anima y el layout no se entera de los renombrados.
+
+**CLS cero:** sólo `opacity` y `translate`, las dos únicas propiedades que no participan del
+layout. Animar `height` o `margin` habría movido la página bajo el dedo de quien está leyendo.
+
+---
+
+## L-103 · El instrumento también miente: tres mediciones falsas en una tarde
+
+**axe-core dijo 22 fallos de contraste en el restaurante.** El fondo real de esa sección es
+`#1a1a1a`, medido directamente en el DOM; axe insistía en que era `#ffffff`. La causa apareció al
+imprimir el entorno: **`innerHeight` valía 0**. El panel del navegador estaba oculto, y sin
+viewport `elementsFromPoint` no devuelve nada, así que axe cae al color del `body`.
+
+Con un iframe de altura explícita, las mismas páginas daban cero. **La herramienta no estaba
+equivocada sobre el contraste: estaba midiendo otra página.**
+
+**El guardián del lockfile dio ROJO con un diagnóstico falso.** Comprobaba que el binario `docker`
+existiera, no que el demonio respondiera. Con Docker Desktop cerrado —el estado normal de una Mac
+recién encendida— el `docker run` fallaba y el guardián lo traducía a «package-lock.json
+desincronizado», con una receta para regenerar un lockfile que estaba perfectamente bien.
+
+Su propio comentario decía *«un guardián que no puede comprobar debe avisar, no callar»*. Lo que
+faltaba escribir es que **avisar no es acusar**: no distinguir «está roto» de «no lo pude mirar»
+manda a arreglar lo que no falla, y a la tercera vez el guardián deja de leerse.
+
+**Y al arreglarlo apareció el tercero.** Un paso que se salta terminaba con éxito, así que
+`verificar-todo.sh` lo pintaba en **verde** — un falso verde, que es literalmente lo que ese
+script existe para no producir. Ahora hay tres estados: ✓, ⚠ «no se pudo comprobar» con el
+motivo, y ✗. El resumen final los cuenta aparte: *«sin fallos, pero 1 comprobación no se pudo
+hacer»*.
+
+> **El patrón:** antes de creerse una medición hay que preguntarle al instrumento en qué
+> condiciones está midiendo. Un `innerHeight` de cero, un demonio apagado y un código de salida
+> ambiguo produjeron tres conclusiones falsas en la misma tarde — y ninguna de las tres se
+> parecía a un error.
+
+### De paso, un defecto real que la medición falsa destapó
+
+Al mirar por qué axe se quejaba de los precios de la carta, resultó que usaban
+`--color-accent`: el token **decorativo**, cuyo contrato dice «bordes, iconos, fondos» y que sólo
+garantiza 3:1 **sobre blanco**. Sobre el `#1a1a1a` de la carta daba 4.96:1 — pasaba, pero por
+accidente. `--color-accent-claro`, que nació para texto sobre la foto del héroe, da **11.81:1**.
+
+La alarma era falsa; el hallazgo, no.
+
+---
+
+## L-104 · Escasez de verdad: la ventaja de tener el dato
+
+El cliente pidió mejorar la redacción de las habitaciones «aplicando neuromarketing», sin
+párrafos largos. La pieza más fuerte no la puso una técnica: la puso **C1 respondida**.
+
+La gerencia confirmó que **de cada bungalow hay uno**. Así que «de este bungalow sólo hay uno» no
+es un recurso: es un hecho, y es el argumento más poderoso que existe en hotelería. La industria
+lo falsifica todo el tiempo —«¡últimas habitaciones!», «3 personas están viendo esto»— y quema la
+confianza de todos. Un hotel que **de verdad** tiene una unidad de algo lo dice una vez y no
+necesita nada más.
+
+Los otros tres recursos, con su nombre:
+
+- **Un momento, no una lista.** «Se pasa del sueño al agua tibia sin cruzar una puerta» se
+  recuerda; «jacuzzi privado en terraza» ya está en las amenidades tres centímetros más abajo.
+  La descripción no repite la ficha: la **ambienta**.
+- **Lo que NO hay.** «Arriba no hay nadie», «rodeado de vegetación y no de vecinos», «nadie a
+  quien pedir permiso». En un hotel de 24 unidades la ausencia de gente es el lujo — es lo que
+  vende Aman y no puede vender una cadena.
+- **Una objeción resuelta antes de formularse.** «Caben cuatro sin que nadie duerma en un sofá»
+  contesta la duda exacta de una familia mirando una habitación doble.
+
+🔴 **Y una regla dura: cero prueba social inventada.** Nada de «la favorita de nuestros
+huéspedes» ni «la más solicitada». No tenemos ese dato, y una frase así es indistinguible de las
+que rellenan las OTAs. En textos así **la credibilidad es el único mecanismo**: una sola frase
+que suene a folleto contamina las ocho.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
