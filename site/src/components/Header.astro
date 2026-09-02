@@ -425,6 +425,21 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
     width: 144px;
     height: auto;
   }
+  /* 🔴 EN EL TELÉFONO EL LOGOTIPO BAJA A 108 px, y no contradice la petición de
+     ampliarlo: esa petición era sobre la barra de escritorio, donde compite con
+     siete apartados. En una pantalla de 375 px, 144 px de logotipo son el 38 %
+     del ancho para una cabecera que sólo tiene el logo y la hamburguesa —se lee
+     como una carátula, no como una cabecera.
+
+     Y tiene una consecuencia medible: con 108 px la fila baja de 104 a **84 px
+     de alto**, y esos 20 px son exactamente los que le faltaban al héroe para
+     no meterse debajo del menú en un iPhone SE. La altura de la cabecera es un
+     token justamente para que este ajuste llegue solo a todo lo que depende de
+     ella. */
+  @media (max-width: 40rem) {
+    :root, :host { --alto-cabecera: 84px; }
+    .marca__logo { width: 108px; }
+  }
   .marca:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
   .nav { display: none; }
   .nav__lista {

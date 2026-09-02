@@ -3198,6 +3198,63 @@ para que cupieran: sirvió para poder volver a separarlos bien.**
 
 ---
 
+## L-111 · Centrar reparte la holgura… y también el desbordamiento
+
+El cliente vio «mucho espacio vacío» entre el menú y el antetítulo del héroe. Medido a
+2000 × 853, el reparto vertical era:
+
+| | px |
+|---|---|
+| bajo el menú | **100** |
+| del contenido a la flecha | 60 |
+| bajo la flecha | 32 |
+
+El contenido estaba `align-items: end` —anclado abajo—, así que toda la holgura sobrante se
+acumulaba arriba. Cien píxeles de vacío contra sesenta no es una decisión de composición: es lo
+que queda cuando la caja se alinea a un borde y el resto se lo come el otro. Y el ojo lo lee como
+un error de cálculo, que fue exactamente la palabra que usó el cliente.
+
+Centrado, la holgura se reparte: **100 → 60 px** bajo el menú, con el bloque ópticamente en medio
+del área visible.
+
+### Y centrar creó dos fallos nuevos, los dos por el mismo motivo
+
+**`center` reparte la holgura por igual, pero cuando el contenido NO cabe reparte el
+DESBORDAMIENTO igual de bien** — se sale por arriba tanto como por abajo. Y por arriba está la
+cabecera.
+
+- **Teléfonos** (375 × 667, 360 × 640): el titular quedaba **11 y 21 px POR ENCIMA** del borde
+  inferior del menú. La causa de fondo: el relleno superior estaba escrito como `6.5rem`, un
+  número que casualmente superaba los 104 px de la cabecera en escritorio y no llegaba a ellos en
+  móvil. Se sustituyó por `max(calc(var(--alto-cabecera) + var(--space-3)), 13svh)`: **la garantía
+  deja de ser un número copiado y pasa a derivar del token que la define**, así que viaja sola a
+  cualquier pantalla y a cualquier cambio futuro de la cabecera.
+- **900 × 500**: el mismo síntoma en escritorio, y con una causa que da vergüenza — mi propio
+  `@media (max-height: 700px)`, añadido dos horas antes, sobrescribía el `padding-block` con un
+  `clamp(4.5rem, …)` y **se llevaba por delante la garantía que ese padding estaba cumpliendo**.
+
+> Un `@media` que sobrescribe una propiedad hereda también la obligación que esa propiedad
+> cumplía. Si el valor base codificaba una regla —«nunca menos que la cabecera»—, la
+> sobrescritura tiene que volver a codificarla, o la rompe en silencio en el rango que cubre.
+
+La red final es `align-items: safe center`: en el momento en que habría desbordamiento, la
+alineación cae a `start`. El contenido se pierde por abajo, que es recuperable con scroll, y
+nunca por arriba, que no lo es.
+
+### El resultado, y por qué hay que contarlo con dos números y no con uno
+
+**26 de 26 pantallas sin solapamiento** con el menú — la garantía dura. **25 de 26 con todo
+visible sin scroll**; la que falta sigue siendo 320 × 568, el suelo ya documentado.
+
+Y en el camino, la cabecera del teléfono baja de 104 a 84 px porque el logotipo pasa de 144 a
+108. No contradice la petición de ampliarlo —aquélla era sobre la barra de escritorio, donde
+compite con siete apartados—: en una pantalla de 375 px, 144 px de logotipo son el 38 % del ancho
+para una cabecera que sólo lleva el logo y la hamburguesa. Los 20 px que se ahorran son
+exactamente los que le faltaban al héroe.
+
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

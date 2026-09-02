@@ -142,16 +142,52 @@ const t = usarT(idioma);
 
      ⚠️ Cualquier cosa que se añada aquí dentro tiene que escalar con `svh`, o
      vuelve el desbordamiento. */
+  /* 🔴 `center` Y NO `end`. El contenido estaba anclado ABAJO, así que toda la
+     holgura sobrante se acumulaba ARRIBA — justo debajo del menú. Medido a
+     2000 × 853, el reparto era:
+
+       bajo el menú          100 px
+       hasta la flecha        60 px
+       bajo la flecha         32 px
+
+     Cien píxeles de vacío arriba y sesenta abajo no es una decisión, es lo que
+     queda cuando la caja se alinea a un borde y el resto se lo come el otro. Y
+     el ojo lo lee como un error de cálculo, que fue exactamente lo que se
+     reportó.
+
+     Centrado, la holgura se reparte por igual y el bloque queda ópticamente en
+     medio del área visible — que empieza bajo la cabecera, no en el píxel 0,
+     por eso el relleno superior nunca baja de su altura. */
   .hero {
     position: relative;
     display: grid;
-    align-items: end;
+    /* `safe center` y no `center` a secas. Centrar reparte la holgura a los dos
+       lados, pero cuando el contenido NO cabe reparte también el DESBORDE: se
+       sale por arriba tanto como por abajo, y por arriba está la cabecera.
+       Medido a 900 × 500, el titular acababa 14 px por encima del borde del
+       menú. `safe` hace que, en el momento en que habría desbordamiento, la
+       alineación caiga a `start` — el contenido se pierde por abajo, que es
+       recuperable con scroll, y nunca por arriba, que no lo es. */
+    align-items: safe center;
     justify-items: center;
     /* svh y no vh: en móvil, vh cuenta la barra del navegador y recorta el héroe. */
     min-height: 100svh;
+    /* Arriba, nunca menos que la cabecera (104 px), que va encima en absolute.
+       Abajo, nunca menos que la flecha de bajada: 44 de alto + 32 de separación
+       del borde + aire = 100 px. Los dos topes existen para que el contenido no
+       pueda meterse debajo de ninguno de los dos, mida lo que mida la pantalla. */
     padding-block:
-      clamp(6.5rem, 14svh, var(--space-10))
-      clamp(5.5rem, 16svh, calc(var(--space-10) + var(--space-6)));
+      /* 🔴 `max()` CON EL TOKEN DE LA CABECERA, no un número copiado.
+         El relleno superior tiene UN requisito duro —no meterse debajo del
+         menú— y ese requisito no es un valor estético: es `--alto-cabecera`.
+         Escribirlo como `6.5rem` funcionaba de casualidad en escritorio y
+         fallaba en el teléfono, donde al centrar el contenido el titular
+         acababa 11 px POR ENCIMA del borde inferior de la cabecera.
+         Con `max(cabecera + aire, 13svh)` la garantía viaja sola a cualquier
+         pantalla y a cualquier cambio futuro del token. El `min()` de fuera
+         sólo evita que en un monitor muy alto el relleno crezca sin sentido. */
+      min(max(calc(var(--alto-cabecera) + var(--space-3)), 13svh), var(--space-10))
+      clamp(6.25rem, 15svh, calc(var(--space-10) + var(--space-3)));
     isolation: isolate;
     overflow: hidden;
   }
@@ -343,9 +379,25 @@ const t = usarT(idioma);
      más ajustadas. */
   @media (max-height: 700px) {
     .hero {
-      padding-block: clamp(4.5rem, 11svh, 6.5rem) clamp(3.5rem, 10svh, 5.5rem);
+      /* ⚠️ Arriba se conserva la MISMA garantía que en la regla base. Este
+         bloque la pisaba con un `clamp(4.5rem, …)` —72 px— por debajo de los
+         104 de la cabecera, y en una ventana de 900 × 500 el titular se metía
+         debajo del menú. Un `@media` que sobrescribe un `padding` hereda
+         también la obligación que ese `padding` estaba cumpliendo. */
+      padding-block:
+        min(max(calc(var(--alto-cabecera) + var(--space-3)), 11svh), 6.5rem)
+        clamp(3.5rem, 10svh, 5.5rem);
     }
     .hero__titulo { font-size: min(var(--text-hero), 7svh); }
+  }
+
+  /* Por debajo de 560 px de alto la flecha estorba en vez de ayudar: se posa
+     encima del aviso legal porque sencillamente no queda sitio entre el
+     contenido y el borde. Es decoración —el salto al contenido lo da el enlace
+     «Saltar al contenido»— y la decoración es lo primero que se retira cuando
+     el espacio manda. Medido en una ventana de 900 × 500. */
+  @media (max-height: 560px) {
+    .hero__bajar { display: none; }
   }
 
   /* ── MÓVIL: el caso difícil, y el que tiene un suelo ──────────────────────
@@ -373,10 +425,20 @@ const t = usarT(idioma);
   @media (max-width: 40rem) {
     .hero {
       min-height: 100svh;
-      padding-block: clamp(4.5rem, 12svh, 6.5rem) clamp(3.5rem, 10svh, 5.5rem);
+      /* Arriba manda la misma garantía que en escritorio —`--alto-cabecera`,
+         que en móvil vale 84— y sólo se recorta el relleno de ABAJO, donde no
+         hay nada que despejar porque la flecha de bajada no se pinta. */
+      padding-block:
+        min(max(calc(var(--alto-cabecera) + var(--space-3)), 12svh), 6.5rem)
+        /* 2.5rem de mínimo abajo, contra los 3.5 de antes: en el teléfono la
+           flecha de bajada NO se pinta, así que este relleno no despeja nada —
+           es aire, y el aire es lo primero que se cede cuando la pantalla es la
+           de un iPhone SE. Recuperar la garantía de no meterse bajo el menú
+           costó 20 px arriba; salen de aquí. */
+        clamp(2.5rem, 8svh, 5.5rem);
     }
     .hero__antetitulo { letter-spacing: 0.18em; }
-    .hero__titulo { font-size: clamp(1.75rem, 5.2svh, 2.5rem); }
+    .hero__titulo { font-size: clamp(1.75rem, 5svh, 2.5rem); }
     .hero__entrada { font-size: var(--text-base); }
     .hero__bajar { display: none; }
   }
