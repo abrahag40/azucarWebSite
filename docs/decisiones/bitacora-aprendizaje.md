@@ -3444,10 +3444,33 @@ tentación era clonar una ficha entera y cambiarle el nombre. **El campo que hac
 mentira es `diferenciador`**: existe precisamente para decir en qué se diferencia una unidad de su
 hermana, y de Arrecife y Luna nadie ha dicho una sola cosa que las diferencie.
 
-Se quedaron **sin `diferenciador`**. El campo es `.optional()` y la ficha no lo pinta si falta, así
-que la página sale entera y honesta. Clonarlo habría producido dos habitaciones que dicen
-distinguirse por lo mismo que otra — un absurdo que ningún guardián detecta porque el dato es
-válido.
+Se quedaron **sin `diferenciador`** en la primera pasada. El campo es `.optional()` y la ficha no
+lo pinta si falta, así que la página salía entera y honesta.
+
+### La corrección de Abraham, y por qué había una tercera vía
+
+Abraham pidió replicar también eso. Y tenía razón, porque yo había planteado un binario falso:
+*copiar la frase de la hermana* o *dejar el hueco*. Hay una tercera opción, y es la correcta.
+
+`diferenciador` distingue una unidad **del resto del catálogo**, no sólo de su hermana. De la
+hermana no podemos distinguirla —nadie ha dicho en qué se diferencian Mar, Agua y Arrecife entre
+sí—, pero **de la otra familia sí**, y con la palabra de la propia gerencia: un grupo tiene el
+jacuzzi en la terraza y el otro en un roof top propio.
+
+Así que se replica **el rasgo de grupo, no el individual**. La frase de Mar es «El mar de frente y
+el jacuzzi en la propia terraza»: la primera mitad es suya y no se copia; la segunda es de la
+familia y sí. La de Cielo —«El jacuzzi está en un roof top propio, no en la terraza»— es entera de
+familia y va tal cual a Luna.
+
+| | se replica | no se replica |
+|---|---|---|
+| **Arrecife** | «el jacuzzi privado está en la propia terraza» | «el mar de frente» (es de Mar) |
+| **Luna** | «el jacuzzi está en un roof top propio, no en la terraza» | «la vista se ve de extremo a extremo» (es de Aire) |
+
+> **El matiz que faltaba:** «no puedo distinguirla de su hermana» no es lo mismo que «no puedo
+> distinguirla». Antes de dejar un campo vacío conviene preguntarse **de qué se distingue** — a
+> menudo hay un eje del que sí sabemos, y el campo se llena con algo verdadero en vez de quedarse
+> mudo. Rellenar mal y no rellenar no son las dos únicas salidas.
 
 Lo que sí se replicó tiene respaldo, y conviene ver de dónde sale cada cosa:
 
@@ -3457,12 +3480,26 @@ Lo que sí se replicó tiene respaldo, y conviene ver de dónde sale cada cosa:
 | `unidades` = 1 | aritmética: 3 del grupo − 2 publicados | **sí** |
 | `vista` | la redacción de la propia gerencia para cada grupo | **sí** |
 | `capacidadMaxima`, `camas` | **nadie las ha dicho** | **no** → asterisco + `build:prod` bloqueado |
-| `diferenciador` | nadie lo ha dicho | **ausente**, no inventado |
+| `diferenciador` | el rasgo de FAMILIA, que sí dijo la gerencia | no: la redacción es nuestra |
+| fotografías | **ninguna, y no se copian las de los hermanos** — ver abajo | — |
 
 > **La regla:** al replicar, separa lo que se hereda de la CATEGORÍA —y que por tanto es cierto
 > para cualquier miembro— de lo que es propio del INDIVIDUO. Lo primero se copia sin remordimiento;
 > lo segundo se deja vacío. Un campo ausente es una pregunta pendiente; un campo copiado es una
 > afirmación falsa con aspecto de dato.
+
+### Y donde esa regla dice que NO: las fotografías
+
+Es el mismo criterio, y aquí cae del otro lado. Una fotografía no muestra la categoría, muestra
+**esa terraza concreta**. Y el propio sitio publica, en el encabezado de la página del listado,
+la frase que escribió el cliente: *«cada bungalow fue decorado con identidad propia»*.
+
+Copiar las fotos de Mar a Arrecife pondría, **en la misma página**, una promesa de singularidad y
+la prueba de que no se cumple. No hace falta invocar ninguna norma externa: el sitio se
+contradiría solo. Y a diferencia de un texto, una foto es lo que el huésped usa para decidir — es
+la parte del catálogo con consecuencias sobre una reserva pagada.
+
+Las dos fichas se quedan con el marcador sobrio hasta que el hotel mande las suyas.
 
 ### El bloqueo no desapareció: cambió de dueño, otra vez
 

@@ -93,6 +93,10 @@
       "en": "Luxury interior and exterior finishes"
     }
   ],
+  "diferenciador": {
+    "es": "El jacuzzi privado está en la propia terraza, a unos pasos de la cama.",
+    "en": "The private jacuzzi is on the terrace itself, a few steps from the bed."
+  },
   "publicado": true,
   "verificado": [
     "nombre",

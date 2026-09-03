@@ -476,14 +476,18 @@ De «nos faltan dos habitaciones» a «confirmen cuánta gente cabe en estas dos
 correo. Las dos fichas salen con **asterisco visible** en esas dos filas, igual que hacía todo el
 catálogo antes de C1.
 
-**Lo que NO se replicó, a propósito:** `diferenciador` —el campo que dice en qué se distingue una
-unidad de su hermana— va **ausente en las dos**. Es opcional, la ficha no lo pinta si falta, y
-copiarlo habría producido dos habitaciones que dicen distinguirse por lo mismo que otra. *Un campo
-ausente es una pregunta pendiente; un campo copiado es una afirmación falsa con aspecto de dato*
-(L-118). Tampoco llevan **Smart TV**: sólo Mar y Cielo la tienen.
+**`diferenciador` entró el 2026-09-03**, a petición de Abraham, y entró **con el rasgo de FAMILIA,
+no con el de una hermana**: «el jacuzzi en la propia terraza» para Arrecife y «el jacuzzi en un
+roof top propio, no en la terraza» para Luna. Es exactamente como separó los dos grupos la
+gerencia, así que distingue de verdad —de la otra familia— sin inventar en qué se diferencia de sus
+dos hermanas, que es lo que nadie ha dicho. Ver L-118. Tampoco llevan **Smart TV**: sólo Mar y
+Cielo la tienen.
 
-**Ninguna de las dos tiene fotografía.** La tarjeta pinta su marcador sobrio y el banner se apoya
-en el color de tinta —15.91:1 con el blanco, más margen que sobre cualquier foto—. Al hacerlo
+**Ninguna de las dos tiene fotografía, y NO se han copiado las de sus hermanos.** El propio sitio
+publica, en el encabezado de esa misma página, «cada bungalow fue decorado con identidad propia»:
+enseñar la terraza de Mar como si fuera la de Arrecife se contradice con su propio texto a dos
+centímetros. La tarjeta pinta su marcador sobrio y el banner se apoya en el color de tinta
+—15.91:1 con el blanco, más margen que sobre cualquier foto—. Al hacerlo
 salió un `!` de TypeScript que prometía lo que el esquema no: `imagenPrincipal` es `.optional()` y
 la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría roto el build
 (L-119).

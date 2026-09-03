@@ -38,9 +38,20 @@
  * está para hacer. Ya no es «faltan dos habitaciones» sino «de esas dos no
  * sabemos ni cuánta gente cabe ni qué cama tiene»: capacidad y camas son
  * estimaciones nuestras, van fuera de `verificado`, salen con asterisco en la
- * ficha y siguen impidiendo `build:prod`. Tampoco tienen fotografía —ninguna
- * identificada en el archivo— ni `diferenciador`, que es el campo que diría en
- * qué se distinguen de sus hermanas y es justo lo que nadie ha dicho.
+ * ficha y siguen impidiendo `build:prod`.
+ *
+ * Sus fichas SÍ están completas de texto: Abraham pidió el 2026-09-03 replicar
+ * lo de sus hermanos, y `diferenciador` entró con el rasgo de FAMILIA —el
+ * jacuzzi en la terraza contra el jacuzzi en el roof top, que es como los
+ * separó la propia gerencia— y no con el rasgo individual de una hermana, que
+ * nadie ha dicho. Una ficha completa no es una ficha verificada: lo que
+ * bloquea sigue siendo la provenencia de los números, no los huecos de texto.
+ *
+ * ⚠️ Y siguen SIN FOTOGRAFÍA. No se han copiado las de sus hermanos a
+ * propósito: el propio sitio publica «cada bungalow fue decorado con identidad
+ * propia», así que enseñar la terraza de Mar como si fuera la de Arrecife se
+ * contradice con su propio texto en la misma página. La tarjeta pinta su
+ * marcador y el banner se apoya en el color de tinta hasta que lleguen.
  *
  * Este script NO rompe el build en desarrollo: avisa. Se activa como error
  * cuando se pasa --estricto, que es como corre en el pipeline de producción.

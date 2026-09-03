@@ -93,6 +93,10 @@
       "en": "Luxury interior and exterior finishes"
     }
   ],
+  "diferenciador": {
+    "es": "El jacuzzi está en un roof top propio, no en la terraza.",
+    "en": "The jacuzzi is on a private rooftop, not the terrace."
+  },
   "publicado": true,
   "verificado": [
     "nombre",
