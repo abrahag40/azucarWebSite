@@ -14,24 +14,39 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
+/**
+ * `imagen` es OPCIONAL desde el 2026-09-03, y no por flexibilidad: por los dos
+ * bungalows —Arrecife y Luna— de los que el hotel no ha entregado ninguna
+ * fotografía. Antes la ficha los pasaba con `imagen={data.imagenPrincipal!}`,
+ * y ese `!` era una promesa que el esquema NO respalda: `imagenPrincipal` es
+ * `.optional()` en `content.config.ts`. En cuanto existiera un tipo sin foto,
+ * `<Image src={undefined}>` reventaba el build.
+ *
+ * Sin foto, el banner se pinta con el color de tinta y nada más. Deliberadamente
+ * sobrio, igual que el marcador de `TarjetaAlojamiento`: **una foto de relleno
+ * bonita haría creer que el hotel entregó material que no ha entregado**, y este
+ * hueco es justamente lo que hay que ver para que se llene.
+ */
 interface Props {
   titulo: string;
   antetitulo?: string;
-  imagen: ImageMetadata;
+  imagen?: ImageMetadata;
 }
 const { titulo, antetitulo, imagen } = Astro.props;
 ---
-<section class="banner">
-  <Image
-    class="banner__fondo"
-    src={imagen}
-    alt=""
-    widths={[640, 1024, 1600]}
-    sizes="100vw"
-    loading="eager"
-    fetchpriority="high"
-    quality={50}
-  />
+<section class:list={['banner', !imagen && 'banner--sinfoto']}>
+  {imagen && (
+    <Image
+      class="banner__fondo"
+      src={imagen}
+      alt=""
+      widths={[640, 1024, 1600]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      quality={50}
+    />
+  )}
   <div class="banner__velo" aria-hidden="true"></div>
   <div class="contenedor banner__contenido">
     {antetitulo && <p class="banner__antetitulo">{antetitulo}</p>}
@@ -70,6 +85,11 @@ const { titulo, antetitulo, imagen } = Astro.props;
     position: absolute; inset: 0; z-index: -1;
     background: rgb(0 0 0 / 0.60);
   }
+  /* Sin fotografía el velo no vela nada: se apoya sobre el color de tinta del
+     sitio. Blanco sobre #222222 da 15.91:1, muy por encima del 4.5:1 de WCAG
+     1.4.3 — más margen, de hecho, que sobre cualquiera de las fotos. */
+  .banner--sinfoto { background: var(--color-ink); }
+  .banner--sinfoto .banner__velo { background: transparent; }
   .banner__contenido {
     text-align: center;
     color: #fff;

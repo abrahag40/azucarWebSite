@@ -21,10 +21,26 @@
  *
  * 🔴 Y POR ESO ESTE GUARDIÁN CAMBIA DE TRABAJO. Ya no vigila «¿el cliente
  * confirmó?» —lo hizo— sino «¿el catálogo publicado suma lo que el hotel
- * tiene?». Hoy no: faltan DOS bungalows, «Bungalow Arrecife» y «Villa Luna»,
- * que la gerencia describe y de los que no se ha identificado ninguna
- * fotografía en el archivo. Un catálogo que enseña 22 de 24 unidades no miente,
- * pero está incompleto, y en producción eso se bloquea.
+ * tiene?». Un catálogo que enseña 22 de 24 unidades no miente, pero está
+ * incompleto, y en producción eso se bloquea.
+ *
+ * ✅ 2026-09-03: EL CATÁLOGO YA SUMA 24. Abraham, como Proxy PO, autorizó crear
+ * «Bungalow Arrecife» y «Bungalow Luna» replicando de su familia. La familia no
+ * es una suposición: la dijo la gerencia en el desglose de arriba —Arrecife va
+ * con Mar y Agua, Luna con Cielo y Aire— y de ahí salen también su unidad y su
+ * vista.
+ *
+ * ⚠️ «Villa Luna» la llamó la gerencia; se publica como «Bungalow Luna» por
+ * instrucción de Abraham del 2026-09-03 («Arrecife y Luna también son
+ * bungalows»). Es una decisión, no una errata, y conviene confirmarla.
+ *
+ * 🔴 EL BLOQUEO NO DESAPARECE, CAMBIA DE MOTIVO — y eso es lo que este guardián
+ * está para hacer. Ya no es «faltan dos habitaciones» sino «de esas dos no
+ * sabemos ni cuánta gente cabe ni qué cama tiene»: capacidad y camas son
+ * estimaciones nuestras, van fuera de `verificado`, salen con asterisco en la
+ * ficha y siguen impidiendo `build:prod`. Tampoco tienen fotografía —ninguna
+ * identificada en el archivo— ni `diferenciador`, que es el campo que diría en
+ * qué se distinguen de sus hermanas y es justo lo que nadie ha dicho.
  *
  * Este script NO rompe el build en desarrollo: avisa. Se activa como error
  * cuando se pasa --estricto, que es como corre en el pipeline de producción.
@@ -63,8 +79,8 @@ let incompleto = false;
 if (unidadesTotales !== UNIDADES_CONFIRMADAS) {
   incompleto = true;
   const faltan = UNIDADES_CONFIRMADAS - unidadesTotales;
-  console.log(`  ⚠ Faltan ${faltan} unidad(es) en el catálogo: «Bungalow Arrecife» y «Villa Luna».`);
-  console.log(`    La gerencia las describe; falta identificar su fotografía en el archivo.`);
+  console.log(`  ⚠ Faltan ${faltan} unidad(es) en el catálogo frente al desglose de la gerencia.`);
+  console.log(`    Revisa el campo \`unidades\` de las fichas contra la cabecera de este archivo.`);
 }
 
 if (pendientes) {

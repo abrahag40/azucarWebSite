@@ -193,7 +193,7 @@ export const ui = {
     // Mexicano, o un comprobante de domicilio del hotel.
     //
     // Por qué no es cosmético: el código postal entra en el `PostalAddress` de
-    // `schema.org` (Base.astro), en el pie de las 46 páginas y en los dos
+    // `schema.org` (Base.astro), en el pie de las 50 páginas y en los dos
     // correos. Es parte del NAP que Google coteja contra Business Profile, y
     // uno equivocado descuadra el posicionamiento local y las entregas.
     'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77760',

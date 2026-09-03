@@ -7,6 +7,21 @@ interface Props { entrada: CollectionEntry<'alojamiento'>; idioma: Idioma }
 const { entrada, idioma } = Astro.props;
 const { data, id } = entrada;
 const t = usarT(idioma);
+
+/**
+ * Inicial del marcador de «sin fotografía».
+ *
+ * NO es `nombre.charAt(0)`, y lo era hasta el 2026-09-03. Con un solo tipo sin
+ * foto daba igual; en cuanto entraron DOS bungalows sin foto —Arrecife y Luna—
+ * las dos casillas mostraban la misma «B», la de «Bungalow», una al lado de la
+ * otra. Dos placas grises idénticas no se leen como «falta la foto»: se leen
+ * como que algo se rompió al pintar.
+ *
+ * Se salta la palabra de categoría y se toma la inicial de lo que de verdad
+ * nombra a la unidad: «Bungalow Arrecife» → A, «Bungalow Luna» → L.
+ */
+const CATEGORIAS = /^(bungalow|habitación|habitacion|suite|room)\s+/i;
+const inicial = data.nombre[idioma].replace(CATEGORIAS, '').charAt(0).toUpperCase();
 ---
 <article class="tarjeta" data-revelar>
   <a class="tarjeta__medio" href={ruta(idioma, `alojamiento/${id}`)} tabindex="-1" aria-hidden="true">
@@ -31,7 +46,7 @@ const t = usarT(idioma);
          una imagen de relleno bonita hace creer que el sitio está más avanzado
          de lo que está. */
       <div class="tarjeta__marcador" role="img" aria-label={data.nombre[idioma]}>
-        <span aria-hidden="true">{data.nombre[idioma].charAt(0)}</span>
+        <span aria-hidden="true">{inicial}</span>
       </div>
     )}
   </a>

@@ -1,0 +1,102 @@
+{
+  "nombre": {
+    "es": "Bungalow Luna",
+    "en": "Bungalow Luna"
+  },
+  "categoria": "suite",
+  "orden": 6,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama extra King Size",
+    "en": "1 extra King Size bed"
+  },
+  "vista": {
+    "es": "Vistas panorámicas al mar",
+    "en": "Panoramic sea views"
+  },
+  "vistaCorta": {
+    "es": "Vistas panorámicas al mar",
+    "en": "Panoramic sea views"
+  },
+  "descripcionCorta": {
+    "es": "Roof top propio con jacuzzi privado.",
+    "en": "Private rooftop with its own jacuzzi."
+  },
+  "descripcion": {
+    "es": "Bungalow con balcón y roof top propio: el jacuzzi está arriba, y desde esa altura la vista del mar es panorámica. Es de la misma familia que Cielo y Aire, y como todos está decorado con identidad propia.",
+    "en": "A bungalow with a balcony and a rooftop of its own: the jacuzzi is up there, and from that height the view of the sea is panoramic. It belongs to the same family as Cielo and Aire, and like every one of them it is decorated with an identity of its own."
+  },
+  "amenidades": [
+    {
+      "es": "Terraza privada con sillas de madera y hamaca",
+      "en": "Private terrace with wooden chairs and a hammock"
+    },
+    {
+      "es": "Roof top privado con jacuzzi y vista panorámica al mar",
+      "en": "Private rooftop with a jacuzzi and a panoramic sea view"
+    },
+    {
+      "es": "Cama extra King Size",
+      "en": "Extra King Size bed"
+    },
+    {
+      "es": "Escritorio y tocador",
+      "en": "Desk and vanity"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Ventilador",
+      "en": "Ceiling fan"
+    },
+    {
+      "es": "Wi-Fi gratuito",
+      "en": "Free Wi-Fi"
+    },
+    {
+      "es": "Clóset",
+      "en": "Closet"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini fridge"
+    },
+    {
+      "es": "Cafetera",
+      "en": "Coffee maker"
+    },
+    {
+      "es": "Secadora de pelo",
+      "en": "Hairdryer"
+    },
+    {
+      "es": "Doble lavabo y espejos",
+      "en": "Double sink and mirrors"
+    },
+    {
+      "es": "Regadera",
+      "en": "Shower"
+    },
+    {
+      "es": "WC",
+      "en": "Toilet"
+    },
+    {
+      "es": "Acabados interiores y exteriores de lujo",
+      "en": "Luxury interior and exterior finishes"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "unidades",
+    "vista"
+  ]
+}

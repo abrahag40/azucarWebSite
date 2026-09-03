@@ -3437,6 +3437,75 @@ Se aplicó lo que pidió —es su domicilio— y **se reabrió R-28** con esa ac
 
 ---
 
+## L-118 · Replicar es legítimo; lo que no se replica es lo que distingue
+
+Abraham autorizó crear los dos bungalows que faltaban «replicando de lo que ya sabemos». La
+tentación era clonar una ficha entera y cambiarle el nombre. **El campo que hace que eso sea
+mentira es `diferenciador`**: existe precisamente para decir en qué se diferencia una unidad de su
+hermana, y de Arrecife y Luna nadie ha dicho una sola cosa que las diferencie.
+
+Se quedaron **sin `diferenciador`**. El campo es `.optional()` y la ficha no lo pinta si falta, así
+que la página sale entera y honesta. Clonarlo habría producido dos habitaciones que dicen
+distinguirse por lo mismo que otra — un absurdo que ningún guardián detecta porque el dato es
+válido.
+
+Lo que sí se replicó tiene respaldo, y conviene ver de dónde sale cada cosa:
+
+| campo | fuente | ¿`verificado`? |
+|---|---|---|
+| familia y amenidades | la gerencia agrupó 3+3, y los hermanos ya estaban escritos | amenidades **no**: la lista es nuestra |
+| `unidades` = 1 | aritmética: 3 del grupo − 2 publicados | **sí** |
+| `vista` | la redacción de la propia gerencia para cada grupo | **sí** |
+| `capacidadMaxima`, `camas` | **nadie las ha dicho** | **no** → asterisco + `build:prod` bloqueado |
+| `diferenciador` | nadie lo ha dicho | **ausente**, no inventado |
+
+> **La regla:** al replicar, separa lo que se hereda de la CATEGORÍA —y que por tanto es cierto
+> para cualquier miembro— de lo que es propio del INDIVIDUO. Lo primero se copia sin remordimiento;
+> lo segundo se deja vacío. Un campo ausente es una pregunta pendiente; un campo copiado es una
+> afirmación falsa con aspecto de dato.
+
+### El bloqueo no desapareció: cambió de dueño, otra vez
+
+`check-datos.mjs` decía «faltan 2 de 24 unidades». Ahora dice «2 fichas sin capacidad ni camas
+confirmadas». Es la segunda vez que este guardián cambia de trabajo sin retirarse (L-100 fue la
+primera), y las dos veces el resultado fue el mismo: **el bloqueo se vuelve más pequeño y más
+fácil de resolver**. «Nos faltan dos habitaciones» es un problema; «confirmen cuánta gente cabe en
+estas dos» es un correo.
+
+---
+
+## L-119 · Un `!` de TypeScript es una promesa que el esquema no había hecho
+
+La ficha de alojamiento pasaba la foto al banner así:
+
+```astro
+<BannerPagina imagen={data.imagenPrincipal!} ... />
+```
+
+Ese `!` afirma «esto nunca es nulo». Pero `content.config.ts` declara
+`imagenPrincipal: image().optional()` — **el esquema dice justo lo contrario**. Convivieron sin
+problema mientras los ocho tipos tuvieran foto; el día que entró uno sin ella, `<Image>` recibía
+`undefined` y el build se caía.
+
+Nadie lo vio antes porque `astro check` **cree al `!`**: para eso está. Un aserto de no-nulidad no
+comprueba nada, apaga la comprobación.
+
+> **La regla:** un `!` sólo es honesto cuando algo FUERA del tipo garantiza el valor —un guardián
+> de flujo, una invariante escrita—. Si lo único que lo sostiene es «hasta hoy siempre había
+> valor», no es un aserto: es una bomba con temporizador puesto en la fecha del primer dato nuevo.
+> El arreglo correcto casi nunca es rellenar el hueco, sino **enseñarle al componente a vivir sin
+> él**: `imagen` pasó a opcional y el banner sin foto se pinta sobre el color de tinta, 15.91:1
+> con el blanco — más margen que sobre cualquier fotografía.
+
+### Y el marcador aprendió a distinguir
+
+El mismo cambio destapó otro detalle de dos: la casilla de «sin fotografía» usaba
+`nombre.charAt(0)`, y con dos bungalows sin foto seguidos mostraba **«B» y «B»**, la de
+«Bungalow». Dos placas grises idénticas no se leen como «falta la foto», se leen como que el
+pintado se rompió. Ahora se salta la palabra de categoría: A y L.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
@@ -3451,7 +3520,7 @@ Se aplicó lo que pidió —es su domicilio— y **se reabrió R-28** con esa ac
 | R-35 | **La cabecera se desborda si la tipografía del menú no carga.** Con seis apartados el mínimo baja a 1057 px con Barlow Condensed y **1177 con `Arial Narrow`**, contra un umbral de 1088. Mitigado precargando la fuente (14 KB), pero si no llega nunca el respaldo se queda | Medio | La cura estructural es que el menú no dependa del ancho exacto de una tipografía. Mientras tanto: **siete apartados es el techo**, y ninguna etiqueta más larga que «Antes de viajar» (L-106) |
 | R-36 | **El héroe no cabe entero en pantallas de 320 px de ancho.** Medido: faltan 49 px con el titular ya en 29 px. Reducir más sería ilegible, y el aviso de «solicitud sujeta a confirmación» no se puede esconder | Bajo | Documentado como suelo medido en `Hero.astro`. Afecta a iPhone SE de 2016 y anteriores; de 360×640 en adelante entra todo (L-107) |
 | R-33 | **Tres roof tops con nombre y ninguna descripción: «Selvamar» (jacuzzi), «Blanc» (mirador, según la gerencia) y «White Pearl» (pedido por el cliente).** Puede que Blanc y White Pearl sean el mismo sitio | Medio | Pendiente de confirmar con el hotel. White Pearl sigue marcado como contenido de ejemplo |
-| R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada. **2026-09-03: el cliente pidió «revisar las habitaciones Arrecife y Luna» — es decir, CONFIRMA que existen, pero no mandó ni un dato**: ni capacidad, ni camas, ni vista, ni descripción, ni fotos | Medio | `build:prod` bloqueado a propósito. Sin esos datos no se puede crear su JSON, y **inventarlos es exactamente lo que la regla 7 prohíbe**. Lo que hace falta es una ficha de cada una, del mismo formato que las ocho publicadas |
+| R-34 | **PARCIAL 2026-09-03: el catálogo ya suma 24 de 24.** Abraham autorizó crear «Bungalow Arrecife» y «Bungalow Luna» replicando de su familia, y la familia NO es una suposición: la dijo la gerencia el 2026-09-02 —Arrecife con Mar y Agua, Luna con Cielo y Aire—, y de ahí salen también su unidad y su vista. **Lo que sigue abierto es distinto y menor: capacidad y camas son estimaciones nuestras, no tienen ninguna fotografía, y no tienen `diferenciador`** —el campo que diría en qué se distinguen de sus hermanas, que es justo lo que nadie ha dicho—. La gerencia la llamó «Villa Luna»; se publica como «Bungalow Luna» por decisión de Abraham | Medio → Bajo | `build:prod` sigue bloqueado, pero **por otro motivo**: ya no «faltan dos habitaciones» sino «confirmen capacidad y cama de estas dos». Pedir además su fotografía y una línea que las distinga (L-118) |
 | R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |
 | R-18 | **El aviso de privacidad no cumple la LFPDPPP** y su versión inglesa no está traducida en el sitio vigente. Faltan domicilio del responsable, derechos ARCO y revocación del consentimiento | Alto | Requisito de **entrada** del sprint 3, que es cuando empezamos a tratar datos. Pregunta **E-PRIV** |
 | R-19 | **El sprint 3 lleva 34 páginas de retraso.** Todo el valor del proyecto —la reserva directa— depende de cuatro respuestas que aún no se han pedido | Alto | Mensaje consolidado escrito y listo. Depende del envío |
@@ -3471,7 +3540,7 @@ Se aplicó lo que pidió —es su domicilio— y **se reabrió R-28** con esa ac
 | R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
 | R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
 | R-27 | ~~**`verificar-todo.sh` y el workflow del CI no comprueban lo mismo**~~ **CERRADA 2026-09-01.** Los guardias se mudaron al script y el workflow sólo lo invoca. De paso entró `html-validate`, que estaba fuera y escondía un `<form>` sin botón de envío en el panel | ~~Medio~~ Ninguno | Correr `./scripts/verificar-todo.sh` es ahora correr el CI (L-088) |
-| R-28 | 🔴 **REABIERTA 2026-09-03. El código postal ha cambiado dos veces y el cliente se ha pronunciado en los dos sentidos.** Dictó 77760; se contrastó contra su propio sitio, que publica 77780, y el 2026-09-01 se cerró a favor del 77780; el 2026-09-03 pidió por escrito «cambiar todos los CP 77780 por 77760». Está aplicado el 77760. **Ni su palabra ni su mirror bastan ya como fuente** | Medio | Comprobar en el buscador de códigos postales del Servicio Postal Mexicano o contra un comprobante de domicilio del hotel. Afecta al héroe, al pie de 46 páginas, al `PostalAddress` de `schema.org` y a los dos correos — es NAP, y un NAP descuadrado daña el posicionamiento local |
+| R-28 | 🔴 **REABIERTA 2026-09-03. El código postal ha cambiado dos veces y el cliente se ha pronunciado en los dos sentidos.** Dictó 77760; se contrastó contra su propio sitio, que publica 77780, y el 2026-09-01 se cerró a favor del 77780; el 2026-09-03 pidió por escrito «cambiar todos los CP 77780 por 77760». Está aplicado el 77760. **Ni su palabra ni su mirror bastan ya como fuente** | Medio | Comprobar en el buscador de códigos postales del Servicio Postal Mexicano o contra un comprobante de domicilio del hotel. Afecta al héroe, al pie de 50 páginas, al `PostalAddress` de `schema.org` y a los dos correos — es NAP, y un NAP descuadrado daña el posicionamiento local |
 | R-29 | **Dos de las cinco «amenidades» que el cliente pidió en el menú no existen en ninguna parte.** Day Pass / Beach Club y el Rooftop «White Pearl» no aparecen en sus 26 páginas; el texto publicado es nuestro | Medio | Marcado como contenido de ejemplo en `instalaciones` (`src/data/hotel.ts`). Confirmar o retirar antes de producción |
 | R-37 | **El cliente pidió una foto de la recepción y en el archivo no hay ninguna.** Revisadas UNA A UNA las 101 fotografías de propiedad del mirror (`img_azucar_001`–`101`): hay habitaciones, baños, terrazas, playa y alberca, y ni un solo mostrador de recepción. Lo más parecido es `img_azucar_015` —el vestíbulo abierto de llegada— y mide 531×700, insuficiente para un banner que pide hasta 1600 px de ancho | Bajo | La página de contacto conserva su fotografía actual. Pedir al hotel una foto de la recepción, apaisada y de 1600 px o más. Cambiarla es una línea en `src/views/Contacto.astro` |
 | R-38 | **La fotografía de «La carretera de Boca Paila» le parece fea al cliente y sustituirla exige una licencia nueva.** La actual es de Wikimedia Commons con CC BY-SA 4.0 y su crédito está publicado; cualquier reemplazo necesita su propia licencia y su propio crédito, y descargarla es un paso que no se hace sin autorización | Bajo | O el hotel manda una foto suya de la carretera —lo mejor: sin crédito que mantener— o se elige una CC/dominio público concreta y se ingiere con su `credito`. El guardián «cada foto de terceros lleva su crédito» de `verificar-todo.sh` lo exige |

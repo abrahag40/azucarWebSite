@@ -16,7 +16,7 @@
 | **Cliente** | Azúcar Hotel Tulum |
 | **Ubicación** | Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, MX |
 | **Sitio vigente** | https://azucarhotel.com/ (WordPress + Divi) |
-| **Naturaleza** | Hotel boutique frente a playa. Abril de 2008. ~21 unidades en 8 tipos |
+| **Naturaleza** | Hotel boutique frente a playa. Abril de 2008. **24 unidades en 10 tipos**, confirmadas por la gerencia el 2026-09-02 (su propio sitio decía 21) |
 | **Encargo** | Rediseño y renovación del sitio web |
 | **Repositorio** | `abrahag40/azucarWebSite` |
 | **Rama de trabajo** | `claude/hotel-tulum-web-audit-0yly29` |
@@ -167,7 +167,7 @@ historias con criterios de aceptación en
 |---|---|---|
 | **0** ✅ | Entender el terreno con evidencia reproducible | Auditoría + backlog aprobado |
 | **1** ✅ | Home bilingüe en URL real, rápida y accesible | Falta el `G-…` de GA4 y medir los CWV |
-| **2** ✅ | Que el huésped recorra los 8 tipos y elija uno | Hecho salvo H2.6 (decisión del cliente) |
+| **2** ✅ | Que el huésped recorra el catálogo y elija uno | Hecho salvo H2.6 (decisión del cliente). Eran 8 tipos; son **10** desde el 2026-09-03 |
 | **3** 🔄 | Que el manager reciba una solicitud real en su teléfono | H3.1 y H3.2 hechas. **El envío sigue bloqueado por C3, B1–B4 y E-PRIV** |
 | **4** ✅ | Que el sitio responda todo lo que el huésped pregunta | Hecho salvo H4.4 y el aviso legal conforme |
 | **5** 🔄 | Producción sin perder posicionamiento y con reversión probada | H5.3 adelantado: 301 construidas y verificadas |
@@ -255,7 +255,7 @@ decisión de costo, no de código.
 ### Panel de precios — Fase 1 construida, sin configurar
 
 **Fuera del plan de sprints**, a petición de Abraham ([ADR-0007](docs/decisiones/ADR-0007-panel-de-precios.md)).
-`/panel/` existe: lee y escribe los precios de los 8 tipos, valida en servidor, y cada cambio
+`/panel/` existe: lee y escribe los precios de los tipos publicados, valida en servidor, y cada cambio
 hace un commit al repositorio que dispara el redespliegue — **sin base de datos**, con historial
 en `git log` y reversión de un comando. El login se delega a **Cloudflare Access**; no se
 escribió una línea de autenticación.
@@ -313,7 +313,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **46** públicas (23 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/` |
+| Páginas | **50** públicas (25 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/`. Las cuatro nuevas son Arrecife y Luna en los dos idiomas |
 | Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
@@ -440,7 +440,7 @@ cuatro fichas: la frase promete «identidad propia» y ponerla cuatro veces la d
 **El pie** separa DIRECCIÓN de CONTACTO en dos rótulos, pone el código postal en su propia línea,
 adelanta Galería a Eventos y estrena el texto de presentación que escribió el cliente.
 
-🟡 **El cliente escribió «Azúcar» con acento.** El sitio entero —46 páginas, `<title>`,
+🟡 **El cliente escribió «Azúcar» con acento.** El sitio entero —50 páginas, `<title>`,
 `schema.org` y los dos correos— usa «Azucar», que es como lo escribe el hotel en su propio sitio.
 Puesto con acento, el párrafo quedaba justo debajo del rótulo «Azucar Hotel Tulum» del pie y se
 leía como una errata. **Se dejó sin acento y la decisión queda abierta:** si la marca lleva
@@ -450,10 +450,46 @@ acento, se cambia entera, no en una frase.
 
 | Petición | Estado |
 |---|---|
-| **«Revisar las habitaciones Arrecife y Luna»** | Son las **dos unidades que faltan** para las 24 (R-34) y **no existen en el sitio**. El cliente confirma que existen pero **no mandó un solo dato**: ni capacidad, ni camas, ni vista, ni fotos. Inventarlas es lo que la regla 7 prohíbe |
+| ~~**«Revisar las habitaciones Arrecife y Luna»**~~ | ✅ **HECHO.** Abraham autorizó replicar de su familia — ver abajo |
 | **Foto de la recepción** | **No hay ninguna.** Revisadas una a una las 101 fotografías de propiedad del mirror: habitaciones, baños, terrazas, playa, alberca — ningún mostrador. Lo más parecido, `img_azucar_015`, mide 531 px de ancho para un banner que pide 1600 (R-37) |
 | **Foto de «La carretera de Boca Paila»** | Sustituirla exige **una licencia nueva y su crédito**: la actual es CC BY-SA 4.0 de Wikimedia. O el hotel manda una suya, o se elige una concreta y se ingiere (R-38) |
 | **«Roof top privado…» en Bungalow Aire** | El texto que el cliente pidió retirar está también en **Aire**, y él sólo habló de Cielo. Cambiado en Cielo; en Aire **se dejó**, porque la frase nueva dice «jacuzzi en su rooftop» y de Aire no consta que lo tenga |
+
+### ✅ El catálogo llega a 24 de 24 — Arrecife y Luna
+
+Creados el 2026-09-03 con autorización de Abraham como Proxy PO. **La familia no es una
+suposición**: la dijo la gerencia el 2026-09-02 en el desglose que respondió C1 —«3 bungalow con
+balcón y jacuzzi privado» son Mar, Agua y **Arrecife**; «3 bungalow con balcón, roof top y
+jacuzzi» son Cielo, Aire y **Luna**—. De ahí salen también su unidad (3 − 2 = 1) y su vista, que
+es la redacción de la propia gerencia.
+
+Seis bungalows y cuatro habitaciones, **24 unidades**. Las cuatro habitaciones bajan a `orden`
+7–10 para que los seis bungalows queden juntos.
+
+🔴 **`build:prod` SIGUE BLOQUEADO, pero por otra cosa** — y ése es el trabajo del guardián:
+
+| antes | ahora |
+|---|---|
+| «faltan 2 de 24 unidades» | «2 fichas sin **capacidad** ni **camas** confirmadas» |
+
+De «nos faltan dos habitaciones» a «confirmen cuánta gente cabe en estas dos». Lo segundo es un
+correo. Las dos fichas salen con **asterisco visible** en esas dos filas, igual que hacía todo el
+catálogo antes de C1.
+
+**Lo que NO se replicó, a propósito:** `diferenciador` —el campo que dice en qué se distingue una
+unidad de su hermana— va **ausente en las dos**. Es opcional, la ficha no lo pinta si falta, y
+copiarlo habría producido dos habitaciones que dicen distinguirse por lo mismo que otra. *Un campo
+ausente es una pregunta pendiente; un campo copiado es una afirmación falsa con aspecto de dato*
+(L-118). Tampoco llevan **Smart TV**: sólo Mar y Cielo la tienen.
+
+**Ninguna de las dos tiene fotografía.** La tarjeta pinta su marcador sobrio y el banner se apoya
+en el color de tinta —15.91:1 con el blanco, más margen que sobre cualquier foto—. Al hacerlo
+salió un `!` de TypeScript que prometía lo que el esquema no: `imagenPrincipal` es `.optional()` y
+la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría roto el build
+(L-119).
+
+⚠️ **La gerencia la llamó «Villa Luna»**; se publica como **«Bungalow Luna»** por instrucción de
+Abraham. Es una decisión registrada, no una errata — conviene confirmarla con el hotel.
 
 ### ⚠️ Datos sin verificar
 
@@ -467,7 +503,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | # | Qué | Bloquea |
 |---|---|---|
 | ~~**C0**~~ | ~~¿Hay restaurante?~~ **RESUELTA 2026-08-25** por Abraham: el restaurante existe. Queda **el spa**, sobre el que no se ha dicho nada | Nada bloqueado. Falta la **carta** (los platos), que es dato aparte |
-| ~~**C1**~~ | ~~Tabla de los 8 tipos~~ ✅ **RESUELTA 2026-09-02**: 24 unidades con desglose por tipología, enviado por la gerencia | Ya no bloquea. Ahora `build:prod` lo bloquean las 2 unidades que faltan en el catálogo (R-34) |
+| ~~**C1**~~ | ~~Tabla de los 8 tipos~~ ✅ **RESUELTA 2026-09-02**: 24 unidades con desglose por tipología, enviado por la gerencia | Ya no bloquea. El catálogo suma **24 de 24** desde el 2026-09-03. Ahora `build:prod` lo bloquea otra cosa, más pequeña: **capacidad y camas de Arrecife y Luna** (R-34) |
 | **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
 | **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
@@ -537,7 +573,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **117 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **119 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

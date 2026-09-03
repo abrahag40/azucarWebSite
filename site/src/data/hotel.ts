@@ -73,10 +73,10 @@ export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[]
          la de los premios, SÍ sigue siendo literal y se conserva.
 
          El pie del sitio muestra las DOS primeras frases de este párrafo, así
-         que este texto es también lo que se lee al final de las 46 páginas.
+         que este texto es también lo que se lee al final de las 50 páginas.
 
          🟡 «AZUCAR», SIN ACENTO — y el cliente lo escribió CON acento.
-         No es un descuido nuestro: el nombre va sin acento en las 46 páginas,
+         No es un descuido nuestro: el nombre va sin acento en las 50 páginas,
          en el `<title>`, en el `hotelSchema` de `Base.astro` y en los dos
          correos, porque así lo escribe el hotel en su propio sitio. Puesto con
          acento, este párrafo quedaba justo debajo del rótulo «Azucar Hotel
@@ -84,7 +84,7 @@ export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[]
          leen como una errata, no como una decisión.
 
          Si la marca pasa a llevar acento, es un cambio de MARCA y se hace
-         entero —46 páginas, schema.org, correos y el logotipo—, no en una
+         entero —50 páginas, schema.org, correos y el logotipo—, no en una
          frase. Pregunta abierta para el cliente. */
       es: 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Desde entonces, un equipo comprometido trabaja cada día con un propósito claro: que tu estancia sea inolvidable. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
       en: 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. Since then, a committed team has worked every day with one clear purpose: to make your stay unforgettable. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',

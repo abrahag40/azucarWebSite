@@ -80,7 +80,7 @@ const schemaHabitacion = {
   descripcion={data.descripcion[IDIOMA]}
 >
   <BannerPagina
-    imagen={data.imagenPrincipal!}
+    imagen={data.imagenPrincipal}
     antetitulo={data.categoria === 'suite' ? t('alojamiento.suites') : t('alojamiento.habitaciones')}
     titulo={data.nombre[IDIOMA]}
   />

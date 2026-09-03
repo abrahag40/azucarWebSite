@@ -1,0 +1,102 @@
+{
+  "nombre": {
+    "es": "Bungalow Arrecife",
+    "en": "Bungalow Arrecife"
+  },
+  "categoria": "suite",
+  "orden": 5,
+  "unidades": 1,
+  "capacidadMaxima": 2,
+  "camas": {
+    "es": "1 cama extra King Size",
+    "en": "1 extra King Size bed"
+  },
+  "vista": {
+    "es": "Vistas paradisíacas al mar",
+    "en": "Paradise sea views"
+  },
+  "vistaCorta": {
+    "es": "Vistas paradisíacas al mar",
+    "en": "Paradise sea views"
+  },
+  "descripcionCorta": {
+    "es": "Jacuzzi privado en la terraza, con vistas al mar.",
+    "en": "Private terrace jacuzzi, with sea views."
+  },
+  "descripcion": {
+    "es": "Bungalow con balcón y jacuzzi privado en la terraza, con vistas al mar. Es de la misma familia que Mar y Agua: el mismo espacio íntimo, los mismos detalles de lujo y, como todos, una decoración con identidad propia.",
+    "en": "A bungalow with a balcony and a private jacuzzi on the terrace, with sea views. It belongs to the same family as Mar and Agua: the same intimate space, the same luxury details and, like every one of them, a decor with an identity of its own."
+  },
+  "amenidades": [
+    {
+      "es": "Terraza privada con sillas de madera y hamaca",
+      "en": "Private terrace with wooden chairs and a hammock"
+    },
+    {
+      "es": "Jacuzzi privado, con agua a temperatura ambiente",
+      "en": "Private jacuzzi, at outdoor water temperature"
+    },
+    {
+      "es": "Cama extra King Size",
+      "en": "Extra King Size bed"
+    },
+    {
+      "es": "Escritorio y tocador",
+      "en": "Desk and vanity"
+    },
+    {
+      "es": "Aire acondicionado",
+      "en": "Air conditioning"
+    },
+    {
+      "es": "Ventilador",
+      "en": "Ceiling fan"
+    },
+    {
+      "es": "Wi-Fi gratuito",
+      "en": "Free Wi-Fi"
+    },
+    {
+      "es": "Clóset",
+      "en": "Closet"
+    },
+    {
+      "es": "Caja de seguridad",
+      "en": "Safety box"
+    },
+    {
+      "es": "Minibar",
+      "en": "Mini fridge"
+    },
+    {
+      "es": "Cafetera",
+      "en": "Coffee maker"
+    },
+    {
+      "es": "Secadora de pelo",
+      "en": "Hairdryer"
+    },
+    {
+      "es": "Doble lavabo y espejos",
+      "en": "Double sink and mirrors"
+    },
+    {
+      "es": "Regadera",
+      "en": "Shower"
+    },
+    {
+      "es": "WC",
+      "en": "Toilet"
+    },
+    {
+      "es": "Acabados interiores y exteriores de lujo",
+      "en": "Luxury interior and exterior finishes"
+    }
+  ],
+  "publicado": true,
+  "verificado": [
+    "nombre",
+    "unidades",
+    "vista"
+  ]
+}
