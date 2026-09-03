@@ -37,6 +37,10 @@
       "en": "Air conditioning"
     },
     {
+      "es": "Ventilador",
+      "en": "Ceiling fan"
+    },
+    {
       "es": "Wi-Fi gratuito",
       "en": "Free Wi-Fi"
     },
@@ -57,12 +61,16 @@
       "en": "Hairdryer"
     },
     {
-      "es": "Dos lavabos y dos espejos",
-      "en": "Two sinks and two mirrors"
+      "es": "Doble lavabo y espejos",
+      "en": "Double sink and mirrors"
     },
     {
       "es": "Regadera",
       "en": "Shower"
+    },
+    {
+      "es": "WC",
+      "en": "Toilet"
     },
     {
       "es": "Clóset",

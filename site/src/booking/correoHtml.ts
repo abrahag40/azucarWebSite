@@ -62,6 +62,7 @@
  *   --color-ink        #222222   titulares y valores
  *   --color-ink-muted  #666666   etiquetas
  *   --color-accent-text #4A6E2C  antetitulo de comentarios y caja de cierre
+ *   --color-boton        #376452 el boton «Responder al huesped»
  *   --color-surface-warm #f8f5f0 fondo de las cajas
  *   --color-surface-alt  #f1eeeb fondo del lienzo
  *   --color-border       #e4dfd8 lineas de la tabla
@@ -187,7 +188,7 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
       </div>
 
       <div style="padding:20px 32px;text-align:center;background:#f8f5f0;">
-        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780</p>
+        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77760</p>
       </div>
 
     </div>
@@ -312,7 +313,7 @@ export function correoManagerHtml(s: Solicitud, r: Rotulos, textos: TextosManage
 
         <div style="margin-top:26px;text-align:center;">
           <a href="mailto:${escaparHtml(s.correo)}?subject=${asuntoRespuesta}"
-             style="display:inline-block;background:#4A6E2C;color:#ffffff;text-decoration:none;
+             style="display:inline-block;background:#376452;color:#ffffff;text-decoration:none;
                     padding:14px 30px;border-radius:2px;font-size:14px;letter-spacing:0.12em;
                     text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(textos.responder)}</a>
         </div>
@@ -327,7 +328,7 @@ export function correoManagerHtml(s: Solicitud, r: Rotulos, textos: TextosManage
       </div>
 
       <div style="padding:18px 32px;text-align:center;background:#f8f5f0;">
-        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780</p>
+        <p style="margin:0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">Azucar Hotel Tulum · Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77760</p>
       </div>
 
     </div>

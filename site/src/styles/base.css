@@ -115,13 +115,17 @@ a:hover { color: var(--color-accent-hover); }
   cursor: pointer;
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.boton--primario { background: var(--color-accent-text); color: #fff; }
-.boton--primario:hover { background: var(--color-accent-hover); color: #fff; }
+/* Relleno de botón: `--color-boton`, no el acento. Ver la nota del token en
+   `tokens.css` — el acento pistacho viste el sitio, este verde rellena
+   botones, y separarlos es lo que permite cambiar uno sin tocar el otro. */
+.boton--primario { background: var(--color-boton); color: #fff; }
+.boton--primario:hover { background: var(--color-boton-hover); color: #fff; }
 .boton--secundario { background: transparent; color: var(--color-ink); border-color: var(--color-accent); }
-/* `accent-text` y no `accent`: al invertirse, el blanco queda SOBRE el color,
-   y el decorativo sólo garantiza 3:1 — insuficiente para texto (WCAG 1.4.3).
-   Venía así desde el sprint 1 y no lo vio axe, que no prueba estados hover. */
-.boton--secundario:hover { background: var(--color-accent-text); color: #fff; }
+/* Al invertirse, el blanco queda SOBRE el color, y el decorativo sólo garantiza
+   3:1 — insuficiente para texto (WCAG 1.4.3). Venía así desde el sprint 1 y no
+   lo vio axe, que no prueba estados hover. Ahora usa el mismo verde de botón
+   que el primario, para que los dos estados llenos sean el mismo color. */
+.boton--secundario:hover { background: var(--color-boton); color: #fff; }
 .boton--claro { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
 /* Contorno claro sobre fotografia, como el boton del heroe de Cappa. El relleno
    translucido garantiza el contraste del texto aunque la foto tenga una zona

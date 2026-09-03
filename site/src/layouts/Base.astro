@@ -112,11 +112,20 @@ const schema = {
     streetAddress: 'Carretera a Boca Paila km 7.5, Zona Hotelera',
     addressLocality: 'Tulum',
     addressRegion: 'Quintana Roo',
-    // 77780, confirmado por el cliente el 2026-09-01. Faltaba: un
-    // `PostalAddress` sin `postalCode` es una dirección incompleta para Google,
-    // y el NAP —nombre, dirección, teléfono— es lo que coteja contra Business
-    // Profile para el posicionamiento local.
-    postalCode: '77780',
+    // 🔴 77760 desde el 2026-09-03, por instrucción DIRECTA del cliente.
+    //
+    // Contradice a su propio sitio, que publica 77780, y contradice a la
+    // decisión R-28 del 2026-09-01 —donde se descartó el 77760 precisamente
+    // por no coincidir con el mirror—. El cliente lo ha pedido dos veces y en
+    // sentidos opuestos, así que **la fuente ya no puede ser la captura**: sólo
+    // vale el Servicio Postal Mexicano o el comprobante de domicilio del hotel.
+    // Se aplica lo pedido y se reabre R-28 hasta tener esa tercera fuente.
+    //
+    // No es cosmético: un `PostalAddress` sin `postalCode` es una dirección
+    // incompleta para Google, y el NAP —nombre, dirección, teléfono— es lo que
+    // coteja contra Business Profile para el posicionamiento local. Un código
+    // postal EQUIVOCADO es peor que ninguno: descuadra el NAP.
+    postalCode: '77760',
     addressCountry: 'MX',
   },
   geo: { '@type': 'GeoCoordinates', latitude: 20.1489, longitude: -87.4483 },

@@ -23,7 +23,7 @@ const MAPA = 'https://www.google.com/maps/search/?api=1&query=20.1489,-87.4483';
 <div class="datos">
   <div class="datos__bloque">
     <h2 class="datos__titulo">{t('ubicacion.direccion')}</h2>
-    <address class="datos__direccion">{t('footer.direccion')}</address>
+    <address class="datos__direccion">{t('footer.direccionCalle')}<br />{t('footer.direccionCp')}</address>
     {conMapa && (
       <p><a class="boton boton--secundario" href={MAPA} rel="noopener noreferrer" target="_blank">
         {t('ubicacion.mapa')}

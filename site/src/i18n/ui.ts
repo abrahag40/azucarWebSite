@@ -71,6 +71,11 @@ export const ui = {
     'practicos.titulo': 'Antes de reservar',
     'practicos.horarios': 'Entrada y salida',
     'practicos.mascotas': 'Mascotas',
+    // Sustituye a «Mascotas» en la ficha de alojamiento (cliente, 2026-09-03).
+    // La política de mascotas sigue COMPLETA en las preguntas frecuentes: sale
+    // de la ficha, no del sitio.
+    'practicos.flexibilidad': 'Entrada y salida flexibles',
+    'practicos.flexibilidadTexto': '¿Necesitas más tiempo en tu salida? Pregunta por el early check in y el late check out.',
     'practicos.menores': 'Menores',
     'practicos.ver': 'Ver todas las políticas',
     'nav.cerrar': 'Cerrar menú',
@@ -86,11 +91,17 @@ export const ui = {
     'reserva.cta': 'Solicitar reserva',
     // ── Página de solicitud (H3.1, H3.2) ────────────────────────────────────
     'reserva.pagMeta': 'Envía tu solicitud de reserva a Azucar Hotel Tulum. El hotel confirma disponibilidad y te responde con el total, impuestos incluidos.',
-    'reserva.entrada': 'Dinos tus fechas y el hotel te responde con la disponibilidad y el total, impuestos incluidos.',
-    'reserva.comoFunciona': 'Cómo funciona',
-    'reserva.paso1': 'Nos escribes con tus fechas.',
-    'reserva.paso2': 'El hotel revisa la disponibilidad a mano, una por una.',
-    'reserva.paso3': 'Te responde con el total, impuestos incluidos, y cómo apartar.',
+    'reserva.entrada': 'Dinos tus fechas y con gusto responderemos a tu solicitud.',
+    // La franja que sustituye a «Cómo funciona» (cliente, 2026-09-03). Va en
+    // CUATRO trozos y no en una frase con mayúsculas incrustadas: las mayúsculas
+    // son ÉNFASIS, y el énfasis se marca con <strong>, no escribiendo a gritos
+    // dentro del dato. Un lector de pantalla deletrea «RESERVA DIRECTAMENTE» si
+    // se lo damos en mayúsculas; con <strong> y `text-transform` lo lee como una
+    // palabra normal y el ojo sigue viendo la mayúscula.
+    'reserva.promoAntes': 'Reserva',
+    'reserva.promoFuerte1': 'directamente',
+    'reserva.promoEnMedio': 'con nosotros para disfrutar de',
+    'reserva.promoFuerte2': 'promociones especiales',
     'reserva.porQueNoHayCalendario': 'No verás un calendario de disponibilidad en línea. El hotel gestiona sus habitaciones manualmente y publicar disponibilidad que no podamos sostener acabaría en una reserva que no existe.',
     'reserva.fieldsetFechas': 'Fechas',
     'reserva.fieldsetAlojamiento': 'Alojamiento',
@@ -111,19 +122,22 @@ export const ui = {
     'reserva.nombre': 'Nombre completo',
     'reserva.correo': 'Correo electrónico',
     'reserva.telefono': 'Teléfono',
-    'reserva.comentarios': 'Algo que debamos saber',
+    'reserva.comentarios': 'Solicitudes especiales',
     'reserva.comentariosPista': 'Celebraciones, hora aproximada de llegada, necesidades de accesibilidad.',
     'reserva.opcional': 'opcional',
     'reserva.obligatorio': 'obligatorio',
-    'reserva.revisar': 'Revisar mi solicitud',
+    'reserva.revisar': 'Enviar',
     'reserva.resumenTitulo': 'Esto es lo que vas a enviar',
     'reserva.resumenPie': 'Nada se ha enviado todavía. Revisa el mensaje y mándalo desde tu correo.',
     'reserva.enviarCorreo': 'Enviar por correo',
     'reserva.copiar': 'Copiar el mensaje',
     'reserva.copiado': 'Mensaje copiado',
     'reserva.editar': 'Volver a editar',
-    'reserva.directo': '¿Prefieres escribir tú?',
-    'reserva.directoTexto': 'Escríbenos con tus fechas, el número de personas y tus datos de contacto.',
+    // La tarjeta lateral ya no lleva titular ni texto de relleno (cliente,
+    // 2026-09-03): son los datos de contacto y nada más. El título se conserva
+    // como etiqueta ACCESIBLE de la <section> —`aria-labelledby` necesita algo
+    // que nombrar— pero no se pinta.
+    'reserva.directo': 'Contacto directo con el hotel',
     'reserva.errTitulo': 'Revisa estos campos antes de continuar',
     'reserva.errFecha': 'Indica la fecha de llegada.',
     'reserva.errSalida': 'La salida tiene que ser posterior a la llegada.',
@@ -165,15 +179,24 @@ export const ui = {
     // de ser `null`, este saludo empieza a usarse sin tocar mas codigo.
     'flotante.saludo': 'Hola, estoy viendo "{pagina}" y tengo una pregunta.',
 
-    // ✅ CÓDIGO POSTAL RESUELTO: **77780**, confirmado por el cliente el
-    // 2026-09-01. Es el que publica su propio sitio en el pie de las 26 páginas
-    // capturadas; el 77760 que había dictado era el error. Cierra C-CP y R-28.
+    // 🔴 CÓDIGO POSTAL — **R-28 REABIERTA el 2026-09-03**. Hoy dice 77760.
     //
-    // La contradicción se detectó porque el dato nuevo se contrastó contra la
-    // captura del sitio viejo en vez de darlo por bueno. Ese es el valor de
-    // conservar el mirror: sirve de segunda fuente contra la que chocar lo que
-    // llega, y un código postal equivocado rompe entregas, mapas y el NAP local.
-    'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77780',
+    // Historia, porque importa: el cliente dictó 77760, se contrastó contra su
+    // propio sitio —que publica 77780 en el pie de las 26 páginas capturadas—,
+    // y el 2026-09-01 se resolvió a favor del 77780. El 2026-09-03 el cliente
+    // ha pedido, textualmente, «cambiar todos los CP 77780 por 77760».
+    //
+    // Se aplica lo que pide: es su domicilio, no nuestro. Pero la conclusión
+    // metodológica cambia — el cliente se ha pronunciado dos veces en sentidos
+    // OPUESTOS, así que ni su palabra ni su mirror bastan ya como fuente. Hace
+    // falta una TERCERA: el buscador de códigos postales del Servicio Postal
+    // Mexicano, o un comprobante de domicilio del hotel.
+    //
+    // Por qué no es cosmético: el código postal entra en el `PostalAddress` de
+    // `schema.org` (Base.astro), en el pie de las 46 páginas y en los dos
+    // correos. Es parte del NAP que Google coteja contra Business Profile, y
+    // uno equivocado descuadra el posicionamiento local y las entregas.
+    'hero.eyebrow': 'Hotel frente al mar · Tulum km 7.5 · 77760',
     // Titular corto a propósito: 36 caracteres caían en tres renglones y el
     // héroe perdía fuerza. Se conserva el núcleo del lema del hotel —«el mar es
     // dulce»— y se cede el lema completo a la franja de imagen, que tiene ancho
@@ -197,6 +220,12 @@ export const ui = {
     'alojamiento.ver': 'Ver alojamiento',
     'alojamiento.detalle': 'Ver detalle',
     'alojamiento.suites': 'Bungalows',
+    // Descripción COLECTIVA de la categoría, escrita por el cliente el
+    // 2026-09-03. Va en el encabezado del grupo y NO repetida en las cuatro
+    // fichas: si las cuatro dijeran esto mismo, las cuatro páginas dirían lo
+    // mismo, y lo que la frase promete es justo lo contrario —«identidad
+    // propia»—. Cada ficha conserva su descripción particular.
+    'alojamiento.suitesTexto': 'Cada bungalow fue decorado con identidad propia. Lo que todos comparten es un espacio íntimo y acogedor, detalles de lujo, jacuzzi privado y vistas al mar que no encontrarás en otro lugar.',
     'alojamiento.habitaciones': 'Habitaciones',
     'alojamiento.capacidad': 'Hasta {n} personas',
     'alojamiento.tipos': '{n} tipos',
@@ -210,6 +239,9 @@ export const ui = {
     'ficha.vista': 'Vista',
     'ficha.metros': 'Superficie',
     'ficha.amenidades': 'Incluye',
+    // El recuadro de «Qué la distingue» se retiró (cliente, 2026-09-03): su
+    // estilo pasó a la descripción y el diferenciador va dentro, sin rótulo
+    // visible. La clave sobrevive como etiqueta accesible del bloque.
     'ficha.diferencia': 'Qué la distingue',
     'ficha.anterior': 'Anterior',
     'ficha.siguiente': 'Siguiente',
@@ -310,12 +342,19 @@ export const ui = {
     'footer.privacidad': 'Aviso de privacidad',
     // ── Pie de tres columnas, patrón de Cappa ────────────────────────────────
     'footer.explorar': 'Explorar',
+    'footer.direccionTitulo': 'Dirección',
     'footer.contacto': 'Contacto',
     'footer.sobre': 'El hotel',
     'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Términos y condiciones',
     'footer.politicas': 'Políticas del hotel',
-    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780, México',
+    /* La dirección va en DOS claves porque se pinta en dos líneas (cliente,
+       2026-09-03). No es una sola cadena con un `<br>` dentro: meter marcado en
+       un dato de traducción obliga a `set:html` en los tres componentes que la
+       usan y abre la puerta a inyectar HTML desde el diccionario. Dos datos y
+       un `<br />` en la plantilla — el marcado se queda en el marcado. */
+    'footer.direccionCalle': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, México',
+    'footer.direccionCp': 'C.P. 77760',
 
     'amenidades.antetitulo': 'Servicios',
     // ── Secciones nuevas de la portada, tomadas de Cappa ────────────────────
@@ -382,6 +421,8 @@ export const ui = {
     'practicos.titulo': 'Before you book',
     'practicos.horarios': 'Check-in and check-out',
     'practicos.mascotas': 'Pets',
+    'practicos.flexibilidad': 'Flexible arrival and departure',
+    'practicos.flexibilidadTexto': 'Need more time on your departure day? Ask about early check-in and late check-out.',
     'practicos.menores': 'Children',
     'practicos.ver': 'See all policies',
     'nav.cerrar': 'Close menu',
@@ -392,11 +433,11 @@ export const ui = {
     'reserva.cta': 'Request a reservation',
     // ── Request page (H3.1, H3.2) ───────────────────────────────────────────
     'reserva.pagMeta': 'Send your reservation request to Azucar Hotel Tulum. The hotel checks availability and replies with the total, taxes included.',
-    'reserva.entrada': 'Tell us your dates and the hotel replies with availability and the total, taxes included.',
-    'reserva.comoFunciona': 'How it works',
-    'reserva.paso1': 'You write to us with your dates.',
-    'reserva.paso2': 'The hotel checks availability by hand, one room at a time.',
-    'reserva.paso3': 'They reply with the total, taxes included, and how to hold it.',
+    'reserva.entrada': 'Tell us your dates and we will gladly reply to your request.',
+    'reserva.promoAntes': 'Book',
+    'reserva.promoFuerte1': 'directly',
+    'reserva.promoEnMedio': 'with us and enjoy',
+    'reserva.promoFuerte2': 'special promotions',
     'reserva.porQueNoHayCalendario': 'You will not find an online availability calendar here. The hotel manages its rooms manually, and showing availability we cannot stand behind would end in a reservation that does not exist.',
     'reserva.fieldsetFechas': 'Dates',
     'reserva.fieldsetAlojamiento': 'Room',
@@ -414,19 +455,18 @@ export const ui = {
     'reserva.nombre': 'Full name',
     'reserva.correo': 'Email',
     'reserva.telefono': 'Phone',
-    'reserva.comentarios': 'Anything we should know',
+    'reserva.comentarios': 'Special requests',
     'reserva.comentariosPista': 'Celebrations, approximate arrival time, accessibility needs.',
     'reserva.opcional': 'optional',
     'reserva.obligatorio': 'required',
-    'reserva.revisar': 'Review my request',
+    'reserva.revisar': 'Submit',
     'reserva.resumenTitulo': 'This is what you are about to send',
     'reserva.resumenPie': 'Nothing has been sent yet. Check the message and send it from your own email.',
     'reserva.enviarCorreo': 'Send by email',
     'reserva.copiar': 'Copy the message',
     'reserva.copiado': 'Message copied',
     'reserva.editar': 'Back to editing',
-    'reserva.directo': 'Rather write to us yourself?',
-    'reserva.directoTexto': 'Write to us with your dates, the number of guests and your contact details.',
+    'reserva.directo': 'Contact the hotel directly',
     'reserva.errTitulo': 'Please check these fields before continuing',
     'reserva.errFecha': 'Enter your arrival date.',
     'reserva.errSalida': 'Departure must be after arrival.',
@@ -453,7 +493,7 @@ export const ui = {
     'flotante.contacto': 'Contact the hotel',
     'flotante.saludo': 'Hi, I’m looking at "{pagina}" and I have a question.',
 
-    'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77780',
+    'hero.eyebrow': 'Beach front hotel Tulum km 7.5 · 77760',
     'hero.titulo': 'The Sweetest Temptation',
     'hero.entrada': 'We are a proudly handcrafted hotel, built by Maya hands with love and respect for nature.',
     'hero.entradaFundado': 'Founded in 2008.',
@@ -464,6 +504,7 @@ export const ui = {
     'alojamiento.ver': 'View rooms',
     'alojamiento.detalle': 'View details',
     'alojamiento.suites': 'Bungalows',
+    'alojamiento.suitesTexto': 'Each bungalow was decorated with an identity of its own. What they all share is an intimate, welcoming space, luxury details, a private jacuzzi and sea views you will not find anywhere else.',
     'alojamiento.habitaciones': 'Rooms',
     'alojamiento.capacidad': 'Up to {n} guests',
     'alojamiento.tipos': '{n} types',
@@ -563,12 +604,14 @@ export const ui = {
     'footer.derechos': 'All rights reserved.',
     'footer.privacidad': 'Privacy notice',
     'footer.explorar': 'Explore',
+    'footer.direccionTitulo': 'Address',
     'footer.contacto': 'Contact',
     'footer.sobre': 'The hotel',
     'footer.legalTitulo': 'Legal',
     'footer.terminos': 'Terms and conditions',
     'footer.politicas': 'Hotel policies',
-    'footer.direccion': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, C.P. 77780, Mexico',
+    'footer.direccionCalle': 'Carretera a Boca Paila km 7.5, Zona Hotelera, Tulum, Quintana Roo, Mexico',
+    'footer.direccionCp': 'C.P. 77760',
 
     'amenidades.antetitulo': 'Our services',
     'galeriaHome.antetitulo': 'The property',

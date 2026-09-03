@@ -33,18 +33,24 @@ const explorar = [
   { clave: 'nav.alojamiento', path: 'alojamiento' },
   { clave: 'nav.amenidades', path: 'servicios' },
   { clave: 'nav.restaurante', path: 'restaurante' },
-  { clave: 'nav.eventos', path: 'eventos' },
+  /* Galería antes que Eventos — orden pedido por el cliente el 2026-09-03. */
   { clave: 'nav.galeria', path: 'galeria' },
+  { clave: 'nav.eventos', path: 'eventos' },
   { clave: 'nav.actividades', path: 'actividades' },
   { clave: 'nav.ubicacion', path: 'ubicacion' },
   { clave: 'nav.faq', path: 'preguntas-frecuentes' },
   { clave: 'nav.contacto', path: 'contacto' },
 ] as const;
 
-/* Primera frase de la presentación. Se corta en el primer punto para no meter
-   tres párrafos en un pie; el texto completo está en la portada. */
-const resumen = presentacion.parrafos[0][idioma].split('. ')[0] + '.';
+/* Las DOS primeras frases de la presentación, no una.
+   Eran una sola hasta el 2026-09-03. El cliente reescribió la apertura del
+   párrafo y su texto son dos frases —«…se hizo realidad en 2008. Desde
+   entonces, un equipo comprometido…»—: cortando por el primer punto, el pie
+   se quedaba con la mitad y perdía justo lo que el cliente quería decir.
+   El resto del párrafo —los premios— sigue sólo en la portada. */
+const resumen = presentacion.parrafos[0][idioma].split('. ').slice(0, 2).join('. ') + '.';
 const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
+
 ---
 <footer class="pie">
   <div class="contenedor pie__rejilla">
@@ -63,8 +69,14 @@ const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
     </nav>
 
     <div class="pie__col">
-      <h2 class="pie__titulo">{t('footer.contacto')}</h2>
-      <address class="pie__direccion">{t('footer.direccion')}</address>
+      {/* DOS rótulos donde antes había uno (cliente, 2026-09-03): la dirección
+          y las formas de contacto son dos cosas distintas y la columna las
+          daba por lo mismo. Los dos son <h2> reales y no párrafos con
+          aspecto de título: el índice de encabezados es cómo se recorre una
+          página con lector de pantalla (WCAG 2.4.6). */}
+      <h2 class="pie__titulo">{t('footer.direccionTitulo')}</h2>
+      <address class="pie__direccion">{t('footer.direccionCalle')}<br />{t('footer.direccionCp')}</address>
+      <h2 class="pie__titulo pie__titulo--sep">{t('footer.contacto')}</h2>
       <ul class="pie__lista">
         {contacto.telefonos.map((n) => (
           <li><a class="telefono" href={`tel:${soloDigitos(n)}`}>{n}</a></li>
@@ -127,6 +139,7 @@ const soloDigitos = (n: string) => n.replace(/[^+\d]/g, '');
     margin: 0;
   }
 
+  .pie__titulo--sep { margin-top: var(--space-5); }
   .pie__titulo {
     font-family: var(--font-ui);
     font-size: var(--text-sm);

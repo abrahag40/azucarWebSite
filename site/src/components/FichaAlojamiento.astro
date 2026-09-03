@@ -59,24 +59,40 @@ const datos: Dato[] = [
         cuerpo entra directo por la descripción, que es lo que el huésped abrió
         la página para leer. */}
     <div class="ficha__cuerpo">
-      <p class="ficha__descripcion">{data.descripcion[idioma]}</p>
+      {/* El RECUADRO ES AHORA DE LA DESCRIPCIÓN (cliente, 2026-09-03).
+          Antes la descripción iba suelta y el diferenciador dentro de una caja
+          cálida con filete de acento; el cliente pidió quitarle la caja a ése y
+          dársela a ésta. Los dos textos pasan a vivir en el mismo bloque, que
+          además arregla algo que ya chirriaba: eran dos párrafos sobre lo
+          mismo separados por una línea, y el segundo se leía como una nota al
+          margen de lo que acababa de decir el primero.
 
-      {data.diferenciador && (
-        <div class="distingue">
-          <p class="distingue__etiqueta">{t('ficha.diferencia')}</p>
-          <p class="distingue__texto">{data.diferenciador[idioma]}</p>
-        </div>
-      )}
+          El rótulo «Qué la distingue» deja de pintarse, pero sigue nombrando el
+          bloque para el lector de pantalla: sin él, la región sería un <div>
+          anónimo y `aria-labelledby` no tendría a qué apuntar. */}
+      <section class="descripcion" aria-labelledby="descripcion-titulo">
+        <h2 class="sr-only" id="descripcion-titulo">{t('ficha.diferencia')}</h2>
+        <p class="descripcion__texto">{data.descripcion[idioma]}</p>
+        {data.diferenciador && (
+          <p class="descripcion__diferencia">{data.diferenciador[idioma]}</p>
+        )}
+      </section>
 
-        {/* Horarios, mascotas y menores: las condiciones que deciden la compra,
-            en la página donde se decide. Es lo que hace `room-details.html` de
-            Cappa, y tiene razón — quien sale de una ficha a buscar la política
-            de mascotas no siempre vuelve. */}
-        <DatosPracticos idioma={idioma} />
+      {/* Horarios y flexibilidad de entrada y salida: las condiciones que
+          deciden la compra, en la página donde se decide. Es lo que hace
+          `room-details.html` de Cappa, y tiene razón — quien sale de una ficha
+          a buscar una condición no siempre vuelve. Mascotas salió de aquí el
+          2026-09-03 a petición del cliente; sigue en las preguntas
+          frecuentes. */}
+      <DatosPracticos idioma={idioma} />
     </div>
 
     <aside class="resumen" aria-labelledby="resumen-titulo">
-      <h2 id="resumen-titulo" class="resumen__titulo">{t('ficha.resumen')}</h2>
+      {/* El nombre del tipo, no «De un vistazo» (cliente, 2026-09-03).
+          Se lee de la fuente de datos, no se copia: es la misma cadena que
+          pinta el banner y la que va en el <title>, así que renombrar un tipo
+          en su JSON lo renombra también aquí. */}
+      <h2 id="resumen-titulo" class="resumen__titulo">{data.nombre[idioma]}</h2>
       <dl class="resumen__lista">
         {datos.map((d) => (
           <div class="resumen__fila">
@@ -131,29 +147,33 @@ const datos: Dato[] = [
   }
   .ficha__cuerpo, .resumen { min-width: 0; }
 
-  .ficha__descripcion {
-    font-size: var(--text-lg);
-    line-height: var(--leading-body);
-    color: var(--color-ink-muted);
-    max-width: 60ch;
-  }
-
-  .distingue {
-    margin-top: var(--space-6);
+  /* El recuadro que era del diferenciador, ahora de la descripción entera:
+     fondo cálido, filete de acento a la izquierda y esquina suave. El color
+     del filete sigue siendo `--color-accent` —decorativo, 3:1 sobre blanco,
+     WCAG 1.4.11— y no el verde de botón: un filete no es un botón, y si
+     compartieran color, un cambio de botón repintaría medio sitio. */
+  .descripcion {
     padding: var(--space-5);
     background: var(--color-surface-warm);
     border-left: 3px solid var(--color-accent);
     border-radius: var(--radius-sm);
+    max-width: 60ch;
   }
-  .distingue__etiqueta {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-antetitulo);
-    text-transform: uppercase;
+  .descripcion__texto {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
     color: var(--color-ink-muted);
-    margin-bottom: var(--space-2);
+    margin: 0;
   }
-  .distingue__texto { line-height: var(--leading-snug); }
+  /* El diferenciador queda DENTRO del mismo recuadro y se distingue por el
+     peso y el color de tinta, no por otra caja. `--color-ink` sobre la
+     superficie cálida da 14.9:1. */
+  .descripcion__diferencia {
+    margin: var(--space-4) 0 0;
+    color: var(--color-ink);
+    font-weight: 500;
+    line-height: var(--leading-snug);
+  }
 
   /* --- Resumen ------------------------------------------------------------ */
   .resumen {

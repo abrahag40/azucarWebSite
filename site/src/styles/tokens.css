@@ -47,6 +47,32 @@
      actual da **5.05:1** en el punto más desfavorable. */
   --color-accent-claro:  #C6DDA0;  /* 5.05:1 sobre el héroe con su velo */
 
+  /* --- Color de BOTÓN -----------------------------------------------------
+     🟢 Verde profundo #376452 — pedido por el cliente el 2026-09-03 para «los
+     btn y para btns de menú grandes como los de "Solicitar Reserva"».
+
+     Por qué es un token PROPIO y no un cuarto tono de `accent`: el acento
+     pistacho sigue haciendo su trabajo en bordes, viñetas, iconos y texto de
+     enlace, y este verde sólo rellena botones. Mezclarlos obligaría a que un
+     cambio de color de botón arrastrase todos los acentos del sitio, que es
+     justo lo que pasó al cambiar de oro a pistacho. Un token por trabajo.
+
+     Medido con la misma vara que el resto de la paleta (WCAG 1.4.3 texto y
+     1.4.11 componentes), con texto BLANCO encima:
+
+                          contraste con #fff
+       boton       #376452      6.76:1     relleno normal
+       boton-hover #2A4E3F      9.29:1     hover y foco
+
+     Y como el botón es un componente, su relleno también tiene que separarse
+     del fondo de la página: #376452 da 3.31:1 contra el blanco de `surface`,
+     por encima del 3:1 que pide 1.4.11.
+
+     🔴 REVERTIR SON DOS LÍNEAS: se apunta a `--color-accent-text` y
+     `--color-accent-hover` y ningún componente se entera. */
+  --color-boton:         #376452;  /* 6.76:1 con texto blanco */
+  --color-boton-hover:   #2A4E3F;  /* 9.29:1 — hover y foco */
+
   --color-ink:           #222222;  /* 15.91:1 — texto principal */
   --color-ink-muted:     #666666;  /*  5.74:1 — texto secundario, cumple AA */
 

@@ -25,9 +25,14 @@ const t = usarT(idioma);
 const todos = (await getCollection('alojamiento', ({ data }) => data.publicado))
   .sort((a, b) => a.data.orden - b.data.orden);
 
+/* `texto` es la descripción COLECTIVA de la categoría — la escribió el cliente
+   el 2026-09-03 para los bungalows. Sólo la tiene esa categoría: inventarle una
+   a «Habitaciones» para que las dos quedaran simétricas sería exactamente el
+   antipatrón que este proyecto evita —maquetar primero y buscar el texto
+   después—. El marcado la pinta si existe y no deja hueco si no. */
 const grupos = [
-  { clave: 'suite' as const, titulo: t('alojamiento.suites') },
-  { clave: 'habitacion' as const, titulo: t('alojamiento.habitaciones') },
+  { clave: 'suite' as const, titulo: t('alojamiento.suites'), texto: t('alojamiento.suitesTexto') },
+  { clave: 'habitacion' as const, titulo: t('alojamiento.habitaciones'), texto: '' },
 ].map((g) => ({ ...g, entradas: todos.filter((e) => e.data.categoria === g.clave) }))
  .filter((g) => g.entradas.length > 0);
 ---
@@ -39,6 +44,7 @@ const grupos = [
           <h2 id={`grupo-${g.clave}`} class="grupo__titulo">{g.titulo}</h2>
           <p class="grupo__cuenta">{t('alojamiento.tipos', { n: g.entradas.length })}</p>
         </header>
+        {g.texto && <p class="grupo__texto">{g.texto}</p>}
         <ul class="rejilla" role="list">
           {g.entradas.map((entrada) => (
             <li class="rejilla__celda">
@@ -72,6 +78,15 @@ const grupos = [
     line-height: 1.15;
     min-width: 0;
     overflow-wrap: break-word;
+  }
+  /* La descripción de la categoría. `65ch` de medida y no el ancho completo:
+     por encima de unos 75 caracteres el ojo pierde el renglón al volver
+     (Bringhurst, y lo mismo dice la guía de legibilidad de la WCAG en 1.4.8). */
+  .grupo__texto {
+    max-width: 65ch;
+    margin: calc(-1 * var(--space-3)) 0 var(--space-6);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
   }
   .grupo__cuenta {
     font-family: var(--font-ui);

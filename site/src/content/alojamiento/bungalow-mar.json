@@ -8,8 +8,8 @@
   "unidades": 1,
   "capacidadMaxima": 2,
   "camas": {
-    "es": "1 cama king size",
-    "en": "1 king size bed"
+    "es": "1 cama extra King Size",
+    "en": "1 extra King Size bed"
   },
   "vista": {
     "es": "Vistas paradisíacas frente al mar",
@@ -37,24 +37,28 @@
       "en": "Private jacuzzi, at outdoor water temperature"
     },
     {
-      "es": "Cama king size",
-      "en": "King size bed"
+      "es": "Cama extra King Size",
+      "en": "Extra King Size bed"
+    },
+    {
+      "es": "Escritorio y tocador",
+      "en": "Desk and vanity"
     },
     {
       "es": "Aire acondicionado",
       "en": "Air conditioning"
     },
     {
+      "es": "Ventilador",
+      "en": "Ceiling fan"
+    },
+    {
       "es": "Wi-Fi gratuito",
       "en": "Free Wi-Fi"
     },
     {
-      "es": "Colchón, almohadas y blancos de lujo",
-      "en": "Luxury mattress, pillows and linens"
-    },
-    {
-      "es": "Televisión",
-      "en": "TV"
+      "es": "Smart TV",
+      "en": "Smart TV"
     },
     {
       "es": "Clóset",
@@ -73,20 +77,20 @@
       "en": "Coffee maker"
     },
     {
-      "es": "Escritorio y tocador",
-      "en": "Desk and vanity"
-    },
-    {
       "es": "Secadora de pelo",
       "en": "Hairdryer"
     },
     {
-      "es": "Dos lavabos y dos espejos",
-      "en": "Two sinks and two mirrors"
+      "es": "Doble lavabo y espejos",
+      "en": "Double sink and mirrors"
     },
     {
       "es": "Regadera",
       "en": "Shower"
+    },
+    {
+      "es": "WC",
+      "en": "Toilet"
     },
     {
       "es": "Acabados interiores y exteriores de lujo",

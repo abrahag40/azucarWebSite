@@ -164,7 +164,14 @@ const rotulos = {
   {/* ADR-0003, regla 1. Va PEGADO al botón, que es donde se decide, y no en un
       pie que nadie lee. Nunca se dice «reserva»: se dice «solicitud». */}
   <p class="solicitud__aviso">{t('reserva.aviso')}</p>
-  <button type="submit" class="boton">{t('reserva.revisar')}</button>
+  {/* `boton--primario`, no `boton` a secas.
+      Iba sin modificador desde el sprint 3, así que el botón PRINCIPAL de la
+      página —el que envía la solicitud— se pintaba con el gris por defecto del
+      navegador mientras los secundarios de al lado sí tenían color. Salió al
+      revisar el cambio de color de botón que pidió el cliente el 2026-09-03:
+      la comprobación devolvió `rgb(239,239,239)` donde tenía que haber verde.
+      Ningún auditor lo veía: es marcado válido y contrasta de sobra. */}
+  <button type="submit" class="boton boton--primario">{t('reserva.revisar')}</button>
 </form>
 
 {/* El resumen. Se rellena y se muestra al validar; sin JavaScript no aparece
@@ -181,7 +188,7 @@ const rotulos = {
         direcciones. Un enlace debe llevar a algo desde el primer momento — es
         el mismo defecto que se le señaló a la plantilla en sus disparadores
         de menú. */}
-    <a class="boton" id="resumen-correo" href={correoDeReserva}>{t('reserva.enviarCorreo')}</a>
+    <a class="boton boton--primario" id="resumen-correo" href={correoDeReserva}>{t('reserva.enviarCorreo')}</a>
     <button type="button" class="boton boton--secundario" id="resumen-copiar">{t('reserva.copiar')}</button>
     <button type="button" class="boton boton--secundario" id="resumen-editar">{t('reserva.editar')}</button>
   </p>

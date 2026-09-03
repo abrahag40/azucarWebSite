@@ -8,8 +8,8 @@
   "unidades": 1,
   "capacidadMaxima": 2,
   "camas": {
-    "es": "1 cama king size",
-    "en": "1 king size bed"
+    "es": "1 cama extra King Size",
+    "en": "1 extra King Size bed"
   },
   "vista": {
     "es": "Vistas a la selva y a la zona hotelera",
@@ -29,12 +29,16 @@
       "en": "Made by Mexican artisans with materials from the region"
     },
     {
-      "es": "1 cama king size con colchón, almohadas y sábanas de lujo",
-      "en": "1 king size bed with luxury mattress, pillows and sheets"
+      "es": "1 cama extra King Size con colchón, almohadas y sábanas de lujo",
+      "en": "1 extra King Size bed with luxury mattress, pillows and sheets"
     },
     {
       "es": "Aire acondicionado",
       "en": "Air conditioning"
+    },
+    {
+      "es": "Ventilador",
+      "en": "Ceiling fan"
     },
     {
       "es": "Wi-Fi gratuito",
@@ -57,12 +61,16 @@
       "en": "Hairdryer"
     },
     {
-      "es": "Dos lavabos y dos espejos",
-      "en": "Two sinks and two mirrors"
+      "es": "Doble lavabo y espejos",
+      "en": "Double sink and mirrors"
     },
     {
       "es": "Regadera",
       "en": "Shower"
+    },
+    {
+      "es": "WC",
+      "en": "Toilet"
     },
     {
       "es": "Clóset",

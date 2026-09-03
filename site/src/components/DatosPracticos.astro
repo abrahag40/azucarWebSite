@@ -6,7 +6,8 @@
  * ── QUÉ HACE LA PLANTILLA Y POR QUÉ TIENE RAZÓN ─────────────────────────────
  * Su ficha de habitación no se queda en la descripción y las amenidades: lleva
  * también **Check-in, Check-out, Pets y Children and extra beds**. Es decir, las
- * condiciones que deciden la compra, en la página donde se decide.
+ * condiciones que deciden la compra, en la página donde se decide. Nosotros
+ * llevamos dos: los horarios y la flexibilidad de entrada y salida.
  *
  * Nuestra ficha no las tenía: el huésped que se preguntaba «¿a qué hora puedo
  * llegar?» o «¿puedo traer al perro?» tenía que salir a `/politicas/` o a las
@@ -19,7 +20,6 @@
  * empezaría a mostrar la política de estacionamiento sin que nada fallara.
  */
 import { politicas } from '../data/politicas';
-import { faq } from '../data/faq';
 import { usarT, ruta, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma }
@@ -27,8 +27,6 @@ const { idioma } = Astro.props;
 const t = usarT(idioma);
 
 const horarios = politicas.find((g) => g.clave === 'horarios');
-const porClave = (c: string) => faq.find((f) => f.clave === c);
-const mascotas = porClave('mascotas');
 
 /**
  * Sólo dos filas, y las dos por un motivo.
@@ -39,27 +37,35 @@ const mascotas = porClave('mascotas');
  * decisión; lo que el huésped necesita aquí es la hora. El resto sigue completo
  * en `/politicas/`, a un clic, con el enlace de abajo.
  *
- * ── Se descartan las respuestas que dependen de su pregunta ─────────────────
- * La respuesta del hotel a «¿Aceptan niños?» es, literalmente, «Sí.», y la de
- * «¿Puedo llegar después de las 15:00?» empieza por «Sí, a cualquier hora».
- * Sacadas de su pregunta quedan como afirmaciones sueltas que no informan de
- * nada: bajo la etiqueta «Menores», un «Sí.» a secas; detrás del horario, un
- * «Sí, a cualquier hora» que parece contradecirlo.
+ * ── MASCOTAS SALIÓ DE AQUÍ el 2026-09-03 ───────────────────────────────────
+ * Lo pidió el cliente: «remover el tema de las mascotas dentro de cada
+ * descripción de cada habitación y cambiarlo por» la invitación a preguntar
+ * por el early check in y el late check out.
  *
- * Las dos se quedan en las preguntas frecuentes, junto a la pregunta que les da
- * sentido. Reescribirlas para que funcionaran aquí sería inventar texto del
- * hotel, y este bloque existe precisamente para no hacerlo.
+ * Tiene sentido comercial y no rompe nada: la política de mascotas sigue
+ * **completa y sin tocar** en las preguntas frecuentes, que es donde la busca
+ * quien viaja con perro. Lo que cambia es qué se le pone delante a quien está
+ * mirando una habitación — y una negativa («por ahora no podemos recibirlas»)
+ * justo encima del botón de solicitar no ayuda a nadie que no venga con perro.
  *
- * **La regla:** una respuesta sólo se puede reutilizar fuera de su FAQ si se
- * sostiene sola. «Amamos las mascotas, pero por ahora no podemos recibirlas» sí;
- * «Sí.» no.
+ * A cambio, la segunda fila deja de ser texto literal del hotel: es una frase
+ * que escribió el cliente. Por eso ya no se lee de `faq.ts` sino del
+ * diccionario, y por eso este archivo ya no importa `faq`.
+ *
+ * ⚠️ LO QUE ESTA FRASE **NO** DICE, a propósito: ni el horario del early check
+ * in, ni el del late check out, ni si tienen costo. Nada de eso está confirmado
+ * —el grupo `horarios` de `politicas.ts` sí habla de cargos por salida tardía—
+ * y «pregunta por» es exactamente la promesa que el hotel puede sostener hoy.
  */
 const bloques = [
   horarios && {
     titulo: t('practicos.horarios'),
     puntos: [horarios.puntos[0][idioma]],
   },
-  mascotas && { titulo: t('practicos.mascotas'), puntos: [mascotas.r[idioma]] },
+  {
+    titulo: t('practicos.flexibilidad'),
+    puntos: [t('practicos.flexibilidadTexto')],
+  },
 ].filter(Boolean) as { titulo: string; puntos: string[] }[];
 
 ---

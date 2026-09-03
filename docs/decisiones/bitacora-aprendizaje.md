@@ -3301,6 +3301,139 @@ empezar.
 > lista de precios, y entonces se elige la combinación que menos duele. Aquí ninguna de las cuatro
 > cesiones es perceptible; el hueco que compran, sí.
 
+---
+
+## L-113 · Un color por trabajo: el botón no tiene por qué ser el acento
+
+El cliente pidió «#376452 para los btn». La vía rápida era repintar
+`--color-accent-text`, que es lo que rellenaba `.boton--primario`. **Habría repintado también los
+enlaces del pie, los rótulos de sección, las viñetas de las listas de amenidades y los iconos**,
+porque ese mismo token hacía de color de texto acentuado en todo el sitio.
+
+Se creó `--color-boton` aparte, con su pareja `--color-boton-hover`. La consecuencia buena no es
+que el botón sea verde: es que **ahora hay dos perillas independientes**, y cambiar una no arrastra
+la otra. El acento pistacho sigue vistiendo el sitio; el verde profundo sólo rellena botones.
+
+> **La regla:** un token nombra un TRABAJO, no un color. `--color-accent-text` era un buen nombre
+> mientras el botón y el acento fueran lo mismo; en cuanto dejaron de serlo, seguir compartiéndolo
+> era acoplar dos decisiones distintas por el accidente de haber empezado iguales. El síntoma que
+> lo delata siempre es el mismo: *«para cambiar A tengo que aceptar que cambie B»*.
+
+### Y midiendo, no suponiendo
+
+| | con blanco encima | sobre el blanco de la página |
+|---|---|---|
+| `--color-boton` #376452 | **6.76:1** ✓ WCAG 1.4.3 | **3.31:1** ✓ WCAG 1.4.11 |
+| `--color-boton-hover` #2A4E3F | **9.29:1** ✓ | 5.29:1 ✓ |
+
+Las dos columnas hacen falta: la primera es el texto DENTRO del botón (1.4.3, mínimo 4.5:1), la
+segunda es el botón CONTRA la página (1.4.11, mínimo 3:1). Un color puede pasar la primera y
+fallar la segunda, y entonces el botón se lee pero no se ve.
+
+---
+
+## L-114 · El botón principal llevaba dos sprints sin color y ningún guardián lo dijo
+
+Al comprobar en el navegador el cambio de color, la consulta devolvió esto para el botón que envía
+la solicitud de reserva:
+
+```
+submitBg: "rgb(239, 239, 239)"
+```
+
+Ése es el **gris por defecto de los botones del navegador**. `FormularioSolicitud.astro` escribía
+`class="boton"` sin el modificador `boton--primario`, así que la acción más importante de la página
+—la que remata el flujo entero del proyecto— se pintaba como un botón de sistema, con los
+secundarios de al lado bien vestidos.
+
+**Por qué no lo vio nada de lo que ya tenemos:**
+
+| guardián | por qué calla |
+|---|---|
+| `html-validate` | `<button class="boton">` es marcado impecable |
+| axe-core | gris sobre blanco con texto negro contrasta de sobra: **no hay violación** |
+| Lighthouse | no juzga si un botón parece un botón de esta marca |
+| el auditor propio | busca enlaces rotos, `alt` y objetivos táctiles, no clases ausentes |
+
+Ninguno estaba mal: **ninguno mide «este elemento tiene el aspecto que le toca»**, que no es una
+propiedad del documento sino de la relación entre el documento y su sistema de diseño.
+
+> **El patrón:** los defectos que sobreviven a una batería de auditores son los que **no violan
+> ninguna regla, sólo la intención**. Se cazan de dos maneras: mirando la página, o preguntándole
+> al navegador por el valor computado en vez de por el marcado. La segunda es la que lo encontró
+> aquí, y es barata: `getComputedStyle(el).backgroundColor` sobre el elemento clave de cada página.
+> Un inventario de clases (`grep -o 'class="[^"]*boton[^"]*"' | sort | uniq -c`) lo habría cazado
+> también, y ahora está en el hábito.
+
+---
+
+## L-115 · Una petición repetida en tres sitios no es de la vista: es del dato
+
+El cliente pidió invertir el orden de los dos teléfonos **tres veces**: en el pie, en la sección de
+contacto y en la página de contacto. La lectura literal era invertirlos en las tres plantillas.
+
+Hacerlo así habría dejado un cuarto sitio mal: **`FranjaLlamada.astro` y `SeccionPresentacion.astro`
+enseñan un solo número, `telefonos[0]`**. Con el cambio en las tres vistas, esos dos habrían
+seguido ofreciendo el número que el cliente acababa de mandar al segundo puesto — y son
+precisamente los que invitan a llamar.
+
+Se invirtió el array en `data/hotel.ts`. Un cambio, cinco lugares correctos, cero reversiones
+repartidas por las plantillas.
+
+> **La regla:** cuando la misma corrección aparece en N sitios, el defecto casi nunca está en los N
+> sitios — está **una capa más abajo**, en lo que los alimenta. Y la prueba de que se ha bajado a la
+> capa correcta es que aparecen lugares que el cliente no mencionó y que también estaban mal.
+
+---
+
+## L-116 · Las mayúsculas de una promoción se ponen en el CSS, no en el texto
+
+El cliente escribió su franja así: «RESERVA **DIRECTAMENTE** con nosotros para disfrutar de
+**PROMOCIONES ESPECIALES**». Copiarla literal al diccionario habría metido versales en el DATO.
+
+Un lector de pantalla que encuentra una palabra íntegramente en mayúsculas **la deletrea**: NVDA y
+VoiceOver leen «RESERVA» como *ere-e-ese-e-erre-uve-a*, porque no pueden distinguir una palabra
+gritada de una sigla. Es de los defectos más extendidos en promociones de hotel y de los más
+fáciles de evitar.
+
+Se guarda en minúsculas, en cuatro trozos, y la franja hace el resto:
+
+- `text-transform: uppercase` — el ojo ve las versales
+- `<strong>` en los dos trozos con énfasis — el oído oye el énfasis
+- el `<strong>` cambia el **peso**, no el color: un segundo color sería un segundo contraste que medir
+
+> **La regla:** en el dato va lo que se DICE; en el CSS, cómo se ve. Las versales son presentación,
+> y el énfasis es semántica — confundirlos hace que una de las dos audiencias se quede fuera.
+
+### Y la animación tiene freno
+
+El brillo y el latido corren **tres veces y paran**. Una animación perpetua es ruido a los diez
+segundos y aquí compite con el campo que el huésped está rellenando. Con
+`prefers-reduced-motion: reduce` no corre ninguna (WCAG 2.3.3 y 2.2.2): la franja conserva color,
+contraste y mensaje, porque **la animación señala el mensaje, no lo contiene**.
+
+---
+
+## L-117 · El mirror dejó de ser segunda fuente cuando el cliente se contradijo
+
+El 2026-09-01 se cerró R-28 así: el cliente dictó el código postal 77760, se contrastó contra su
+propio sitio —que publica 77780 en el pie de sus 26 páginas—, y ganó el mirror. La lección de
+entonces era buena: *el archivo del sitio viejo vale como segunda fuente contra la que chocar lo
+que llega*.
+
+El 2026-09-03 el mismo cliente pidió, por escrito, «cambiar todos los CP 77780 por 77760».
+
+**El método de septiembre uno ya no sirve**, y no porque estuviera mal: sirve mientras haya UNA
+fuente que contrastar contra otra. Aquí las dos fuentes son el mismo emisor diciendo cosas
+opuestas, así que el desempate ya no puede salir de ninguna de las dos. Hace falta una tercera que
+no dependa de él: el buscador del Servicio Postal Mexicano, o un comprobante de domicilio.
+
+Se aplicó lo que pidió —es su domicilio— y **se reabrió R-28** con esa acción escrita.
+
+> **El patrón:** una técnica de verificación tiene condiciones de validez, y conviene escribirlas
+> junto a la técnica. «Contrastar contra el mirror» vale contra un descuido; **no vale contra un
+> cambio de opinión**. Confundir las dos cosas es cómo un dato equivocado se queda cerrado en la
+> documentación con una palomita al lado.
 
 ---
 
@@ -3318,7 +3451,7 @@ empezar.
 | R-35 | **La cabecera se desborda si la tipografía del menú no carga.** Con seis apartados el mínimo baja a 1057 px con Barlow Condensed y **1177 con `Arial Narrow`**, contra un umbral de 1088. Mitigado precargando la fuente (14 KB), pero si no llega nunca el respaldo se queda | Medio | La cura estructural es que el menú no dependa del ancho exacto de una tipografía. Mientras tanto: **siete apartados es el techo**, y ninguna etiqueta más larga que «Antes de viajar» (L-106) |
 | R-36 | **El héroe no cabe entero en pantallas de 320 px de ancho.** Medido: faltan 49 px con el titular ya en 29 px. Reducir más sería ilegible, y el aviso de «solicitud sujeta a confirmación» no se puede esconder | Bajo | Documentado como suelo medido en `Hero.astro`. Afecta a iPhone SE de 2016 y anteriores; de 360×640 en adelante entra todo (L-107) |
 | R-33 | **Tres roof tops con nombre y ninguna descripción: «Selvamar» (jacuzzi), «Blanc» (mirador, según la gerencia) y «White Pearl» (pedido por el cliente).** Puede que Blanc y White Pearl sean el mismo sitio | Medio | Pendiente de confirmar con el hotel. White Pearl sigue marcado como contenido de ejemplo |
-| R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada | Medio | `build:prod` bloqueado a propósito. Pedidas las fotos a la gerencia |
+| R-34 | **Dos unidades del hotel no están en el sitio: «Bungalow Arrecife» y «Villa Luna».** Son las 2 que faltan para las 24 confirmadas, y no hay ninguna fotografía identificada. **2026-09-03: el cliente pidió «revisar las habitaciones Arrecife y Luna» — es decir, CONFIRMA que existen, pero no mandó ni un dato**: ni capacidad, ni camas, ni vista, ni descripción, ni fotos | Medio | `build:prod` bloqueado a propósito. Sin esos datos no se puede crear su JSON, y **inventarlos es exactamente lo que la regla 7 prohíbe**. Lo que hace falta es una ficha de cada una, del mismo formato que las ocho publicadas |
 | R-17 | **El contenido del cliente se contradice: restaurante y spa.** `/servicios/` los anuncia, su FAQ los desmiente. Estuvo publicado por nosotros, incluido en `schema.org` | Alto | Retirado del sitio nuevo. Pregunta **C0**, marcada urgente |
 | R-18 | **El aviso de privacidad no cumple la LFPDPPP** y su versión inglesa no está traducida en el sitio vigente. Faltan domicilio del responsable, derechos ARCO y revocación del consentimiento | Alto | Requisito de **entrada** del sprint 3, que es cuando empezamos a tratar datos. Pregunta **E-PRIV** |
 | R-19 | **El sprint 3 lleva 34 páginas de retraso.** Todo el valor del proyecto —la reserva directa— depende de cuatro respuestas que aún no se han pedido | Alto | Mensaje consolidado escrito y listo. Depende del envío |
@@ -3338,8 +3471,10 @@ empezar.
 | R-25 | **El panel de precios crece por acumulación hasta ser el CMS que ADR-0004 descartó.** Un campo hoy, otro mañana, y en seis meses hay un WordPress artesanal sin sus ventajas | Medio | El alcance escrito en [ADR-0007](ADR-0007-panel-de-precios.md) es la defensa. Si se rebasa, se reabre ADR-0004 y se evalúa un CMS headless sobre git (Decap, Tina) — no se siguen añadiendo campos |
 | R-26 | **El token de escritura al repositorio es la credencial más sensible del proyecto.** Quien la tenga puede escribir código, no sólo datos. Aparece con el panel de precios | Alto | Cuatro mitigaciones obligatorias en ADR-0007 §Decisión 3: token de alcance fino a un solo repositorio, sólo como secreto de Cloudflare, ruta de escritura fijada en el código, y rotación con fecha en el runbook |
 | R-27 | ~~**`verificar-todo.sh` y el workflow del CI no comprueban lo mismo**~~ **CERRADA 2026-09-01.** Los guardias se mudaron al script y el workflow sólo lo invoca. De paso entró `html-validate`, que estaba fuera y escondía un `<form>` sin botón de envío en el panel | ~~Medio~~ Ninguno | Correr `./scripts/verificar-todo.sh` es ahora correr el CI (L-088) |
-| R-28 | ~~**El código postal del cliente no coincide con el de su propio sitio**~~ **CERRADA 2026-09-01: es 77780**, el de su sitio; el 77760 dictado era el error. Se detectó porque el dato nuevo se contrastó contra el mirror en vez de darlo por bueno — el archivo del sitio viejo vale como segunda fuente | ~~Medio~~ Ninguno | Corregido en el héroe, en el pie y en `schema.org`, donde además faltaba `postalCode` |
+| R-28 | 🔴 **REABIERTA 2026-09-03. El código postal ha cambiado dos veces y el cliente se ha pronunciado en los dos sentidos.** Dictó 77760; se contrastó contra su propio sitio, que publica 77780, y el 2026-09-01 se cerró a favor del 77780; el 2026-09-03 pidió por escrito «cambiar todos los CP 77780 por 77760». Está aplicado el 77760. **Ni su palabra ni su mirror bastan ya como fuente** | Medio | Comprobar en el buscador de códigos postales del Servicio Postal Mexicano o contra un comprobante de domicilio del hotel. Afecta al héroe, al pie de 46 páginas, al `PostalAddress` de `schema.org` y a los dos correos — es NAP, y un NAP descuadrado daña el posicionamiento local |
 | R-29 | **Dos de las cinco «amenidades» que el cliente pidió en el menú no existen en ninguna parte.** Day Pass / Beach Club y el Rooftop «White Pearl» no aparecen en sus 26 páginas; el texto publicado es nuestro | Medio | Marcado como contenido de ejemplo en `instalaciones` (`src/data/hotel.ts`). Confirmar o retirar antes de producción |
+| R-37 | **El cliente pidió una foto de la recepción y en el archivo no hay ninguna.** Revisadas UNA A UNA las 101 fotografías de propiedad del mirror (`img_azucar_001`–`101`): hay habitaciones, baños, terrazas, playa y alberca, y ni un solo mostrador de recepción. Lo más parecido es `img_azucar_015` —el vestíbulo abierto de llegada— y mide 531×700, insuficiente para un banner que pide hasta 1600 px de ancho | Bajo | La página de contacto conserva su fotografía actual. Pedir al hotel una foto de la recepción, apaisada y de 1600 px o más. Cambiarla es una línea en `src/views/Contacto.astro` |
+| R-38 | **La fotografía de «La carretera de Boca Paila» le parece fea al cliente y sustituirla exige una licencia nueva.** La actual es de Wikimedia Commons con CC BY-SA 4.0 y su crédito está publicado; cualquier reemplazo necesita su propia licencia y su propio crédito, y descargarla es un paso que no se hace sin autorización | Bajo | O el hotel manda una foto suya de la carretera —lo mejor: sin crédito que mantener— o se elige una CC/dominio público concreta y se ingiere con su `credito`. El guardián «cada foto de terceros lleva su crédito» de `verificar-todo.sh` lo exige |
 | R-31 | **«Qué hacer en Tulum» no tiene ni una fotografía.** El archivo del hotel son 244 imágenes de la propiedad: ni un cenote, ni una ruina. Las ocho tarjetas van ilustradas con glifos propios | Medio | Pedir al hotel ocho fotografías del entorno, o comprarlas con licencia. El campo `imagen` está listo: poner la foto es una línea (L-092) |
 | R-32 | **El menú llegó a su techo: ocho apartados.** El noveno no cabe ni bajando el tracking, y el umbral de escritorio ya subió a 72rem por el logotipo más grande y el apartado nuevo | Bajo | Si hace falta un apartado más, sale otro. La aritmética está en `Header.astro` |
 | R-30 | **La página de Eventos es enteramente contenido inventado.** El sitio vigente no menciona eventos, y no sabemos tipos, aforos ni precios | Medio | Cero cifras publicadas, a propósito. Aviso en la cabecera de `src/data/eventos.ts` |

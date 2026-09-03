@@ -395,9 +395,65 @@ Ver L-090.
 |---|---|
 | Day Pass / Beach Club · Rooftop «White Pearl» | **Inventados.** No existen en las 26 páginas capturadas (R-29) |
 | La página de Eventos entera | **Inventada.** Sin cifras, a propósito (R-30) |
-| ~~Código postal~~ | ✅ **RESUELTO 2026-09-01: es 77780.** El 77760 dictado era el error; se detectó al contrastarlo con la captura del sitio viejo |
+| Código postal | 🔴 **REABIERTO 2026-09-03. Hoy dice 77760**, porque el cliente lo pidió por escrito. Pero el 2026-09-01 él mismo había confirmado 77780, que es el que publica su sitio: se ha pronunciado en los dos sentidos, así que **hace falta una tercera fuente** —Servicio Postal Mexicano o comprobante de domicilio— (R-28, L-117) |
 | La carta del restaurante | Sigue siendo de ejemplo. Lo que sí se resolvió es el **nombre** |
 | Las ocho fotos de «Qué hacer en Tulum» | **No existen.** Hay glifos dibujados en su lugar, y el hueco listo (R-31) |
+
+### Cambios del cliente — 2026-09-03
+
+Segunda tanda. **Aplicadas 18 de 21 peticiones**; las tres que faltan no dependen de código.
+Lo que hay que saber:
+
+**Los botones pasan a verde profundo `#376452`** —cabecera incluida—, con un token propio,
+`--color-boton`, y no repintando el acento. Si se hubiera tocado `--color-accent-text`, el mismo
+cambio habría repintado los enlaces del pie, los rótulos de sección y las viñetas de las
+amenidades. Medido: 6.76:1 con texto blanco, 3.31:1 contra la página. Ver L-113.
+
+🐛 **Y al comprobarlo salió un defecto de dos sprints: el botón que ENVÍA la solicitud no tenía
+color.** Llevaba `class="boton"` sin `boton--primario`, así que se pintaba con el gris por defecto
+del navegador. No lo veía nada —es marcado válido, contrasta de sobra y ningún auditor juzga si un
+botón parece un botón—; salió al preguntarle al navegador por el valor computado. Ver L-114.
+
+**La página de solicitud cambia de argumento.** Fuera «Cómo funciona» y sus tres pasos; entra una
+franja de **reserva directa con promociones especiales**, animada con un brillo y un latido que
+corren tres veces y paran, y que **no corren en absoluto** con `prefers-reduced-motion`. Las
+mayúsculas son de CSS y el énfasis de `<strong>`: en el dato el texto va en minúsculas, para que
+un lector de pantalla no deletree «RESERVA» letra por letra (L-116). 🔴 **No dice qué promociones
+son ni cuánto descuentan** — C3 sigue sin responder. El botón pasa a decir «Enviar» / «Submit», y
+la tarjeta lateral pierde su titular: son los datos de contacto y nada más.
+
+**El orden de los dos teléfonos se invirtió EN EL DATO**, no en las tres vistas donde el cliente lo
+pidió. Había dos sitios más —`FranjaLlamada` y `SeccionPresentacion`— que enseñan un solo número y
+que con el cambio por vista habrían seguido ofreciendo el equivocado. Ver L-115.
+
+**La ficha de alojamiento se reordena:** el recuadro cálido pasa de «Qué la distingue» a la
+descripción, «De un vistazo» pasa a ser **el nombre del tipo**, y la fila de **mascotas sale y
+entra la de entrada y salida flexibles** —la política de mascotas sigue completa en el FAQ—.
+
+**Las ocho fichas cambian de inventario:** «1 cama extra King Size», Smart TV **sólo en Mar y
+Cielo**, «Doble lavabo y espejos», WC y Ventilador nuevos, «Escritorio y tocador» debajo de la
+cama, y fuera «Colchón, almohadas y blancos de lujo» —Wi-Fi ya estaba en la lista—.
+
+**Los Bungalows estrenan descripción colectiva** en el encabezado de su grupo, no repetida en las
+cuatro fichas: la frase promete «identidad propia» y ponerla cuatro veces la desmentiría.
+
+**El pie** separa DIRECCIÓN de CONTACTO en dos rótulos, pone el código postal en su propia línea,
+adelanta Galería a Eventos y estrena el texto de presentación que escribió el cliente.
+
+🟡 **El cliente escribió «Azúcar» con acento.** El sitio entero —46 páginas, `<title>`,
+`schema.org` y los dos correos— usa «Azucar», que es como lo escribe el hotel en su propio sitio.
+Puesto con acento, el párrafo quedaba justo debajo del rótulo «Azucar Hotel Tulum» del pie y se
+leía como una errata. **Se dejó sin acento y la decisión queda abierta:** si la marca lleva
+acento, se cambia entera, no en una frase.
+
+🔴 **Lo que NO se pudo hacer, y por qué:**
+
+| Petición | Estado |
+|---|---|
+| **«Revisar las habitaciones Arrecife y Luna»** | Son las **dos unidades que faltan** para las 24 (R-34) y **no existen en el sitio**. El cliente confirma que existen pero **no mandó un solo dato**: ni capacidad, ni camas, ni vista, ni fotos. Inventarlas es lo que la regla 7 prohíbe |
+| **Foto de la recepción** | **No hay ninguna.** Revisadas una a una las 101 fotografías de propiedad del mirror: habitaciones, baños, terrazas, playa, alberca — ningún mostrador. Lo más parecido, `img_azucar_015`, mide 531 px de ancho para un banner que pide 1600 (R-37) |
+| **Foto de «La carretera de Boca Paila»** | Sustituirla exige **una licencia nueva y su crédito**: la actual es CC BY-SA 4.0 de Wikimedia. O el hotel manda una suya, o se elige una concreta y se ingiere (R-38) |
+| **«Roof top privado…» en Bungalow Aire** | El texto que el cliente pidió retirar está también en **Aire**, y él sólo habló de Cielo. Cambiado en Cielo; en Aire **se dejó**, porque la frase nueva dice «jacuzzi en su rooftop» y de Aire no consta que lo tenga |
 
 ### ⚠️ Datos sin verificar
 
@@ -481,7 +537,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **112 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **117 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

@@ -29,7 +29,15 @@ type Texto = Record<Idioma, string>;
  */
 export const contacto = {
   correo: 'contacto@azucarhotel.com',
-  telefonos: ['+52\u00A0(984)\u00A0210-0057', '+52\u00A0(81)\u00A01380-2176'],
+  /* ORDEN INVERTIDO el 2026-09-03. El cliente lo pidió tres veces por
+     separado —pie, sección de contacto y página de contacto—, así que no es
+     una preferencia de una vista: es cuál de los dos números quiere que se
+     marque primero. Se invierte AQUÍ y no en tres plantillas, porque además
+     hay dos sitios —`FranjaLlamada` y `SeccionPresentacion`— que enseñan un
+     solo número, `telefonos[0]`, y que con el cambio en las vistas habrían
+     seguido enseñando el que el cliente ya no quiere de primero.
+     El orden del sitio vigente era el contrario. */
+  telefonos: ['+52\u00A0(81)\u00A01380-2176', '+52\u00A0(984)\u00A0210-0057'],
   /**
    * Numero de WhatsApp para el boton flotante, en formato wa.me: solo digitos,
    * con codigo de pais, sin `+` ni espacios (p. ej. `529841234567`).
@@ -59,8 +67,27 @@ export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[]
   },
   parrafos: [
     {
-      es: 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008 gracias a nuestros huéspedes y a todos los que formamos el equipo de trabajo. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
-      en: 'Azucar Hotel Tulum was born from a dream and became a reality in 2008 thanks to our guests and everyone on the team. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',
+      /* ⚠️ ÉSTA YA NO ES LA FRASE LITERAL DEL SITIO VIGENTE. El cliente la
+         reescribió el 2026-09-03 y sustituye a «…gracias a nuestros huéspedes
+         y a todos los que formamos el equipo de trabajo». La segunda frase,
+         la de los premios, SÍ sigue siendo literal y se conserva.
+
+         El pie del sitio muestra las DOS primeras frases de este párrafo, así
+         que este texto es también lo que se lee al final de las 46 páginas.
+
+         🟡 «AZUCAR», SIN ACENTO — y el cliente lo escribió CON acento.
+         No es un descuido nuestro: el nombre va sin acento en las 46 páginas,
+         en el `<title>`, en el `hotelSchema` de `Base.astro` y en los dos
+         correos, porque así lo escribe el hotel en su propio sitio. Puesto con
+         acento, este párrafo quedaba justo debajo del rótulo «Azucar Hotel
+         Tulum» del pie, y dos grafías del mismo nombre a dos centímetros se
+         leen como una errata, no como una decisión.
+
+         Si la marca pasa a llevar acento, es un cambio de MARCA y se hace
+         entero —46 páginas, schema.org, correos y el logotipo—, no en una
+         frase. Pregunta abierta para el cliente. */
+      es: 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Desde entonces, un equipo comprometido trabaja cada día con un propósito claro: que tu estancia sea inolvidable. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
+      en: 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. Since then, a committed team has worked every day with one clear purpose: to make your stay unforgettable. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',
     },
     {
       es: 'Este lugar ha sido creado con mucho amor a estas tierras y a la gente que nos visita. La calidez y el trato personalizado nos han caracterizado siempre.',
