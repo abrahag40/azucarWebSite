@@ -15,9 +15,22 @@ interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 ---
+{/* 🔴 SIN `sobreHero` desde el 2026-09-07 — y su ausencia es el cambio.
+    El cliente pidió que el vídeo dejara de ser a sangre y que arriba, «a la
+    altura del menú», hubiera una banda del color de la sección siguiente.
+    Esa banda no hay que construirla: **es la cabecera normal del sitio**, la
+    que ya usan las otras 24 páginas —blanca al 94 %, sticky, con el texto en
+    tinta y sus contrastes medidos desde el sprint 1—.
+
+    Y no era opcional hacerlo así. Con `sobreHero` el menú va en BLANCO, pensado
+    para leerse sobre la fotografía; puesto sobre una banda blanca habría
+    quedado invisible. La petición del cliente y el cambio de cabecera son la
+    misma decisión, no dos.
+
+    Consecuencia deliberada: en la portada el menú pasa a acompañar el scroll,
+    como en el resto del sitio, en vez de irse con el héroe. */}
 <Base
   idioma={idioma}
-  sobreHero
   titulo={t('home.titulo')}
   descripcion={t('home.meta')}
 >

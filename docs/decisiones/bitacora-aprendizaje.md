@@ -3910,6 +3910,87 @@ La simetría no es simétrica: **reducir sí es honesto**. La versión vertical 
 
 ---
 
+## L-128 · La banda que pidió el cliente ya existía: era la cabecera
+
+El cliente pidió que el vídeo dejara de ser a sangre y que arriba, «a la altura del menú», hubiera
+una banda del color de la sección siguiente. La lectura ingenua es construir un `<div>` blanco de
+104 px encima del vídeo.
+
+Habría sido un error, y el motivo lo dice el propio menú: **va en BLANCO**, porque está pensado
+para leerse sobre la fotografía. Sobre una banda blanca habría quedado invisible. La petición del
+cliente y un cambio de cabecera son **la misma decisión**, no dos.
+
+Y esa cabecera ya estaba escrita: `.cabecera` sin el modificador `--sobre-hero` es sólida, blanca
+al 94 %, sticky y con el texto en tinta — la que usan las otras 24 páginas, con sus contrastes
+medidos desde el sprint 1. El cambio entero cabe en **quitar una palabra** de `Inicio.astro`.
+
+> **El patrón:** cuando una petición de diseño obliga a que un elemento cambie de fondo, lo
+> primero que hay que preguntarse es qué había encima. Y antes de construir la pieza nueva, mirar
+> si el sistema ya la tiene: un sitio con dos modos de cabecera ya resolvió este problema una vez.
+
+### Y el cambio se pagó solo en otro sitio
+
+Con el menú fuera del vídeo, el velo superior de 0.68 —que existía **sólo** para que el menú
+blanco se leyera sobre las palmeras (L-125)— dejó de tener función. Bajó a **0.24** y el vídeo se
+ve notablemente más luminoso, que es justo lo que el cliente pedía en la misma frase.
+
+Re-medido con el velo real —el degradado vertical compuesto con la elipse del contenido, cada
+texto en su posición medida en el navegador— sobre los 66 fotogramas:
+
+| zona | velo efectivo | contraste |
+|---|---|---|
+| antetítulo | 0.67 | 7.45:1 |
+| titular | 0.72 | 9.26:1 |
+| entradilla | 0.73 | 9.60:1 |
+| aviso legal | 0.73 | 9.59:1 |
+| flecha de bajada | 0.71 | 8.72:1 |
+
+Todas por encima del mínimo, y **con más margen que antes**: el número que se retiró no era el que
+las sostenía.
+
+---
+
+## L-129 · Tres formas de que una altura no sea la que escribiste
+
+Encoger el vídeo era «poner un `inset` por abajo». Falló tres veces seguidas, cada una por un
+motivo distinto, y ninguna dio un error:
+
+**1. `height: 100%` gana al `inset`.** La regla llevaba `inset: 0` y `width/height: 100%`, que
+mientras el `inset` fue 0 eran inofensivos. Al poner `inset: 0 0 banda 0`, la altura explícita
+siguió mandando y la banda no apareció.
+
+**2. Quitar la altura tampoco vale, porque Astro pone la suya.** Con `image.responsiveStyles: true`
+el servicio de imagen inyecta `height: auto`; con la proporción intrínseca, la foto se estiró a
+**960 px dentro de un héroe de 696** y se salió 264 px por abajo. La solución es una altura
+explícita —`calc(100% - var(--banda-hero))`— que no depende de qué inyecte nadie.
+
+**3. Dos `@media` sobrescribían el `min-height`.** El bloque de móvil tenía su propio
+`min-height: 100svh`, correcto mientras la cabecera flotaba; con la cabecera en el flujo, cabecera
+más héroe sumaban **897 px en una pantalla de 812**. Ese mismo bloque ya llevaba escrita, de un
+episodio anterior, la lección que hacía falta:
+
+> *Un `@media` que sobrescribe un `padding` hereda también la obligación que ese `padding` estaba
+> cumpliendo.*
+
+Era cierta y no bastó: **la obligación había cambiado**. Antes era «no meterse bajo el menú»; ahora
+es «dejar libre la banda». Una nota que enuncia la obligación de entonces protege menos que una que
+enuncia el invariante.
+
+> **El patrón:** una medida en CSS es el resultado de una negociación entre varias reglas, y las
+> tres que perdí no estaban en el archivo que yo estaba editando —una era un residuo histórico,
+> otra la inyecta el framework y la tercera vivía 300 líneas más abajo. **Cambiar una altura obliga
+> a buscar quién más la escribe**, y el navegador responde esa pregunta en un segundo:
+> `getBoundingClientRect()` sobre el elemento y sobre sus vecinos, en cada tamaño que importe.
+
+### Cuatro tamaños, y uno que se acepta
+
+Medido a 1440×900, 1280×800, 375×812 y 900×500. Los tres primeros caben enteros. El cuarto se pasa
+35 px, y se comprobó **qué** se pasa: nada del contenido —el aviso legal termina en el píxel 460 de
+500—, sólo el último tramo del vídeo y parte de la banda. Marco, no información. Forzar que cupiera
+exigía apretar el titular contra el borde, peor negocio que 35 px de scroll.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

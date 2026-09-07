@@ -153,9 +153,16 @@ const FUENTES = JSON.stringify({
 <style>
   .videohero {
     position: absolute;
-    inset: 0;
+    /* `--banda-hero` la declara `.hero` (2026-09-07): el medio se detiene antes
+       del borde inferior para dejar la banda blanca que pidió el cliente. El
+       respaldo `0` es por si este componente se reutiliza fuera del héroe, donde
+       esa variable no existiría. */
+    /* Altura explícita, igual que `.hero__fondo` — ver su nota. `--banda-hero`
+       la declara `.hero`; el respaldo `0px` es por si este componente se
+       reutiliza fuera del héroe, donde esa variable no existiría. */
+    inset: 0 0 auto 0;
     width: 100%;
-    height: 100%;
+    height: calc(100% - var(--banda-hero, 0px));
     object-fit: cover;
     /* `center`, NO el `center 40%` de la fotografía — y es deliberado.
        El encuadre del vídeo ya está decidido **plano a plano** en la

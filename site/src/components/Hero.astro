@@ -180,33 +180,84 @@ const t = usarT(idioma);
        recuperable con scroll, y nunca por arriba, que no lo es. */
     align-items: safe center;
     justify-items: center;
+    /* 🔴 EL VÍDEO YA NO VA A SANGRE — cliente, 2026-09-07.
+       Pidió una banda del color de la sección siguiente arriba, «a la altura
+       del menú», y otra debajo.
+
+       La de ARRIBA no se construye aquí: es la cabecera, que al quitarle
+       `sobreHero` vuelve a ocupar su sitio en el flujo, blanca y con el texto
+       en tinta. Por eso el héroe descuenta su altura — sin ese `calc`, la
+       cabecera y el héroe sumarían 100svh + 104 px y la flecha de bajada
+       quedaría por debajo del pliegue, que es justo lo que no puede pasar.
+
+       La de ABAJO sí, y es `--banda-hero`: el fondo blanco del propio héroe
+       asomando por debajo del medio, que va recortado por `inset`.
+
+       `--color-surface` y no un blanco escrito a mano: tiene que COINCIDIR con
+       la sección de abajo, y coincidir es una relación, no un valor. Si algún
+       día `.presentacion` cambia de fondo, esto cambia con ella. */
+    --banda-hero: clamp(2.5rem, 7svh, 5rem);
+    /* ── LO QUE ESTE CAMBIO CUESTA, MEDIDO EN CUATRO TAMAÑOS ───────────────
+       Al pasar la cabecera al flujo, sus ~105 px dejan de solaparse con el
+       héroe y hay que descontarlos de algún sitio. Resultado:
+
+         1440×900   cabe entero   banda 63 px
+         1280×800   cabe entero   banda 56 px
+          375×812   cabe entero   banda 41 px
+          900×500   **se pasa 35 px**
+
+       El único que se pasa es la ventana baja, y se comprobó QUÉ se pasa: nada
+       del contenido. Antetítulo, titular, entradilla, botones y el aviso de
+       «solicitud sujeta a confirmación» terminan en el píxel 460 de 500; la
+       flecha no se pinta a esa altura por una regla anterior. Lo que queda bajo
+       el pliegue son los últimos 35 px del vídeo y parte de la banda blanca:
+       marco, no información.
+
+       Se acepta a sabiendas. Forzar que cupiera exigía dejar el relleno
+       inferior casi en cero y apretar el titular contra el borde, que es peor
+       negocio que 35 px de scroll en una ventana de 500 px de alto. */
+    background: var(--color-surface);
     /* svh y no vh: en móvil, vh cuenta la barra del navegador y recorta el héroe. */
-    min-height: 100svh;
+    /* −1px: `--alto-cabecera` son 104, pero la cabecera mide 105 en pantalla
+       porque lleva `border-bottom: 1px`. Sin este ajuste la suma daba 801 en un
+       viewport de 800 y aparecía una barra de scroll por un píxel. */
+    min-height: calc(100svh - var(--alto-cabecera) - 1px);
     /* Arriba, nunca menos que la cabecera (104 px), que va encima en absolute.
        Abajo, nunca menos que la flecha de bajada: 44 de alto + 32 de separación
        del borde + aire = 100 px. Los dos topes existen para que el contenido no
        pueda meterse debajo de ninguno de los dos, mida lo que mida la pantalla. */
+    /* ⚠️ El relleno superior ERA `max(--alto-cabecera + aire, 13svh)`, porque la
+       cabecera flotaba encima y el contenido no podía meterse debajo. Desde que
+       la cabecera está en el flujo ese requisito desapareció: ya no hay nada
+       que esquivar, y mantener 104 px de reserva sólo empujaba el titular hacia
+       abajo. Queda un relleno de composición, no de seguridad.
+
+       El de ABAJO sí sube: tiene que dejar libre la banda blanca MÁS el sitio de
+       la flecha de bajada, que ahora vive dentro del medio. */
     padding-block:
-      /* 🔴 `max()` CON EL TOKEN DE LA CABECERA, no un número copiado.
-         El relleno superior tiene UN requisito duro —no meterse debajo del
-         menú— y ese requisito no es un valor estético: es `--alto-cabecera`.
-         Escribirlo como `6.5rem` funcionaba de casualidad en escritorio y
-         fallaba en el teléfono, donde al centrar el contenido el titular
-         acababa 11 px POR ENCIMA del borde inferior de la cabecera.
-         Con `max(cabecera + aire, 13svh)` la garantía viaja sola a cualquier
-         pantalla y a cualquier cambio futuro del token. El `min()` de fuera
-         sólo evita que en un monitor muy alto el relleno crezca sin sentido. */
-      min(max(calc(var(--alto-cabecera) + var(--space-3)), 13svh), var(--space-10))
-      clamp(6.25rem, 15svh, calc(var(--space-10) + var(--space-3)));
+      clamp(var(--space-5), 5svh, var(--space-7))
+      calc(var(--banda-hero) + clamp(var(--space-6), 7svh, var(--space-8)));
+    padding-inline: var(--space-5);
     isolation: isolate;
     overflow: hidden;
   }
 
+  /* El medio —fotografía, vídeo y velo— ya no llega al borde inferior del
+     héroe: se detiene `--banda-hero` antes, y por debajo asoma el blanco. */
   .hero__fondo {
     position: absolute;
-    inset: 0;
+    /* 🔴 La altura va EXPLÍCITA, no deducida del `inset`. Dos intentos fallaron
+       antes, y por motivos opuestos:
+         · `inset: 0` + `height: 100%` → la altura ganaba y tapaba la banda.
+         · `inset: 0 0 banda 0` sin altura → **Astro inyecta `height: auto`** en
+           sus imágenes responsivas (`image.responsiveStyles: true` en la
+           configuración), y con la proporción intrínseca la foto se estiraba a
+           960 px dentro de un héroe de 696: se salía por abajo 264 px.
+       Un `calc()` explícito gana a las dos cosas y no depende de qué estilos
+       inyecte el servicio de imagen. */
+    inset: 0 0 auto 0;
     width: 100%;
-    height: 100%;
+    height: calc(100% - var(--banda-hero));
     object-fit: cover;
     object-position: center 40%;
     z-index: -2;
@@ -250,7 +301,11 @@ const t = usarT(idioma);
      filas de esa tabla. No lo detecta ningún auditor de marcado. */
   .hero__velo {
     position: absolute;
-    inset: 0;
+    /* El MISMO recorte que la fotografía: si el velo llegara al borde teñiría
+       la banda blanca de gris y se vería como una franja sucia. */
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: calc(100% - var(--banda-hero));
     z-index: -1;
     /* DOS capas: la vertical de siempre y una VIÑETA LATERAL nueva.
        El borde derecho de `hero-roof-top.webp` es cielo abierto —muestreado en
@@ -295,10 +350,21 @@ const t = usarT(idioma);
      por debajo del 4.5:1 de WCAG 1.4.3, y el hover verde del menú a 2.90:1.
      Es exactamente el defecto que R-22 había costado cerrar.
 
-     Se elige **0.68**: devuelve 7.86:1 al blanco y 5.34:1 al hover, que es
-     igual o mejor que lo que daba la fotografía (7.7 y 5.05). La franja
-     inferior sube de 0.38 a 0.55 por la flecha de bajada, que es un control y
-     pide 3:1 (WCAG 1.4.11): con 0.38 daba 2.68:1 y con 0.55 da 4.76:1.
+     Se eligió **0.68**: devolvía 7.86:1 al blanco y 5.34:1 al hover del menú.
+     La franja inferior subió de 0.38 a **0.55** por la flecha de bajada, que es
+     un control y pide 3:1 (WCAG 1.4.11): con 0.38 daba 2.68:1 y con 0.55 da
+     4.76:1. Esa sigue en pie.
+
+     ✏️ **PERO EL 0.68 YA NO HACE FALTA, y baja a 0.24 (2026-09-07).**
+     Ese número existía por UNA razón: el menú blanco iba encima del vídeo. Al
+     quitar `sobreHero`, el menú salió del vídeo y se fue a su propia banda
+     blanca — así que arriba ya no hay ningún texto que proteger. El texto del
+     héroe no depende de esta franja sino de la elipse de
+     `.hero__contenido::before` (0.64 → 6.71:1), que no se toca.
+
+     Mantener 0.68 habría sido apagar el vídeo para nada, y el encargo del
+     cliente era justo el contrario: que se viera mejor. Queda 0.24 como
+     viñeta suave, que es composición y no requisito.
 
      ── POR QUÉ SÓLO CUANDO HAY VÍDEO ─────────────────────────────────────
      Subirlo siempre habría apagado la fotografía sin necesidad: ella ya
@@ -318,8 +384,8 @@ const t = usarT(idioma);
         rgb(0 0 0 / 0.10) 10%,
         rgb(0 0 0 / 0) 18%),
       linear-gradient(to bottom,
-        rgb(0 0 0 / 0.68) 0%,
-        rgb(0 0 0 / 0.68) 14%,
+        rgb(0 0 0 / 0.24) 0%,
+        rgb(0 0 0 / 0.16) 14%,
         rgb(0 0 0 / 0.12) 30%,
         rgb(0 0 0 / 0.12) 70%,
         rgb(0 0 0 / 0.55) 100%);
@@ -402,7 +468,10 @@ const t = usarT(idioma);
      contenido: además de decorar, da un salto útil a quien navega por teclado. */
   .hero__bajar {
     position: absolute;
-    bottom: var(--space-6);
+    /* Por encima de la banda blanca. La flecha es un círculo de contorno BLANCO
+       —ver `border-bottom: 1.5px solid #fff` más abajo—, así que sobre la banda
+       sería invisible. Se queda dentro del medio, que es donde tiene fondo. */
+    bottom: calc(var(--banda-hero) + var(--space-6));
     left: 50%;
     translate: -50% 0;
     width: 44px;
@@ -441,14 +510,18 @@ const t = usarT(idioma);
      más ajustadas. */
   @media (max-height: 700px) {
     .hero {
-      /* ⚠️ Arriba se conserva la MISMA garantía que en la regla base. Este
-         bloque la pisaba con un `clamp(4.5rem, …)` —72 px— por debajo de los
-         104 de la cabecera, y en una ventana de 900 × 500 el titular se metía
-         debajo del menú. Un `@media` que sobrescribe un `padding` hereda
-         también la obligación que ese `padding` estaba cumpliendo. */
+      /* ⚠️ Este bloque ya pisó una vez la garantía de la regla base —tenía un
+         `clamp(4.5rem, …)` de 72 px por debajo de los 104 de la cabecera, y en
+         una ventana de 900 × 500 el titular se metía bajo el menú—. La lección
+         de entonces sigue valiendo: **un `@media` que sobrescribe un `padding`
+         hereda la obligación que ese `padding` estaba cumpliendo.**
+
+         Desde el 2026-09-07 la obligación de arriba ya no existe —la cabecera
+         está en el flujo y no hay nada que esquivar—, pero aparece otra: dejar
+         libre la banda blanca de abajo. Se hereda igual. */
       padding-block:
-        min(max(calc(var(--alto-cabecera) + var(--space-3)), 11svh), 6.5rem)
-        clamp(3.5rem, 10svh, 5.5rem);
+        clamp(var(--space-4), 4svh, var(--space-7))
+        calc(var(--banda-hero) + clamp(var(--space-5), 7svh, var(--space-8)));
     }
     .hero__titulo { font-size: min(var(--text-hero), 7svh); }
   }
@@ -486,18 +559,28 @@ const t = usarT(idioma);
      adelante— entra todo con holgura. */
   @media (max-width: 40rem) {
     .hero {
-      min-height: 100svh;
-      /* Arriba manda la misma garantía que en escritorio —`--alto-cabecera`,
-         que en móvil vale 84— y sólo se recorta el relleno de ABAJO, donde no
-         hay nada que despejar porque la flecha de bajada no se pinta. */
+      /* 🔴 ESTA REGLA SOBRESCRIBÍA EL CAMBIO DE ESCRITORIO Y HABÍA QUE TOCARLA.
+         Tenía `min-height: 100svh`, que era correcto mientras la cabecera
+         flotaba encima; con la cabecera en el flujo, cabecera + héroe sumaban
+         **897 px en una pantalla de 812** y el último tramo del vídeo y la
+         banda blanca caían bajo el pliegue. Medido, no supuesto.
+
+         Y el reparto es distinto al de escritorio por una razón que no es la
+         altura sino el ANCHO: a 375 px el titular ocupa cinco renglones en vez
+         de tres, así que el contenido mide 633 px contra 493. El mismo relleno
+         que sobra arriba aquí no cabe. */
+      min-height: calc(100svh - var(--alto-cabecera) - 1px);
+      /* La banda se estrecha en el teléfono. No es una excepción estética: el
+         contenido ocupa 140 px más y ese espacio tiene que salir de algún sitio.
+         Sigue leyéndose como banda —el vídeo deja de tocar el borde—, que es lo
+         que pidió el cliente. */
+      --banda-hero: clamp(2rem, 5svh, 3.5rem);
+      /* Arriba, lo mínimo: la cabecera ya no flota, así que no hay nada que
+         esquivar. Abajo, la banda más un respiro — la flecha de bajada NO se
+         pinta en el teléfono, así que este relleno no despeja ningún control. */
       padding-block:
-        min(max(calc(var(--alto-cabecera) + var(--space-3)), 12svh), 6.5rem)
-        /* 2.5rem de mínimo abajo, contra los 3.5 de antes: en el teléfono la
-           flecha de bajada NO se pinta, así que este relleno no despeja nada —
-           es aire, y el aire es lo primero que se cede cuando la pantalla es la
-           de un iPhone SE. Recuperar la garantía de no meterse bajo el menú
-           costó 20 px arriba; salen de aquí. */
-        clamp(2.5rem, 8svh, 5.5rem);
+        clamp(var(--space-3), 2.5svh, var(--space-6))
+        calc(var(--banda-hero) + clamp(var(--space-4), 4svh, var(--space-6)));
     }
     .hero__antetitulo { letter-spacing: 0.18em; }
     .hero__titulo { font-size: clamp(1.75rem, 5svh, 2.5rem); }

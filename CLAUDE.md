@@ -561,6 +561,32 @@ convertía una pausa temporal de Chrome en una pérdida definitiva (L-123).
 ⚠️ **Requiere ffmpeg** (`brew install ffmpeg`) para volver a generar los archivos. Sólo hace falta si
 cambia el vídeo de origen.
 
+### 🖼️ El héroe deja de ser a sangre — 2026-09-07
+
+A petición del cliente: el vídeo ya no llega a los bordes. Arriba, «a la altura del menú», y
+abajo, hay una banda del color de la sección siguiente.
+
+**La banda de arriba no se construyó: es la cabecera.** `.cabecera` sin `sobreHero` ya era sólida,
+blanca al 94 %, sticky y con el texto en tinta — la que usan las otras 24 páginas. Y era obligatorio
+hacerlo así: con `sobreHero` el menú va en BLANCO, y sobre una banda blanca habría quedado
+invisible. La petición del cliente y el cambio de cabecera son la misma decisión (L-128).
+
+**La de abajo es `--banda-hero`**, el fondo del propio héroe asomando: 63 px a 1440×900, 56 a
+1280×800, 41 en el teléfono.
+
+✅ **Y el vídeo se ve MEJOR, no sólo más pequeño.** El velo superior de 0.68 existía sólo para que
+el menú blanco se leyera sobre las palmeras; con el menú fuera del vídeo, bajó a **0.24**. Re-medido
+con el velo real —degradado compuesto con la elipse, cada texto en su posición medida— sobre los 66
+fotogramas: antetítulo 7.45:1, titular 9.26:1, entradilla 9.60:1, aviso 9.59:1, flecha 8.72:1.
+**Todas con más margen que antes.**
+
+⚠️ **Consecuencia deliberada:** en la portada el menú pasa a acompañar el scroll, como en el resto
+del sitio, en vez de irse con el héroe. Y `sobreHero` **queda sin usar en ninguna página**: se
+conserva con su CSS a propósito, para que volver atrás sea añadir una palabra.
+
+Medido en cuatro tamaños. Tres caben enteros; a 900×500 se pasa 35 px, y lo que se pasa es marco
+—el aviso legal termina en el píxel 460 de 500—, no información (L-129).
+
 ### ⚠️ Datos sin verificar
 
 De cada tipo, sólo **nombre y vista** provienen del sitio real. **Unidades, capacidad y camas
@@ -643,7 +669,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **127 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **129 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

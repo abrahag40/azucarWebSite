@@ -5,8 +5,20 @@
  * Dos modos, controlados por `sobreHero`:
  *
  * - `true`  — se posa SOBRE la fotografía del héroe, transparente y en blanco.
- *             Es la composición de Cappa y lo que produce la primera impresión.
+ *             Es la composición de Cappa y lo que producía la primera impresión.
  * - `false` — sólida y pegada arriba, para las páginas sin héroe a sangre.
+ *
+ * ⚠️ **DESDE EL 2026-09-07 NINGUNA PÁGINA USA `sobreHero`.** La portada era la
+ * única, y dejó de usarlo cuando el cliente pidió que el vídeo no fuera a
+ * sangre y que arriba hubiera una banda del color de la sección siguiente: esa
+ * banda ES esta cabecera en su modo sólido, y con el menú en blanco sobre fondo
+ * blanco no habría sido legible.
+ *
+ * El modo y su CSS SE CONSERVAN a propósito, no por olvido. Es una decisión de
+ * composición que el cliente ha cambiado una vez y puede volver a cambiar;
+ * mantenerlo hace que volver atrás sea añadir una palabra en `Inicio.astro` en
+ * vez de reescribir la cabecera. Si dentro de unos meses sigue sin usarse, se
+ * borra — pero entonces será una limpieza consciente, no una pérdida.
  *
  * Cappa cambia de transparente a sólida al hacer scroll con jQuery. Aquí no hay
  * JavaScript: sobre el héroe la cabecera acompaña al scroll y desaparece con él.
