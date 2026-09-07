@@ -249,8 +249,39 @@ const t = usarT(idioma);
     overflow: hidden;
   }
 
+  /* 🔴 LA BANDA ES UN ELEMENTO REAL, no el fondo del héroe asomando.
+     Y tuvo que serlo por un defecto que el cliente vio antes que yo: «sigo
+     viendo esa mancha que sale debajo del div del video».
+
+     La causa, medida en producción: `.hero__contenido::before` es la elipse
+     negra que da contraste al texto, y está anclada al CONTENIDO con
+     `inset: -55% -28%` —lo cual es correcto y fue a su vez el arreglo de un
+     defecto anterior—. Con el contenido de 493 px de alto, esa elipse se
+     extiende **230 px por debajo del vídeo**: cruzaba entera la banda de 104 y
+     la teñía de un degradado gris, más oscuro en el centro. No era una banda
+     blanca sucia: era la elipse, pintando donde ya no había vídeo que velar.
+
+     Dejar que el fondo del héroe «asomara» no bastaba, porque el fondo se pinta
+     DEBAJO de todo y la elipse iba encima. La banda pasa a ser una capa propia
+     con `z-index: 1`, por encima de la elipse —que vive en el nivel 0, dentro
+     del contexto de apilamiento del contenido— y la flecha sube a 2 para
+     quedarse encima de la banda.
+
+     No se toca la elipse: su tamaño relativo al contenido es lo que la hace
+     funcionar en cualquier pantalla, y recortarla habría devuelto el problema
+     que resolvía. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: var(--banda-hero);
+    background: var(--color-surface);
+    z-index: 1;
+    pointer-events: none;
+  }
+
   /* El medio —fotografía, vídeo y velo— ya no llega al borde inferior del
-     héroe: se detiene `--banda-hero` antes, y por debajo asoma el blanco. */
+     héroe: se detiene `--banda-hero` antes, y ahí empieza la banda. */
   .hero__fondo {
     position: absolute;
     /* 🔴 La altura va EXPLÍCITA, no deducida del `inset`. Dos intentos fallaron
@@ -496,6 +527,8 @@ const t = usarT(idioma);
      de lo que tenía nunca sobre la fotografía. */
   .hero__bajar {
     position: absolute;
+    /* Por encima de la banda (`z-index: 1`), que a su vez tapa la elipse. */
+    z-index: 2;
     bottom: calc((var(--banda-hero) - 44px) / 2);
     left: 50%;
     translate: -50% 0;

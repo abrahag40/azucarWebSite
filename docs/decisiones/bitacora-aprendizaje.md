@@ -4055,6 +4055,51 @@ verdad.**
 
 ---
 
+## L-132 · La mancha era la elipse pintando donde ya no había vídeo
+
+El cliente insistió: *«sigo viendo esa mancha que sale debajo del div del video»*. Yo había dado la
+banda por resuelta —era «el fondo blanco del héroe asomando»— y no lo estaba.
+
+Medido en producción, con `getBoundingClientRect()`:
+
+```
+el vídeo termina en   696
+la banda blanca va    696 → 800   (104 px)
+la elipse del texto   -109 → 926  ← 230 px POR DEBAJO del vídeo
+```
+
+`.hero__contenido::before` es el degradado radial negro que da contraste al titular, y está anclado
+al CONTENIDO con `inset: -55% -28%`. Ese anclaje es correcto y fue a su vez el arreglo de un defecto
+anterior —una elipse dimensionada en % del héroe se venía abajo al cambiar la altura de la ventana—.
+Pero con el contenido midiendo 493 px, la elipse se extiende 271 px más allá por abajo, y desde que
+el vídeo dejó de llegar al borde, esos píxeles caen sobre la banda blanca: un degradado gris, más
+oscuro en el centro. **La banda no estaba sucia: estaba velada.**
+
+### Por qué «el fondo asomando» no podía funcionar
+
+El fondo de un elemento se pinta **debajo de todos sus descendientes**. La elipse es descendiente.
+Un fondo nunca iba a tapar algo que se pinta encima de él, por muy blanco que fuera.
+
+La banda pasa a ser una capa propia, `.hero::after`, con `z-index: 1` — por encima de la elipse, que
+vive en el nivel 0 dentro del contexto de apilamiento del contenido — y la flecha sube a `z-index: 2`
+para quedarse encima de la banda.
+
+**No se tocó la elipse.** Recortarla habría devuelto el defecto que ella resolvía. Se cambió lo que
+tiene delante, no lo que hace.
+
+> **El patrón:** «que se vea el fondo» no es una forma de tapar nada. Cuando un elemento decorativo
+> se desborda de su zona, la pregunta no es cómo encogerlo —suele estar dimensionado así por una
+> razón— sino **qué capa debería estar delante de él**. Y el orden de pintado se comprueba, no se
+> supone: aquí bastó restar dos rectángulos para ver que uno sobresalía 230 px.
+
+### Y la lección de método
+
+El cliente lo vio dos veces antes de que yo lo midiera. La primera se lo atribuí al velo del vídeo
+—«se ve opaco»— y bajé la franja inferior de 0.55 a 0.24, lo cual era cierto pero era **otro**
+problema. Que un síntoma tenga una causa plausible no significa que tenga una sola.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

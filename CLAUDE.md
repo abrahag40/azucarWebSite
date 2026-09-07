@@ -575,7 +575,14 @@ invisible. La petición del cliente y el cambio de cabecera son la misma decisi�
 parecido—, así que si la cabecera cambia de alto, la banda le sigue sola. Y **la flecha de bajada
 vive dentro de ella**, en tinta sobre blanco: arriba la banda tiene el menú, abajo tiene la flecha.
 
-🐛 **Mudar la flecha arregló tres cosas de una, y la primera era un defecto real.** Sobre el vídeo
+🐛 **La banda es una CAPA PROPIA (`.hero::after`, `z-index: 1`), no «el fondo asomando».** El
+cliente vio dos veces una mancha gris bajo el vídeo y la segunda tenía otra causa: la elipse negra
+que da contraste al titular está anclada al contenido (`inset: -55% -28%`) y se extiende **230 px
+por debajo del vídeo**, tiñendo la banda entera. Un fondo se pinta debajo de sus descendientes, así
+que nunca iba a taparla. No se tocó la elipse —su tamaño relativo al contenido es lo que la hace
+funcionar—: se puso una capa delante. Ver L-132.
+
+🐛 **Mudar la flecha arregló otras tres cosas, y la primera era un defecto real.** Sobre el vídeo
 iba en `bottom: banda + 32` y mide 44, así que ocupaba hasta `banda + 76`; el relleno inferior
 reservaba como mucho `banda + 64`. **Doce píxeles de solape garantizados con el aviso legal, en
 cualquier pantalla** — no un ajuste fino, una resta mal hecha. Además, la franja inferior del velo
@@ -692,7 +699,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **131 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **132 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
