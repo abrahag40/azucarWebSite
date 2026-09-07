@@ -75,17 +75,21 @@ export const presentacion: { antetitulo: Texto; titulo: Texto; parrafos: Texto[]
          El pie del sitio muestra las DOS primeras frases de este párrafo, así
          que este texto es también lo que se lee al final de las 50 páginas.
 
-         🟡 «AZUCAR», SIN ACENTO — y el cliente lo escribió CON acento.
-         No es un descuido nuestro: el nombre va sin acento en las 50 páginas,
-         en el `<title>`, en el `hotelSchema` de `Base.astro` y en los dos
-         correos, porque así lo escribe el hotel en su propio sitio. Puesto con
-         acento, este párrafo quedaba justo debajo del rótulo «Azucar Hotel
-         Tulum» del pie, y dos grafías del mismo nombre a dos centímetros se
-         leen como una errata, no como una decisión.
+         ✅ «AZUCAR», SIN ACENTO — RESUELTO el 2026-09-07.
+         El cliente mandó este párrafo CON acento y se publicó sin él: puesto
+         con acento quedaba justo debajo del rótulo «Azucar Hotel Tulum» del
+         pie, y dos grafías del mismo nombre a dos centímetros se leen como una
+         errata, no como una decisión. Quedó anotado como pregunta abierta.
 
-         Si la marca pasa a llevar acento, es un cambio de MARCA y se hace
-         entero —50 páginas, schema.org, correos y el logotipo—, no en una
-         frase. Pregunta abierta para el cliente. */
+         El cliente la respondió, y en los términos más amplios posibles: «es
+         requerimiento que en ningún lado que diga Azucar lleve acento». Ya no
+         es una preferencia de este párrafo: es una regla de marca.
+
+         Por eso no se queda en este comentario. `verificar-todo.sh` tiene desde
+         hoy un guardián que falla si la forma acentuada aparece en cualquier
+         parte de `site/`, build incluido — que es donde estaban las dos
+         últimas: los COMENTARIOS de `robots.txt` y `_headers`, que también se
+         sirven al visitante. */
       es: 'Azucar Hotel Tulum nació de un sueño y se hizo realidad en 2008. Desde entonces, un equipo comprometido trabaja cada día con un propósito claro: que tu estancia sea inolvidable. Somos un Small Luxury Hotel que durante años ha ganado premios al mejor hotel y está entre los mejores de la zona hotelera de Tulum.',
       en: 'Azucar Hotel Tulum was born from a dream and became a reality in 2008. Since then, a committed team has worked every day with one clear purpose: to make your stay unforgettable. We are a Small Luxury Hotel that for years has won awards for best hotel and is among the best in the Tulum hotel zone.',
     },

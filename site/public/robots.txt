@@ -1,4 +1,4 @@
-# Azúcar Hotel Tulum
+# Azucar Hotel Tulum
 #
 # Este archivo permite el rastreo completo porque está pensado para el dominio
 # de producción. En el dominio de staging (*.pages.dev) NO es lo que queremos:

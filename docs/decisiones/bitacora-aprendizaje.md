@@ -4100,6 +4100,50 @@ problema. Que un síntoma tenga una causa plausible no significa que tenga una s
 
 ---
 
+## L-133 · Una regla de marca no se cumple corrigiéndola: se cumple vigilándola
+
+El cliente cerró una pregunta que llevaba cuatro días abierta, y la cerró más ancha de lo que se
+había preguntado. Se le había planteado sobre UN párrafo del pie; respondió sobre el sitio entero:
+*«es requerimiento que en ningún lado que diga Azucar lleve acento»*.
+
+Lo tentador era corregir lo que quedara y darlo por hecho. **Ya se había colado una vez**: el
+2026-09-03 el propio cliente mandó el texto del pie escrito con acento, y sólo se detectó porque
+quedaba justo debajo del rótulo sin acento del mismo pie, donde las dos grafías juntas se leían como
+una errata. *El camino por el que entró es el mismo por el que va a volver a entrar:* texto del
+cliente, copiado tal cual.
+
+Así que entró como **guardián de `verificar-todo.sh`**, y con eso la regla pasa de ser una nota a
+ser una condición de publicación.
+
+### Y el guardián encontró dos que yo no habría buscado
+
+El código del sitio estaba limpio. Las dos últimas apariciones estaban en sitios que no parecen
+contenido:
+
+```
+site/public/robots.txt   # Azúcar Hotel Tulum
+site/public/_headers     # Cabeceras de Cloudflare Pages — Azúcar Hotel Tulum
+```
+
+Son **comentarios**, pero de archivos que **se sirven**: cualquiera puede pedir `/robots.txt` y
+leerlos. «Todo lo que se publica» incluye lo que no parece una página.
+
+### Dónde SÍ se permite, y por qué importa decirlo
+
+El guardián revisa `site/` —build incluido— y **no** revisa `docs/`. Tiene que ser así: para explicar
+una decisión sobre un acento hay que poder escribir el acento. Un guardián sin escape convierte su
+propia documentación en un fallo, y entonces alguien lo desactiva.
+
+Por el mismo motivo el patrón se compone en ejecución con `printf "\u00fa"`: así **el archivo del
+guardián no contiene la forma que persigue**, y la regla es cierta también sobre él.
+
+> **El patrón:** cuando una corrección depende de que nadie se equivoque otra vez, no es una
+> corrección. Y al escribir el guardián, dos preguntas que se olvidan: *¿qué archivos que no parecen
+> contenido acaban sirviéndose?* y *¿dónde tiene que estar permitido lo que prohíbo, para poder
+> explicarlo?*
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

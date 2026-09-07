@@ -1,4 +1,4 @@
-# Cabeceras de Cloudflare Pages — Azúcar Hotel Tulum
+# Cabeceras de Cloudflare Pages — Azucar Hotel Tulum
 #
 # POR QUÉ HACE FALTA ESTE ARCHIVO
 # Cloudflare Pages aplica `max-age=0, must-revalidate` a todo lo que sale de

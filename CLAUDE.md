@@ -121,6 +121,11 @@ Mac, ni al navegador, ni salida a internet** hacia dominios externos. Consecuenc
 5. **Accesibilidad y Core Web Vitals van en la DoD de cada historia**, jamás en una fase final.
 6. **El contenido se modela como datos**, nunca incrustado en el marcado.
 7. **Datos sin confirmar por el cliente no se publican.** `build:prod` falla.
+8. **La marca se escribe «Azucar», SIN ACENTO, en todo lo que se publica.**
+   Requisito del cliente del 2026-09-07, literal: *«es requerimiento que en
+   ningún lado que diga Azucar lleve acento»*. **`verificar-todo.sh` lo
+   verifica y falla** sobre `site/` entero, build incluido. Se permite escribir
+   la forma acentuada en `docs/`, que es donde se explica la decisión.
 
 ---
 
@@ -440,11 +445,10 @@ cuatro fichas: la frase promete «identidad propia» y ponerla cuatro veces la d
 **El pie** separa DIRECCIÓN de CONTACTO en dos rótulos, pone el código postal en su propia línea,
 adelanta Galería a Eventos y estrena el texto de presentación que escribió el cliente.
 
-🟡 **El cliente escribió «Azúcar» con acento.** El sitio entero —50 páginas, `<title>`,
-`schema.org` y los dos correos— usa «Azucar», que es como lo escribe el hotel en su propio sitio.
-Puesto con acento, el párrafo quedaba justo debajo del rótulo «Azucar Hotel Tulum» del pie y se
-leía como una errata. **Se dejó sin acento y la decisión queda abierta:** si la marca lleva
-acento, se cambia entera, no en una frase.
+✅ **El cliente escribió «Azúcar» con acento — RESUELTO el 2026-09-07.** Se publicó sin acento
+porque, puesto con él, el párrafo quedaba justo debajo del rótulo «Azucar Hotel Tulum» del pie y se
+leía como una errata. El cliente confirmó la regla en los términos más amplios: *«es requerimiento
+que en ningún lado que diga Azucar lleve acento»*. Es la **regla 8** y tiene guardián.
 
 🔴 **Lo que NO se pudo hacer, y por qué:**
 
@@ -699,7 +703,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **132 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **133 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

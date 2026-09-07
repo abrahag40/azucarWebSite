@@ -62,7 +62,7 @@ paso() {
 }
 
 echo
-echo "  Verificación completa — Azúcar Hotel Tulum"
+echo "  Verificación completa — Azucar Hotel Tulum"
 echo
 
 paso "datos de alojamiento"         npm --prefix site run datos
@@ -317,6 +317,41 @@ paso "sin enlaces a recursos inexistentes" bash -c '
     [ -f "site/dist$u" ] || { echo "ROTO $u"; rotos=$((rotos+1)); }
   done
   [ "$rotos" -eq 0 ]'
+
+# ── LA MARCA VA SIN ACENTO, SIEMPRE ────────────────────────────────────────
+# Requisito del cliente (2026-09-07), literal: «es requerimiento que en ningun
+# lado que diga Azucar lleve acento».
+#
+# Por que hace falta un guardian y no basta con corregirlo una vez: **ya se
+# colo**. El 2026-09-03 el cliente mando un parrafo para el pie escrito con
+# acento; se detecto al verlo justo debajo del rotulo sin acento del propio
+# pie, donde las dos grafias juntas se leian como una errata. Un texto que
+# llega del cliente con la marca mal escrita es exactamente el camino por el
+# que vuelve a entrar.
+#
+# ── QUE SE REVISA, Y QUE NO ────────────────────────────────────────────────
+# Se revisa `site/`: todo lo que se publica o compone lo que se publica —el
+# build entero, los datos, el diccionario y las plantillas de los dos correos—.
+# Ojo con `robots.txt` y `_headers`: sus COMENTARIOS tambien se sirven, y ahi
+# es donde estaban las dos unicas apariciones que quedaban.
+#
+# NO se revisa `docs/` ni este script: ahi se discute la decision, y para
+# explicarla hay que poder escribir la forma acentuada. Si un comentario de
+# `site/` la necesita, va a `docs/`.
+#
+# El patron se compone en ejecucion (`\u00e1`) para que este archivo no
+# contenga la forma acentuada y siga siendo cierto lo de arriba.
+paso "la marca va sin acento en todo el sitio" bash -c '
+  acentuada="Az$(printf "\u00fa")car"
+  hallazgos=$(grep -rn --binary-files=without-match "$acentuada" site/src site/public site/dist 2>/dev/null | head -20)
+  if [ -n "$hallazgos" ]; then
+    echo "$hallazgos"
+    echo
+    echo "La marca se escribe SIN acento en todo lo que se publica."
+    echo "Requisito del cliente del 2026-09-07. Si necesitas escribirla con"
+    echo "acento para explicar la decision, hazlo en docs/, no en site/."
+    exit 1
+  fi'
 
 echo
 if [ "$fallos" -eq 0 ] && [ "$saltados" -gt 0 ]; then
