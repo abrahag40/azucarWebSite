@@ -3991,6 +3991,70 @@ exigía apretar el titular contra el borde, peor negocio que 35 px de scroll.
 
 ---
 
+## L-130 · Doce píxeles de solape que estaban en la aritmética, no en el ojo
+
+El cliente dijo que la flecha de bajada «no está ordenada adecuadamente». Lo estaba mirando; el
+defecto se leía en dos líneas de CSS que nunca habían estado juntas:
+
+```css
+.hero__bajar   { bottom: calc(var(--banda-hero) + var(--space-6)); height: 44px; }
+.hero          { padding-bottom: calc(var(--banda-hero) + clamp(2rem, 7svh, 4rem)); }
+```
+
+La flecha ocupa de `banda + 32` a **`banda + 76`**. El relleno reservaba, como máximo,
+`banda + 64`. **Doce píxeles de solape garantizados con el aviso legal, en cualquier pantalla y
+cualquier tamaño de fuente.** No era un ajuste fino que se hubiera desviado: los dos números nunca
+pudieron cuadrar, porque uno no sabía de la altura del otro.
+
+> **El patrón:** cuando una posición y el espacio que la aloja se escriben en reglas distintas,
+> hay que preguntarse si comparten los términos. Aquí el relleno conocía la banda pero **no la
+> altura de la flecha**, que es justo lo que tenía que alojar. Un valor que no aparece en la
+> fórmula no puede respetarse por casualidad.
+
+### Y la mejor solución no fue arreglar la resta
+
+Se podía sumar los 44 px al relleno. En vez de eso, la flecha se mudó **dentro de la banda blanca**,
+y eso arregló tres cosas a la vez:
+
+| | antes | después |
+|---|---|---|
+| solape con el aviso | 12 px | **0** |
+| franja inferior del velo | 0.55, y el vídeo se veía opaco abajo | **0.24**, simétrico con el de arriba |
+| las dos bandas | una con el menú, otra vacía | **las dos con algo dentro** |
+
+La segunda es la interesante: el 0.55 existía **sólo** para dar contraste a un círculo de contorno
+blanco. Sacado el círculo del vídeo, el número perdió su razón de ser — y el cliente había pedido
+en la misma frase que el fondo no se viera opaco. *Un elemento en el sitio equivocado obliga a
+todo lo que tiene alrededor a compensarlo; moverlo devuelve libertad a sus vecinos.*
+
+---
+
+## L-131 · «Que se vean iguales» tiene un límite, y es el contenido
+
+El cliente pidió que las bandas de arriba y abajo se vieran iguales. Se resolvió apuntando la de
+abajo **al mismo token** que la de arriba —`--alto-cabecera`, no un número parecido—, así que si la
+cabecera cambia de alto la banda le sigue sin que nadie se acuerde.
+
+Pero la igualdad no se puede sostener en todas partes, y el motivo es aritmético:
+
+| viewport | héroe disponible | contenido | queda para relleno |
+|---|---|---|---|
+| 1280×800 | 695 | 493 | 202 → banda de 104 **cabe** |
+| 375×812 | 727 | 633 | 94 → banda de 85 **no cabe**; llega a 69 |
+| 900×500 | 395 | 335 | 60 → banda de 104 **se pasa 99 px** |
+
+En el teléfono el titular se parte en cinco renglones en vez de tres y el contenido crece 140 px;
+en una ventana baja, la cabecera se lleva el 21 % de la pantalla ella sola. Donde no cabe, la banda
+se encoge: **sigue leyéndose —el vídeo no toca el borde— y eso es lo que el cliente pedía de
+verdad.**
+
+> **La regla:** una petición de simetría es una petición sobre lo que se VE, y lo que se ve depende
+> de cuánto espacio sobra. Antes de prometerla en todos los tamaños, hay que restar. Y cuando no
+> cabe, la decisión honesta es decir en cuáles sí y en cuáles no, con los números — no elegir en
+> silencio entre romper la simetría o romper el pliegue.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

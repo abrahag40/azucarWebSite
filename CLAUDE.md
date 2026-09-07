@@ -571,8 +571,16 @@ blanca al 94 %, sticky y con el texto en tinta — la que usan las otras 24 pág
 hacerlo así: con `sobreHero` el menú va en BLANCO, y sobre una banda blanca habría quedado
 invisible. La petición del cliente y el cambio de cabecera son la misma decisión (L-128).
 
-**La de abajo es `--banda-hero`**, el fondo del propio héroe asomando: 63 px a 1440×900, 56 a
-1280×800, 41 en el teléfono.
+**La de abajo es `--banda-hero`**, y mide **el mismo token que la cabecera** —no un valor
+parecido—, así que si la cabecera cambia de alto, la banda le sigue sola. Y **la flecha de bajada
+vive dentro de ella**, en tinta sobre blanco: arriba la banda tiene el menú, abajo tiene la flecha.
+
+🐛 **Mudar la flecha arregló tres cosas de una, y la primera era un defecto real.** Sobre el vídeo
+iba en `bottom: banda + 32` y mide 44, así que ocupaba hasta `banda + 76`; el relleno inferior
+reservaba como mucho `banda + 64`. **Doce píxeles de solape garantizados con el aviso legal, en
+cualquier pantalla** — no un ajuste fino, una resta mal hecha. Además, la franja inferior del velo
+estaba en 0.55 sólo para dar contraste a ese círculo blanco: fuera del vídeo, el velo pudo volverse
+**simétrico** (0.24 arriba y abajo) y el fondo dejó de verse opaco por abajo.
 
 ✅ **Y el vídeo se ve MEJOR, no sólo más pequeño.** El velo superior de 0.68 existía sólo para que
 el menú blanco se leyera sobre las palmeras; con el menú fuera del vídeo, bajó a **0.24**. Re-medido
@@ -584,8 +592,23 @@ fotogramas: antetítulo 7.45:1, titular 9.26:1, entradilla 9.60:1, aviso 9.59:1,
 del sitio, en vez de irse con el héroe. Y `sobreHero` **queda sin usar en ninguna página**: se
 conserva con su CSS a propósito, para que volver atrás sea añadir una palabra.
 
-Medido en cuatro tamaños. Tres caben enteros; a 900×500 se pasa 35 px, y lo que se pasa es marco
-—el aviso legal termina en el píxel 460 de 500—, no información (L-129).
+**Medido en cinco tamaños, y en los cinco cabe entero:**
+
+| viewport | arriba | abajo | desborde |
+|---|---|---|---|
+| 1920×1080 | 105 | 104 | 0 |
+| 1440×900 | 105 | 104 | 0 |
+| 1280×800 | 105 | 104 | 0 |
+| 375×812 | 85 | **69** | 0 |
+| 900×500 | 105 | **30** | 0 |
+
+Las bandas son iguales donde el contenido deja sitio. En el teléfono el contenido mide 633 de los
+727 disponibles y en una ventana de 500 px de alto mide 335 de 395: ahí la banda se encoge porque
+la alternativa es no caber. **Que quepa manda sobre que sea simétrico** (L-129).
+
+Contraste re-medido con el velo nuevo y la geometría nueva sobre los 66 fotogramas: antetítulo
+7.44:1, titular 9.32:1, entradilla 9.74:1, aviso 7.63:1. La flecha sale del cálculo — sobre blanco
+en tinta da 15.91:1.
 
 ### ⚠️ Datos sin verificar
 
@@ -669,7 +692,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **129 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **131 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

@@ -196,7 +196,11 @@ const t = usarT(idioma);
        `--color-surface` y no un blanco escrito a mano: tiene que COINCIDIR con
        la sección de abajo, y coincidir es una relación, no un valor. Si algún
        día `.presentacion` cambia de fondo, esto cambia con ella. */
-    --banda-hero: clamp(2.5rem, 7svh, 5rem);
+    /* 🔴 LA BANDA MIDE LO MISMO QUE LA CABECERA — cliente, 2026-09-07:
+       «que arriba y abajo se vean iguales, con tamaños similares».
+       No es un valor parecido: es EL MISMO token, así que si la cabecera
+       cambia de alto, la banda le sigue sin que nadie se acuerde. */
+    --banda-hero: var(--alto-cabecera);
     /* ── LO QUE ESTE CAMBIO CUESTA, MEDIDO EN CUATRO TAMAÑOS ───────────────
        Al pasar la cabecera al flujo, sus ~105 px dejan de solaparse con el
        héroe y hay que descontarlos de algún sitio. Resultado:
@@ -234,9 +238,12 @@ const t = usarT(idioma);
 
        El de ABAJO sí sube: tiene que dejar libre la banda blanca MÁS el sitio de
        la flecha de bajada, que ahora vive dentro del medio. */
+    /* Abajo: la banda MÁS un respiro, y nada más. Antes esto reservaba también
+       el hueco de la flecha, y lo reservaba mal —12 px de menos—; ahora la
+       flecha vive dentro de la banda y no compite con el texto. */
     padding-block:
       clamp(var(--space-5), 5svh, var(--space-7))
-      calc(var(--banda-hero) + clamp(var(--space-6), 7svh, var(--space-8)));
+      calc(var(--banda-hero) + clamp(var(--space-4), 3svh, var(--space-6)));
     padding-inline: var(--space-5);
     isolation: isolate;
     overflow: hidden;
@@ -385,10 +392,10 @@ const t = usarT(idioma);
         rgb(0 0 0 / 0) 18%),
       linear-gradient(to bottom,
         rgb(0 0 0 / 0.24) 0%,
-        rgb(0 0 0 / 0.16) 14%,
-        rgb(0 0 0 / 0.12) 30%,
-        rgb(0 0 0 / 0.12) 70%,
-        rgb(0 0 0 / 0.55) 100%);
+        rgb(0 0 0 / 0.14) 18%,
+        rgb(0 0 0 / 0.12) 40%,
+        rgb(0 0 0 / 0.14) 82%,
+        rgb(0 0 0 / 0.24) 100%);
   }
 
   .hero__contenido {
@@ -466,29 +473,48 @@ const t = usarT(idioma);
 
   /* Flecha de bajada, como en Cappa. Es un enlace real al primer bloque de
      contenido: además de decorar, da un salto útil a quien navega por teclado. */
+  /* 🔴 LA FLECHA VIVE EN LA BANDA BLANCA, no sobre el vídeo. Cambió el
+     2026-09-07 y arregla tres cosas de una:
+
+     1. **El solape, que era aritmético y no estético.** Sobre el vídeo iba en
+        `bottom: banda + 32` y mide 44, así que ocupaba de `banda+32` a
+        `banda+76`; el relleno inferior reservaba `banda + clamp(32, 7svh, 64)`,
+        como mucho `banda+64`. **Doce píxeles de solape garantizados** con el
+        aviso legal, en cualquier pantalla. No era un ajuste fino: era una resta
+        mal hecha.
+
+     2. **El fondo opaco.** La franja inferior del velo estaba en 0.55 por UNA
+        razón: dar contraste a este círculo de contorno blanco. Fuera del vídeo,
+        esa razón desaparece y el velo puede volverse simétrico — ver la nota
+        del velo.
+
+     3. **La simetría que pidió el cliente.** Arriba la banda tiene el menú;
+        abajo tiene la flecha. Las dos bandas pasan a ser del mismo alto Y a
+        contener algo, en vez de una llena y otra vacía.
+
+     Sobre blanco el círculo se pinta en tinta: `--color-ink` da 15.91:1, más
+     de lo que tenía nunca sobre la fotografía. */
   .hero__bajar {
     position: absolute;
-    /* Por encima de la banda blanca. La flecha es un círculo de contorno BLANCO
-       —ver `border-bottom: 1.5px solid #fff` más abajo—, así que sobre la banda
-       sería invisible. Se queda dentro del medio, que es donde tiene fondo. */
-    bottom: calc(var(--banda-hero) + var(--space-6));
+    bottom: calc((var(--banda-hero) - 44px) / 2);
     left: 50%;
     translate: -50% 0;
     width: 44px;
     height: 44px;
     display: grid;
     place-items: center;
-    border: 1px solid rgb(255 255 255 / 0.5);
+    border: 1px solid rgb(34 34 34 / 0.35);
     border-radius: 50%;
     transition: background-color var(--dur) var(--ease);
   }
   .hero__bajar:hover,
-  .hero__bajar:focus-visible { background: rgb(255 255 255 / 0.18); }
+  .hero__bajar:focus-visible { background: rgb(34 34 34 / 0.07); }
   .hero__bajar span {
     width: 8px;
     height: 8px;
-    border-right: 1.5px solid #fff;
-    border-bottom: 1.5px solid #fff;
+    /* Tinta, no blanco: el chevron va sobre la banda blanca. 15.91:1. */
+    border-right: 1.5px solid var(--color-ink);
+    border-bottom: 1.5px solid var(--color-ink);
     rotate: 45deg;
     translate: 0 -2px;
     animation: latido 2s var(--ease) infinite;
@@ -519,9 +545,19 @@ const t = usarT(idioma);
          Desde el 2026-09-07 la obligación de arriba ya no existe —la cabecera
          está en el flujo y no hay nada que esquivar—, pero aparece otra: dejar
          libre la banda blanca de abajo. Se hereda igual. */
+      /* 🔴 AQUÍ LAS DOS BANDAS NO PUEDEN SER IGUALES, y conviene decirlo.
+         A 900×500 el héroe dispone de 395 px —500 menos la cabecera— y su
+         contenido mide 335. Quedan 60 px para TODO el relleno; una banda del
+         alto de la cabecera se come 104 ella sola. Medido: con bandas iguales
+         se pasaba 99 px del pliegue.
+
+         Se elige que QUEPA. La banda sigue leyéndose —el vídeo no toca el
+         borde—, sólo que más estrecha. La flecha no se pinta por debajo de 560
+         px de alto, así que tampoco hay que alojarla. */
+      --banda-hero: clamp(1.75rem, 6svh, 2.75rem);
       padding-block:
-        clamp(var(--space-4), 4svh, var(--space-7))
-        calc(var(--banda-hero) + clamp(var(--space-5), 7svh, var(--space-8)));
+        clamp(var(--space-3), 2.5svh, var(--space-5))
+        calc(var(--banda-hero) + clamp(var(--space-3), 2svh, var(--space-4)));
     }
     .hero__titulo { font-size: min(var(--text-hero), 7svh); }
   }
@@ -574,13 +610,18 @@ const t = usarT(idioma);
          contenido ocupa 140 px más y ese espacio tiene que salir de algún sitio.
          Sigue leyéndose como banda —el vídeo deja de tocar el borde—, que es lo
          que pidió el cliente. */
-      --banda-hero: clamp(2rem, 5svh, 3.5rem);
+      /* La banda se acerca al alto de la cabecera todo lo que el contenido
+         permite, que no es del todo: a 375×812 la cabecera mide 85 y el
+         contenido 633 de los 727 disponibles. Quedan 94 px para el relleno
+         entero, así que la banda llega a **69** — cerca de 85, no igual.
+         Ponerla a 85 se pasaba del pliegue, y que quepa manda. */
+      --banda-hero: clamp(3rem, 8.5svh, 5.5rem);
       /* Arriba, lo mínimo: la cabecera ya no flota, así que no hay nada que
          esquivar. Abajo, la banda más un respiro — la flecha de bajada NO se
-         pinta en el teléfono, así que este relleno no despeja ningún control. */
+         pinta en el teléfono, así que este relleno no aloja ningún control. */
       padding-block:
-        clamp(var(--space-3), 2.5svh, var(--space-6))
-        calc(var(--banda-hero) + clamp(var(--space-4), 4svh, var(--space-6)));
+        clamp(var(--space-3), 2svh, var(--space-5))
+        calc(var(--banda-hero) + clamp(var(--space-3), 1.5svh, var(--space-4)));
     }
     .hero__antetitulo { letter-spacing: 0.18em; }
     .hero__titulo { font-size: clamp(1.75rem, 5svh, 2.5rem); }
