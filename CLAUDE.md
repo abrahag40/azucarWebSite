@@ -314,7 +314,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | | |
 |---|---|
 | Páginas | **50** públicas (25 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/`. Las cuatro nuevas son Arrecife y Luna en los dos idiomas |
-| Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud |
+| Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud, 1.4 KB del vídeo en las 2 portadas |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
 | Auditor propio | **2 hallazgos, ninguno rojo.** Los 90 enlaces a `/reservar/` ya resuelven |
@@ -495,6 +495,50 @@ la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría 
 ⚠️ **La gerencia la llamó «Villa Luna»**; se publica como **«Bungalow Luna»** por instrucción de
 Abraham. Es una decisión registrada, no una errata — conviene confirmarla con el hotel.
 
+### 🎬 Vídeo en el héroe de la portada — 2026-09-07
+
+El cliente mandó `22_mayo.mp4`: un reel de Instagram de **1080×1920 vertical, 42 s, 85 MB**, con 19
+planos de unos 2.2 s. Está en el héroe, adaptado. La tubería es
+[`scripts/video-hero.sh`](scripts/video-hero.sh), se corre **a mano** —ffmpeg no está en CI ni en
+Cloudflare— y su salida se versiona.
+
+**No se usa entero, y ésa es la decisión que más pesa.** En un héroe apaisado, `cover` de un 9:16
+sólo enseña una **banda del 29 % de la altura del cuadro**. Se simuló plano a plano antes de tocar
+código: la alberca de la terraza, las palmeras y el agua funcionan; las habitaciones se quedan en
+cabecera y pared; el baño y el clóset se convierten en un lavabo y unas repisas. Se eligieron **tres
+planos completos**, todos exteriores. Quedan **8.2 s**. Ver L-120.
+
+**Dos recortes**, como un `<picture>`: apaisado 1280×720 para escritorio y vertical 720×1280 para
+teléfono, donde el cuadro entero es el acierto. WebM (VP9) y MP4 (H.264) — **cada navegador descarga
+uno**: entre 663 KB y 1.2 MB.
+
+🔴 **El LCP no se toca, y está medido.** La fotografía sigue siendo el elemento LCP y sigue
+precargada igual; el vídeo entra `preload="none"`, sin `src` en el marcado, y sólo arranca en
+`requestIdleCallback` **después** de `load`. Comprobado en el navegador: el camino crítico del
+primer segundo y medio es idéntico al de antes —tipografías, CSS, logo y foto— y **el vídeo empieza
+a los 2048 ms**.
+
+**No se le carga a quien no debe:** `prefers-reduced-motion`, `saveData` y redes `2g` no descargan
+ni un byte y se quedan con la fotografía, que es completa por sí sola.
+
+🔴 **El velo del héroe SUBE de 0.52 a 0.68 cuando hay vídeo.** El aviso que `Hero.astro` llevaba
+escrito desde el sprint 1 —«si se cambia la fotografía, hay que volver a medir»— hizo su trabajo: un
+vídeo tiene un píxel más claro **por fotograma**, y en los 52 medidos aparece blanco puro. Con el
+velo de la foto el texto de la cabecera caía a **4.27:1** y el hover del menú a 2.90:1. Con 0.68
+suben a 7.86:1 y 5.34:1 — igual o mejor que la fotografía. Y sólo con el vídeo pintando: la foto
+conserva su luz. Ver L-125.
+
+**`media-src 'self'` entra en la CSP.** Sin esa línea el `<video>` caía en `default-src 'none'` y el
+navegador lo bloqueaba **sin error visible**.
+
+**Tres defectos que este trabajo destapó**, los tres silenciosos: `media` en `<source>` no funciona
+dentro de `<video>` (L-121), el `poster` se descarga aunque haya `preload="none"` —y se pedía en el
+mismo milisegundo que el LCP, para no verse nunca— (L-122), y un `catch` que borraba el vídeo
+convertía una pausa temporal de Chrome en una pérdida definitiva (L-123).
+
+⚠️ **Requiere ffmpeg** (`brew install ffmpeg`) para volver a generar los archivos. Sólo hace falta si
+cambia el vídeo de origen.
+
 ### ⚠️ Datos sin verificar
 
 De cada tipo, sólo **nombre y vista** provienen del sitio real. **Unidades, capacidad y camas
@@ -577,10 +621,11 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **119 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **125 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
+| **`scripts/video-hero.sh`** | **Del reel de 85 MB del cliente al vídeo del héroe: qué planos y por qué, y la receta de codificación medida** |
 | **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
 ---

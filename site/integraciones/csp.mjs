@@ -71,6 +71,14 @@ export default function csp() {
           `style-src 'self' ${[...estilos].join(' ')}`,
           `img-src 'self' data:`,
           `font-src 'self'`,
+          // `media-src` para el vídeo del héroe (2026-09-07). Sin esta línea el
+          // <video> cae en `default-src 'none'` y el navegador lo bloquea SIN
+          // error visible: la página se ve bien, con el póster puesto, y el
+          // vídeo simplemente nunca arranca. Sólo `'self'`: el vídeo se sirve
+          // desde nuestro dominio, no desde YouTube ni Vimeo — un iframe de
+          // terceros traería su JavaScript y sus cookies de seguimiento a la
+          // portada, que es justo lo que este sitio no hace.
+          `media-src 'self'`,
           // Sin `connect-src`: el sitio no hace ninguna petición desde JavaScript.
           // Cuando el formulario del sprint 3 llame a su función, se añade aquí y
           // esa línea será la prueba escrita de que se tomó la decisión.

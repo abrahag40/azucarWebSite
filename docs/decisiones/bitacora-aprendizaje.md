@@ -3543,10 +3543,311 @@ pintado se rompió. Ahora se salta la palabra de categoría: A y L.
 
 ---
 
+## L-120 · Un solo color para todos los botones: qué se gana y qué se paga
+
+El cliente pidió el 2026-09-03 «#376452 para los btn y para btns de menú grandes como los de
+"Solicitar Reserva" en TODO el sitio». Se aplicó a los **botones de acción principal**: 146 usos
+en las 51 páginas, los dos idiomas, el panel y los dos correos.
+
+Al ir a confirmarlo el 2026-09-07 apareció que «TODO el sitio» admitía una lectura más ancha: los
+**secundarios** —«Ver alojamiento», «Cómo llegar», «Copiar el mensaje»— eran de contorno y sólo se
+rellenaban de verde al pasar el ratón. Abraham, como Proxy PO, eligió la lectura literal: rellenos
+también. Son 22 botones en 12 páginas, y el sitio pasa a **168 botones del mismo verde**.
+
+> **Lo que se gana:** una sola señal de «esto se pulsa», sin que nadie tenga que aprender que el
+> contorno también es un botón. Es la lectura literal de lo que pidió quien paga.
+>
+> **Lo que se paga, dicho antes de que se descubra:** el patrón *primary / secondary action*
+> (Nielsen Norman) distinguía la acción principal de la de apoyo **por color**, y ya no. Donde
+> conviven en la misma vista, la jerarquía queda sólo en el orden de lectura:
+>
+> | Vista | Acción principal | Ahora idéntica a |
+> |---|---|---|
+> | `/404/` | Ir al inicio | Ver alojamiento |
+> | `/eventos/` | Escribir al hotel | Agendar una visita |
+> | **resumen de la solicitud** | **Enviar por correo** | Copiar el mensaje · Volver a editar |
+>
+> La tercera fila es la que importa: es la pantalla donde el proyecto entero se juega su razón de
+> ser, y ahora tres botones iguales compiten por la misma mirada.
+
+**El antipatrón que NO se cometió:** recuperar la jerarquía por mi cuenta haciendo el principal más
+grande. Nadie lo pidió. Cambiar el color es ejecutar el encargo; rediseñar la jerarquía es
+sustituir el criterio del cliente por el mío y llamarlo «mejora». Queda escrito en `base.css`, al
+lado del cambio, para que la decisión se tome a la vista y no por inercia.
+
+**Cómo se verificó, y por qué no bastaba leer el CSS.** Se preguntó al navegador el valor
+**computado** de cada botón en 8 páginas de los dos idiomas — la misma vara de L-114, la lección
+del botón «Enviar» que llevaba dos sprints sin color siendo marcado perfectamente válido. Y a
+mitad de la comprobación los secundarios de `/ubicacion/` salían verdes y los de la portada no:
+no era el cambio, era **el HTML cacheado por el navegador**, que seguía apuntando al CSS viejo.
+Una página que no habías visitado en la sesión se cargaba fresca; una que sí, mentía. `?cb=1` lo
+resolvió. Sin ese detalle, el informe habría dicho «el cambio se aplica en unas páginas y en otras
+no», que es un defecto que no existía.
+
+### Y de paso, un número falso que llevaba cuatro días publicado
+
+`tokens.css` afirmaba que #376452 daba «3.31:1 contra el blanco de `surface`». El contraste real
+es **6.76:1**. El contraste entre dos colores es **uno solo**: da igual si el verde es el texto
+sobre blanco o el relleno bajo texto blanco. Dos números distintos para el mismo par eran, por
+construcción, imposibles.
+
+La conclusión que sostenía —«cumple el 3:1 de 1.4.11»— era correcta, y de hecho con el doble de
+holgura de la declarada. Por eso nadie lo miró: **un número equivocado que respalda una conclusión
+correcta no molesta a nadie hasta que alguien lo reutiliza.** Y ese día llegó: desde hoy respalda
+el doble de botones. Corregido, y con las tres superficies medidas en vez de una:
+6.76:1 sobre `surface`, 6.21:1 sobre `surface-warm`, 5.85:1 sobre `surface-alt`.
+
+---
+
+## L-121 · axe-core sin pintar la página miente, y miente hacia el lado tranquilizador
+
+Al medir accesibilidad tras el cambio de color, axe reportó una violación **WCAG 2 AA** de
+`color-contrast` en la portada:
+
+```
+Element has insufficient color contrast of 3.5
+(foreground #6f9440, background #ffffff, 14px, normal). Expected 4.5:1
+```
+
+El fondo de ese párrafo **no es blanco**. Es `#1c1a17` — la franja oscura de llamada a la acción,
+declarada con un `background` sólido, sin imagen ni transparencia. Recorriendo la cadena de
+ancestros con `getComputedStyle`, el color efectivo aparece sin ambigüedad en `section.llamada`, y
+el contraste real es **4.95:1**: cumple.
+
+axe **se saltó ese ancestro y cayó hasta el `<body>`**, que sí es blanco. El motivo: el panel del
+navegador estaba oculto, la página no se pintaba, y la resolución de fondos de axe necesita
+geometría real para saber qué elemento hay detrás de qué.
+
+> **La regla:** axe-core no es un analizador estático, es un **observador de una página pintada**.
+> Con el panel oculto, minimizado o en una pestaña de fondo, sus resultados de color no valen —
+> ni los positivos ni los negativos.
+
+Es la misma trampa de L-047 con otra cara. Allí, medir antes de aplicar el CSS producía decenas de
+violaciones falsas de `target-size` porque sin estilos todo mide una línea. Aquí, medir sin pintar
+produce violaciones falsas de `color-contrast` porque sin geometría todo está sobre el `<body>`.
+**Las dos veces el error fue el mismo:** pedirle a una herramienta de observación que observe algo
+que no se estaba dibujando.
+
+Y nótese hacia dónde miente cada una. L-047 mentía **a la contra** —inventaba defectos, molesto
+pero inofensivo—. Ésta mintió a la contra en un caso, pero el mecanismo sirve igual para el otro
+lado: un texto que de verdad falle sobre un fondo oscuro puede pasar por bueno si axe lo compone
+sobre el blanco del `body`. **Un falso negativo de accesibilidad no avisa de nada.**
+
+Por eso el contraste de los botones nuevos no se dio por bueno con axe, sino calculando la fórmula
+de luminancia relativa de WCAG 2.1 sobre los valores computados: eso no depende de que nadie pinte
+nada.
+
+---
+
+## L-122 · El `git diff` que no reconoces: dos sesiones en un mismo árbol de trabajo
+
+Al terminar el cambio de color, `git diff --stat` mostraba cuatro archivos. Dos eran míos.
+Los otros dos —`Hero.astro` con 62 líneas nuevas y `csp.mjs` con una directiva `media-src`— eran
+de un trabajo de **vídeo en el héroe** que esta sesión no había tocado. El `git status` del
+arranque decía «limpio».
+
+Tres señales lo confirmaron, y ninguna es sutil una vez que se sabe mirar:
+
+1. Archivos sin rastrear de un trabajo ajeno: `VideoHero.astro`, `scripts/video-hero.sh` y cuatro
+   archivos de vídeo.
+2. Un `w-tmp.mjs` que **apareció y desapareció** entre dos comprobaciones consecutivas.
+3. `.claude/launch.json` cambió el puerto del preview de 4321 a **4399** a mitad de la medición —
+   porque el 4321 lo tenía ocupado este servidor.
+
+> **La regla:** antes de un commit, `git status` no es un trámite, es una **comprobación de
+> autoría**. Si el diff contiene algo que no escribiste, el commit no es tuyo: arrastra trabajo
+> ajeno a medias, con un mensaje que lo describe mal, y el día que haya que revertir tu cambio se
+> lleva por delante el del otro.
+
+Aquí se decidió **no commitear** y entregar el trabajo verificado pero sin consolidar, explicando
+por qué. Cuesta un paso más; el commit incorrecto habría costado un `git revert` quirúrgico sobre
+una rama con dos autores mezclados en un solo objeto.
+
+**El antipatrón evitado** es `git commit -a` o `git add .` por costumbre. En un árbol compartido
+esos dos comandos no significan «guarda mi trabajo»: significan «guarda todo lo que haya, sea de
+quien sea».
+
+---
+
+## L-120 · Un vídeo vertical en un héroe apaisado enseña el 29 % del cuadro
+
+El cliente mandó un reel de Instagram —1080×1920, 42 s, 85 MB— para el héroe de la portada. La
+tentación era ponerlo entero y dejar que `object-fit: cover` resolviera.
+
+`cover` no resuelve: **elige**. Con un 9:16 dentro de un héroe apaisado, lo que se ve es una banda
+central del **29 % de la altura del cuadro**. Antes de tocar código se simuló plano a plano
+recortando exactamente esa banda, y el resultado decidió el montaje:
+
+| plano | recortado a lo ancho |
+|---|---|
+| alberca de la terraza, palmeras, mar | ✅ funciona entero |
+| palmeras y cielo, camastro | ✅ funciona entero |
+| agua de la alberca | ✅ funciona entero |
+| habitaciones | ⚠️ cabecera de cama y pared |
+| baño y clóset | ❌ un lavabo, unas repisas |
+
+Recortado a lo ancho, **un clóset es una repisa**. Se eligieron tres planos completos —no se cortó
+a mitad de toma, porque el original ya venía montado en tomas de 2.2 s— y los tres son exteriores,
+que además es lo que promete el titular.
+
+> **El patrón:** antes de decidir si un material sirve, hay que verlo **como lo va a ver el
+> usuario**, no como viene. Doce fotogramas recortados a la proporción real costaron cinco minutos
+> y evitaron publicar un héroe en el que el hotel enseña su clóset.
+
+### Y dos recortes, porque el móvil no tiene el mismo problema
+
+En un teléfono el 9:16 es el acierto: se ve el cuadro entero. Se codifican dos versiones y las
+elige el script por ancho de ventana — el móvil no descarga píxeles que iba a tirar.
+
+---
+
+## L-121 · `media` en `<source>` sólo funciona dentro de `<picture>`
+
+Los dos recortes se eligieron primero con `<source media="…">`, calcando el patrón de `<picture>`.
+No funciona: **dentro de un `<video>` los navegadores ignoran `media`** —lo implementaron y lo
+retiraron— y se limitan a tomar la primera fuente cuyo `type` puedan reproducir.
+
+Y falla **en silencio**: nada avisa, la página se ve bien, y un escritorio se lleva el recorte
+vertical. Se resolvió donde sí es fiable: `matchMedia` en el script, que ya existía para no tocar
+el LCP.
+
+> **La regla:** dos elementos que se parecen no comparten API. `<source>` dentro de `<picture>` y
+> `<source>` dentro de `<video>` se escriben igual y **no hacen lo mismo**.
+
+### De paso, el otro fallo silencioso del mismo día
+
+Los cuatro `import` de vídeo devuelven una **cadena**, no un objeto: sólo las imágenes pasan por el
+servicio de imagen de Astro y llegan como `{ src, width, height }`. Escribir `video.src` daba
+`undefined`, y **Astro omite los atributos cuyo valor es `undefined`**. El marcado salía sin URL,
+sin un solo error en consola.
+
+Los dos defectos comparten forma: **el navegador no se queja, simplemente no hace nada.** Se
+cazaron preguntándole al DOM qué había pasado de verdad, no leyendo el código.
+
+---
+
+## L-122 · El póster de un `<video>` se descarga aunque pongas `preload="none"`
+
+El héroe llevaba `poster` con el primer fotograma del clip. Parecía gratis. Medido con
+`performance.getEntriesByType('resource')`:
+
+```
+hero-poster-ancho.webp   @ 615 ms
+hero-roof-top.webp       @ 615 ms   ← el elemento LCP
+```
+
+**El póster se pedía en el mismo milisegundo que la fotografía del héroe**, disputándole el ancho
+de banda al elemento LCP. `preload="none"` cubre el medio; el póster no es el medio.
+
+Y lo mejor: **no se veía nunca**. El vídeo está a `opacity: 0` hasta que pinta su primer fotograma,
+y hasta ese instante lo que se ve es la fotografía de debajo. Un archivo descargado en el peor
+momento posible para no enseñarse jamás. Se quitó el atributo y se borraron los dos archivos.
+
+> **El patrón:** «no cuesta nada» es una hipótesis, no un hecho, y la de rendimiento se comprueba
+> con el reloj del navegador. Aquí el coste no estaba en el vídeo —que arranca a los 2 s, después
+> de todo— sino en el atributo que se puso *para* que el vídeo no costara nada.
+
+---
+
+## L-123 · Un `catch` que borra es peor que un fallo que se reintenta
+
+El arranque llevaba esto, y parecía prudencia:
+
+```js
+video.play().catch(() => video.remove());
+```
+
+«Si no se puede reproducir, quítalo». El problema es que **el rechazo más común de `play()` no es
+permanente**. Verificando en un panel de navegador oculto salió el mensaje exacto:
+
+```
+AbortError: video-only background media was paused to save power
+```
+
+Chrome pausa el vídeo sin audio cuando la página está en **segundo plano**, que es lo que pasa cada
+vez que alguien abre un enlace en una pestaña nueva. Con aquel `remove()`, ese visitante perdía el
+vídeo **para siempre**, aunque después mirara la pestaña.
+
+Ahora no se borra nada: si `play()` falla se deja el elemento quieto —debajo está la fotografía, así
+que no hay hueco— y se reintenta en `visibilitychange`.
+
+> **La regla:** antes de escribir un manejador de error, hay que saber si el error es **permanente o
+> transitorio**. Un `catch` destructivo convierte una condición temporal en una pérdida definitiva, y
+> es de los defectos que no aparecen en desarrollo porque en desarrollo la pestaña siempre está
+> delante.
+
+### El entorno «roto» era el mejor banco de pruebas
+
+El panel reporta `document.visibilityState === "hidden"` incluso al frente, y además **congela el
+reloj de animación**, así que las transiciones CSS no avanzan. Las dos cosas parecían estorbos y las
+dos encontraron algo: la primera, el `catch` destructivo; la segunda obligó a comprobar el estado
+final con `getAnimations().forEach(a => a.finish())` en vez de fiarse de un `setTimeout`.
+
+---
+
+## L-124 · A presupuesto fijo, el denoise no ahorra bytes: los reasigna
+
+El clip elegido costaba 9.7 Mbps con calidad constante — las palmeras al viento son de lo más caro
+que existe de codificar. Un héroe no puede pesar «lo que salga», así que se pasó a VBR de dos
+pasadas con objetivo explícito.
+
+Fijado el presupuesto, la pregunta sobre el denoise deja de ser «¿cuál pesa menos?» —todos pesan lo
+mismo— y pasa a ser **«a igualdad de bytes, ¿cuál se ve mejor?»**. Se codificó tres veces a 1.4 Mbps
+y se compararon a tamaño real:
+
+| | resultado |
+|---|---|
+| sin denoise | palmeras ruidosas y **cielo con bandas** |
+| `hqdn3d` suave | cielo limpio, palmeras aún separadas ← **gana** |
+| `hqdn3d` fuerte | cielo limpísimo, palmeras empastadas |
+
+El denoise quita el grano del teléfono, que es incompresible y no aporta nada, y con esos bits paga
+el movimiento de las palmeras, que sí se ve.
+
+Por el mismo razonamiento se **descartó** `unsharp`, que estaba en la primera receta: afilar añade
+energía de alta frecuencia que hay que codificar, y a bitrate limitado esos bits salen de otro
+sitio. **Afilar antes de comprimir es pedirle al códec que gaste en halos.**
+
+---
+
+## L-125 · Cambiar el fondo del héroe invalidó una tabla que ya estaba escrita
+
+`Hero.astro` llevaba desde el sprint 1 una tabla de contraste medida sobre el píxel más claro de
+`hero-roof-top.webp`, y debajo este aviso:
+
+> ⚠️ Si se cambia la fotografía del héroe, hay que volver a medir las dos filas de esa tabla. No lo
+> detecta ningún auditor de marcado.
+
+Se cambió por un vídeo. Se volvió a medir. **No pasaba.**
+
+Una fotografía tiene un píxel más claro; un vídeo tiene uno por fotograma, y el peor caso es el
+máximo de todos. Medido sobre los 52 fotogramas del clip, en las tres zonas del héroe aparece
+**blanco puro** —el sol reventado sobre el agua y sobre el bordillo—, o sea el peor fondo posible:
+
+| velo | 0.52 | 0.60 | 0.64 | **0.68** | 0.72 |
+|---|---|---|---|---|---|
+| texto blanco | **4.27 ✗** | 5.74 | 6.71 | **7.86** | 9.23 |
+| `accent-claro` (hover del menú) | **2.90 ✗** | 3.90 | 4.55 | **5.34** | 6.27 |
+
+Con el velo de la foto, el texto de la cabecera caía a 4.27:1 —por debajo del 4.5:1 de WCAG
+1.4.3— y el hover verde a 2.90:1: exactamente el defecto que R-22 había costado cerrar. Se sube a
+**0.68**, que devuelve 7.86:1 y 5.34:1, igual o mejor que lo que daba la fotografía.
+
+Y sólo **cuando el vídeo está pintando**: el selector cuelga de `[data-listo]`, así que sin
+JavaScript, con `prefers-reduced-motion` o si el vídeo falla, la foto conserva su luz.
+
+> **Lo que este caso demuestra:** un aviso escrito en el código, junto al número que protege, hizo
+> su trabajo un año después y con otro material. Ningún auditor automático lo habría dicho —axe no
+> mide fotogramas de vídeo—, y el fallo habría sido invisible hasta que alguien no pudiera leer el
+> menú. **La documentación que se paga sola es la que está pegada al número que documenta.**
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
 |---|---|---|---|
+| R-39 | **El botón flotante de WhatsApp está fuera de todo landmark**, en `Base.astro`, después de `<footer>`. axe-core lo marca como violación `region` (best-practice, RGAA 9.2.1) en las 50 páginas con cabecera. Existe desde el 2026-08-22, o sea **antes** de la medición del 2026-09-01 que quedó registrada como «0 violaciones»: ese cero no era exacto | Bajo | Envolverlo en un landmark propio o darle `role`. Y volver a correr axe **con la página pintada** antes de anotar ningún «cero» (L-121) |
 | R-01 | **Licencia de la plantilla Cappa.** Publicar producción sobre un demo raspado sin licencia es exposición legal para nosotros y para el cliente | Alto | Definir quién compra la licencia **antes** de escribir código de producción |
 | R-02 | Motor de reservas / PMS actual desconocido. Define el alcance completo | Alto | Pregunta prioritaria en la entrevista |
 | R-03 | ~~Calidad de la fotografía~~ **CERRADO** — el mirror confirma 244 WebP de 2025 bien dimensionadas. Queda sólo la cesión de derechos | ~~Alto~~ Bajo | Preguntar únicamente por los derechos (C5.3) |

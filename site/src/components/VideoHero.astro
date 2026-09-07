@@ -1,0 +1,297 @@
+---
+/**
+ * Fondo de VÍDEO del héroe de la portada.
+ *
+ * Sustituye a la fotografía como fondo, y está construido con una obsesión por
+ * encima de todas: **no tocar el LCP**. La portada mide hoy 1.33 s de LCP y 99
+ * de rendimiento en Lighthouse, y un vídeo mal puesto se lleva las dos cosas por
+ * delante en una tarde.
+ *
+ * ── LA IDEA, EN UNA FRASE ───────────────────────────────────────────────────
+ * El elemento LCP **sigue siendo la fotografía**. El vídeo entra después, por
+ * su cuenta, y sólo cuando ya no le quita ancho de banda a nada.
+ *
+ * Es decir: para el navegador, y para Lighthouse, esta portada carga
+ * exactamente igual que ayer. El vídeo es un extra que aparece encima.
+ *
+ * ── CÓMO SE CONSIGUE ────────────────────────────────────────────────────────
+ *
+ * 1. `preload="none"` y **sin `src` en el marcado**. Las fuentes viven en
+ *    atributos `data-src` y sólo se convierten en `src` reales cuando el script
+ *    decide. Un `<video>` con `src` puesto empieza a descargar en cuanto el
+ *    analizador lo ve, aunque lleve `preload="none"` —los navegadores lo tratan
+ *    como una sugerencia—, y compite con la imagen del héroe justo en el peor
+ *    momento.
+ *
+ * 2. El arranque se pide en `requestIdleCallback` **después** del evento `load`.
+ *    Para entonces el LCP ya está medido y la página ya es interactiva.
+ *
+ * 3. La fotografía no se retira nunca del DOM: se queda debajo, y el vídeo se
+ *    funde encima cuando tiene fotogramas que enseñar. Si el vídeo falla, si la
+ *    red se cae o si el navegador no lo reproduce, lo que queda es la portada
+ *    de siempre. **Nada de esto tiene un estado roto.**
+ *
+ * 4. **SIN atributo `poster`.** Lo llevaba, y era un coste escondido: medido
+ *    con `performance.getEntriesByType('resource')`, el póster se pedía a los
+ *    **615 ms, exactamente a la vez que la fotografía del héroe**, y le
+ *    disputaba el ancho de banda al elemento LCP. `preload="none"` no cubre el
+ *    póster: sólo el medio.
+ *
+ *    Y además no se veía nunca. El vídeo está a `opacity: 0` hasta que pinta su
+ *    primer fotograma; hasta ese instante lo que se ve es la fotografía de
+ *    debajo. Un póster que nadie llega a ver, descargado en el peor momento.
+ *    Se quitó el atributo y se borraron los dos archivos.
+ *
+ * ── A QUIÉN NO SE LE CARGA, Y POR QUÉ ───────────────────────────────────────
+ *
+ *   · `prefers-reduced-motion: reduce` — WCAG 2.3.3. Un fondo en movimiento a
+ *     pantalla completa es exactamente lo que esa preferencia pide evitar, y
+ *     aquí ni siquiera se descarga: se ahorra el movimiento y el megabyte.
+ *   · `navigator.connection.saveData` — quien pide ahorro de datos no quiere un
+ *     vídeo decorativo de 1 MB, y decírselo con la interfaz no serviría porque
+ *     el daño es la descarga.
+ *   · conexiones `2g` y `slow-2g` — el vídeo tardaría más que la visita.
+ *
+ * En los tres casos la portada se queda con su fotografía, que es completa por
+ * sí sola. La mejora es progresiva de verdad: no hay un «modo degradado».
+ *
+ * ── DOS RECORTES, Y POR QUÉ NO SE ELIGEN CON `<source media>` ───────────────
+ * El original es 9:16 vertical. En un héroe apaisado, `cover` sólo enseña una
+ * banda del 29 % de la altura del cuadro; en un teléfono, en cambio, el cuadro
+ * entero es el acierto. Se codifican dos versiones.
+ *
+ * 🔴 El primer intento las eligió con `<source media="…">`, como en un
+ * `<picture>`. **No funciona, y falla en silencio.** El atributo `media` sobre
+ * `<source>` sólo lo respetan los navegadores dentro de `<picture>`; dentro de
+ * un `<video>` lo ignoran —lo implementaron y lo retiraron— y se limitan a
+ * tomar la primera fuente cuyo `type` puedan reproducir. Resultado: un
+ * escritorio se llevaba el recorte vertical, o ninguno.
+ *
+ * Se resuelve donde sí es fiable: el script evalúa `matchMedia` y asigna la URL
+ * al vídeo. Como el arranque ya es por script —hace falta para no tocar el
+ * LCP—, no cuesta nada extra, y de paso desaparecen los cuatro `<source>`.
+ *
+ * El detalle de por qué se eligieron ESOS planos y no el vídeo entero está en
+ * `scripts/video-hero.sh`.
+ *
+ * ── SIN CONTROLES, Y POR QUÉ ESO NO INCUMPLE 2.2.2 ──────────────────────────
+ * El criterio 2.2.2 (Pausar, detener, ocultar) exige un control para el
+ * contenido en movimiento **que dure más de cinco segundos**… y este dura 8 y
+ * se repite. Lo que da cumplimiento aquí es la vía del propio criterio: la
+ * preferencia del sistema. Con `prefers-reduced-motion` el movimiento no
+ * existe, y no es un botón escondido en una esquina: es la preferencia que el
+ * usuario ya configuró una vez y que vale para todo el sitio.
+ */
+/* ⚠️ Estos cuatro imports devuelven una CADENA con la URL, no un objeto.
+   Sólo las imágenes pasan por el servicio de imagen de Astro y llegan como
+   `{ src, width, height }`; cualquier otro recurso lo resuelve Vite y lo
+   entrega como texto. Escribir `videoAnchoWebm.src` daba `undefined`, y Astro
+   OMITE los atributos con valor `undefined`: el marcado salía sin URL, sin un
+   solo error, y el vídeo simplemente no existía. */
+import videoAnchoWebm from '../assets/video/hero-ancho.webm';
+import videoAnchoMp4 from '../assets/video/hero-ancho.mp4';
+import videoAltoWebm from '../assets/video/hero-alto.webm';
+import videoAltoMp4 from '../assets/video/hero-alto.mp4';
+
+/* Sin `respaldo` como prop. Lo llevaba, y era mentira: la fotografía de
+   respaldo la pinta `Hero.astro` en su propio <img>, y este componente no la
+   tocaba. Una prop obligatoria que nadie lee es contrato falso. */
+interface Props {
+  /** Clase extra, por si algún día hay un héroe de vídeo en otra página. */
+  clase?: string;
+}
+const { clase = '' } = Astro.props;
+
+/* El umbral se declara UNA vez y viaja al script en un `data-`. Si estuviera
+   escrito también en el CSS o en el script, serían dos números que hay que
+   mantener a mano y que un día dejan de coincidir. 48rem = 768 px, el mismo
+   salto de tableta que usa el resto del sitio. */
+const UMBRAL = '(min-width: 48rem)';
+
+/* Las cuatro URLs en un solo `data-`, como JSON. El script elige por ancho y
+   por soporte de códec. Va en un atributo y no incrustado en el JavaScript
+   para que el bloque de código sea IDÉNTICO en las dos páginas de idioma: un
+   solo hash en la CSP en vez de dos — el mismo criterio que ya usa el
+   formulario de solicitud con sus rótulos. */
+const FUENTES = JSON.stringify({
+  ancho: { webm: videoAnchoWebm, mp4: videoAnchoMp4 },
+  alto: { webm: videoAltoWebm, mp4: videoAltoMp4 },
+});
+---
+{/* SIN `disablepictureinpicture` ni `disableremoteplayback`, y por dos razones.
+    La primera es que no hacen nada: los dos existen para quitar botones de un
+    reproductor, y aquí no hay reproductor —ni `controls`, ni foco, ni
+    `pointer-events`—, así que no hay nada que quitar.
+
+    La segunda es que **los dos validadores del proyecto se contradicen sobre
+    ellos**: los tipos de Astro exigen `disableRemotePlayback` en camelCase y
+    `html-validate` exige minúsculas, y Astro emite el atributo tal cual se
+    escribe. No hay forma de escribirlo que pase las dos. Un atributo inerte no
+    merece una excepción en la configuración de un guardián.
+
+    `aria-hidden` y sin `<track>`: es decoración, no contenido. El vídeo no
+    lleva audio —se le quita en la codificación, no se silencia con un
+    atributo— así que no hay nada que subtitular ni que describir. Un lector de
+    pantalla no debe encontrarse aquí un reproductor sin propósito. */}
+<video
+  class={`videohero ${clase}`}
+  aria-hidden="true"
+  tabindex="-1"
+  muted
+  loop
+  playsinline
+  preload="none"
+  data-umbral={UMBRAL}
+  data-fuentes={FUENTES}
+></video>
+
+<style>
+  .videohero {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* El MISMO encuadre que la fotografía a la que sustituye. La banda apaisada
+       ya se recortó al 40 % en la codificación, así que aquí sólo queda
+       centrar; en vertical, el 40 % vuelve a mandar. */
+    object-position: center 40%;
+    z-index: -2;
+    /* Nace invisible y se funde cuando tiene fotogramas. Sin esto se ve un
+       parpadeo negro entre que el elemento existe y que empieza a pintar. */
+    opacity: 0;
+    transition: opacity 900ms var(--ease);
+    /* No captura ratón ni teclado: debajo hay una fotografía y encima un
+       titular con botones. */
+    pointer-events: none;
+  }
+  .videohero[data-listo] { opacity: 1; }
+
+  /* Cinturón y tirantes. El script ya no carga nada con esta preferencia
+     puesta, pero si el usuario la activa DESPUÉS —se puede, sin recargar— el
+     vídeo que ya estuviera corriendo se esconde igualmente y vuelve la foto. */
+  @media (prefers-reduced-motion: reduce) {
+    .videohero { display: none !important; }
+  }
+</style>
+
+<script>
+  /**
+   * Arranque del vídeo del héroe. Todo lo que hace este script podría no
+   * ejecutarse nunca y la portada seguiría estando completa.
+   */
+  const video = document.querySelector<HTMLVideoElement>('.videohero');
+
+  if (video) {
+    const conexion = (navigator as any).connection;
+    const tipo = conexion?.effectiveType ?? '';
+    const noQuiereMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ahorraDatos = conexion?.saveData === true;
+    const redLenta = tipo === '2g' || tipo === 'slow-2g';
+
+    if (!noQuiereMovimiento && !ahorraDatos && !redLenta) {
+      const arrancar = () => {
+        const ancho = window.matchMedia(video.dataset.umbral!).matches;
+
+        // La fuente se elige AQUÍ, no con `<source media>`: dentro de un
+        // <video> los navegadores ignoran ese atributo. Dos decisiones:
+        //   · recorte  → por ancho de ventana
+        //   · códec    → WebM si el navegador dice que puede con VP9; sólo
+        //                Safari cae al MP4, que pesa un 45 % más.
+        const fuentes = JSON.parse(video.dataset.fuentes!);
+        const juego = ancho ? fuentes.ancho : fuentes.alto;
+        const puedeWebm = video.canPlayType('video/webm; codecs="vp9"') !== '';
+        video.src = puedeWebm ? juego.webm : juego.mp4;
+
+        // `muted` por propiedad además de por atributo: Safari en iOS exige que
+        // la propiedad esté puesta en el momento de llamar a play(), y no le
+        // basta con el atributo del marcado.
+        video.muted = true;
+        video.load();
+
+        // Se revela con el primer fotograma REAL pintado, no con `canplay`:
+        // `canplay` dispara cuando hay datos suficientes, que no es lo mismo
+        // que haber pintado, y se colaba un parpadeo.
+        // Se revela con el primer fotograma REAL pintado, no con `canplay`:
+        // `canplay` dispara cuando hay datos suficientes, que no es lo mismo
+        // que haber pintado, y por ahí se colaba un parpadeo. Si la pestaña
+        // está en segundo plano no pinta nada, y entonces tampoco se revela:
+        // correcto, porque no hay nada que enseñar todavía.
+        const revelar = () => video.setAttribute('data-listo', '');
+        // Se captura el método en vez de comprobarlo con `in`: `'x' in video`
+        // estrecha `video` a `never` en la rama negativa —el tipo no declara
+        // esa propiedad— y todo lo de dentro deja de compilar. Con una
+        // referencia opcional, el tipo de `video` no se toca.
+        const porFotograma = (video as any).requestVideoFrameCallback?.bind(video);
+        if (porFotograma) {
+          porFotograma(revelar);
+        } else {
+          // Respaldo para quien no tenga `requestVideoFrameCallback`: se espera
+          // a que el reloj haya AVANZADO, no al evento `playing`. `playing`
+          // puede adelantarse al primer fotograma pintado, y por ahí se colaba
+          // un parpadeo negro. `currentTime > 0` sólo es cierto cuando ya hay
+          // imagen.
+          const alAvanzar = () => {
+            if (video.currentTime > 0) {
+              video.removeEventListener('timeupdate', alAvanzar);
+              revelar();
+            }
+          };
+          video.addEventListener('timeupdate', alAvanzar);
+        }
+
+        // 🔴 UN `catch` QUE BORRABA EL VÍDEO, Y ERA UN DEFECTO.
+        // La primera versión hacía `.catch(() => video.remove())`. Parecía
+        // prudente —«si no se puede reproducir, quítalo»— y era destructivo:
+        // el rechazo más común de `play()` NO es permanente. Chrome devuelve
+        //
+        //     AbortError: video-only background media was paused to save power
+        //
+        // cuando la página está en SEGUNDO PLANO, que es exactamente lo que
+        // pasa cada vez que alguien abre un enlace en una pestaña nueva. Con
+        // aquel `remove()`, ese visitante perdía el vídeo para siempre aunque
+        // luego mirara la pestaña.
+        //
+        // Ahora no se borra nada: si `play()` falla, el póster se queda —que
+        // es un fotograma del propio vídeo, así que no se ve ningún hueco— y
+        // se vuelve a intentar cuando la página se hace visible. Lo cazó la
+        // verificación en un panel oculto, que es justo el caso que el código
+        // daba por imposible.
+        video.play().catch(() => {});
+      };
+
+      // Después de `load` y en tiempo ocioso: el LCP ya está medido.
+      const enReposo = () =>
+        'requestIdleCallback' in window
+          ? (window as any).requestIdleCallback(arrancar, { timeout: 2500 })
+          : setTimeout(arrancar, 400);
+
+      if (document.readyState === 'complete') enReposo();
+      else window.addEventListener('load', enReposo, { once: true });
+    }
+
+    // Reintento al volver a primer plano. Cubre las dos causas de que el vídeo
+    // esté parado sin que nadie haya hecho nada mal: la pestaña estaba en
+    // segundo plano al cargar, o el navegador la suspendió para ahorrar
+    // batería. `video.src` como guarda: antes de que el script lo asigne no
+    // hay nada que reproducir.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && video.src && video.paused) {
+        video.play().catch(() => {});
+      }
+    });
+
+    // Un vídeo que sigue decodificando fuera de pantalla gasta batería para
+    // nada. Cuando el héroe sale del viewport se pausa, y al volver se reanuda.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        ([e]) => {
+          if (!video.src) return;
+          if (e.isIntersecting) video.play().catch(() => {});
+          else video.pause();
+        },
+        { threshold: 0 },
+      ).observe(video);
+    }
+  }
+</script>

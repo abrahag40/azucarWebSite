@@ -23,6 +23,7 @@
  *    Definition of Done.
  */
 import { Image, getImage } from 'astro:assets';
+import VideoHero from './VideoHero.astro';
 import { usarT, ruta, ancla, type Idioma } from '../i18n/ui';
 import fondo from '../assets/hero-roof-top.webp';
 
@@ -83,6 +84,15 @@ const t = usarT(idioma);
     fetchpriority="high"
     quality={50}
   />
+  {/* El VÍDEO va DESPUÉS de la fotografía y encima de ella, no en su lugar.
+      La fotografía sigue siendo el elemento LCP y sigue precargada exactamente
+      igual que antes: para Lighthouse esta portada carga como ayer. El vídeo
+      entra por su cuenta cuando ya no le quita ancho de banda a nada, y se
+      funde encima. Si no llega —sin JavaScript, con `prefers-reduced-motion`,
+      con ahorro de datos o en 2G— lo que queda es la portada de siempre.
+      Toda la mecánica y sus porqués están en `VideoHero.astro`. */}
+  <VideoHero />
+
   <div class="hero__velo" aria-hidden="true"></div>
 
   <div class="contenedor hero__contenido">
@@ -261,6 +271,58 @@ const t = usarT(idioma);
       rgb(0 0 0 / 0.06) 30%,
       rgb(0 0 0 / 0.06) 70%,
       rgb(0 0 0 / 0.38) 100%);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     🔴 EL VELO SUBE CUANDO HAY VÍDEO — y no es gusto, es aritmética.
+
+     La tabla de arriba se midió sobre el píxel más claro de
+     `hero-roof-top.webp`. El aviso que la acompaña decía: «si se cambia la
+     fotografía del héroe, hay que volver a medir». Se cambió por un vídeo, se
+     volvió a medir, y **no pasaba**.
+
+     Un vídeo no tiene un píxel más claro: tiene uno por fotograma, y el peor
+     caso es el máximo de todos. Medido sobre los 52 fotogramas del clip
+     final, en las TRES zonas del héroe aparece **blanco puro** —el sol
+     reventado sobre el agua de la alberca y sobre el bordillo—, o sea el peor
+     fondo posible que existe:
+
+                              velo 0.52   0.60   0.64   **0.68**   0.72
+       blanco                   4.27 ✗    5.74   6.71   **7.86**   9.23
+       `accent-claro` (hover)   2.90 ✗    3.90   4.55   **5.34**   6.27
+
+     Con el velo de la foto, el texto blanco de la cabecera caía a **4.27:1**,
+     por debajo del 4.5:1 de WCAG 1.4.3, y el hover verde del menú a 2.90:1.
+     Es exactamente el defecto que R-22 había costado cerrar.
+
+     Se elige **0.68**: devuelve 7.86:1 al blanco y 5.34:1 al hover, que es
+     igual o mejor que lo que daba la fotografía (7.7 y 5.05). La franja
+     inferior sube de 0.38 a 0.55 por la flecha de bajada, que es un control y
+     pide 3:1 (WCAG 1.4.11): con 0.38 daba 2.68:1 y con 0.55 da 4.76:1.
+
+     ── POR QUÉ SÓLO CUANDO HAY VÍDEO ─────────────────────────────────────
+     Subirlo siempre habría apagado la fotografía sin necesidad: ella ya
+     cumplía de sobra con 0.52. El selector cuelga de `[data-listo]`, que el
+     script pone sólo cuando el vídeo ha pintado su primer fotograma. Sin
+     JavaScript, con `prefers-reduced-motion` o si el vídeo falla, el velo se
+     queda como estaba y la foto conserva su luz.
+
+     `:global()` es deliberado y está declarado: `.videohero` es una clase de
+     OTRO componente, y el guardián `verificar-estilos.mjs` existe justo para
+     cazar las que se usan a ciegas fuera de su ámbito.
+     ══════════════════════════════════════════════════════════════════════ */
+  :global(.videohero[data-listo]) ~ .hero__velo {
+    background:
+      linear-gradient(to left,
+        rgb(0 0 0 / 0.26) 0%,
+        rgb(0 0 0 / 0.10) 10%,
+        rgb(0 0 0 / 0) 18%),
+      linear-gradient(to bottom,
+        rgb(0 0 0 / 0.68) 0%,
+        rgb(0 0 0 / 0.68) 14%,
+        rgb(0 0 0 / 0.12) 30%,
+        rgb(0 0 0 / 0.12) 70%,
+        rgb(0 0 0 / 0.55) 100%);
   }
 
   .hero__contenido {
