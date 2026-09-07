@@ -120,12 +120,39 @@ a:hover { color: var(--color-accent-hover); }
    botones, y separarlos es lo que permite cambiar uno sin tocar el otro. */
 .boton--primario { background: var(--color-boton); color: #fff; }
 .boton--primario:hover { background: var(--color-boton-hover); color: #fff; }
-.boton--secundario { background: transparent; color: var(--color-ink); border-color: var(--color-accent); }
-/* Al invertirse, el blanco queda SOBRE el color, y el decorativo sólo garantiza
-   3:1 — insuficiente para texto (WCAG 1.4.3). Venía así desde el sprint 1 y no
-   lo vio axe, que no prueba estados hover. Ahora usa el mismo verde de botón
-   que el primario, para que los dos estados llenos sean el mismo color. */
-.boton--secundario:hover { background: var(--color-boton); color: #fff; }
+
+/* ── Secundario: MISMO relleno que el primario, y es deliberado ─────────────
+   Decidido por Abraham como Proxy PO el 2026-09-07, leyendo la petición del
+   cliente —«#376452 para los btn ... en TODO el sitio»— en su sentido literal:
+   todos los botones rellenos, no sólo los de acción principal.
+
+   Lo que esto CUESTA, escrito aquí para que no se descubra por sorpresa: el
+   patrón acción-principal / acción-de-apoyo (Nielsen Norman) las distinguía
+   por color, y ya no. Donde conviven en la misma vista —404, /eventos/ y el
+   resumen de la solicitud— la jerarquía queda sólo en el ORDEN de lectura. El
+   sitio NO la recupera por tamaño: eso sería una decisión de diseño que nadie
+   ha pedido, y hacerla por mi cuenta sería pasarme del encargo.
+
+   Medido con la misma vara que el resto de la paleta, texto BLANCO encima:
+     relleno #376452 · texto #fff ......... 6.76:1   (1.4.3 pide 4.5:1)
+     hover   #2a4e3f · texto #fff ......... 9.29:1
+   Y el relleno contra las TRES superficies (1.4.11 pide 3:1 para componentes):
+     vs surface      #ffffff .............. 6.76:1
+     vs surface-warm #f8f5f0 .............. 6.21:1
+     vs surface-alt  #f1eeeb .............. 5.85:1
+   Las tres importan, no sólo el blanco: de los 12 sitios donde vive un
+   secundario, el del mapa se apoya en `surface-warm`. Ninguno cae sobre
+   fotografía — ahí el botón sigue siendo `--contorno-claro`.
+
+   El foco no depende de esto: es el `outline` global de `:focus-visible`, no
+   el borde. Por eso el borde puede irse a transparente sin dejar mudo al
+   teclado.
+
+   🔴 REVERTIR SON DOS LÍNEAS: `background: transparent; color:
+   var(--color-ink); border-color: var(--color-accent)` en el estado normal, y
+   `var(--color-boton)` en el hover. */
+.boton--secundario { background: var(--color-boton); color: #fff; border-color: transparent; }
+.boton--secundario:hover { background: var(--color-boton-hover); color: #fff; }
 .boton--claro { background: rgb(255 255 255 / 0.95); color: var(--color-ink); }
 /* Contorno claro sobre fotografia, como el boton del heroe de Cappa. El relleno
    translucido garantiza el contraste del texto aunque la foto tenga una zona

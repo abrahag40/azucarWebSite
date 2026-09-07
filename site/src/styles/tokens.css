@@ -65,8 +65,20 @@
        boton-hover #2A4E3F      9.29:1     hover y foco
 
      Y como el botón es un componente, su relleno también tiene que separarse
-     del fondo de la página: #376452 da 3.31:1 contra el blanco de `surface`,
-     por encima del 3:1 que pide 1.4.11.
+     del fondo de la página. Contra las TRES superficies del sitio, no sólo
+     contra el blanco:
+       vs surface      #ffffff ............ 6.76:1
+       vs surface-warm #f8f5f0 ............ 6.21:1
+       vs surface-alt  #f1eeeb ............ 5.85:1
+     Las tres muy por encima del 3:1 que pide 1.4.11.
+
+     ✏️ Corregido el 2026-09-07: aquí decía «3.31:1 contra el blanco de
+     surface», y era falso — el contraste de #376452 con #ffffff es uno solo,
+     6.76:1, lo mires como texto blanco encima o como relleno sobre la página.
+     La conclusión que sostenía —cumple 1.4.11— era correcta, y de hecho con
+     más holgura de la declarada; el número no lo era. Importa arreglarlo hoy
+     porque desde hoy respalda el DOBLE de botones: los secundarios también
+     van rellenos. Ver la nota de `.boton--secundario` en `base.css`.
 
      🔴 REVERTIR SON DOS LÍNEAS: se apunta a `--color-accent-text` y
      `--color-accent-hover` y ningún componente se entera. */
