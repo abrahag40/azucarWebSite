@@ -13,135 +13,159 @@
 #
 #  ── QUÉ ES EL ORIGINAL ─────────────────────────────────────────────────────
 #  1080×1920 VERTICAL · 42 s · H.264 a 16.2 Mbps · 85.2 MB · con audio.
-#  Es un reel de Instagram: 19 planos de unos 2.2 s cada uno.
+#  Es un reel de Instagram: 18 planos de unos 2.2 s, y el último lleva el
+#  LOGOTIPO del hotel incrustado sobre el agua de la alberca.
 #
-#  ── POR QUÉ NO SE USA ENTERO, QUE ES LA DECISIÓN QUE MÁS PESA ──────────────
-#  El héroe es apaisado en escritorio. Un 9:16 dentro de él, con `cover`, sólo
-#  enseña una BANDA CENTRAL del 29 % de la altura del cuadro. Se simuló plano a
-#  plano, y el resultado manda:
+#  ── EL PROBLEMA DE FONDO: UN 9:16 EN UN HÉROE APAISADO ─────────────────────
+#  Con `cover`, de un 9:16 sólo se ve una BANDA de 608 px de los 1920 —el 32 %
+#  de la altura del cuadro—. Qué caiga dentro de esa banda no es un detalle: es
+#  la diferencia entre enseñar la alberca o enseñar una repisa.
 #
-#      plano 4  (6.8– 9.0 s)  alberca, barandal, palmeras, mar   ✅ excelente
-#      plano 5  (9.0–11.2 s)  palmeras y cielo, camastro         ✅ excelente
-#      plano 18 (38.0–42.0 s) agua de la alberca, cáusticas      ✅ excelente
-#      planos de habitación                                       ⚠️ cabecera y pared
-#      planos de baño y clóset                                    ❌ lavabo, repisas
+#  ── POR QUÉ CADA PLANO LLEVA SU PROPIO RECORTE ─────────────────────────────
+#  🔴 Primera versión: un solo desplazamiento (40 %) para todo el vídeo. Es lo
+#  que hace `object-position` en CSS, y por eso parecía razonable. Está mal, y
+#  se vio en cuanto entró el plano del logotipo: el logo está CENTRADO en el
+#  cuadro —medido, 50.0 % en los dos ejes— y una banda al 40 % le cortaba la
+#  base y lo dejaba al 71 % de la franja. Se veía descolgado hacia abajo.
 #
-#  Recortado a lo ancho, un clóset es una repisa y un baño es un espejo. Se
-#  eligen TRES PLANOS COMPLETOS —no se corta a mitad de toma— y todos son
-#  exteriores: es además lo que promete el titular, «el mar es dulce».
+#  Un desplazamiento único obliga a que todos los planos tengan su asunto a la
+#  misma altura, y no la tienen: la alberca está abajo, las palmeras arriba, el
+#  logotipo en el centro. **El encuadre es una decisión POR PLANO**, y aquí se
+#  toma antes de codificar, no en el CSS.
 #
-#  ── DOS RECORTES, COMO UN <picture> ────────────────────────────────────────
-#  · apaisado 16:9 para escritorio, recortando la banda que sí se ve
-#  · vertical 9:16 para teléfono, donde el cuadro entero es el acierto
-#  Los elige el navegador con <source media>, y así el móvil no descarga
-#  píxeles que va a tirar.
+#  El CSS, en consecuencia, ya no reencuadra: `object-position: center`.
+#
+#  ── LA SELECCIÓN, Y SU ORDEN ───────────────────────────────────────────────
+#  De los 18 planos se eligen SIETE, y el orden no es el del original: cuenta
+#  una llegada. Fuera quedan los de clóset y lavabo, que recortados a lo ancho
+#  son una repisa y un espejo.
+#
+#      fuera → dentro → mirando afuera → marca
+#
+#  Cada `y` de recorte se eligió mirando el plano con las bandas candidatas
+#  superpuestas, no a ojo sobre el vídeo entero.
 # ============================================================================
 set -euo pipefail
 
 ORIGEN="${1:?Uso: $0 <ruta al mp4 original>}"
-DESTINO="$(cd "$(dirname "$0")/.." && pwd)/site/src/assets/video"
+RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
+DESTINO="$RAIZ/site/src/assets/video"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 mkdir -p "$DESTINO"
 
-# ── 1. Los tres planos, sin re-encodar todavía ──────────────────────────────
-#   Los límites salen de `select='gt(scene,0.35)'` sobre el original, así que
-#   son los cortes REALES del montaje. Se entra 40 ms después y se sale 50 ms
-#   antes para no arrastrar el fotograma de transición.
-segmento () { # inicio fin salida
-  ffmpeg -y -v error -ss "$1" -to "$2" -i "$ORIGEN" \
-    -an -c:v libx264 -crf 14 -preset slow "$TMP/$3"
-}
-segmento 6.80 11.15 a.mp4   # alberca de la terraza + palmeras y mar
-segmento 38.05 41.90 b.mp4  # agua de la alberca
+# ── EL MONTAJE ──────────────────────────────────────────────────────────────
+#   inicio  fin    y-recorte  rótulo
+#   El `y` es la esquina superior de la banda de 608 px dentro del cuadro de
+#   1920. 655 es el centro exacto; por debajo se sube la mirada, por encima se
+#   baja.
+MONTAJE=(
+  " 7.10  8.80  682  alberca y mar"          # la llegada: alberca, barandal, Caribe
+  " 9.15 10.90  590  palmeras y camastro"    # se levanta la vista
+  " 4.80  6.55  656  terraza con hamaca"     # el umbral
+  "16.00 17.75  761  silla y puertas"        # se entra
+  "11.40 13.20  722  recámara de piedra"     # dentro
+  "27.00 28.80  722  cama con balcón"        # dentro, mirando afuera
+  "39.20 41.80  655  agua y LOGOTIPO"        # la marca. 655 = centro medido
+)
 
-printf "file '%s'\n" "$TMP/a.mp4" "$TMP/b.mp4" > "$TMP/lista.txt"
-ffmpeg -y -v error -f concat -safe 0 -i "$TMP/lista.txt" -c copy "$TMP/maestro.mp4"
-
-# ── 2. Realce: denoise suave, y NADA de afilado ─────────────────────────────
-#   Medido, no supuesto. Se codificó el plano caro TRES veces con el MISMO
-#   presupuesto de bytes (1.4 Mbps) y se compararon a tamaño real:
+# ── 1. Cada plano, recortado a SU altura ────────────────────────────────────
+#   El recorte se aplica AQUÍ, plano a plano, y no en un filtro común al final:
+#   ése es justamente el cambio. Los intermedios van casi sin pérdida (crf 12)
+#   para que la única compresión que cuenta sea la del paso final.
 #
-#       sin denoise    palmeras ruidosas y CIELO CON BANDAS
-#       hqdn3d suave   cielo limpio, palmeras aún separadas   ← gana
-#       hqdn3d fuerte  cielo limpísimo, palmeras empastadas
-#
-#   La pregunta correcta no era «cuál pesa menos» —con presupuesto fijo pesan
-#   lo mismo— sino «cuál se ve mejor». El denoise no ahorra bytes: los
-#   REASIGNA. Quita el grano del teléfono, que es incompresible y no aporta
-#   nada, y con esos bits paga el movimiento de las palmeras, que sí se ve.
-#
-#   `unsharp` se probó y se DESCARTÓ: a bitrate limitado, afilar añade energía
-#   de alta frecuencia que hay que codificar, y esos bits salen de otro sitio.
-#   Afilar antes de comprimir es pedirle al códec que gaste en halos.
-#
-#   eq: +4 % de contraste y +6 % de saturación, poco a propósito. El Caribe
+#   `hqdn3d` suave, y nada de afilado. Medido con presupuesto de bytes fijo: sin
+#   denoise el cielo hace bandas; con denoise fuerte las palmeras se empastan.
+#   El denoise no ahorra bytes, los REASIGNA — quita el grano del teléfono, que
+#   es incompresible, y paga con ellos el movimiento de las palmas. `unsharp` se
+#   probó y se descartó: afilar antes de comprimir es pedirle al códec que gaste
+#   en halos.
+#   `eq`: +4 % de contraste y +6 % de saturación. Poco a propósito — el Caribe
 #   sobresaturado es el cliché que hace que una foto de hotel parezca falsa.
 REALCE="hqdn3d=2:1.5:3:3,eq=contrast=1.04:saturation=1.06"
 
-# ── 3. Los dos recortes ─────────────────────────────────────────────────────
-#   La banda apaisada se toma al 40 % de la altura, que es el mismo
-#   `object-position: center 40%` que ya usaba la fotografía del héroe: así el
-#   encuadre del vídeo y el del póster de respaldo coinciden y no hay salto.
-#
-#   1280×720 y no 1920×1080: el original mide 1080 de ancho, y ampliar a 1920
-#   sería inventar detalle y pagarlo en bytes. De 1280 en adelante escala el
-#   navegador, que para eso está.
-CROP_ANCHO="crop=1080:608:0:525,${REALCE},scale=1280:720:flags=lanczos"
-CROP_ALTO="${REALCE},scale=720:1280:flags=lanczos"
+: > "$TMP/lista-ancho.txt"
+: > "$TMP/lista-alto.txt"
+i=0
+for fila in "${MONTAJE[@]}"; do
+  read -r ini fin y rot <<< "$fila"
+  i=$((i+1))
+  printf "  %d/7  %-24s %5.2f–%-5.2f s   recorte y=%s\n" "$i" "$rot" "$ini" "$fin" "$y"
+  # Apaisado: recorte propio de este plano.
+  ffmpeg -y -v error -ss "$ini" -to "$fin" -i "$ORIGEN" -an \
+    -vf "crop=1080:608:0:$y,$REALCE" \
+    -c:v libx264 -crf 12 -preset veryfast -pix_fmt yuv420p "$TMP/a$i.mp4"
+  # Vertical: el cuadro entero, que en un teléfono es el acierto. No hace falta
+  # recorte — y por eso el logotipo se ve completo sin tocar nada.
+  ffmpeg -y -v error -ss "$ini" -to "$fin" -i "$ORIGEN" -an \
+    -vf "$REALCE" \
+    -c:v libx264 -crf 12 -preset veryfast -pix_fmt yuv420p "$TMP/v$i.mp4"
+  echo "file '$TMP/a$i.mp4'" >> "$TMP/lista-ancho.txt"
+  echo "file '$TMP/v$i.mp4'" >> "$TMP/lista-alto.txt"
+done
 
-# ── 4. Presupuesto de BYTES, no de calidad ──────────────────────────────────
-#   🔴 Aquí hubo una corrección. El primer intento usó VP9 con calidad
-#   constante (`-crf 34 -b:v 0`) y produjo **15 MB y subiendo** para 8 segundos:
-#   las palmeras al viento y las cáusticas del agua son de lo más caro que
-#   existe de codificar, y a calidad constante el códec gasta lo que haga falta.
+ffmpeg -y -v error -f concat -safe 0 -i "$TMP/lista-ancho.txt" -c copy "$TMP/maestro-ancho.mp4"
+ffmpeg -y -v error -f concat -safe 0 -i "$TMP/lista-alto.txt"  -c copy "$TMP/maestro-alto.mp4"
+DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$TMP/maestro-ancho.mp4")
+printf "\n  Montaje: %.1f s\n\n" "$DUR"
+# ── 2. Resolución NATIVA, que es lo que más calidad da por byte ─────────────
+#   🔴 Segunda corrección. La versión anterior ampliaba la banda de 1080×608 a
+#   1280×720 con lanczos «para que se viera mejor en escritorio». No se ve
+#   mejor: **el original mide 1080 de ancho y ahí no hay más detalle que
+#   inventar**. Ampliar antes de codificar sólo obliga al códec a gastar bits en
+#   reproducir el desenfoque de la propia ampliación.
 #
-#   Un héroe no puede tener un peso «el que salga». Se pasa a VBR de dos
-#   pasadas con objetivo explícito: la primera pasada mira el material entero y
-#   la segunda reparte el presupuesto donde hace falta. El tamaño deja de ser
-#   una sorpresa.
+#   Codificando en nativo, esos bits se quedan en la imagen real. De 1080 en
+#   adelante escala el navegador, que para eso está, y con menos píxeles que
+#   codificar el mismo presupuesto rinde bastante más.
+#
+#   El vertical sí se REDUCE —de 1080×1920 a 608×1080—: reducir sí es honesto,
+#   y en un teléfono 608 de ancho sobran.
+#
+# ── 3. Presupuesto de BYTES, no de calidad ─────────────────────────────────
+#   VP9 con calidad constante daba 15 MB para 8 s: las palmeras al viento y las
+#   cáusticas del agua son de lo más caro que existe de codificar, y a calidad
+#   constante el códec gasta lo que haga falta. Un héroe no puede pesar «lo que
+#   salga». VBR de dos pasadas: la primera mira el material entero y la segunda
+#   reparte el presupuesto donde hace falta.
 #
 #   Cada navegador descarga UN archivo, no los cuatro.
-VP9_ANCHO=850k;  X264_ANCHO=1250k
-VP9_ALTO=650k;   X264_ALTO=950k
+VP9_ANCHO=700k;  X264_ANCHO=1000k
+VP9_ALTO=560k;   X264_ALTO=820k
 
-codificar () { # filtro nombre bitrate_vp9 bitrate_x264
-  local filtro="$1" nombre="$2" bv="$3" bx="$4"
+codificar () { # maestro escala nombre bitrate_vp9 bitrate_x264
+  local maestro="$1" escala="$2" nombre="$3" bv="$4" bx="$5"
+  local vf=""; [ -n "$escala" ] && vf="-vf scale=$escala:flags=lanczos"
   echo "  · $nombre"
-  # VP9 — Chrome, Edge, Firefox, Android. Dos pasadas.
-  ffmpeg -y -v error -i "$TMP/maestro.mp4" -vf "$filtro" -an \
+  ffmpeg -y -v error -i "$maestro" $vf -an \
     -c:v libvpx-vp9 -b:v "$bv" -row-mt 1 -deadline good -cpu-used 2 \
     -pix_fmt yuv420p -pass 1 -passlogfile "$TMP/vp9-$nombre" -f null /dev/null
-  ffmpeg -y -v error -i "$TMP/maestro.mp4" -vf "$filtro" -an \
+  ffmpeg -y -v error -i "$maestro" $vf -an \
     -c:v libvpx-vp9 -b:v "$bv" -row-mt 1 -deadline good -cpu-used 2 \
     -pix_fmt yuv420p -pass 2 -passlogfile "$TMP/vp9-$nombre" "$DESTINO/${nombre}.webm"
-  # H.264 High — el respaldo universal y lo único que reproduce Safari viejo.
-  # `+faststart` mueve el índice al principio del archivo: sin él el navegador
+  # H.264 High: el respaldo universal y lo único que reproduce Safari viejo.
+  # `+faststart` mueve el índice al principio del archivo; sin él el navegador
   # se descarga el archivo entero antes de pintar el primer fotograma.
-  ffmpeg -y -v error -i "$TMP/maestro.mp4" -vf "$filtro" -an \
-    -c:v libx264 -b:v "$bx" -maxrate $(( ${bx%k} * 13 / 10 ))k -bufsize $(( ${bx%k} * 3 ))k \
+  ffmpeg -y -v error -i "$maestro" $vf -an \
+    -c:v libx264 -b:v "$bx" -maxrate "$(( ${bx%k} * 13 / 10 ))k" -bufsize "$(( ${bx%k} * 3 ))k" \
     -preset veryslow -profile:v high -level 4.0 -pix_fmt yuv420p \
     -passlogfile "$TMP/x264-$nombre" -pass 1 -f null /dev/null
-  ffmpeg -y -v error -i "$TMP/maestro.mp4" -vf "$filtro" -an \
-    -c:v libx264 -b:v "$bx" -maxrate $(( ${bx%k} * 13 / 10 ))k -bufsize $(( ${bx%k} * 3 ))k \
+  ffmpeg -y -v error -i "$maestro" $vf -an \
+    -c:v libx264 -b:v "$bx" -maxrate "$(( ${bx%k} * 13 / 10 ))k" -bufsize "$(( ${bx%k} * 3 ))k" \
     -preset veryslow -profile:v high -level 4.0 -pix_fmt yuv420p -movflags +faststart \
     -passlogfile "$TMP/x264-$nombre" -pass 2 "$DESTINO/${nombre}.mp4"
 }
-codificar "$CROP_ANCHO" hero-ancho "$VP9_ANCHO" "$X264_ANCHO"
-codificar "$CROP_ALTO"  hero-alto  "$VP9_ALTO"  "$X264_ALTO"
+codificar "$TMP/maestro-ancho.mp4" ""        hero-ancho "$VP9_ANCHO" "$X264_ANCHO"
+codificar "$TMP/maestro-alto.mp4"  "608:1080" hero-alto  "$VP9_ALTO"  "$X264_ALTO"
 
-# ── 5. NO se genera póster, y es una decisión medida ────────────────────────
-#   La primera versión extraía el primer fotograma y lo ponía como `poster` del
-#   <video>. Medido en el navegador con `performance.getEntriesByType`, ese
-#   póster se pedía a los **615 ms, a la vez que la fotografía del héroe**, y le
-#   disputaba el ancho de banda al elemento LCP: `preload="none"` cubre el
-#   medio, no el póster.
-#
-#   Y encima no se veía nunca: el vídeo va a `opacity: 0` hasta que pinta su
-#   primer fotograma, y hasta entonces lo que se ve es la fotografía de debajo.
-#   Un archivo descargado en el peor momento posible para no enseñarse jamás.
-#   Ver `VideoHero.astro`, nota 4.
+# ── 4. NO se genera póster, y es una decisión medida ────────────────────────
+#   Una versión anterior extraía el primer fotograma y lo ponía como `poster`.
+#   Medido en el navegador con `performance.getEntriesByType`, ese póster se
+#   pedía a los **615 ms, a la vez que la fotografía del héroe**, y le disputaba
+#   el ancho de banda al elemento LCP: `preload="none"` cubre el medio, no el
+#   póster. Y encima no se veía nunca, porque el vídeo va a `opacity: 0` hasta
+#   que pinta su primer fotograma. Ver `VideoHero.astro`, nota 4.
 
 echo
 echo "  Listo. En $DESTINO:"
-ls -lh "$DESTINO" | awk 'NR>1 {printf "    %-26s %s\n", $9, $5}'
+ls -lh "$DESTINO" | awk 'NR>1 {printf "    %-22s %s\n", $9, $5}'

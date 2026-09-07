@@ -503,14 +503,36 @@ planos de unos 2.2 s. Está en el héroe, adaptado. La tubería es
 Cloudflare— y su salida se versiona.
 
 **No se usa entero, y ésa es la decisión que más pesa.** En un héroe apaisado, `cover` de un 9:16
-sólo enseña una **banda del 29 % de la altura del cuadro**. Se simuló plano a plano antes de tocar
-código: la alberca de la terraza, las palmeras y el agua funcionan; las habitaciones se quedan en
-cabecera y pared; el baño y el clóset se convierten en un lavabo y unas repisas. Se eligieron **tres
-planos completos**, todos exteriores. Quedan **8.2 s**. Ver L-120.
+sólo enseña una **banda del 32 % de la altura del cuadro**. Se simuló plano a plano antes de tocar
+código: la alberca, las palmeras, las recámaras y el agua funcionan; el baño y el clóset se
+convierten en un lavabo y unas repisas. Ver L-120.
 
-**Dos recortes**, como un `<picture>`: apaisado 1280×720 para escritorio y vertical 720×1280 para
-teléfono, donde el cuadro entero es el acierto. WebM (VP9) y MP4 (H.264) — **cada navegador descarga
-uno**: entre 663 KB y 1.2 MB.
+**Siete planos, y el orden no es el del original: cuenta una llegada.**
+
+| | plano | recorte |
+|---|---|---|
+| 1 | alberca, barandal y Caribe | y = 682 |
+| 2 | palmeras y camastro | y = 590 |
+| 3 | terraza con hamaca | y = 656 |
+| 4 | silla y puertas — se entra | y = 761 |
+| 5 | recámara de muro de piedra | y = 722 |
+| 6 | cama con balcón, mirando afuera | y = 722 |
+| 7 | agua y **logotipo** | y = 655 |
+
+🔴 **Cada plano lleva SU PROPIO recorte, y ése fue el defecto que el cliente vio.** La primera
+versión usaba un desplazamiento único —40 %, como haría `object-position`— y con el plano del
+logotipo se rompió: el logo está **centrado exacto en el cuadro** (medido: 50.0 % en los dos ejes)
+y esa banda le cortaba la base, dejándolo al 71 % de la franja. Se veía descolgado porque lo
+estaba. Un valor único obliga a que todos los planos tengan su asunto a la misma altura, y la
+alberca está abajo, las palmeras arriba y el logotipo en medio. El encuadre pasó a la codificación
+y el CSS dejó de reencuadrar (`object-position: center`). Ver L-126.
+
+**Dos recortes**, como un `<picture>`: apaisado **1080×608 nativo** para escritorio y vertical
+**608×1080** para teléfono, donde el cuadro entero es el acierto —y donde el logotipo se ve
+completo sin tocar nada—. **Nada se amplía antes de codificar**: el original mide 1080 de ancho y
+ampliar sólo obliga al códec a gastar bits en reproducir el desenfoque del propio reescalado
+(L-127). WebM (VP9) y MP4 (H.264) — **cada navegador descarga uno**: de 907 KB a 1.5 MB para
+**13.2 s**.
 
 🔴 **El LCP no se toca, y está medido.** La fotografía sigue siendo el elemento LCP y sigue
 precargada igual; el vídeo entra `preload="none"`, sin `src` en el marcado, y sólo arranca en
@@ -621,7 +643,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **125 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **127 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

@@ -57,8 +57,13 @@
  *
  * ── DOS RECORTES, Y POR QUÉ NO SE ELIGEN CON `<source media>` ───────────────
  * El original es 9:16 vertical. En un héroe apaisado, `cover` sólo enseña una
- * banda del 29 % de la altura del cuadro; en un teléfono, en cambio, el cuadro
+ * banda del 32 % de la altura del cuadro; en un teléfono, en cambio, el cuadro
  * entero es el acierto. Se codifican dos versiones.
+ *
+ * ⚠️ El encuadre de la versión apaisada se decide **plano a plano** al
+ * codificar, no aquí: siete planos con siete alturas de recorte distintas. Por
+ * eso este componente NO lleva `object-position` vertical — movería los siete
+ * en bloque. Ver `scripts/video-hero.sh`.
  *
  * 🔴 El primer intento las eligió con `<source media="…">`, como en un
  * `<picture>`. **No funciona, y falla en silencio.** El atributo `media` sobre
@@ -152,10 +157,14 @@ const FUENTES = JSON.stringify({
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* El MISMO encuadre que la fotografía a la que sustituye. La banda apaisada
-       ya se recortó al 40 % en la codificación, así que aquí sólo queda
-       centrar; en vertical, el 40 % vuelve a mandar. */
-    object-position: center 40%;
+    /* `center`, NO el `center 40%` de la fotografía — y es deliberado.
+       El encuadre del vídeo ya está decidido **plano a plano** en la
+       codificación: la alberca se recorta a una altura, las palmeras a otra y
+       el logotipo a la suya (ver `scripts/video-hero.sh`). Un
+       `object-position` aquí volvería a mover todo eso en bloque y desharía
+       precisamente el trabajo que distingue un encuadre de otro.
+       La fotografía conserva su 40 %: ella sí es un solo cuadro. */
+    object-position: center;
     z-index: -2;
     /* Nace invisible y se funde cuando tiene fotogramas. Sin esto se ve un
        parpadeo negro entre que el elemento existe y que empieza a pintar. */

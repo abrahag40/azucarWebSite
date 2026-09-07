@@ -3843,6 +3843,73 @@ JavaScript, con `prefers-reduced-motion` o si el vídeo falla, la foto conserva 
 
 ---
 
+## L-126 · El encuadre es una decisión por plano, y `object-position` sólo sabe de una
+
+El vídeo del héroe se recortaba con **un solo desplazamiento** —la banda al 40 % de la altura—
+para los tres planos. Parecía razonable porque es literalmente lo que hace `object-position` en
+CSS: un valor, todo el elemento.
+
+El cliente lo señaló en cuanto entró el plano del logotipo: *«donde sale el logo, al final, me
+parece que está muy abajo»*. Tenía razón, y el número lo confirma. Midiendo los píxeles claros y
+poco saturados del fotograma —el logo es blanco sobre agua turquesa, así que se aísla solo:
+
+```
+caja del logotipo   x 186–893  ·  y 736–1181   de un cuadro de 1080×1920
+centro              50.0 %  ·  49.9 %          ← centrado exacto
+```
+
+**El logotipo está perfectamente centrado en el cuadro.** La banda al 40 % iba de 525 a 1133: le
+cortaba la base (1181) y dejaba su centro al **71 %** de la franja. Se veía descolgado porque lo
+estaba.
+
+### Por qué un solo desplazamiento no podía funcionar
+
+Un valor único obliga a que todos los planos tengan su asunto a la misma altura del cuadro, y no la
+tienen:
+
+| plano | dónde está lo que importa | recorte |
+|---|---|---|
+| alberca y mar | abajo | y = 682 |
+| palmeras y camastro | arriba | y = 590 |
+| silla y puertas | muy abajo | y = 761 |
+| **logotipo** | **centro exacto** | **y = 655** |
+
+El recorte pasó a la **codificación, plano a plano**, y el CSS dejó de reencuadrar
+(`object-position: center`). Cada plano llega ya encuadrado; el navegador sólo lo coloca.
+
+> **El patrón:** cuando una propiedad de CSS se aplica a un elemento entero pero el contenido de ese
+> elemento **cambia con el tiempo**, la propiedad es la herramienta equivocada. Un vídeo no es una
+> imagen larga: es una sucesión de composiciones distintas, y encuadrarlas todas con el mismo número
+> es aceptar que casi todas queden mal.
+
+### Y el criterio de selección se abrió, porque el cliente pidió más
+
+Se pasó de tres planos a **siete**, ordenados como una llegada —fuera, el umbral, dentro, mirando
+afuera, la marca— y no en el orden del original. Siguen fuera los de clóset y lavabo: recortados a
+lo ancho son una repisa y un espejo.
+
+---
+
+## L-127 · Ampliar antes de codificar es pedirle al códec que reproduzca un desenfoque
+
+La banda apaisada se ampliaba de 1080×608 a **1280×720 con lanczos**, con la idea de «que se viera
+mejor en escritorio». Es una idea equivocada y cuesta bytes: **el original mide 1080 de ancho y ahí
+no hay más detalle que inventar**. Lo único que añade la ampliación es el suavizado del propio
+reescalado — y eso el códec tiene que codificarlo.
+
+Codificando en **nativo 1080×608** hay un 29 % menos de píxeles que describir, así que el mismo
+presupuesto de bytes rinde más en la imagen que sí existe. De 1080 en adelante escala el navegador,
+que para eso está.
+
+La simetría no es simétrica: **reducir sí es honesto**. La versión vertical baja de 1080×1920 a
+608×1080 sin remordimiento, porque tirar detalle que no se va a ver es exactamente el trabajo.
+
+> **La regla:** antes de escalar, pregúntate en qué dirección va. Reducir descarta información que
+> sobra; ampliar fabrica información que no existe, y en un códec eso se paga dos veces — en bits
+> y en nitidez.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
