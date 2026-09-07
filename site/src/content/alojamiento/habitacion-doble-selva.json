@@ -12,16 +12,16 @@
     "en": "2 queen size beds"
   },
   "vista": {
-    "es": "Vistas a la avenida principal y a la selva",
-    "en": "Main-road and jungle views"
+    "es": "Vistas a la selva",
+    "en": "Jungle views"
   },
   "descripcionCorta": {
     "es": "Dos camas, con la selva enfrente.",
     "en": "Two beds, with the jungle ahead."
   },
   "descripcion": {
-    "es": "Dos camas queen del lado de la selva, con la avenida de las boutiques enfrente y el monte detrás. La hamaca del balcón mira a lo que casi todo Tulum era hace veinte años.",
-    "en": "Two queen beds on the jungle side, the boutique avenue in front and the forest behind. The hammock on the balcony faces what almost all of Tulum was twenty years ago."
+    "es": "Esta habitación es muy cómoda, lujosa, amplia y comparte hermosas vistas a la selva, donde podrás disfrutar desde tu cama o balcón de las espectaculares puestas del sol y coloridos atardeceres.",
+    "en": "This room is very comfortable, luxurious and spacious, and shares beautiful views of the jungle, where from your bed or your balcony you can enjoy spectacular sunsets and colourful evening skies."
   },
   "amenidades": [
     {
@@ -41,8 +41,8 @@
       "en": "Ceiling fan"
     },
     {
-      "es": "Wi-Fi gratuito",
-      "en": "Free Wi-Fi"
+      "es": "Wi-Fi gratuito y de alta velocidad",
+      "en": "Free high-speed Wi-Fi"
     },
     {
       "es": "Frigobar",
@@ -81,8 +81,8 @@
       "en": "Safety box"
     },
     {
-      "es": "Balcón con hamaca, con vistas a la avenida de la zona hotelera y a la selva",
-      "en": "Balcony with a hammock, overlooking the hotel-zone avenue and the jungle"
+      "es": "Balcón con hamaca",
+      "en": "Balcony with a hammock"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-selva.webp",
@@ -97,6 +97,7 @@
     "amenidades",
     "camas",
     "capacidad",
+    "descripcion",
     "nombre",
     "unidades",
     "vista"

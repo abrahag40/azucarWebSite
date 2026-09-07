@@ -621,6 +621,40 @@ Contraste re-medido con el velo nuevo y la geometría nueva sobre los 66 fotogra
 7.44:1, titular 9.32:1, entradilla 9.74:1, aviso 7.63:1. La flecha sale del cálculo — sobre blanco
 en tinta da 15.91:1.
 
+### Cambios del cliente — 2026-09-07 (fichas de habitación)
+
+**Las cuatro habitaciones estrenan descripción del cliente**, y son **dos textos repartidos por
+VISTA**, no cuatro: jardín/mar para las dos de mar, selva para las dos de selva. Las dos king dicen
+lo mismo que su queen hermana; lo único que las separa es la vista, que es como lo pidió el cliente.
+
+✅ **Y por eso `descripcion` VUELVE a `verificado` en esas cuatro.** Salió en el sprint 2 cuando la
+reescribimos nosotros; ahora es texto literal del cliente otra vez. Es la primera vez que una marca
+de verificación se recupera en lugar de perderse.
+
+**«ANTES DE RESERVAR» deja de verse, pero no se borra:** pasa a `.sr-only`. Es el `<h2>` que nombra
+la región con `aria-labelledby`, y sin él un lector de pantalla anuncia una lista de datos sin decir
+de qué son. Mismo patrón que «Qué la distingue» y que la tarjeta de contacto de la solicitud.
+
+**«Sujeto a disponibilidad» va en cursiva y en su propia línea**, no dentro del rótulo. Metido en el
+rótulo —versales, columna de 176 px— se partía en tres renglones; abajo queda pegado a la promesa,
+que es donde protege.
+
+**«Wi-Fi gratuito» → «Wi-Fi gratuito y de alta velocidad» en las DIEZ fichas**, bungalows incluidos:
+es un hecho del hotel, no de un tipo de habitación, y `hotel.ts` ya lo decía así en las facilidades.
+
+**Fuera «la avenida».** El cliente la señaló como poco vendedora. Salió de la línea del balcón —de
+las cuatro, no sólo de las de selva— y también del campo `vista`, donde las dos de selva ni siquiera
+coincidían entre sí («…y a la zona hotelera» contra «avenida principal y…»). Las dos dicen ahora
+**«Vistas a la selva»**, que es lo que dice la descripción nueva y un subconjunto de lo que decían:
+se quitó información, no se inventó ninguna.
+
+🔴 **Lo que NO se unificó, y hay que confirmar:** las cuatro listas de «Incluye» son ahora idénticas
+en **13 de 15 líneas**. Las dos que quedan son la cama —King contra Queen, que debe diferir— y el
+balcón: las de mar tienen **«mesa, sillas de madera y hamaca»** y las de selva sólo **«hamaca»**. Esa
+diferencia viene del sitio del hotel, no de nosotros. Igualarlas exigiría afirmar que los balcones
+de selva también tienen mesa y sillas, y eso nadie lo ha dicho. **Una pregunta de una línea al
+hotel.**
+
 ### ⚠️ Datos sin verificar
 
 De cada tipo, sólo **nombre y vista** provienen del sitio real. **Unidades, capacidad y camas
@@ -703,7 +737,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **133 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **135 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

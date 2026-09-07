@@ -12,16 +12,16 @@
     "en": "1 extra King Size bed"
   },
   "vista": {
-    "es": "Vistas a la selva y a la zona hotelera",
-    "en": "Jungle and hotel-zone views"
+    "es": "Vistas a la selva",
+    "en": "Jungle views"
   },
   "descripcionCorta": {
     "es": "Cama king, con la selva enfrente.",
     "en": "King bed, with the jungle ahead."
   },
   "descripcion": {
-    "es": "Hay una sola, y mira a la selva. Desde la hamaca del balcón se ve la avenida de la zona hotelera con sus boutiques y, detrás, el monte cerrado.",
-    "en": "There is only one, and it faces the jungle. From the hammock on the balcony you see the hotel-zone avenue with its boutiques and, behind it, the dense forest."
+    "es": "Esta habitación es muy cómoda, lujosa, amplia y comparte hermosas vistas a la selva, donde podrás disfrutar desde tu cama o balcón de las espectaculares puestas del sol y coloridos atardeceres.",
+    "en": "This room is very comfortable, luxurious and spacious, and shares beautiful views of the jungle, where from your bed or your balcony you can enjoy spectacular sunsets and colourful evening skies."
   },
   "amenidades": [
     {
@@ -41,8 +41,8 @@
       "en": "Ceiling fan"
     },
     {
-      "es": "Wi-Fi gratuito",
-      "en": "Free Wi-Fi"
+      "es": "Wi-Fi gratuito y de alta velocidad",
+      "en": "Free high-speed Wi-Fi"
     },
     {
       "es": "Frigobar",
@@ -81,8 +81,8 @@
       "en": "Safety box"
     },
     {
-      "es": "Balcón con hamaca, con vistas a la avenida de la zona hotelera y a la selva",
-      "en": "Balcony with a hammock, overlooking the hotel-zone avenue and the jungle"
+      "es": "Balcón con hamaca",
+      "en": "Balcony with a hammock"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-selva.webp",
@@ -97,6 +97,7 @@
     "amenidades",
     "camas",
     "capacidad",
+    "descripcion",
     "nombre",
     "unidades",
     "vista"

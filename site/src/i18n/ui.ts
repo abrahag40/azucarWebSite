@@ -68,6 +68,10 @@ export const ui = {
     'nav.verTodoAmenidades': 'Ver todas las amenidades',
     'nav.verTodoEventos': 'Ver eventos y celebraciones',
     // ── Bloque práctico de la ficha (patrón `room-details` de Cappa) ─────────
+    // ⚠️ NO SE PINTA desde el 2026-09-07: el cliente pidió quitarlo de la
+    // ficha. Sigue existiendo, en `.sr-only`, porque es el <h2> que da nombre a
+    // la región con `aria-labelledby`; borrarlo dejaría a un lector de pantalla
+    // con una lista de datos sin decir de qué son.
     'practicos.titulo': 'Antes de reservar',
     'practicos.horarios': 'Entrada y salida',
     'practicos.mascotas': 'Mascotas',
@@ -76,6 +80,12 @@ export const ui = {
     // de la ficha, no del sitio.
     'practicos.flexibilidad': 'Entrada y salida flexibles',
     'practicos.flexibilidadTexto': '¿Necesitas más tiempo en tu salida? Pregunta por el early check in y el late check out.',
+    // La salvedad va APARTE y en cursiva, no dentro del rótulo. Metida en el
+    // rótulo —que va en versales y en una columna de 176 px— se partía en tres
+    // renglones y gritaba; aquí queda pegada a la promesa, que es donde
+    // protege, y su estilo la marca como letra pequeña sin necesidad de
+    // decirlo. Cliente, 2026-09-07.
+    'practicos.flexibilidadNota': 'Sujeto a disponibilidad.',
     'practicos.menores': 'Menores',
     'practicos.ver': 'Ver todas las políticas',
     'nav.cerrar': 'Cerrar menú',
@@ -423,6 +433,7 @@ export const ui = {
     'practicos.mascotas': 'Pets',
     'practicos.flexibilidad': 'Flexible arrival and departure',
     'practicos.flexibilidadTexto': 'Need more time on your departure day? Ask about early check-in and late check-out.',
+    'practicos.flexibilidadNota': 'Subject to availability.',
     'practicos.menores': 'Children',
     'practicos.ver': 'See all policies',
     'nav.cerrar': 'Close menu',

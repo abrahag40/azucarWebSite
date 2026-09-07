@@ -4144,6 +4144,59 @@ guardián no contiene la forma que persigue**, y la regla es cierta también sob
 
 ---
 
+## L-134 · Una marca de verificación que se recupera
+
+`descripcion` salió de `verificado` en el sprint 2, y con razón: reescribimos las ocho fichas
+aplicando una norma editorial propia, así que el texto dejó de ser del cliente. Aquella pérdida
+está documentada como un coste asumido.
+
+El 2026-09-07 el cliente mandó la descripción de las cuatro habitaciones escrita por él. El texto
+volvió a ser suyo, así que **la marca vuelve**. Es la primera vez en el proyecto que una casilla de
+`verificado` se recupera en lugar de perderse.
+
+> **Por qué importa:** un campo de procedencia sólo significa algo si puede moverse en las dos
+> direcciones. Si únicamente se pierde, en seis meses está vacío y nadie lo mira; si se mantiene al
+> día, responde a la única pregunta que importa en una demo —*«¿esto lo dijo el hotel o lo dijimos
+> nosotros?»*— sin abrir el historial de git.
+
+### Y el reparto no era el que parecía
+
+El cliente dio dos textos y los rotuló «King Mar» y «King Selva y Queen Selva». Leído deprisa, son
+descripciones por HABITACIÓN y falta una. Leído entero —los dos empiezan con la misma frase y sólo
+divergen al llegar a la vista— son descripciones por **VISTA**: dos textos para cuatro fichas.
+
+Confirmado antes de escribir nada, y la confirmación cambió el trabajo: no había que redactar una
+cuarta descripción, había que repartir dos.
+
+---
+
+## L-135 · Unificar tiene un límite: lo que unifica no puede ser una afirmación nueva
+
+«Definitivamente no tiene que decir "la avenida"… unifica». La petición era clara y se cumplió: la
+vista salió de la línea del balcón en las cuatro fichas, y el campo `vista` de las dos de selva
+—que ni siquiera coincidía entre sí— pasó a decir **«Vistas a la selva»** en las dos.
+
+Ese cambio es seguro porque **quita** información: «Vistas a la selva» es un subconjunto cierto de
+«Vistas a la avenida principal y a la selva». Nadie puede quejarse de que le prometimos algo.
+
+Donde se paró la unificación fue en el balcón:
+
+| | |
+|---|---|
+| las dos de mar | «Balcón con **mesa, sillas de madera** y hamaca» |
+| las dos de selva | «Balcón con hamaca» |
+
+Igualarlas hacia arriba habría **añadido** mesa y sillas a dos habitaciones cuyo balcón, según el
+propio sitio del hotel, sólo tiene hamaca. Igualarlas hacia abajo habría borrado dos ventajas
+reales de las otras dos. Se dejaron distintas y se preguntó.
+
+> **La regla, y es la misma de siempre desde otro ángulo:** al unificar textos, mira en qué
+> dirección va cada cambio. **Quitar un matiz es seguro; añadirlo es inventar.** «Hazlos iguales»
+> nunca autoriza lo segundo, porque quien lo pide da por hecho que ya son iguales — y si lo fueran,
+> no habría nada que unificar.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

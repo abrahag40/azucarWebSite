@@ -20,8 +20,8 @@
     "en": "Two beds, with a partial sea view."
   },
   "descripcion": {
-    "es": "Dos camas queen y un balcón con mesa y hamaca sobre el jardín, con el mar asomando entre la vegetación. Caben cuatro sin que nadie duerma en un sofá.",
-    "en": "Two queen beds and a balcony with a table and a hammock over the garden, the sea showing through the greenery. Four people fit, and nobody sleeps on a sofa."
+    "es": "Esta habitación es muy cómoda, lujosa, amplia y comparte hermosas vistas al jardín y/o al mar desde su relajante balcón con sillas de madera y hamaca, donde podrás disfrutar no sólo el sonido del mar sino de las aves que rodean nuestros jardines.",
+    "en": "This room is very comfortable, luxurious and spacious, and shares beautiful views of the garden and/or the sea from its relaxing balcony with wooden chairs and a hammock, where you can enjoy not only the sound of the sea but also the birds that surround our gardens."
   },
   "amenidades": [
     {
@@ -41,8 +41,8 @@
       "en": "Ceiling fan"
     },
     {
-      "es": "Wi-Fi gratuito",
-      "en": "Free Wi-Fi"
+      "es": "Wi-Fi gratuito y de alta velocidad",
+      "en": "Free high-speed Wi-Fi"
     },
     {
       "es": "Frigobar",
@@ -81,8 +81,8 @@
       "en": "Safety box"
     },
     {
-      "es": "Balcón con mesa, sillas de madera y hamaca, con vistas al mar y al jardín",
-      "en": "Balcony with table, wooden chairs and a hammock, overlooking the sea and the garden"
+      "es": "Balcón con mesa, sillas de madera y hamaca",
+      "en": "Balcony with table, wooden chairs and a hammock"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-mar.webp",
@@ -97,6 +97,7 @@
     "amenidades",
     "camas",
     "capacidad",
+    "descripcion",
     "nombre",
     "unidades",
     "vista"

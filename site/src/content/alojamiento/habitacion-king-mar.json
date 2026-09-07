@@ -20,8 +20,8 @@
     "en": "King bed, with a partial sea view."
   },
   "descripcion": {
-    "es": "Cama king y un balcón con hamaca donde el jardín se abre y deja pasar el mar. Está hecha por artesanos de la región: el hotel entero se levantó así, a mano.",
-    "en": "A king bed and a balcony with a hammock, where the garden opens and lets the sea through. It was made by artisans from the region — the whole hotel was raised that way, by hand."
+    "es": "Esta habitación es muy cómoda, lujosa, amplia y comparte hermosas vistas al jardín y/o al mar desde su relajante balcón con sillas de madera y hamaca, donde podrás disfrutar no sólo el sonido del mar sino de las aves que rodean nuestros jardines.",
+    "en": "This room is very comfortable, luxurious and spacious, and shares beautiful views of the garden and/or the sea from its relaxing balcony with wooden chairs and a hammock, where you can enjoy not only the sound of the sea but also the birds that surround our gardens."
   },
   "amenidades": [
     {
@@ -41,8 +41,8 @@
       "en": "Ceiling fan"
     },
     {
-      "es": "Wi-Fi gratuito",
-      "en": "Free Wi-Fi"
+      "es": "Wi-Fi gratuito y de alta velocidad",
+      "en": "Free high-speed Wi-Fi"
     },
     {
       "es": "Frigobar",
@@ -81,8 +81,8 @@
       "en": "Safety box"
     },
     {
-      "es": "Balcón con mesa, sillas de madera y hamaca, con vistas al mar y al jardín",
-      "en": "Balcony with table, wooden chairs and a hammock, overlooking the sea and the garden"
+      "es": "Balcón con mesa, sillas de madera y hamaca",
+      "en": "Balcony with table, wooden chairs and a hammock"
     }
   ],
   "imagenPrincipal": "../../assets/alojamiento/habitacion-king-mar.webp",
@@ -97,6 +97,7 @@
     "amenidades",
     "camas",
     "capacidad",
+    "descripcion",
     "nombre",
     "unidades",
     "vista"

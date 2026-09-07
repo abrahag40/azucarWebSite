@@ -65,19 +65,29 @@ const bloques = [
   {
     titulo: t('practicos.flexibilidad'),
     puntos: [t('practicos.flexibilidadTexto')],
+    /* La salvedad, aparte del punto y no dentro de él. Va en cursiva y más
+       pequeña: es una condición, no una promesa, y el estilo lo dice sin que
+       haya que escribir «nota:». */
+    nota: t('practicos.flexibilidadNota'),
   },
-].filter(Boolean) as { titulo: string; puntos: string[] }[];
+].filter(Boolean) as { titulo: string; puntos: string[]; nota?: string }[];
 
 ---
 {bloques.length > 0 && (
   <section class="practicos" aria-labelledby="practicos-titulo">
-    <h2 class="practicos__titulo" id="practicos-titulo">{t('practicos.titulo')}</h2>
+    {/* `.sr-only`: el cliente pidió que «ANTES DE RESERVAR» dejara de verse
+        (2026-09-07). No se borra, se esconde — es el <h2> que nombra esta
+        región vía `aria-labelledby`, y sin él un lector de pantalla anuncia
+        una lista de datos sin decir de qué son. Mismo patrón que «Qué la
+        distingue» en la ficha y que la tarjeta de contacto de la solicitud. */}
+    <h2 class="sr-only" id="practicos-titulo">{t('practicos.titulo')}</h2>
     <dl class="practicos__lista">
       {bloques.map((b) => (
         <div class="practicos__fila">
           <dt>{b.titulo}</dt>
           <dd>
             {b.puntos.map((x) => <p>{x}</p>)}
+            {b.nota && <p class="practicos__nota">{b.nota}</p>}
           </dd>
         </div>
       ))}
@@ -94,13 +104,19 @@ const bloques = [
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-border);
   }
-  .practicos__titulo {
-    font-family: var(--font-ui);
+  /* `.practicos__titulo` se retiró con el <h2> que lo llevaba: ahora va en
+     `.sr-only`, que es global y no necesita estilo aquí. El aire que dejaba su
+     `margin-bottom` lo pone ahora el `padding-top` de `.practicos`. */
+
+  /* La salvedad de «sujeto a disponibilidad». Cursiva y un punto más pequeña
+     que el texto al que acompaña: se lee como lo que es, letra pequeña, sin
+     tener que rotularla. `--color-ink-muted` da 5.74:1 sobre blanco, por
+     encima del 4.5:1 de WCAG 1.4.3 — la cursiva no exime del contraste. */
+  .practicos__nota {
+    font-style: italic;
     font-size: var(--text-sm);
-    letter-spacing: var(--tracking-antetitulo);
-    text-transform: uppercase;
     color: var(--color-ink-muted);
-    margin-bottom: var(--space-5);
+    margin-top: var(--space-2);
   }
 
   /* `<dl>` y no una tabla ni una lista: cada fila es un TÉRMINO y su
