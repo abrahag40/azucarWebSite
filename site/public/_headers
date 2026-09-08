@@ -1,19 +1,29 @@
 # Cabeceras de Cloudflare Pages — Azucar Hotel Tulum
 #
 # POR QUÉ HACE FALTA ESTE ARCHIVO
-# Cloudflare Pages aplica `max-age=0, must-revalidate` a todo lo que sale de
-# `public/`, y con razón: son archivos de nombre estable, así que no puede
-# saber si cambiaron. Los de `_astro/` sí llevan hash en el nombre y reciben
-# caché larga automáticamente.
+# Cloudflare Pages sirve **todo** con `max-age=0, must-revalidate`, incluido lo
+# que sale de `_astro/`. Para los archivos de `public/` eso es correcto: tienen
+# nombre estable y la plataforma no puede saber si cambiaron.
 #
-# El efecto medido en producción era que las CINCO tipografías se revalidaban en
-# cada navegación: cinco viajes de ida y vuelta por página, aunque devuelvan 304.
-# En una conexión móvil de Tulum eso es latencia pura sobre el camino crítico
-# del texto, que es justo lo que acabábamos de optimizar autoalojándolas.
+# 🔴 CORREGIDO EL 2026-09-08. Este comentario afirmaba que «los de `_astro/` sí
+# llevan hash en el nombre y reciben caché larga automáticamente». **Era falso**,
+# y llevaba meses siéndolo. Medido en producción:
+#
+#     curl -sI https://azucar-hotel-tulum.pages.dev/_astro/base.CmW_MqPs.css
+#       cache-control: public, max-age=0, must-revalidate
+#
+# El hash del nombre lo pone Astro, no Cloudflare, y Cloudflare no lo interpreta.
+# La consecuencia medida era que CADA navegación revalidaba todos los recursos
+# con hash de la página: CSS, tipografías, imágenes y el vídeo del héroe. No se
+# re-descargaban bytes —devuelven 304— pero es un viaje de ida y vuelta por
+# recurso y por página, que en una conexión móvil de Tulum es latencia pura.
 #
 # `immutable` es seguro aquí porque el contenido de estos archivos NO cambia: si
-# alguna vez hubiera que sustituir una tipografía, se cambia el nombre del
-# archivo, que es la disciplina que hace válida esta cabecera.
+# cambia, cambia su hash y por tanto su nombre. Esa es la disciplina que hace
+# válida la cabecera, y la cumplen los 315 archivos de `_astro/` sin excepción.
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /iconos/*
   Cache-Control: public, max-age=604800

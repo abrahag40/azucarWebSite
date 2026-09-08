@@ -4275,6 +4275,48 @@ portátiles de 1366×768 y 1280×720, y recortado sólo en monitores ultrapanor�
 
 ---
 
+## L-138 · Un comentario que explica el comportamiento de la plataforma es una hipótesis
+
+`site/public/_headers` llevaba escrito, desde que se creó, esto:
+
+> «Cloudflare Pages aplica `max-age=0, must-revalidate` a todo lo que sale de `public/`, y con
+> razón: son archivos de nombre estable. **Los de `_astro/` sí llevan hash en el nombre y reciben
+> caché larga automáticamente.**»
+
+La segunda frase era falsa. Salió midiendo otra cosa —las cabeceras del vídeo nuevo del héroe— y
+bastó un `curl` para verlo:
+
+```
+curl -sI https://azucar-hotel-tulum.pages.dev/_astro/base.CmW_MqPs.css
+  cache-control: public, max-age=0, must-revalidate
+```
+
+**El hash del nombre lo pone Astro, no Cloudflare, y Cloudflare no lo interpreta.** Los 315 archivos
+de `_astro/` —CSS, tipografías, 190 imágenes y el vídeo— se revalidaban en cada navegación. No se
+re-descargaban bytes, porque devuelven 304, pero es un viaje de ida y vuelta por recurso y por
+página: exactamente el coste que ese mismo archivo decía querer evitarle a las tipografías.
+
+Lo que hace que este caso duela es que el archivo **ya tenía la cura escrita**. La regla
+`/fuentes/*` con `immutable` estaba ahí, funcionando y bien argumentada. Lo único que faltaba era
+aplicar el mismo razonamiento a `_astro/`, y no se aplicó porque el comentario aseguraba que no
+hacía falta. **Una afirmación falsa sobre la plataforma no sólo estaba equivocada: apagó la pregunta
+durante meses.**
+
+> **La regla:** un comentario que describe lo que hace TU código es documentación; uno que describe
+> lo que hace la **plataforma** es una hipótesis, y caduca. Cuando escribas «X lo hace
+> automáticamente», o pegas al lado el comando que lo demuestra, o lo escribes como pregunta
+> abierta. Lo que no se puede es dejarlo en afirmación: quien lo lea después —tú incluido— dejará de
+> comprobarlo.
+
+**El antipatrón evitado** es el de la *documentación que se cree a sí misma*. El comentario era
+plausible, estaba bien escrito y razonaba correctamente a partir de una premisa falsa — que es
+justo la clase de texto que nadie audita.
+
+Corregido el 2026-09-08: la regla `/_astro/*` con `max-age=31536000, immutable`, y el comentario
+reescrito con el `curl` que lo prueba dentro.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
