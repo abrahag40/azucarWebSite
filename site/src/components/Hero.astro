@@ -414,6 +414,14 @@ const t = usarT(idioma);
      `:global()` es deliberado y está declarado: `.videohero` es una clase de
      OTRO componente, y el guardián `verificar-estilos.mjs` existe justo para
      cazar las que se usan a ciegas fuera de su ámbito.
+
+     ── 🔴 SI CAMBIA EL VÍDEO, SE VUELVE A MEDIR — Y YA NO A MANO ─────────
+     `node scripts/contraste-hero.mjs` compone estas tres capas sobre el píxel
+     más claro de CADA fotograma, en escritorio y en móvil, y falla si algún
+     texto baja del umbral de WCAG 1.4.3. Con `24_mayo.mp4` (2026-09-08): peor
+     caso 9.01 / 8.21 / 7.67 / 9.00 / 7.34 en escritorio y 6.73 / 7.53 / 6.94 /
+     9.00 / 6.00 en móvil. Se hizo dos veces a mano y las dos se perdió el
+     cálculo al cerrar la sesión; por eso ahora es un archivo (L-136).
      ══════════════════════════════════════════════════════════════════════ */
   :global(.videohero[data-listo]) ~ .hero__velo {
     background:

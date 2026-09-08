@@ -499,71 +499,79 @@ la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría 
 ⚠️ **La gerencia la llamó «Villa Luna»**; se publica como **«Bungalow Luna»** por instrucción de
 Abraham. Es una decisión registrada, no una errata — conviene confirmarla con el hotel.
 
-### 🎬 Vídeo en el héroe de la portada — 2026-09-07
+### 🎬 Vídeo en el héroe de la portada — 2026-09-08
 
-El cliente mandó `22_mayo.mp4`: un reel de Instagram de **1080×1920 vertical, 42 s, 85 MB**, con 19
-planos de unos 2.2 s. Está en el héroe, adaptado. La tubería es
-[`scripts/video-hero.sh`](scripts/video-hero.sh), se corre **a mano** —ffmpeg no está en CI ni en
-Cloudflare— y su salida se versiona.
+El cliente cambió el vídeo. Ahora es **`24_mayo.mp4`**: 1080×1920 vertical, 24.1 s, 46.9 MB, **ocho
+planos** de unos 2.7 s, y el último funde el **logotipo** sobre el agua de la alberca. Sustituye a
+`22_mayo.mp4`. La tubería es [`scripts/video-hero.sh`](scripts/video-hero.sh), se corre **a mano**
+—ffmpeg no está en CI ni en Cloudflare— y su salida se versiona.
 
-**No se usa entero, y ésa es la decisión que más pesa.** En un héroe apaisado, `cover` de un 9:16
-sólo enseña una **banda del 32 % de la altura del cuadro**. Se simuló plano a plano antes de tocar
-código: la alberca, las palmeras, las recámaras y el agua funcionan; el baño y el clóset se
-convierten en un lavabo y unas repisas. Ver L-120.
-
-**Siete planos, y el orden no es el del original: cuenta una llegada.**
+**Y esta vez entran los ocho planos.** Del anterior hubo que descartar 11 de 18 porque eran de
+interior y, recortados a lo ancho, un clóset es una repisa y un baño es un lavabo. Éste es todo
+exterior: playa, alberca, arcos, palapa, el arco de piedra con el rótulo y el logotipo.
 
 | | plano | recorte |
 |---|---|---|
-| 1 | alberca, barandal y Caribe | y = 682 |
-| 2 | palmeras y camastro | y = 590 |
-| 3 | terraza con hamaca | y = 656 |
-| 4 | silla y puertas — se entra | y = 761 |
-| 5 | recámara de muro de piedra | y = 722 |
-| 6 | cama con balcón, mirando afuera | y = 722 |
-| 7 | agua y **logotipo** | y = 655 |
+| 1 | playa, camastros y palmeras | y = 430 |
+| 2 | alberca y arcos con el rótulo | y = 650 |
+| 3 | camastros bajo las sombrillas | y = 680 |
+| 4 | el arco de piedra y la alberca | y = 560 |
+| 5 | palapa, alberca y el Caribe | y = 700 |
+| 6 | palapa y tumbonas | y = 680 |
+| 7 | columnas, palmeras y el mar | y = 500 |
+| 8 | el agua y el **logotipo** | y = 655 |
 
-🔴 **Cada plano lleva SU PROPIO recorte, y ése fue el defecto que el cliente vio.** La primera
-versión usaba un desplazamiento único —40 %, como haría `object-position`— y con el plano del
-logotipo se rompió: el logo está **centrado exacto en el cuadro** (medido: 50.0 % en los dos ejes)
-y esa banda le cortaba la base, dejándolo al 71 % de la franja. Se veía descolgado porque lo
-estaba. Un valor único obliga a que todos los planos tengan su asunto a la misma altura, y la
-alberca está abajo, las palmeras arriba y el logotipo en medio. El encuadre pasó a la codificación
-y el CSS dejó de reencuadrar (`object-position: center`). Ver L-126.
+**Cada plano lleva su propio recorte**, como en el vídeo anterior y por el mismo motivo: un
+desplazamiento único obliga a que todos tengan el asunto a la misma altura, y aquí la alberca está
+abajo, las palmeras arriba y el logotipo justo en medio. El CSS no reencuadra (`object-position:
+center`).
+
+🔴 **El logotipo, que era la petición explícita, está centrado — y su límite es una división.**
+Medido sobre el original: ocupa x 190–890 · y 738–1179, centro en 50.0 % / 49.9 %. El recorte y=655
+es esa resta. Pero como mide 445 px de alto sobre 1080 de ancho, **su proporción más apaisada
+posible es 2.43:1**, y con `cover` la franja visible del cuadro vale `1080 ÷ proporción del
+elemento`. Medido en el despliegue: entero y con 22–48 px de margen en 1680×1050, 1440×900,
+1512×916, 1280×800 y 1920×1080; **al ras** en portátiles de 1366×768 y 1280×720; **recortado 39 px
+por lado en ultrapanorámicos 21:9** (R-40). No se arregla codificando —fuera de esos 1080 px no hay
+imagen que enseñar—: se arreglaría con una tarjeta final de logotipo más pequeño. Ver L-137.
+
+**Un remate congelado de 0.9 s** cierra el montaje: el logotipo termina de fundirse casi al final del
+original y sin esa pausa el bucle vuelve a empezar antes de que se lea. Un fotograma quieto no cuesta
+bytes.
 
 **Dos recortes**, como un `<picture>`: apaisado **1080×608 nativo** para escritorio y vertical
-**608×1080** para teléfono, donde el cuadro entero es el acierto —y donde el logotipo se ve
-completo sin tocar nada—. **Nada se amplía antes de codificar**: el original mide 1080 de ancho y
-ampliar sólo obliga al códec a gastar bits en reproducir el desenfoque del propio reescalado
-(L-127). WebM (VP9) y MP4 (H.264) — **cada navegador descarga uno**: de 907 KB a 1.5 MB para
-**13.2 s**.
+**608×1080** para teléfono, donde el cuadro entero es el acierto. **Nada se amplía antes de
+codificar.** WebM (VP9) y MP4 (H.264) — **cada navegador descarga uno**: 1.8 / 2.4 MB en escritorio
+y 1.2 / 1.7 MB en teléfono, para **14.7 s**.
 
-🔴 **El LCP no se toca, y está medido.** La fotografía sigue siendo el elemento LCP y sigue
-precargada igual; el vídeo entra `preload="none"`, sin `src` en el marcado, y sólo arranca en
-`requestIdleCallback` **después** de `load`. Comprobado en el navegador: el camino crítico del
-primer segundo y medio es idéntico al de antes —tipografías, CSS, logo y foto— y **el vídeo empieza
-a los 2048 ms**.
+⚠️ **El presupuesto de bytes SUBE** (700k→1000k en VP9, 1000k→1400k en H.264) y es una consecuencia
+del material, no un capricho: el vídeo anterior tenía recámaras —paredes lisas, casi gratis de
+codificar— y éste es agua, palmeras y cielo en los ocho planos, que es lo más caro que hay. Al
+presupuesto viejo se bloqueaba en el agua. El cliente pidió expresamente que no se viera pixeleado.
 
-**No se le carga a quien no debe:** `prefers-reduced-motion`, `saveData` y redes `2g` no descargan
-ni un byte y se quedan con la fotografía, que es completa por sí sola.
+🔴 **El LCP no se toca.** La fotografía sigue siendo el elemento LCP y sigue precargada igual; el
+vídeo entra `preload="none"`, sin `src` en el marcado, y sólo arranca en `requestIdleCallback`
+**después** de `load`. **No se le carga a quien no debe:** `prefers-reduced-motion`, `saveData` y
+redes `2g` no descargan ni un byte.
 
-🔴 **El velo del héroe SUBE de 0.52 a 0.68 cuando hay vídeo.** El aviso que `Hero.astro` llevaba
-escrito desde el sprint 1 —«si se cambia la fotografía, hay que volver a medir»— hizo su trabajo: un
-vídeo tiene un píxel más claro **por fotograma**, y en los 52 medidos aparece blanco puro. Con el
-velo de la foto el texto de la cabecera caía a **4.27:1** y el hover del menú a 2.90:1. Con 0.68
-suben a 7.86:1 y 5.34:1 — igual o mejor que la fotografía. Y sólo con el vídeo pintando: la foto
-conserva su luz. Ver L-125.
+✅ **Contraste re-medido, y ahora es un guardián versionado.** El material nuevo es mucho más claro
+—arena al sol, sombrillas blancas— así que la medición era obligatoria. Está en
+[`scripts/contraste-hero.mjs`](scripts/contraste-hero.mjs), con perfil de escritorio y de móvil, y
+compone las tres capas reales (viñeta lateral, degradado vertical y la elipse del contenido) sobre
+el píxel más claro de **cada fotograma**:
 
-**`media-src 'self'` entra en la CSP.** Sin esa línea el `<video>` caía en `default-src 'none'` y el
-navegador lo bloqueaba **sin error visible**.
+| | escritorio | móvil |
+|---|---|---|
+| antetítulo | 9.01:1 | 6.73:1 |
+| titular | 8.21:1 | 7.53:1 |
+| entradilla | 7.67:1 | 6.94:1 |
+| botón de contorno | 9.00:1 | 9.00:1 |
+| aviso legal | 7.34:1 | 6.00:1 |
 
-**Tres defectos que este trabajo destapó**, los tres silenciosos: `media` en `<source>` no funciona
-dentro de `<video>` (L-121), el `poster` se descarga aunque haya `preload="none"` —y se pedía en el
-mismo milisegundo que el LCP, para no verse nunca— (L-122), y un `catch` que borraba el vídeo
-convertía una pausa temporal de Chrome en una pérdida definitiva (L-123).
+**Y la primera medición se equivocó por 2.5 puntos.** Daba 4.77:1 en el aviso porque medía la caja
+del `<p>` —800 px— en vez de los renglones pintados —237 px—. Casi apago el vídeo entero para
+arreglar un problema que no existía. Ver L-136.
 
-⚠️ **Requiere ffmpeg** (`brew install ffmpeg`) para volver a generar los archivos. Sólo hace falta si
-cambia el vídeo de origen.
 
 ### 🖼️ El héroe deja de ser a sangre — 2026-09-07
 
@@ -741,7 +749,8 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
-| **`scripts/video-hero.sh`** | **Del reel de 85 MB del cliente al vídeo del héroe: qué planos y por qué, y la receta de codificación medida** |
+| **`scripts/video-hero.sh`** | **Del reel del cliente al vídeo del héroe: qué planos y por qué, y la receta de codificación medida** |
+| **`scripts/contraste-hero.mjs`** | **¿Se lee el texto del héroe sobre el vídeo? Compone las tres capas de velo sobre el píxel más claro de cada fotograma, en escritorio y en móvil** |
 | **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
 ---
@@ -775,5 +784,8 @@ node scripts/verificar-301.mjs site/dist
 
 # ¿alguna clase CSS usada en un componente y definida en el ámbito de otro?
 node scripts/verificar-estilos.mjs
+
+# ¿se lee el texto del héroe sobre el vídeo? — obligatorio si cambia el vídeo
+node scripts/contraste-hero.mjs
 node scripts/verificar-301.mjs https://azucar-hotel-tulum.pages.dev
 ```

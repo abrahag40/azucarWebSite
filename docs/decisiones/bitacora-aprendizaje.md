@@ -4197,10 +4197,89 @@ reales de las otras dos. Se dejaron distintas y se preguntó.
 
 ---
 
+## L-136 · Medir la caja del párrafo no es medir el texto
+
+El cliente mandó un vídeo nuevo para el héroe y `Hero.astro` lleva escrito desde el sprint 1 el
+aviso de que **si cambia el fondo hay que volver a medir el contraste**. Con una fotografía eso es
+mirar un píxel: el más claro. Con un vídeo hay uno por fotograma, y este material es mucho más claro
+que el anterior — arena al sol, sombrillas y camastros blancos donde antes había recámaras.
+
+La primera medición dio el aviso legal en **4.77:1**, apenas un 6 % por encima del 4.5:1 de
+WCAG 1.4.3. Estaba a punto de subir el velo y apagar el vídeo entero para arreglarlo.
+
+**El número estaba mal, y el error era de geometría.** Había tomado el rectángulo del `<p>`, que
+mide 800 px de ancho porque es un bloque. El aviso, centrado, mide **237**. Los 563 px restantes
+son sitio donde no hay una sola letra — y justamente donde la elipse de contraste ya casi no vela,
+porque se apaga hacia los lados. Estaba midiendo el contraste de un texto contra píxeles que ese
+texto no toca.
+
+Con los rectángulos de LÍNEA —`createRange().selectNodeContents(el).getClientRects()`, que devuelve
+una caja por renglón pintado— el mismo aviso da **7.34:1**. No cambió nada del sitio: cambió lo que
+yo estaba mirando.
+
+> **La regla:** WCAG 1.4.3 habla del contraste **del texto**, no de su caja. Un bloque centrado, un
+> `text-align: center`, un botón ancho: en todos ellos la caja es mucho mayor que las letras, y
+> medir la caja te hace «arreglar» un problema que no existe. **Y el arreglo tiene coste**: aquí
+> habría sido oscurecer el vídeo que el cliente acababa de pedir que se luciera.
+
+**El antipatrón evitado** no es medir mal: es **creerle a la primera medición cuando el arreglo que
+sugiere contradice el encargo**. Que el número dijera «apaga el vídeo» el mismo día que el cliente
+pidió más calidad de imagen era la señal de que había que revisar el número, no el vídeo.
+
+Y una segunda lección, de método: **esta medición se hizo a mano dos veces y las dos se perdió al
+cerrar la sesión.** Ahora es [`scripts/contraste-hero.mjs`](../../scripts/contraste-hero.mjs), con
+sus dos perfiles —escritorio y móvil— y la geometría leída del navegador anotada dentro. Lo que se
+mide dos veces se guioniza.
+
+---
+
+## L-137 · El techo del logotipo es una división, no un ajuste de codificación
+
+El cliente pidió, literalmente, que al final del vídeo «el logo de Azucar salga bien colocado en el
+centro». Medido sobre el original buscando píxeles claros y poco saturados, el logotipo ocupa
+**x 190–890 · y 738–1179** del cuadro de 1080×1920: centro en 50.0 % / 49.9 %. De ahí sale el
+recorte y = 655, que es una resta, no un gusto.
+
+Lo interesante es lo que se descubre al comprobarlo en el navegador. Con `object-fit: cover`, la
+franja del cuadro original que llega a verse **no depende de cómo se codifique el vídeo**: vale
+`1080 ÷ (proporción del elemento)`. Y como el logotipo mide 445 px de alto sobre un cuadro de 1080
+de ancho, existe un techo exacto:
+
+> **1080 / 445 = 2.43:1 — la proporción más apaisada en la que el logotipo cabe entero.**
+
+Medido en el despliegue:
+
+| ventana | elemento | proporción | franja visible | margen del logo |
+|---|---|---|---|---|
+| 1680×1050 | 1680×841 | 2.00 | 541 px | +48 |
+| 1440×900 | 1440×691 | 2.08 | 518 px | +37 |
+| 1512×916 | 1512×707 | 2.14 | 505 px | +30 |
+| 1280×800 | 1280×591 | 2.17 | 499 px | +27 |
+| 1920×1080 | 1920×871 | 2.20 | 490 px | +22 |
+| 1366×768 | 1366×559 | 2.44 | 442 px | **−2** |
+| 2560×1080 | 2560×871 | 2.94 | 367 px | **−39** |
+
+La tentación era resolverlo codificando: «alejar» el plano del logotipo para que le sobre aire.
+**No se puede, y entender por qué es la lección.** Alejar un plano es enseñar más campo del que hay,
+y el original mide 1080 de ancho: fuera de esos 1080 px no existe imagen. Rellenar los lados con una
+copia borrosa del propio fotograma deja una costura visible sobre el agua, que tiene textura. El
+límite no está en el códec ni en el CSS: está en el material.
+
+> **La regla:** antes de buscar el parámetro que arregla algo, comprueba si el problema es
+> aritmético. Si lo es, ningún parámetro lo arregla — y seguir buscándolo es donde se pierden las
+> tardes. **Se arregla cambiando el dato de entrada** (aquí: una tarjeta final con el logotipo más
+> pequeño), o se documenta como límite y se dice en voz alta.
+
+Se documenta: entero y centrado en todo lo que sea 16:10 o 16:9 normal, rozando el borde en los
+portátiles de 1366×768 y 1280×720, y recortado sólo en monitores ultrapanorámicos 21:9 (R-40).
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
 |---|---|---|---|
+| R-40 | **En monitores ultrapanorámicos (21:9, p. ej. 2560×1080) el logotipo del final del vídeo se recorta por arriba y por abajo**, unos 39 px por lado. No es un defecto de codificación: el logotipo mide 445 px de alto sobre 1080 de ancho, así que su proporción más apaisada posible es 2.43:1 y ahí el elemento va a 2.94:1 (L-137) | Bajo | Pedir al cliente una tarjeta final con el logotipo más pequeño —más aire alrededor—. Con el material actual no tiene arreglo por código |
 | R-39 | **El botón flotante de WhatsApp está fuera de todo landmark**, en `Base.astro`, después de `<footer>`. axe-core lo marca como violación `region` (best-practice, RGAA 9.2.1) en las 50 páginas con cabecera. Existe desde el 2026-08-22, o sea **antes** de la medición del 2026-09-01 que quedó registrada como «0 violaciones»: ese cero no era exacto | Bajo | Envolverlo en un landmark propio o darle `role`. Y volver a correr axe **con la página pintada** antes de anotar ningún «cero» (L-121) |
 | R-01 | **Licencia de la plantilla Cappa.** Publicar producción sobre un demo raspado sin licencia es exposición legal para nosotros y para el cliente | Alto | Definir quién compra la licencia **antes** de escribir código de producción |
 | R-02 | Motor de reservas / PMS actual desconocido. Define el alcance completo | Alto | Pregunta prioritaria en la entrevista |
