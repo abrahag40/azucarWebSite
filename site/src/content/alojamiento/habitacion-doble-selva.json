@@ -85,8 +85,12 @@
       "en": "Balcony with a hammock"
     }
   ],
-  "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-selva.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/habitacion-doble-selva.webp",
   "galeria": [
+    "../../assets/alojamiento/2026/habitacion-doble-selva-02.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-selva-03.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-selva-04.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-selva-05.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-selva-02.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-selva-03.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-selva-04.webp",

@@ -101,8 +101,12 @@
     "es": "El mar de frente y el jacuzzi en la propia terraza.",
     "en": "Sea straight ahead, jacuzzi on the terrace itself."
   },
-  "imagenPrincipal": "../../assets/alojamiento/suite-mar.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/bungalow-mar.webp",
   "galeria": [
+    "../../assets/alojamiento/2026/bungalow-mar-02.webp",
+    "../../assets/alojamiento/2026/bungalow-mar-03.webp",
+    "../../assets/alojamiento/2026/bungalow-mar-04.webp",
+    "../../assets/alojamiento/2026/bungalow-mar-05.webp",
     "../../assets/alojamiento/galeria/suite-mar-02.webp",
     "../../assets/alojamiento/galeria/suite-mar-03.webp",
     "../../assets/alojamiento/galeria/suite-mar-04.webp",

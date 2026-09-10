@@ -85,8 +85,12 @@
       "en": "Balcony with a hammock"
     }
   ],
-  "imagenPrincipal": "../../assets/alojamiento/habitacion-king-selva.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/habitacion-king-selva.webp",
   "galeria": [
+    "../../assets/alojamiento/2026/habitacion-king-selva-02.webp",
+    "../../assets/alojamiento/2026/habitacion-king-selva-03.webp",
+    "../../assets/alojamiento/2026/habitacion-king-selva-04.webp",
+    "../../assets/alojamiento/2026/habitacion-king-selva-05.webp",
     "../../assets/alojamiento/galeria/habitacion-king-selva-02.webp",
     "../../assets/alojamiento/galeria/habitacion-king-selva-03.webp",
     "../../assets/alojamiento/galeria/habitacion-king-selva-04.webp",

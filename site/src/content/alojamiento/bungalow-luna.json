@@ -97,12 +97,12 @@
     "es": "El jacuzzi está en un roof top propio, no en la terraza.",
     "en": "The jacuzzi is on a private rooftop, not the terrace."
   },
-  "imagenPrincipal": "../../assets/alojamiento/bungalow-luna.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/bungalow-luna.webp",
   "galeria": [
-    "../../assets/alojamiento/galeria/bungalow-luna-02.webp",
-    "../../assets/alojamiento/galeria/bungalow-luna-03.webp",
-    "../../assets/alojamiento/galeria/bungalow-luna-04.webp",
-    "../../assets/alojamiento/galeria/bungalow-luna-05.webp"
+    "../../assets/alojamiento/2026/bungalow-luna-02.webp",
+    "../../assets/alojamiento/2026/bungalow-luna-03.webp",
+    "../../assets/alojamiento/2026/bungalow-luna-04.webp",
+    "../../assets/alojamiento/2026/bungalow-luna-05.webp"
   ],
   "publicado": true,
   "verificado": [

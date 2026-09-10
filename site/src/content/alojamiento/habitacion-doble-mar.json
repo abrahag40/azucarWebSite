@@ -85,8 +85,12 @@
       "en": "Balcony with table, wooden chairs and a hammock"
     }
   ],
-  "imagenPrincipal": "../../assets/alojamiento/habitacion-doble-mar.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/habitacion-doble-mar.webp",
   "galeria": [
+    "../../assets/alojamiento/2026/habitacion-doble-mar-02.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-mar-03.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-mar-04.webp",
+    "../../assets/alojamiento/2026/habitacion-doble-mar-05.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-mar-02.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-mar-03.webp",
     "../../assets/alojamiento/galeria/habitacion-doble-mar-04.webp",

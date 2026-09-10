@@ -101,8 +101,12 @@
     "es": "La vista es panorámica, no frontal: se ve de extremo a extremo.",
     "en": "The view is panoramic, not head-on: it opens end to end."
   },
-  "imagenPrincipal": "../../assets/alojamiento/suite-aire.webp",
+  "imagenPrincipal": "../../assets/alojamiento/2026/bungalow-aire.webp",
   "galeria": [
+    "../../assets/alojamiento/2026/bungalow-aire-02.webp",
+    "../../assets/alojamiento/2026/bungalow-aire-03.webp",
+    "../../assets/alojamiento/2026/bungalow-aire-04.webp",
+    "../../assets/alojamiento/2026/bungalow-aire-05.webp",
     "../../assets/alojamiento/galeria/suite-aire-02.webp",
     "../../assets/alojamiento/galeria/suite-aire-03.webp",
     "../../assets/alojamiento/galeria/suite-aire-04.webp",
