@@ -4427,6 +4427,128 @@ planos de habitación son más oscuros que la playa, así que no pueden mover el
 Un resultado que no cambia cuando no debería cambiar es una verificación, no un fallo. Pero hay que
 poder decir **por qué** no debería — si no, es indistinguible de una caché.
 
+
+## L-141 · Tres pasadas de Lighthouse no son una medición, son tres anécdotas
+
+El 2026-09-10, al medir los Core Web Vitals de la portada con el vídeo nuevo, seguí la
+metodología que ya estaba escrita en `medicion-calidad.md`: **tres pasadas**. Con esas tres
+pasadas escribí, en voz alta y con confianza, que *«el LCP se mueve 210 ms»*.
+
+Era falso. Ampliadas a siete, la diferencia es de **20 ms** — ruido.
+
+```
+        3 pasadas                    7 pasadas
+con     2.39  2.05  1.86             2.39 2.05 1.86 1.86 1.88 1.86 1.82   mediana 1.86
+sin     1.83  1.84  1.84             1.83 1.84 1.84 1.99 1.98 2.06 1.84   mediana 1.84
+```
+
+Lo que pasó es fácil de ver y difícil de sospechar en el momento: con tres muestras, las **dos
+primeras** pasadas con vídeo cayeron por azar en la cola lenta —y una de ellas era además el
+primer arranque en frío de Chrome, con `npx` descargando Lighthouse en paralelo, que dio un TBT
+absurdo de **1217 ms** cuando las otras seis dieron **0**—. La mediana de tres es rehén de dos
+valores. La de siete no.
+
+Y el detalle que lo delata: **el grupo SIN vídeo también se dispersa** (1.83 a 2.06). Si hubiera
+mirado eso primero en vez de comparar medianas, habría visto que el rango de un grupo se traga
+entero la diferencia entre los dos. **La dispersión dentro de un grupo es la vara con la que se
+mide si la diferencia entre grupos significa algo**, y en la primera tanda ni siquiera la miré.
+
+### El A/B que sí valió, y por qué se podía hacer
+
+Lo que sí estuvo bien desde el principio fue **no comparar contra la medición de agosto**. Aquella
+era de antes del vídeo, con otro contenido y otra red; atribuirle una diferencia al vídeo habría
+sido comparar dos días, no dos configuraciones.
+
+El A/B correcto salió de una propiedad del propio componente: `VideoHero.astro` **no descarga ni
+un byte** con `prefers-reduced-motion: reduce`. Así que:
+
+```bash
+--chrome-flags="--headless=new"                              # con vídeo
+--chrome-flags="--headless=new --force-prefers-reduced-motion" # sin vídeo
+```
+
+**Misma URL, mismo build, mismo momento, una sola variable.** Y verificado en cada informe, no
+supuesto: las pasadas «con» descargan 1499 KB de vídeo, las «sin» descargan 0.
+
+El antipatrón evitado tiene nombre: *comparar contra una línea base histórica* cuando entre las
+dos mediciones cambió más de una cosa. Una línea base vieja sirve para vigilar tendencia, no para
+aislar una causa.
+
+### Lo que la medición sí demostró
+
+- El elemento LCP es la **fotografía** en las 17 pasadas. El vídeo nunca llega a ser candidato.
+- El vídeo se pide a 349 ms; la foto del LCP termina a 248 ms. **101 ms de separación, fechados.**
+- El único coste real es el **Speed Index: +400 ms**, y ahí los rangos apenas se solapan, así que
+  es señal y no ruido. No es un Core Web Vital y el rendimiento se queda en 99 — pero es el precio
+  y está escrito.
+
+**La regla que queda:** antes de afirmar que A difiere de B, mirar cuánto difiere A de sí mismo.
+Si el rango de un grupo se come la diferencia entre grupos, no hay diferencia todavía — hay pocas
+muestras. Y en herramientas de laboratorio, **descartar la primera pasada**, que mide el arranque
+en frío de la máquina y no el sitio.
+
+
+## L-142 · Cuando dos asuntos no caben en el recorte, el problema es la toma, no el recorte
+
+El 2026-09-10, con el vídeo del héroe ya desplegado, Abraham dijo algo muy concreto: **«en el
+segundo plano no se ve la alberca»**. Tenía razón, y la reacción obvia —«pues bajo el recorte»—
+era la equivocada.
+
+En [[L-140]] quedó escrito que el encuadre es una decisión por plano: la banda apaisada enseña
+**608 px de los 1920** del original vertical. Lo que esta lección añade es qué hacer cuando en esa
+banda **no caben las dos cosas que importan**.
+
+### Primero medir, y la medida cerró la puerta
+
+En la toma que estaba puesta (`24_mayo` 9.80–11.20), sobre el cuadro de 1920:
+
+```
+rótulo «Hotel AZUCAR Tulum» del arco     y   520 –  640
+agua de la alberca                       y  1100 – 1400
+                                              ↑ 780 px de separación
+banda disponible                                608 px
+```
+
+**780 no cabe en 608.** No es una cuestión de afinar: es una desigualdad. Subir la banda enseña la
+alberca y se lleva el rótulo —que era el único sitio del montaje donde se leía el nombre del hotel
+antes del remate—; bajarla hace lo contrario; y un compromiso a media altura corta las dos.
+
+Barrí cinco alturas (500, 650, 760, 870, 980) y las miré recortadas. Todas confirmaban lo mismo, y
+las dos más bajas además metían en cuadro un pedrusco de hormigón del primer plano que se comía el
+tercio inferior. **El barrido no encontró la solución: demostró que no la había ahí.**
+
+### La salida era cambiar de toma
+
+El mismo reel tiene **otro plano del mismo arco** (4.40–5.80), desde un punto más abierto y más
+alto. Ahí los dos asuntos están más juntos, y a `y=650` entran los dos: el rótulo completo arriba y
+la alberca ocupando el tercio inferior, con su islita de palmera.
+
+Ese plano **estaba descartado en la selección original, y por una razón que ahora se lee mal:
+«parecido al que entró»**. Era parecido en motivo y distinto en lo único que importaba.
+
+### El antipatrón, con nombre
+
+*Optimizar dentro de una restricción sin comprobar que la restricción sea la correcta.* Yo tenía
+un parámetro a mano —`y`— y lo estuve barriendo con cinco valores y capturas comparadas, que
+parece rigor. Pero todo ese trabajo ocurría **dentro de una toma que no podía dar el resultado**.
+Rigor aplicado al problema equivocado sigue siendo el problema equivocado.
+
+Es el mismo error de forma que [[L-139]], donde la cura no fue arreglar los números de la rejilla
+sino quitarlos, y que [[L-136]], donde medí con cuidado la caja que no era. El patrón se repite:
+**cuando el barrido de un parámetro no encuentra un valor bueno, la hipótesis a revisar no es el
+valor — es qué se está barriendo.**
+
+### La regla que queda
+
+Antes de negociar un recorte entre dos asuntos que no caben, **medir su separación en el original y
+compararla con la banda**. Si no cabe, dejar de mover el recorte y preguntar si **otra toma del
+mismo motivo los tiene más juntos**. El encuadre no es sólo dónde cortas: es qué cortas.
+
+Y una nota sobre el descarte: la selección original apartó ese plano con la etiqueta «parecido».
+**«Parecido» no es un criterio, es un resumen** — y un resumen se traga justo la diferencia que
+luego hace falta. Si se descarta por parecido, conviene escribir *en qué* se parece, porque el día
+que el criterio cambie eso es lo único que permite reabrir el descarte sin revisarlo todo.
+
 ---
 
 ## Riesgos abiertos

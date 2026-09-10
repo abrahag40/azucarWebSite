@@ -326,8 +326,9 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | Redirecciones | 12 reglas · 25 URLs · 0 fallos |
 | CI | ✅ **verde**, y desde el 2026-09-01 **corre exactamente `verificar-todo.sh`** — R-27 cerrada (L-088). Ha estado roto dos veces sin que nadie lo viera: trece commits (L-040) y seis (L-087) |
 | 🔴 Lockfile | **Se genera en Docker/Linux, no en macOS.** `npm ci` rechaza un lockfile de macOS y con él caen CI y Cloudflare. Procedimiento en `site/README.md` |
-| **Lighthouse** (móvil, 4G) | **rendimiento 99 · accesibilidad 100 · buenas prácticas 100 · SEO 92** ⚠️ |
-| **Core Web Vitals** | **LCP 1.33–1.86 s · CLS 0.003 · TBT 0–26 ms** — los tres dentro de umbral |
+| **Lighthouse** (móvil, 4G) | **rendimiento 99 · accesibilidad 100 · buenas prácticas 100 · SEO 92** ⚠️ · **escritorio: 100** |
+| **Core Web Vitals** | **Re-medidos CON el vídeo el 2026-09-10** —nunca se habían medido con vídeo—. Móvil, mediana de **7 pasadas**: **LCP 1.86 s · CLS 0.000 · TBT 0 ms**. Escritorio: LCP 0.55 s. Los tres dentro de umbral |
+| **¿Cuánto cuesta el vídeo?** | **Medido con A/B sobre la misma URL** (`prefers-reduced-motion` no descarga nada): **LCP +20 ms — ruido**, CLS 0, TBT 0. Lo único real es **Speed Index +400 ms**, que no es un CWV. El elemento LCP es la fotografía en las 17 pasadas, y el vídeo se pide **101 ms después** de que la foto termine |
 | **axe-core 4.13** | **0 violaciones**, re-medido el 2026-09-01 sobre 10 páginas tras el cambio de paleta a pistacho |
 | **html-validate** | **0 incidencias** en 45 páginas · **ya no es periódico: es un guardián de `verificar-todo.sh`**, y al entrar encontró un `<form>` sin botón de envío en el panel |
 | Pruebas unitarias | **35 casos** sobre `componerSolicitud`, los dos correos HTML y la concordancia de número · 0 dependencias nuevas |
@@ -522,7 +523,7 @@ es «parecido», es el mismo material — **por eso el montaje lleva un remate, 
 | | plano | origen | recorte |
 |---|---|---|---|
 | 1 | la playa, las sombrillas y las palmeras | 24_mayo | y = 430 |
-| 2 | el arco de piedra con el **rótulo**, y la alberca | 24_mayo | y = **500** |
+| 2 | el arco con el **rótulo** y la **alberca** con su islita | 24_mayo | y = **650** |
 | 3 | columnas de piedra, palmeras y el Caribe | 24_mayo | y = 500 |
 | 4 | la palapa, la alberca y el mar | 24_mayo | y = 700 |
 | 5 | el camastro blanco bajo las sombrillas | 24_mayo | y = 680 |
@@ -560,10 +561,18 @@ problema y no lo es: **los cinco exteriores se separan 9.2 unidades entre ellos*
 habitación queda a 8.7 de su media. La habitación no está más lejos del exterior de lo que los
 exteriores están entre sí. El plano que sí lo estaba —a 32 unidades— se fue.
 
-✅ **El rótulo del arco se arregló al verificar.** A y=560 —la altura que llevaba el script para ese
-plano— el rótulo «Hotel AZUCAR Tulum» **salía cortado por arriba**. A y=500 entra entero y la
-alberca sigue en cuadro. Es el único sitio del montaje donde se lee el nombre del hotel antes del
-remate, y llevaba dos versiones cortado sin que nadie lo viera.
+✅ **El plano del arco se arregló CAMBIANDO DE TOMA, no de altura** (2026-09-10, a raíz de que
+Abraham viera que «en el segundo plano no se ve la alberca»). Y es el hallazgo más útil del
+encuadre, porque mover la altura **no lo arreglaba**: medido sobre la toma que estaba puesta, el
+rótulo ocupa **y 520–640** y el agua **y 1100–1400** — del uno al otro hay **780 px y la banda mide
+608**. En esa toma las dos cosas no caben, y cualquier compromiso corta las dos.
+
+La salida fue otra toma del mismo arco (4.40–5.80), descartada en su día por «parecida», donde a
+**y=650** el rótulo entra entero arriba y la alberca ocupa el tercio inferior con su islita de
+palmera. 🔴 **La regla: cuando dos asuntos no caben en la banda, antes de negociar el recorte hay
+que preguntarse si otra toma del mismo motivo los tiene más juntos.** Ver L-142.
+
+Sigue siendo el único sitio del montaje donde se lee el nombre del hotel antes del remate.
 
 🔴 **El logotipo, que era la petición explícita, está centrado — y su límite es una división.**
 Medido sobre el original: ocupa x 190–890 · y 738–1179, centro en 50.0 % / 49.9 %. El recorte y=655
@@ -804,7 +813,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **139 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **141 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |

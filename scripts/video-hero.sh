@@ -83,11 +83,28 @@
 #  El plano que sí lo era estaba a 32 unidades, y ése se fue.
 #
 #  ── LOS DOS ARREGLOS DE ENCUADRE QUE SALIERON DE VERIFICAR ─────────────────
-#  · **El arco con el rótulo pasa de y=560 a y=500.** A 560 —la altura que
-#    llevaba el script anterior para ese plano— el rótulo «Hotel AZUCAR Tulum»
-#    del arco **sale cortado por arriba**. A 500 entra entero y la alberca sigue
-#    en cuadro. Es el único sitio del montaje donde se lee el nombre del hotel
-#    antes del remate.
+#  · **El plano del arco se CAMBIA DE TOMA, y no de altura.** Es el hallazgo más
+#    útil de todo el encuadre, y llegó por una queja concreta de Abraham: «en el
+#    segundo plano no se ve la alberca».
+#
+#    Tenía razón, y mover la altura NO lo arreglaba. Medido sobre la toma que
+#    estaba puesta (9.80–11.20): el rótulo «Hotel AZUCAR Tulum» del arco ocupa
+#    **y 520–640** y el agua de la alberca **y 1100–1400**. Del principio del
+#    rótulo al final del agua hay **780 px, y la banda mide 608**. En esa toma
+#    las dos cosas NO CABEN: subir la banda enseña la alberca y se lleva el
+#    rótulo —que es el único sitio del montaje donde se lee el nombre del hotel
+#    antes del remate—, y bajarla hace lo contrario. Un compromiso a media
+#    altura las corta las dos.
+#
+#    La salida no era elegir, era **cambiar de toma**. El mismo reel tiene otro
+#    plano del mismo arco (4.40–5.80) desde un punto más abierto donde, a y=650,
+#    el rótulo entra **entero** arriba y la alberca ocupa el **tercio inferior**
+#    con su islita de palmera. Estaba descartado por «parecido al que entró», y
+#    resultó ser el que sí resolvía.
+#
+#    🔴 La lección: cuando dos asuntos no caben en la banda, antes de negociar
+#    el recorte hay que preguntarse si **otra toma del mismo motivo** los tiene
+#    más juntos. El encuadre no es sólo dónde cortas: es qué cortas.
 #  · **El primer plano de `24_mayo` sigue empezando en 1.05 y no antes:** el
 #    original abre con un fundido desde negro. `22_mayo` NO lo tiene —medido,
 #    Y=133 desde el fotograma cero—, así que sus ventanas pueden pegarse al
@@ -143,7 +160,7 @@ mkdir -p "$DESTINO"
 #   corte.
 MONTAJE=(
   "24  1.05  2.45  430  la playa, las sombrillas y las palmeras"
-  "24  9.80 11.20  500  el arco de piedra con el rotulo, y la alberca"
+  "24  4.40  5.80  650  el arco con el rotulo, y la alberca con su islita"
   "24 17.90 19.30  500  columnas de piedra, palmeras y el Caribe"
   "24 12.50 13.90  700  la palapa, la alberca y el mar"
   "24  7.00  8.40  680  el camastro blanco bajo las sombrillas"
