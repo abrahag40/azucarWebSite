@@ -3,7 +3,12 @@ import Base from '../layouts/Base.astro';
 import BannerPagina from '../components/BannerPagina.astro';
 import DatosContacto from '../components/DatosContacto.astro';
 import { usarT, type Idioma } from '../i18n/ui';
-import banner from '../assets/franja-habitacion.webp';
+/* La RECEPCIÓN, pedida por el cliente el 2026-09-03.
+   Hasta el 2026-09-10 no existía: se revisaron una a una las 101 fotografías de
+   propiedad del mirror y no había un solo mostrador (R-37). La sesión nueva del
+   fotógrafo sí lo trae, con el logotipo en dorado detrás del mostrador — que es
+   exactamente lo que pedía una página que se llama «Contacto». */
+import banner from '../assets/recepcion.webp';
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
