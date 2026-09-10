@@ -288,11 +288,20 @@ se muestra tiene que ser el que se cobra.
 **Archivo:** `site/src/data/galeria.ts`
 
 Son las descripciones que lee un lector de pantalla y que Google usa para entender la imagen.
-Describen **lo que se ve**, no lo que se quiere vender: «camastros bajo una pérgola con el sol
-poniéndose» sirve; «un atardecer de ensueño» no.
+Describen **lo que se ve**, no lo que se quiere vender: «la alberca del roof top de noche,
+iluminada por dentro» sirve; «un rincón mágico» no.
 
 Para **cambiar una foto**, hay que sustituir el archivo en `site/src/assets/galeria/` con el
 mismo nombre, y actualizar aquí su descripción.
+
+Para **quitar una foto**, se borran sus dos apariciones en este archivo: la línea `import` de
+arriba y su bloque de la lista. **El archivo de imagen NO se borra** sin comprobar antes que no
+lo esté usando otra página: varias fotos de esta carpeta son también la portada de `/eventos/`
+o `/restaurante/`, y borrarlas rompe la publicación.
+
+Para **añadir una foto**, se copia el archivo a esa carpeta, se añade su `import` y su bloque.
+No hay que tocar nada más: **la rejilla se reparte sola**, tanto en la página de galería como en
+el adelanto de la portada, sea cual sea el número de fotos.
 
 ---
 

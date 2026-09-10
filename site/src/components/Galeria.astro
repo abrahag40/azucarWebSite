@@ -60,10 +60,13 @@ interface Props {
    * Proporción de la miniatura. `vertical` (3:4) es la de las fichas de
    * alojamiento, donde TODAS las fotos son verticales y el recorte no quita
    * nada. `cuadrada` es para la galería general, cuyo material está mezclado:
-   * de las ocho fotos de propiedad, cinco son apaisadas 4:3 y tres verticales
-   * 3:4. Recortar una panorámica del roof top a 3:4 se lleva el 44 % de su
-   * ancho —deja de reconocerse—; el cuadrado quita un 25 % simétrico a unas y
-   * otras. La foto entera, sin recortar, está a un clic en el visor.
+   * medidas las 45 del banco, son **36 apaisadas y 9 verticales**, y el abanico
+   * va de 1.78 a 0.55. El argumento no sólo sigue en pie: se refuerza. Recortar
+   * la más apaisada (1600 × 900) a 3:4 conserva el **42 % de su ancho** y deja
+   * de reconocerse; el cuadrado conserva el 56 %, y a la más vertical le
+   * conserva el 55 % de su alto. **El cuadrado es el único recorte que trata
+   * igual a los dos extremos** de un banco tan mezclado. La foto entera, sin
+   * recortar, está a un clic en el visor.
    */
   proporcion?: 'vertical' | 'cuadrada';
 }

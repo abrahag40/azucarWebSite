@@ -4315,6 +4315,68 @@ justo la clase de texto que nadie audita.
 Corregido el 2026-09-08: la regla `/_astro/*` con `max-age=31536000, immutable`, y el comentario
 reescrito con el `curl` que lo prueba dentro.
 
+---
+
+## L-139 · El número de fotos lo pone el cliente; la rejilla no puede cablearlo
+
+El 2026-09-10 el cliente tachó cinco de las nueve fotografías de `/galeria/`. Quitarlas es borrar
+cinco entradas de un arreglo. Lo interesante es lo que se rompió al hacerlo, y **cuándo se había
+roto de verdad**.
+
+El mosaico de la portada reproduce el ritmo de Cappa —tres tercios, dos mitades, tres tercios— y lo
+hacía así:
+
+```ts
+const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
+```
+
+Correcto. Con **ocho** fotos. El banco pasó a nueve en la segunda curaduría y la novena quedó sola
+ocupando 4 de las 12 columnas; con cuatro, la cuarta habría quedado sola ocupando 6. Es decir: el
+defecto **no lo introdujo el cliente hoy, lo introdujo el sprint 4** y llevaba desde entonces a la
+vista de todos.
+
+Nadie lo vio porque **una fila a medias no rompe nada**: no falla el build, no la marca `axe-core`,
+`html-validate` la da por buena y el auditor propio no juzga estética. Es el mismo hueco por el que
+pasó el botón sin color de L-114: marcado impecable, resultado feo, cero guardianes.
+
+Y debajo había un segundo defecto del mismo origen. El `sizes` de esas imágenes era uno solo para
+todas —`(min-width: 62rem) 30vw, …`— calculado para el ancho de un **tercio**. A las dos mitades les
+mentía ya entonces: se les pedía al navegador una imagen de 384 px para una caja de 544. En una
+pantalla retina no se notaba, porque 30 vw × 2 se pasa igualmente de la derivada más grande; en una
+pantalla normal se veía blanda. **El defecto existía y el hardware lo tapaba en la mitad de los
+casos.**
+
+La cura no fue arreglar los números, fue quitarlos:
+
+```ts
+const anchos = (total: number): Ancho[] => { … }   // filas de 3 · si sobra 1, 2+2
+```
+
+Sólo dos filas suman doce columnas exactas —tres tercios o dos mitades—, así que se reparte en
+filas de tres y, si al final fuera a sobrar una sola foto, la última fila de tres se parte en dos de
+dos: 4 → 2+2, 7 → 3+2+2, 9 → 3+3+3. Ninguna fila queda a medias, sea cual sea el número. El `sizes`
+pasó a salir del ancho de cada pieza, y eso se puede medir: sobre las cuatro fotos que había ese
+mediodía, en un teléfono de 375 px a 2× la portada bajaba de 134 196 a 80 564 bytes —**53 KB
+menos**— y en un escritorio a 1× subía lo mismo, que es exactamente lo que cuesta llenar una caja
+de 544 px con una imagen de 544 y no con una de 480.
+
+**Y la prueba de que la regla valía llegó esa misma tarde**: entraron 41 fotografías nuevas y el
+banco pasó de 4 a 45. Con el `i === 3 || i === 4` de antes habría vuelto a descuadrar; con el
+reparto calculado no hubo que tocar una línea. Lo que sí hubo que corregir fue otra cosa que el
+número tampoco perdonaba —la portada mapeaba el banco ENTERO y pasó a pintar 45 imágenes—, y esa
+es la misma lección mirada desde el otro lado: **«todas» también es un número cableado cuando el
+dato es de otro.**
+
+> **La regla:** cuando copias un diseño de una plantilla, copia el **ritmo**, nunca el **número**.
+> La plantilla tiene ocho fotos porque su demo tiene ocho; tú tienes las que el cliente diga hoy y
+> otras distintas mañana. Un índice literal en una vista es una afirmación sobre los datos, y los
+> datos son de otro.
+
+**El antipatrón evitado** es el de la *constante disfrazada de diseño*: el `3` y el `4` no se leían
+como configuración, se leían como la composición de Cappa, y por eso nadie los tocó al cambiar el
+banco dos veces. La pista de que algo es una constante y no un diseño es simple — **si el dato
+cambia y el código no se entera, era una constante.**
+
 
 ## L-140 · El encuadre de un plano no está en su fotograma central
 
@@ -4511,7 +4573,6 @@ Lo interesante para el método es doble:
    una afirmación dice «en las N», hay que mirar las N — y mirarlas cuesta un `for`.
 
 
-
 ## L-142 · Cuando dos asuntos no caben en el recorte, el problema es la toma, no el recorte
 
 El 2026-09-10, con el vídeo del héroe ya desplegado, Abraham dijo algo muy concreto: **«en el
@@ -4579,6 +4640,8 @@ que el criterio cambie eso es lo único que permite reabrir el descarte sin revi
 
 | # | Riesgo | Impacto | Acción |
 |---|---|---|---|
+| R-41 | **Tres fotografías que el cliente quitó de la galería siguen siendo el banner de otras páginas.** El 2026-09-10 tachó cinco de las nueve; tres de esas cinco son la portada de `/restaurante/` (roof top al atardecer), la de `/eventos/` (arco de la playa) y la foto del restaurante dentro de `/restaurante/` (alberca del roof top). Los archivos no se borran por eso. **Y si también salen de ahí, el banco no da:** quedan cuatro fotos para seis banners, y de las cuatro sólo la alberca de noche está sin usar | Medio | Una pregunta de una línea al cliente: «¿esas tres salen también de las páginas donde son portada, o sólo de la galería?». Si salen, hace falta material nuevo, no recolocación |
+| R-42 | ~~**La galería quedó en cuatro fotografías y el adelanto de la portada ya no adelanta nada**~~ **CERRADA el mismo día que se abrió, 2026-09-10.** Se abrió por la mañana, con el recorte del cliente; por la tarde entraron las 41 de la sesión con fotógrafo y el banco pasó a 45. El adelanto de la portada volvió a ser un adelanto —enseña nueve— | Ninguno | Sin acción. Queda como recordatorio de que un riesgo de «falta material» puede caducar en horas cuando el material ya existía y no había llegado |
 | R-40 | **En monitores ultrapanorámicos (21:9, p. ej. 2560×1080) el logotipo del final del vídeo se recorta por arriba y por abajo**, unos 39 px por lado. No es un defecto de codificación: el logotipo mide 445 px de alto sobre 1080 de ancho, así que su proporción más apaisada posible es 2.43:1 y ahí el elemento va a 2.94:1 (L-137) | Bajo | Pedir al cliente una tarjeta final con el logotipo más pequeño —más aire alrededor—. Con el material actual no tiene arreglo por código |
 | R-39 | **El botón flotante de WhatsApp está fuera de todo landmark**, en `Base.astro`, después de `<footer>`. axe-core lo marca como violación `region` (best-practice, RGAA 9.2.1) en las 50 páginas con cabecera. Existe desde el 2026-08-22, o sea **antes** de la medición del 2026-09-01 que quedó registrada como «0 violaciones»: ese cero no era exacto | Bajo | Envolverlo en un landmark propio o darle `role`. Y volver a correr axe **con la página pintada** antes de anotar ningún «cero» (L-121) |
 | R-01 | **Licencia de la plantilla Cappa.** Publicar producción sobre un demo raspado sin licencia es exposición legal para nosotros y para el cliente | Alto | Definir quién compra la licencia **antes** de escribir código de producción |

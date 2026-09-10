@@ -297,11 +297,19 @@ Servicios, ubicación, contacto, preguntas frecuentes y políticas en los dos id
 vigente, traducciones incluidas**. Aviso de privacidad publicado con sus carencias declaradas
 (H4.8 parcial). Queda **H4.4**, la galería general.
 
-**H4.4 — galería general** en `/galeria/` y `/en/gallery/`: ocho fotografías de la propiedad
-con texto alternativo descriptivo propio en los dos idiomas. Reutiliza el visor de H2.3 en vez
-de duplicarlo. La curaduría dejó un dato para Abraham: de las diez fotos de propiedad
-revisadas una a una, **ocho entraron**; el archivo de 244 imágenes es desigual y no admite
-atajos —ordenar por tamaño de archivo no predice si una foto sirve—.
+**H4.4 — galería general** en `/galeria/` y `/en/gallery/`, con texto alternativo descriptivo
+propio en los dos idiomas. Reutiliza el visor de H2.3 en vez de duplicarlo. La curaduría dejó un
+dato para Abraham: el archivo de 244 imágenes es desigual y no admite atajos —ordenar por tamaño
+de archivo no predice si una foto sirve—.
+
+**La galería cambió DOS veces el 2026-09-10, y en sentidos opuestos.** Por la mañana el cliente
+tachó cinco de las nueve sobre la propia rejilla —no dio motivos y no se inventan— y quedó en
+cuatro. Por la tarde entraron **41 de la sesión con fotógrafo** y quedó en **45**: las cuatro de
+2025 conservan su orden al final. Las cinco tachadas siguen fuera, y eso **no lo deshace el lote
+nuevo**: lo que el cliente quitó fueron esas cinco fotografías concretas, no esos motivos.
+
+🔴 **Pero tres de las cinco tachadas siguen siendo la portada de otras páginas** —`/restaurante/`
+y `/eventos/`—, y eso el código no lo resuelve solo. Ver R-41.
 
 Construirla destapó **tres defectos, dos anteriores a la historia**: un `href` que producía un
 404 en producción (L-043), el CI en rojo desde hacía trece commits (L-040) y dos informes que
@@ -456,7 +464,7 @@ que en ningún lado que diga Azucar lleve acento»*. Es la **regla 8** y tiene g
 | Petición | Estado |
 |---|---|
 | ~~**«Revisar las habitaciones Arrecife y Luna»**~~ | ✅ **HECHO.** Abraham autorizó replicar de su familia — ver abajo |
-| **Foto de la recepción** | **No hay ninguna.** Revisadas una a una las 101 fotografías de propiedad del mirror: habitaciones, baños, terrazas, playa, alberca — ningún mostrador. Lo más parecido, `img_azucar_015`, mide 531 px de ancho para un banner que pide 1600 (R-37) |
+| ~~**Foto de la recepción**~~ | ✅ **HECHO 2026-09-10.** No existía —revisadas una a una las 101 del mirror, ningún mostrador— hasta que llegó la sesión profesional de septiembre: `Galeria/_MLS6946.jpg`, el mostrador con el logotipo en dorado detrás, a 5999×3375. Publicada en `/contacto/`, que hasta hoy compartía banner con `/alojamiento/`. **R-37 cerrado** |
 | **Foto de «La carretera de Boca Paila»** | Sustituirla exige **una licencia nueva y su crédito**: la actual es CC BY-SA 4.0 de Wikimedia. O el hotel manda una suya, o se elige una concreta y se ingiere (R-38) |
 | **«Roof top privado…» en Bungalow Aire** | El texto que el cliente pidió retirar está también en **Aire**, y él sólo habló de Cielo. Cambiado en Cielo; en Aire **se dejó**, porque la frase nueva dice «jacuzzi en su rooftop» y de Aire no consta que lo tenga |
 
@@ -488,14 +496,21 @@ gerencia, así que distingue de verdad —de la otra familia— sin inventar en 
 dos hermanas, que es lo que nadie ha dicho. Ver L-118. Tampoco llevan **Smart TV**: sólo Mar y
 Cielo la tienen.
 
-**Ninguna de las dos tiene fotografía, y NO se han copiado las de sus hermanos.** El propio sitio
-publica, en el encabezado de esa misma página, «cada bungalow fue decorado con identidad propia»:
-enseñar la terraza de Mar como si fuera la de Arrecife se contradice con su propio texto a dos
-centímetros. La tarjeta pinta su marcador sobrio y el banner se apoya en el color de tinta
-—15.91:1 con el blanco, más margen que sobre cualquier foto—. Al hacerlo
-salió un `!` de TypeScript que prometía lo que el esquema no: `imagenPrincipal` es `.optional()` y
-la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría roto el build
-(L-119).
+✅ **Y desde el 2026-09-10 las dos TIENEN fotografía propia.** Durante una semana salieron con
+marcador sobrio, porque se decidió no copiarles las de sus hermanos: el propio sitio publica, en el
+encabezado de esa misma página, «cada bungalow fue decorado con identidad propia», y enseñar la
+terraza de Mar como si fuera la de Arrecife se contradice con su propio texto a dos centímetros.
+**Esperar valió la pena**: la sesión profesional trae 16 fotos de Arrecife y 11 de Luna, casi todas
+exclusivas. Los diez tipos tienen ya principal y galería.
+
+🔴 **Y confirman una inferencia nuestra.** El `diferenciador` de esas dos fichas se dedujo de cómo
+la gerencia agrupó los tipos —nadie lo había dicho de ellas—: «el jacuzzi en la propia terraza»
+para Arrecife, «en un roof top propio» para Luna. Las fotos enseñan **exactamente eso**. Es la
+primera vez en el proyecto que una inferencia se confirma con evidencia independiente (L-139).
+
+Aquel marcador sobrio, además, sacó a la luz un `!` de TypeScript que prometía lo que el esquema no:
+`imagenPrincipal` es `.optional()` y la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo
+sin foto habría roto el build (L-119).
 
 ⚠️ **La gerencia la llamó «Villa Luna»**; se publica como **«Bungalow Luna»** por instrucción de
 Abraham. Es una decisión registrada, no una errata — conviene confirmarla con el hotel.
@@ -813,11 +828,12 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **141 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **142 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 | **`scripts/video-hero.sh`** | **De los DOS reels del cliente al vídeo del héroe: qué planos entran, cuáles se descartan y por qué, y la receta de codificación medida** |
+| **`scripts/ingerir-fotos.mjs`** | **De la sesión del fotógrafo a `site/src/assets/`: por qué el maestro se queda en 1600 px y a calidad 85** |
 | **`scripts/contraste-hero.mjs`** | **¿Se lee el texto del héroe sobre el vídeo? Compone las tres capas de velo sobre el píxel más claro de cada fotograma, en escritorio y en móvil** |
 | **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
