@@ -7,11 +7,7 @@
  * de doce columnas con anchos MEZCLADOS: seis piezas de un tercio y dos de un
  * medio, repartidas 3 + 2 + 3. Ese cambio de ritmo a media rejilla es lo que
  * distingue un mosaico de una cuadrícula, y es la razón de que la sección se
- * mire. Se reproduce tal cual.
- *
- * Ocho es exactamente el número de fotografías curadas que tenemos (H4.4), así
- * que la correspondencia con la plantilla es 1:1 y no hay que rellenar ni
- * recortar nada.
+ * mire. Se reproduce, pero NO se copia el número: ver `anchos()` más abajo.
  *
  * ── POR QUÉ NO REUTILIZA `Galeria.astro` ────────────────────────────────────
  * Aquel componente es una cuadrícula uniforme con visor modal, pensada para
@@ -29,8 +25,100 @@ const { idioma } = Astro.props;
 const t = usarT(idioma);
 const destino = ruta(idioma, 'galeria');
 
-// El ritmo de Cappa: tercios, mitades, tercios. El índice decide el ancho.
-const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
+type Ancho = 'entera' | 'media' | 'tercio';
+
+/**
+ * El reparto de anchos, calculado a partir del NÚMERO de fotos.
+ *
+ * ── EL ÍNDICE CABLEADO ERA UNA BOMBA DE RELOJERÍA, Y ESTALLÓ DOS VECES ──────
+ * Esto era `i === 3 || i === 4 ? 'media' : 'tercio'`: el 3 + 2 + 3 de Cappa
+ * escrito a mano, correcto **sólo con ocho fotos**. El banco de la galería lo
+ * decide el cliente, no la plantilla, y en cuanto cambió el número la rejilla se
+ * rompió sin que nadie lo viera:
+ *
+ *   · con nueve fotos, la última quedaba SOLA ocupando 4 de las 12 columnas;
+ *   · con cuatro (curaduría del cliente, 2026-09-10), la cuarta habría quedado
+ *     sola ocupando 6.
+ *
+ * Nadie lo notó porque una fila a medias no rompe nada: no es un error de build
+ * ni una violación de accesibilidad, sólo se ve mal. Es el mismo tipo de defecto
+ * silencioso que el botón sin color de L-114.
+ *
+ * ── LA REGLA ────────────────────────────────────────────────────────────────
+ * Sólo dos filas suman doce columnas exactas: **tres tercios** o **dos mitades**.
+ * Se reparte en filas de tres mientras se pueda y, si al final fuera a sobrar UNA
+ * sola foto, la última fila de tres se parte en dos filas de dos:
+ *
+ *     1 → 1        4 → 2+2      7 → 3+2+2
+ *     2 → 2        5 → 3+2      8 → 3+3+2
+ *     3 → 3        6 → 3+3      9 → 3+3+3
+ *
+ * Así ninguna fila queda a medias, sea cual sea el número de fotos. A ocho el
+ * orden ya no es el 3 + 2 + 3 exacto de Cappa sino 3 + 3 + 2: **las mismas piezas
+ * en otro orden**. Se prefiere eso a conservar el ritmo con un número cableado
+ * que vuelva a romperse la próxima vez que el cliente quite una foto.
+ */
+const POR_FILA = { 1: 'entera', 2: 'media', 3: 'tercio' } as const;
+
+const anchos = (total: number): Ancho[] => {
+  const filas: (1 | 2 | 3)[] = [];
+  for (let quedan = total; quedan > 0; ) {
+    const fila = quedan === 4 ? 2 : (Math.min(quedan, 3) as 1 | 2 | 3);
+    filas.push(fila);
+    quedan -= fila;
+  }
+  return filas.flatMap((n) => Array<Ancho>(n).fill(POR_FILA[n]));
+};
+
+/**
+ * 🔴 LA FRANJA ES UN ADELANTO, NO LA GALERÍA. Y el 2026-09-10 dejó de serlo sin
+ * que nadie lo pidiera: al entrar las 41 fotografías de la sesión profesional,
+ * este componente —que mapeaba `fotos` entera— pasó a pintar **45** en la
+ * portada. 59 `<img>` y 86 KB de HTML en la página que decide el LCP del sitio.
+ *
+ * No era un fallo del reparto de anchos, que con 45 sigue cuadrando: era que
+ * «todas» dejó de ser un número razonable el día que el banco creció de 4 a 45.
+ *
+ * Nueve es el tope, y no es un número redondo cualquiera: son **tres filas de
+ * tres exactas**, la forma que ya tenía la franja antes de crecer.
+ */
+const ADELANTO = 9;
+const seleccion = fotos.slice(0, ADELANTO);
+const ancho = anchos(seleccion.length);
+
+/**
+ * El `sizes` de cada pieza, que **depende de su ancho** y antes no lo hacía.
+ *
+ * Había uno solo para todas —`(min-width: 62rem) 30vw, (min-width: 40rem) 45vw,
+ * 90vw`— escrito pensando en los tercios. Con ocho fotos eso mentía sólo a las
+ * dos mitades; ahora las cuatro son mitades y mentiría a todas: se le pedía al
+ * navegador una imagen de 30 vw (384 px a 1280) para una celda de 544. En una
+ * pantalla normal (DPR 1) eso es elegir la derivada de 480 para una caja de 544
+ * y verla blanda; en una retina no se notaba porque 30 vw × 2 ya se pasaba de
+ * la derivada más grande — que es justo por lo que el defecto llevaba aquí
+ * desde el sprint 4 sin que nadie lo viera.
+ *
+ * Y el `90vw` del móvil estaba mal para TODAS: ahí las celdas siempre han ido de
+ * dos en dos, así que miden ~45 vw. Se pedía el doble de imagen de la que cabe.
+ *
+ * Medido sobre la rejilla real (contenedor de 1104 px dentro de 1200):
+ * tercio = (1104 − 32) / 3 = 357 px ≈ 30 vw · media = (1104 − 16) / 2 = 544 px
+ * ≈ 45 vw · entera = 1104 px ≈ 90 vw.
+ *
+ * Y lo que cambia, medido contra el `srcset` que emite el build:
+ *
+ *   · **teléfono de 375 px a 2×**: las cuatro bajan de 531/720 w a 480 w.
+ *     134 196 B → 80 564 B. **53 KB menos** en la portada, que es la página que
+ *     más importa.
+ *   · **escritorio de 1280 px a 1×**: suben de 480 w a 531/720 w. 80 564 B →
+ *     134 196 B. Sube, sí: es lo que cuesta llenar una caja de 544 px con una
+ *     imagen de 544 y no con una de 480 estirada.
+ */
+const SIZES: Record<Ancho, string> = {
+  tercio: '(min-width: 40rem) 30vw, 45vw',
+  media: '45vw',
+  entera: '90vw',
+};
 ---
 <section class="seccion seccion--calida galeria-home" aria-labelledby="galeria-home-titulo">
   <div class="contenedor">
@@ -41,8 +129,8 @@ const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
     </header>
 
     <ul class="mosaico" role="list">
-      {fotos.map((f, i) => (
-        <li class:list={['mosaico__celda', `mosaico__celda--${anchoDe(i)}`]}>
+      {seleccion.map((f, i) => (
+        <li class:list={['mosaico__celda', `mosaico__celda--${ancho[i]}`]}>
           {/* Toda la pieza es el enlace. El texto accesible NO es el `alt` de la
               foto —que describe la imagen— sino a dónde lleva: son dos cosas
               distintas y confundirlas hace que el lector de pantalla anuncie
@@ -52,7 +140,7 @@ const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
               src={f.imagen}
               alt={f.alt[idioma]}
               widths={[320, 480, 720]}
-              sizes="(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 90vw"
+              sizes={SIZES[ancho[i]]}
               loading="lazy"
               quality={50}
             />
@@ -78,8 +166,8 @@ const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
   /* Doce columnas, como la rejilla de Bootstrap que usa Cappa.
 
      En móvil TODAS las piezas ocupan seis columnas, es decir dos por fila. Se
-     probó con una sola columna y las ocho fotografías sumaban unos 1 600 px de
-     scroll para un adelanto: en un teaser eso no es generosidad, es peaje. Dos
+     probó con una sola columna y las fotografías sumaban unos 200 px de scroll
+     cada una para un adelanto: en un teaser eso no es generosidad, es peaje. Dos
      columnas es además lo que ya usa la página `/galeria/`, donde se comprobó
      que a 320 px las miniaturas siguen siendo legibles. */
   .mosaico {
@@ -91,10 +179,14 @@ const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
     gap: var(--space-3);
   }
   .mosaico__celda { min-width: 0; grid-column: span 6; }
+  /* La fila de una sola pieza ocupa el ancho entero también en móvil: es la
+     única forma de que no quede a medias. La produce `anchos()` sólo cuando el
+     banco tiene exactamente una foto. */
+  .mosaico__celda--entera { grid-column: span 12; }
 
   @media (min-width: 40rem) {
     .mosaico { gap: var(--space-4); }
-    /* Tres tercios · dos mitades · tres tercios — el reparto de Cappa. */
+    /* Tres tercios o dos mitades — las dos únicas filas que suman doce. */
     .mosaico__celda--tercio { grid-column: span 4; }
     .mosaico__celda--media  { grid-column: span 6; }
   }
@@ -111,6 +203,7 @@ const anchoDe = (i: number) => (i === 3 || i === 4 ? 'media' : 'tercio');
   @media (min-width: 40rem) {
     .mosaico__celda--tercio .mosaico__enlace { aspect-ratio: 4 / 3; }
     .mosaico__celda--media  .mosaico__enlace { aspect-ratio: 16 / 9; }
+    .mosaico__celda--entera .mosaico__enlace { aspect-ratio: 21 / 9; }
   }
 
   .mosaico__enlace :global(img) {
