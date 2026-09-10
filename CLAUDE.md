@@ -499,32 +499,71 @@ la ficha la pasaba con `data.imagenPrincipal!`. El primer tipo sin foto habría 
 ⚠️ **La gerencia la llamó «Villa Luna»**; se publica como **«Bungalow Luna»** por instrucción de
 Abraham. Es una decisión registrada, no una errata — conviene confirmarla con el hotel.
 
-### 🎬 Vídeo en el héroe de la portada — 2026-09-08
+### 🎬 Vídeo del héroe — LOS DOS REELS FUSIONADOS, 2026-09-10
 
-El cliente cambió el vídeo. Ahora es **`24_mayo.mp4`**: 1080×1920 vertical, 24.1 s, 46.9 MB, **ocho
-planos** de unos 2.7 s, y el último funde el **logotipo** sobre el agua de la alberca. Sustituye a
-`22_mayo.mp4`. La tubería es [`scripts/video-hero.sh`](scripts/video-hero.sh), se corre **a mano**
+A petición de Abraham, el héroe deja de salir de un reel y sale de **los dos**. La razón es de
+contenido, no de duración: son complementarios y ninguno cuenta el hotel entero.
+
+| | qué es | cadencia | planos |
+|---|---|---|---|
+| `22_mayo.mp4` | el reel de **HABITACIÓN** — camas, baños, clósets, terrazas | 41.96 s a **25 fps** | 18 de ~2.24 s |
+| `24_mayo.mp4` | el reel de **EXTERIOR** — playa, alberca, palapa, los arcos | 24.13 s a **24 fps** | 8 de ~2.71 s |
+
+El de exteriores enseñaba dónde está el hotel y **nunca dónde duermes**. La tubería es
+[`scripts/video-hero.sh`](scripts/video-hero.sh), ahora toma **dos rutas**, se corre **a mano**
 —ffmpeg no está en CI ni en Cloudflare— y su salida se versiona.
 
-**Y esta vez entran los ocho planos.** Del anterior hubo que descartar 11 de 18 porque eran de
-interior y, recortados a lo ancho, un clóset es una repisa y un baño es un lavabo. Éste es todo
-exterior: playa, alberca, arcos, palapa, el arco de piedra con el rótulo y el logotipo.
+🔴 **Los dos originales terminan con EXACTAMENTE el mismo remate**: el logotipo fundido sobre el
+agua. Medido en los dos, la caja del logo cae en x 188–891 · y 738–1181, centro 50.0 % / 50.0 %. No
+es «parecido», es el mismo material — **por eso el montaje lleva un remate, no dos.**
 
-| | plano | recorte |
-|---|---|---|
-| 1 | playa, camastros y palmeras | y = 430 |
-| 2 | alberca y arcos con el rótulo | y = 650 |
-| 3 | camastros bajo las sombrillas | y = 680 |
-| 4 | el arco de piedra y la alberca | y = 560 |
-| 5 | palapa, alberca y el Caribe | y = 700 |
-| 6 | palapa y tumbonas | y = 680 |
-| 7 | columnas, palmeras y el mar | y = 500 |
-| 8 | el agua y el **logotipo** | y = 655 |
+**Entran 11 de los 26 planos**, 1.4 s cada uno (2.4 s el remate) para **17.5 s**:
 
-**Cada plano lleva su propio recorte**, como en el vídeo anterior y por el mismo motivo: un
-desplazamiento único obliga a que todos tengan el asunto a la misma altura, y aquí la alberca está
-abajo, las palmeras arriba y el logotipo justo en medio. El CSS no reencuadra (`object-position:
-center`).
+| | plano | origen | recorte |
+|---|---|---|---|
+| 1 | la playa, las sombrillas y las palmeras | 24_mayo | y = 430 |
+| 2 | el arco de piedra con el **rótulo**, y la alberca | 24_mayo | y = **500** |
+| 3 | columnas de piedra, palmeras y el Caribe | 24_mayo | y = 500 |
+| 4 | la palapa, la alberca y el mar | 24_mayo | y = 700 |
+| 5 | el camastro blanco bajo las sombrillas | 24_mayo | y = 680 |
+| 6 | **la cama king** y su cabecera de madera | 22_mayo | y = 750 |
+| 7 | **las dos camas** | 22_mayo | y = 810 |
+| 8 | **la cama**, el ventanal y la cortina | 22_mayo | y = 750 |
+| 9 | **la cama**, el ventanal y la hamaca del balcón | 22_mayo | y = 750 |
+| 10 | el jacuzzi privado sobre el Caribe | 22_mayo | y = 580 |
+| 11 | el agua y el **logotipo** | 24_mayo | y = 655 |
+
+El orden es el argumento: **llegas → la propiedad → el mar → la alberca → el descanso → tu cuarto
+(×4) → tu terraza → la marca.** El jacuzzi privado va entre las habitaciones y el remate porque es
+el único plano que es las dos cosas y devuelve el azul justo antes del logotipo.
+
+**Cada plano lleva su propio recorte** —once planos, ocho alturas distintas— y por el mismo motivo
+de siempre: un desplazamiento único obliga a que todos tengan el asunto a la misma altura, y aquí la
+cabecera de una cama está a media altura, la alberca abajo y el rótulo del arco arriba. El CSS no
+reencuadra (`object-position: center`).
+
+⚠️ **Y el encuadre no se elige mirando el fotograma central: se elige mirando el PRIMERO y el ÚLTIMO
+de cada ventana, ya recortados**, porque estas cámaras se mueven. Esa comprobación cambió dos
+decisiones y descartó un plano. Ver L-140.
+
+🔴 **Los tres descartes que explican la selección:**
+
+| qué se cayó | por qué |
+|---|---|
+| **6 planos de baño y clóset** de `22_mayo` | Recortados a la banda, un clóset es una repisa. Uno tiene los avisos impresos pegados al espejo |
+| **«la cabecera tallada»**, el plano más bonito del material | Dos medidas independientes. Color: U=87.9 · V=150.6 contra U≈112 del resto de habitación — tungsteno contra luz de día. **No se corrige:** ni a 12000 K ni con `colorbalance` al ±0.28 pasa de U=102, y por el camino pierde 24 puntos de luminancia. Y la cámara viaja: un poste de la cama barre el cuadro y deja una ventana limpia de sólo 1.3 s |
+| **el segundo remate de logotipo** | Es el mismo. Ver arriba |
+
+✅ **El salto de color entre habitación y exterior SÍ se deja, y el argumento es una resta.** Los
+cuatro planos de habitación van a U 109.6–114.4 y los cinco de exterior a U 116.0–125.2. Parece un
+problema y no lo es: **los cinco exteriores se separan 9.2 unidades entre ellos**, y el bloque de
+habitación queda a 8.7 de su media. La habitación no está más lejos del exterior de lo que los
+exteriores están entre sí. El plano que sí lo estaba —a 32 unidades— se fue.
+
+✅ **El rótulo del arco se arregló al verificar.** A y=560 —la altura que llevaba el script para ese
+plano— el rótulo «Hotel AZUCAR Tulum» **salía cortado por arriba**. A y=500 entra entero y la
+alberca sigue en cuadro. Es el único sitio del montaje donde se lee el nombre del hotel antes del
+remate, y llevaba dos versiones cortado sin que nadie lo viera.
 
 🔴 **El logotipo, que era la petición explícita, está centrado — y su límite es una división.**
 Medido sobre el original: ocupa x 190–890 · y 738–1179, centro en 50.0 % / 49.9 %. El recorte y=655
@@ -540,33 +579,52 @@ original y sin esa pausa el bucle vuelve a empezar antes de que se lea. Un fotog
 bytes.
 
 **Dos recortes**, como un `<picture>`: apaisado **1080×608 nativo** para escritorio y vertical
-**608×1080** para teléfono, donde el cuadro entero es el acierto. **Nada se amplía antes de
-codificar.** WebM (VP9) y MP4 (H.264) — **cada navegador descarga uno**: 1.8 / 2.4 MB en escritorio
-y 1.2 / 1.7 MB en teléfono, para **14.7 s**.
+**608×1080** para teléfono, donde el cuadro entero es el acierto —y por eso ahí las camas y el
+logotipo salen completos sin tocar nada—. **Nada se amplía antes de codificar.** WebM (VP9) y MP4
+(H.264) — **cada navegador descarga uno**: 2.1 / 2.9 MB en escritorio y 1.5 / 2.0 MB en teléfono,
+para **17.5 s**.
 
-⚠️ **El presupuesto de bytes SUBE** (700k→1000k en VP9, 1000k→1400k en H.264) y es una consecuencia
-del material, no un capricho: el vídeo anterior tenía recámaras —paredes lisas, casi gratis de
-codificar— y éste es agua, palmeras y cielo en los ocho planos, que es lo más caro que hay. Al
-presupuesto viejo se bloqueaba en el agua. El cliente pidió expresamente que no se viera pixeleado.
+✅ **El presupuesto de bytes NO sube al fusionar, y ésa es la gracia del material mixto.** Sigue en
+1000k VP9 / 1400k H.264. Cuatro de los once planos son ahora habitación —paredes lisas y ropa de
+cama blanca, casi gratis de codificar— y con dos pasadas el códec ve el archivo entero antes de
+repartir, así que **los bits que la habitación no gasta se los queda el agua**. Medido sobre los
+tres planos presentes en las DOS versiones, a media de archivo idéntica (166.9 contra 166.5 KB/s):
+
+| plano | sólo exteriores | fusión | |
+|---|---|---|---|
+| el arco y la alberca | 243.6 KB/s | 248.8 KB/s | +2 % |
+| la palapa y el mar | 134.6 KB/s | 158.0 KB/s | **+17 %** |
+| el agua y el logotipo | 179.7 KB/s | 222.8 KB/s | **+24 %** |
+
+Es decir: dura 2.8 s más, pesa 0.5 MB más, **y sus planos de agua se ven mejor que antes**. El
+cliente había pedido expresamente que no se viera pixeleado.
+
+⚠️ **Las dos cadencias no coincidían** —25 fps `22_mayo` contra 24 fps `24_mayo`— y concatenar sin
+igualarlas produce marcas de tiempo incoherentes que `concat -c copy` **no denuncia**. Se normaliza
+todo a 24 fps en el filtro de cada segmento: en un plano de 1.4 s la diferencia es un fotograma.
 
 🔴 **El LCP no se toca.** La fotografía sigue siendo el elemento LCP y sigue precargada igual; el
 vídeo entra `preload="none"`, sin `src` en el marcado, y sólo arranca en `requestIdleCallback`
 **después** de `load`. **No se le carga a quien no debe:** `prefers-reduced-motion`, `saveData` y
 redes `2g` no descargan ni un byte.
 
-✅ **Contraste re-medido, y ahora es un guardián versionado.** El material nuevo es mucho más claro
-—arena al sol, sombrillas blancas— así que la medición era obligatoria. Está en
-[`scripts/contraste-hero.mjs`](scripts/contraste-hero.mjs), con perfil de escritorio y de móvil, y
-compone las tres capas reales (viñeta lateral, degradado vertical y la elipse del contenido) sobre
-el píxel más claro de **cada fotograma**:
+✅ **Contraste re-medido sobre el material nuevo — obligatorio siempre que cambie el vídeo.** Está
+en [`scripts/contraste-hero.mjs`](scripts/contraste-hero.mjs), con perfil de escritorio y de móvil,
+y compone las tres capas reales (viñeta lateral, degradado vertical y la elipse del contenido) sobre
+el píxel más claro de **cada uno de los 79 fotogramas**:
 
 | | escritorio | móvil |
 |---|---|---|
-| antetítulo | 9.01:1 | 6.73:1 |
+| antetítulo | 9.01:1 | 6.72:1 |
 | titular | 8.21:1 | 7.53:1 |
-| entradilla | 7.67:1 | 6.94:1 |
-| botón de contorno | 9.00:1 | 9.00:1 |
-| aviso legal | 7.34:1 | 6.00:1 |
+| entradilla | 7.67:1 | 6.99:1 |
+| botón de contorno | 8.99:1 | 9.00:1 |
+| aviso legal | 7.34:1 | 6.01:1 |
+
+**Y salen casi idénticas a las del vídeo anterior, lo cual es la comprobación, no una casualidad:**
+el peor caso lo fija el píxel más CLARO, que es la arena al sol y las sombrillas blancas — y esos
+planos están en las dos versiones y salen del mismo original. Los cuatro planos de habitación son
+más oscuros que la playa, así que no pueden mover el peor caso.
 
 **Y la primera medición se equivocó por 2.5 puntos.** Daba 4.77:1 en el aviso porque medía la caja
 del `<p>` —800 px— en vez de los renglones pintados —237 px—. Casi apago el vídeo entero para
@@ -746,11 +804,11 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **135 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **139 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
-| **`scripts/video-hero.sh`** | **Del reel del cliente al vídeo del héroe: qué planos y por qué, y la receta de codificación medida** |
+| **`scripts/video-hero.sh`** | **De los DOS reels del cliente al vídeo del héroe: qué planos entran, cuáles se descartan y por qué, y la receta de codificación medida** |
 | **`scripts/contraste-hero.mjs`** | **¿Se lee el texto del héroe sobre el vídeo? Compone las tres capas de velo sobre el píxel más claro de cada fotograma, en escritorio y en móvil** |
 | **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
@@ -786,7 +844,11 @@ node scripts/verificar-301.mjs site/dist
 # ¿alguna clase CSS usada en un componente y definida en el ámbito de otro?
 node scripts/verificar-estilos.mjs
 
-# ¿se lee el texto del héroe sobre el vídeo? — obligatorio si cambia el vídeo
+# Vídeo del héroe — se corre A MANO (ffmpeg no está en CI) y toma LOS DOS reels.
+# Tarda ~6 min. Su salida se versiona en site/src/assets/video/
+./scripts/video-hero.sh "…/Hotel Azucar/22_mayo.mp4" "…/Hotel Azucar/24_mayo.mp4"
+
+# ¿se lee el texto del héroe sobre el vídeo? — OBLIGATORIO si cambia el vídeo
 node scripts/contraste-hero.mjs
 node scripts/verificar-301.mjs https://azucar-hotel-tulum.pages.dev
 ```

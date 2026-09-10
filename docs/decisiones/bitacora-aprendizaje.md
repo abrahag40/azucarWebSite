@@ -4315,6 +4315,118 @@ justo la clase de texto que nadie audita.
 Corregido el 2026-09-08: la regla `/_astro/*` con `max-age=31536000, immutable`, y el comentario
 reescrito con el `curl` que lo prueba dentro.
 
+
+## L-140 · El encuadre de un plano no está en su fotograma central
+
+El 2026-09-10 Abraham pidió fusionar los dos reels del cliente en un solo vídeo de héroe, con una
+condición dicha en sus palabras: *«de nada me sirve que por ejemplo si sale camas, aparezcan muy
+debajo y no se visualicen en el hero»*.
+
+El problema es geométrico y ya estaba documentado: el original es 9:16 y el héroe apaisado sólo
+enseña una banda de **608 px de los 1920** —el 32 % del cuadro—. Lo que no estaba documentado es
+**cómo se elige esa banda sin equivocarse**, y ahí había un método malo heredado.
+
+### El método malo: un fotograma por plano
+
+Las dos versiones anteriores del script eligieron cada `y` mirando **el fotograma central** de cada
+plano. Es lo natural y es insuficiente, porque **estas cámaras se mueven**: son reels de teléfono
+grabados andando. Un asunto centrado a la mitad del plano puede entrar y salir en los extremos.
+
+El método nuevo son tres pasos, y ninguno es caro:
+
+1. Detectar los cortes (`select=gt(scene,0.12)`) y sacar el fotograma central de los 26 planos.
+2. **Renderizar el recorte 1080×608 REAL** de cada uno y verlos en hoja de contacto. No la
+   miniatura vertical con una línea encima: el recorte, tal como se va a ver.
+3. Para los seleccionados, repetir con el **primer y el último** fotograma de la ventana exacta.
+
+El paso 3 es el que paga, y pagó tres veces:
+
+- **Un plano descartado.** «La cabecera tallada» era el fotograma más bonito del material: madera
+  calada, dos almohadas, luz cálida. En su fotograma central es perfecto. Barrido cada 0.4 s, un
+  **poste de la cama barre el cuadro** y a t=1.9 s lo parte en dos. La ventana limpia mide 1.3 s.
+- **Un encuadre corregido que llevaba dos versiones mal.** El plano del arco de piedra iba a y=560
+  desde el vídeo anterior. A esa altura **el rótulo «Hotel AZUCAR Tulum» del arco sale cortado por
+  arriba** — y es el único sitio del montaje donde se lee el nombre del hotel antes del remate. A
+  y=500 entra entero y la alberca sigue en cuadro. Nadie lo había visto porque nadie había mirado
+  ese plano recortado; se había mirado el vídeo.
+- **Un descarte que ahorró la mitad del trabajo.** Los dos reels terminan con el mismo remate de
+  logotipo. No «parecido»: medida la caja de píxeles claros y poco saturados en los dos, ambos dan
+  x 188–891 · y 738–1181, centro 50.0 % / 50.0 %. Es el mismo material. Se usa uno.
+
+### El antipatrón, con nombre
+
+`object-position` en el CSS. Es la solución que pide el cuerpo —una línea, se ajusta a ojo en el
+navegador— y es incorrecta por construcción: **mueve los once planos en bloque**, y aquí la cabecera
+de una cama está a media altura, la alberca abajo y el rótulo del arco arriba. Once planos, **ocho
+alturas de recorte distintas**. El encuadre es una decisión por plano y se toma antes de codificar.
+
+### Corregirse en voz alta: el plano que quise salvar
+
+Descartar «la cabecera tallada» no fue un juicio estético, y conviene decir por qué, porque mi
+primer impulso fue justo el contrario: incluirlo y **corregirle el color**.
+
+Medido con `signalstats` sobre cinco fotogramas por plano, U y V medios (neutro = 128):
+
+| bloque | U | V |
+|---|---|---|
+| cinco exteriores | 116.0 – 125.2 | 125.1 – 132.9 |
+| cuatro de habitación | 109.6 – 114.4 | 134.7 – 139.9 |
+| **la cabecera tallada** | **87.9** | **150.6** |
+
+Es luz de tungsteno entre diez planos de luz de día. Probé a corregirlo y **la medición me dijo que
+no**: `colortemperature` a 7500, 8500, 9500, 10500, 12000 y 14000 K, y `colorbalance` a ±0.10, 0.16,
+0.22 y 0.28. Lo más lejos que llega es U=102 —a 14000 K, un valor absurdo— y por el camino se lleva
+**24 puntos de luminancia**: la imagen se apaga y la pared se vuelve verdosa. A la vista, la
+corregida sigue siendo amarilla y además está muerta.
+
+Y la misma medición dictó **lo que NO hay que tocar**. Los cuatro planos de habitación son más
+cálidos que los cinco de exterior, y la tentación era igualarlos. La resta lo desmiente: **los cinco
+exteriores se separan 9.2 unidades entre ellos** (116.0 a 125.2) y el bloque de habitación queda a
+8.7 de su media. La habitación no está más lejos del exterior de lo que los exteriores están entre
+sí. Corregir eso habría sido inventar un problema — y el que sí lo era estaba a 32 unidades.
+
+**La regla que queda:** medir sirve para decidir que hay un problema *y también* para decidir que no
+lo hay. Lo segundo se practica menos y ahorra más.
+
+### El regalo que no esperaba: el material mixto abarata el vídeo
+
+El script anterior había SUBIDO el presupuesto de bytes (700k→1000k VP9, 1000k→1400k H.264) porque
+sus ocho planos eran agua, palmeras y cielo —lo más caro que existe de codificar—. Yo esperaba tener
+que subirlo otra vez al alargar el montaje.
+
+Al revés. Con **dos pasadas** el códec ve el archivo entero antes de repartir, y cuatro de los once
+planos son ahora paredes lisas y ropa de cama blanca. Los bits que la habitación no gasta se los
+queda el agua. Medido sobre los tres planos presentes en las dos versiones, a media de archivo
+idéntica (166.9 contra 166.5 KB/s):
+
+| plano | sólo exteriores | fusión | |
+|---|---|---|---|
+| el arco y la alberca | 243.6 KB/s | 248.8 KB/s | +2 % |
+| la palapa y el mar | 134.6 KB/s | 158.0 KB/s | **+17 %** |
+| el agua y el logotipo | 179.7 KB/s | 222.8 KB/s | **+24 %** |
+
+Dura 2.8 s más, pesa 0.5 MB más y **sus planos de agua se ven mejor que antes**, al mismo
+presupuesto. Es lo contrario de la intuición: *añadir* material barato mejora el caro.
+
+### Y una trampa silenciosa: las dos cadencias
+
+`22_mayo` va a **25 fps** y `24_mayo` a **24**. Concatenar segmentos de cadencias distintas con
+`concat -c copy` produce un archivo con marcas de tiempo incoherentes, **y no falla ni avisa**: se
+reproduce, y se va desincronizando. Se normaliza todo a 24 fps en el filtro de cada segmento, donde
+el coste es un fotograma por plano de 1.4 s.
+
+### La comprobación que parecía sospechosa y era la prueba
+
+El guardián `contraste-hero.mjs` devolvió, sobre material nuevo, cifras **casi idénticas** a las del
+vídeo anterior (9.01 / 8.21 / 7.67 en escritorio). Primer reflejo: está cacheando. No lo estaba —el
+recuento de fotogramas pasó de 66 a 79, que es 17.5 s a 4.5 fps—, y la coincidencia **es la
+explicación correcta**: el peor contraste lo fija el píxel más CLARO, que es la arena al sol y las
+sombrillas blancas; esos planos están en las dos versiones y salen del mismo original. Los cuatro
+planos de habitación son más oscuros que la playa, así que no pueden mover el peor caso.
+
+Un resultado que no cambia cuando no debería cambiar es una verificación, no un fallo. Pero hay que
+poder decir **por qué** no debería — si no, es indistinguible de una caché.
+
 ---
 
 ## Riesgos abiertos
