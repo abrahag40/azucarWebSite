@@ -99,37 +99,87 @@ Verificado en cada informe, no supuesto: las pasadas «con» descargan **1 archi
 
 ### Móvil, estrangulamiento `simulate` — 7 + 7 pasadas
 
+> **Re-medido el 2026-09-10 por la tarde**, después de cambiar de toma el plano 2 del montaje
+> (commit `02ae860`). Las cifras de abajo son las del vídeo **que está desplegado hoy**.
+
 | Métrica | Umbral | **con vídeo** | sin vídeo | diferencia | |
 |---|---|---|---|---|---|
-| **LCP** (mediana) | < 2.5 s | **1.86 s** | 1.84 s | **+20 ms** | ✅ |
+| **LCP** (mediana) | < 2.5 s | **1.86 s** | 1.85 s | **+10 ms** | ✅ |
 | **CLS** | < 0.1 | **0.000** | 0.000 | 0 | ✅ |
 | **TBT** | < 200 ms | **0 ms** | 0 ms | 0 | ✅ |
-| Speed Index *(no es CWV)* | — | 1.64 s | 1.24 s | **+400 ms** | ⚠️ |
+| Speed Index *(no es CWV)* | — | 1.64 s | 1.23 s | **+410 ms** | ⚠️ |
 | Rendimiento | — | **99** | 99 | 0 | |
 
 LCP por pasada — **los dos grupos se dispersan igual**, y ésa es la conclusión:
 
 ```
-con vídeo   2.39  2.05  1.86  1.86  1.88  1.86  1.82     mediana 1.86
-sin vídeo   1.83  1.84  1.84  1.99  1.98  2.06  1.84     mediana 1.84
+con vídeo   1.82  1.83  2.07  1.87  1.86  1.85  2.06     mediana 1.86
+sin vídeo   1.99  1.85  1.83  1.81  1.88  1.89  1.84     mediana 1.85
 ```
 
-Los 20 ms de diferencia caen dentro del ruido de cualquiera de los dos grupos por separado.
+Los 10 ms de diferencia caen dentro del ruido de cualquiera de los dos grupos por separado.
 **El vídeo no mueve el LCP de forma medible.**
+
+**TBT = 0 ms en las CATORCE pasadas.** En la primera tanda hubo un 1217 ms suelto que resultó ser
+el arranque en frío de la máquina; ahora se tira una **pasada de calentamiento** antes de contar, y
+el valor anómalo no ha vuelto a aparecer. La receta de L-141, funcionando.
+
+### El cambio de toma no costó nada, y el CONTROL lo demuestra
+
+El plano 2 se cambió de toma a mediodía. Comparar contra la medición de la mañana sería comparar
+dos momentos distintos… salvo que el brazo **sin vídeo** sirve de control: si el sitio sin vídeo
+mide hoy lo mismo que hace unas horas, las condiciones no han cambiado y la comparación vale.
+
+| | mañana (vídeo v1) | tarde (vídeo v2) | Δ |
+|---|---|---|---|
+| **control** — sin vídeo, LCP | 1.84 s | 1.85 s | +10 ms |
+| **control** — sin vídeo, Speed Index | 1.24 s | 1.23 s | −10 ms |
+| con vídeo, LCP | 1.86 s | 1.86 s | **0** |
+| con vídeo, Speed Index | 1.64 s | 1.64 s | **0** |
+
+El control se mueve 10 ms, o sea nada: las condiciones son las mismas. Y con eso sobre la mesa, el
+vídeo nuevo mide **exactamente igual** que el anterior. Tiene sentido —cambió un plano de once y el
+peso apenas se movió, 2903 KB contra 2920 KB— pero **una explicación plausible no es una medición**,
+y por eso se midió.
 
 ### Escritorio — 3 pasadas, con el archivo MÁS pesado (2141 KB)
 
-| Rendimiento | LCP | CLS | TBT | Speed Index |
-|---|---|---|---|---|
-| **100** · 100 · 100 | 0.52 – 0.59 s | 0.001 | 0 ms | 0.50 – 0.63 s |
+| Rendimiento | LCP | CLS | TBT |
+|---|---|---|---|
+| **100** · 100 · 100 | 0.54 – 0.57 s | 0.001 | 0 ms |
 
 ### Las tres cosas que esto demuestra, y la que cuesta
 
-1. **El elemento LCP es la fotografía en las 17 pasadas**, con vídeo y sin él. El vídeo nunca
-   llega a ser candidato a LCP, que es exactamente lo que perseguía el diseño.
-2. **El vídeo se pide DESPUÉS del LCP, y se puede fechar.** En la pasada móvil 3: la fotografía
-   del héroe se pide a 154 ms y termina a 248 ms; el vídeo se pide a **349 ms**, es decir
-   **101 ms después de que la foto haya terminado de descargarse**. No compiten.
+1. **El elemento LCP es la fotografía en 33 de los 34 informes**, con vídeo y sin él.
+
+   🔴 **Y la excepción importa, así que se dice.** El único informe donde el LCP es el `<video>` es
+   la **primera pasada de la primera tanda**: la de arranque en frío, con Chrome abriéndose por
+   primera vez y `npx` descargando Lighthouse en paralelo, que dio TBT 1217 ms y rendimiento 70
+   cuando las demás dieron 0 y 99. Con la máquina así de asfixiada la fotografía pinta tarde, el
+   `requestIdleCallback` del vídeo llega a dispararse dentro de la ventana de LCP y **el primer
+   fotograma del vídeo gana**.
+
+   O sea: **el diseño no garantiza que el vídeo nunca sea LCP — garantiza que no lo sea mientras la
+   máquina responda.** En condiciones normales no pasó ni una vez en 14 pasadas. Y aun en esa
+   pasada patológica el LCP fue de **2.39 s, por debajo del umbral de 2.5 s**, así que el criterio
+   se cumplió igualmente.
+
+   Es la razón de fondo por la que se descarta la pasada de calentamiento: no sólo porque el número
+   sea feo, sino porque **mide una máquina que ningún visitante tiene**.
+2. **El vídeo se pide DESPUÉS del LCP, y se puede fechar — en las siete pasadas, no en una.**
+
+   | pasada | la foto del LCP termina | el vídeo se pide | separación |
+   |---|---|---|---|
+   | 1 | 197 ms | 265 ms | 68 ms |
+   | 2 | 191 ms | 276 ms | 86 ms |
+   | 3 | 253 ms | 318 ms | 66 ms |
+   | 4 | 244 ms | 326 ms | 82 ms |
+   | 5 | 210 ms | 282 ms | 73 ms |
+   | 6 | 186 ms | 243 ms | 57 ms |
+   | 7 | 194 ms | 272 ms | 79 ms |
+
+   Mediana **73 ms**, mínimo 57. **Ninguna separación es negativa**: el vídeo nunca se pide antes de
+   que la fotografía haya terminado. No compiten por el ancho de banda.
 3. **`prefers-reduced-motion` funciona en producción**, no sólo en el código: 0 bytes de vídeo.
 4. ⚠️ **Lo que sí cuesta es el Speed Index: +400 ms** (1.64 contra 1.24 s), y es real —los rangos
    apenas se solapan—. Tiene sentido: el SI mide con qué rapidez se llena visualmente la pantalla,

@@ -4487,6 +4487,30 @@ Si el rango de un grupo se come la diferencia entre grupos, no hay diferencia to
 muestras. Y en herramientas de laboratorio, **descartar la primera pasada**, que mide el arranque
 en frío de la máquina y no el sitio.
 
+### Apéndice del 2026-09-10 por la tarde: la pasada descartada escondía un hallazgo
+
+Al re-medir tras cambiar de toma el plano 2, revisé el **elemento LCP de los 34 informes
+acumulados** —cosa que la primera vez sólo hice en cuatro—. En 33 es la fotografía. En uno es el
+`<video>`.
+
+Ese uno es **justo la pasada de arranque en frío que había descartado**. Y no es un error de la
+herramienta: con la máquina asfixiada, la fotografía pinta tarde, al `requestIdleCallback` del
+vídeo le da tiempo a dispararse dentro de la ventana de LCP, y el primer fotograma del vídeo gana.
+
+Obliga a matizar una frase que yo había escrito como absoluta. **El diseño no garantiza que el
+vídeo nunca sea el LCP: garantiza que no lo sea mientras la máquina responda.** En 14 pasadas
+normales no ocurrió ni una vez, y aun en la patológica el LCP fue 2.39 s, bajo el umbral de 2.5.
+
+Lo interesante para el método es doble:
+
+1. **Descartar una pasada no es tirarla.** Se descarta del *promedio*, no del *análisis*. La pasada
+   fea es la única que enseña el comportamiento del sistema bajo presión, que es información que
+   ninguna de las buenas contiene.
+2. **Verifiqué una muestra y generalicé a la población.** Escribí «el LCP es la fotografía en las 17
+   pasadas» habiendo abierto cuatro informes. Era cierto en los cuatro y falso como enunciado. Si
+   una afirmación dice «en las N», hay que mirar las N — y mirarlas cuesta un `for`.
+
+
 
 ## L-142 · Cuando dos asuntos no caben en el recorte, el problema es la toma, no el recorte
 
