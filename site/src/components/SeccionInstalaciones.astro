@@ -21,7 +21,18 @@ import { Image } from 'astro:assets';
 import { instalaciones } from '../data/hotel';
 import { usarT, type Idioma } from '../i18n/ui';
 import fotoSelvamar from '../assets/galeria/06-alberca-roof-top.webp';
-import fotoWhitePearl from '../assets/galeria/01-roof-top-atardecer.webp';
+/* 🔴 «White Pearl» DEJA DE SER UNA FOTO PRESTADA. Hasta el 2026-09-10 esta
+   sección se ilustraba con `01-roof-top-atardecer`, que es del roof top del
+   restaurante: la única azotea de la que teníamos fotografía. Abraham confirmó
+   ese día que las nueve fotos de la carpeta «Perla Blanca» son de este roof
+   top, así que ahora se ve el sitio del que habla el texto — la terraza alta
+   con su alberca larga, el deck y el mar detrás.
+
+   ⚠️ La FOTO está confirmada; el TEXTO sigue siendo nuestro. Por eso
+   `ejemplo: true` no se toca en `hotel.ts`: lo que nadie ha dicho todavía es
+   que la terraza esté «reservada para atardeceres y celebraciones pequeñas».
+   Que exista el sitio y que la descripción sea suya son dos cosas distintas. */
+import fotoWhitePearl from '../assets/rooftop-white-pearl.webp';
 import fotoDaypass from '../assets/galeria/05-camastros-palapa.webp';
 import fotoSpa from '../assets/galeria/08-patio-arboles.webp';
 
