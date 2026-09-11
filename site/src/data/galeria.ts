@@ -78,6 +78,46 @@
  * 2025: el orden del array es el orden de la rejilla, y lo que decide si
  * alguien sigue mirando es lo primero que ve.
  *
+ * ── SEXTA TANDA: «TODAS», Y ESTA VEZ ES LITERAL ───────────────────────────
+ * El 2026-09-11 la instrucción del cliente, vía Abraham, fue **«quiero que
+ * existan todas, no me importa nada»**. Entran las 31 que las curadurías
+ * anteriores habían apartado, y con ellas la carpeta `Galeria/` queda **completa
+ * al 100 %: sus 146 imágenes están las 146 en la galería.**
+ *
+ *     18  las de 6K que se llamaban «editar» o «para editar»
+ *      1  `_MLS6946`, la recepción — ya era el banner de /contacto/
+ *      9  exports de Instagram a 1080 px
+ *      3  las «capturas de pantalla» de `booking/`
+ *
+ * **Se comprobó por CONTENIDO, no por nombre de archivo.** Cada original se
+ * re-codificó con esta misma tubería —1600 px, WebP q85— y se comparó su hash
+ * contra las 119 ya cargadas. De ahí salen los tres números que cuadran solos:
+ * 115 ya estaban, 31 faltaban, y 4 numeradas no tienen origen en esa carpeta
+ * porque son las cuatro supervivientes de 2025. Cotejar por nombre no habría
+ * servido: los archivos se llaman por su posición desde la quinta tanda.
+ *
+ * ✅ **Y corrige un error de la quinta tanda.** Aquí se escribió que las tres
+ * capturas «no son fotografías». **Lo son**: miradas una a una, son el arco con
+ * la alberca y el mar, la alberca de borde infinito entre las palmeras, y el
+ * rincón de la palapa con su hamaca y sus pufs. Ni una pizca de interfaz, ni un
+ * precio, ni un logotipo de Booking. Se descartaron por su NOMBRE de archivo, que
+ * es exactamente el atajo que esta galería lleva tres curadurías evitando.
+ *
+ * ⚠️ **Lo que se advirtió de las otras 28 sigue siendo verdad, y la decisión es
+ * del cliente:** las 9 de Instagram miden 1080 px y el visor las abre a 1120, así
+ * que se estiran un poco; las 18 de «editar» son de 6K y nadie ha confirmado si
+ * el nombre significaba que estaban pendientes de retoque. Se dijo, se decidió, y
+ * queda escrito quién decidió.
+ *
+ * 🔴 **Las 31 van al FINAL, y eso rompe a propósito el orden por fuerza visual.**
+ * Las 18 de 6K son mejores que buena parte de las 74 de Booking —que no pasan de
+ * 768 px— y aun así quedan detrás de ellas. El motivo es el contrato de la
+ * numeración: colocarlas donde les toca obligaría a **renumerar las 119
+ * anteriores**, y con ellas se iría la lista que el cliente tiene delante ahora
+ * mismo para poder decir «quita la 57». Se prefiere una rejilla imperfecta a una
+ * referencia rota. Reordenar sigue siendo posible y es una sola pasada: se
+ * renumera entero y se regenera el array.
+ *
  * ── 🔢 LOS ARCHIVOS SE LLAMAN POR SU NÚMERO, Y ESO ES EL CONTRATO ──────────
  * Desde el 2026-09-10 las 119 viven en `assets/galeria/numeradas/` y se llaman
  * `001.webp` … `119.webp`, **en el mismo orden en que salen en la rejilla**. Lo
@@ -89,10 +129,11 @@
  * pasa a llamarse `012.webp`. Mantener el nombre viejo rompería justo lo que
  * esto viene a dar.
  *
- * ⚠️ **Y por eso TRES fotos están dos veces en el repositorio, a propósito.**
+ * ⚠️ **Y por eso CUATRO fotos están dos veces en el repositorio, a propósito.**
  * `04-vista-selva-mar`, `05-camastros-palapa` y `09-entrada-piedra` son además
  * la portada de `/actividades/`, `/reservar/` y `/nosotros/`, y una de ellas
- * ilustra el Day Pass. Si esas páginas apuntaran a un número, la próxima
+ * ilustra el Day Pass. A ellas se suma `recepcion.webp` —el banner de
+ * `/contacto/`—, que desde la sexta tanda está también como `138.webp`. Si esas páginas apuntaran a un número, la próxima
  * reordenación les cambiaría la foto **en silencio**. Cada una conserva su
  * archivo y su ruta de ORIGEN, y la galería usa una copia numerada.
  *
@@ -254,6 +295,37 @@ import foto116 from '../assets/galeria/numeradas/116.webp';
 import foto117 from '../assets/galeria/numeradas/117.webp';
 import foto118 from '../assets/galeria/numeradas/118.webp';
 import foto119 from '../assets/galeria/numeradas/119.webp';
+import foto120 from '../assets/galeria/numeradas/120.webp';
+import foto121 from '../assets/galeria/numeradas/121.webp';
+import foto122 from '../assets/galeria/numeradas/122.webp';
+import foto123 from '../assets/galeria/numeradas/123.webp';
+import foto124 from '../assets/galeria/numeradas/124.webp';
+import foto125 from '../assets/galeria/numeradas/125.webp';
+import foto126 from '../assets/galeria/numeradas/126.webp';
+import foto127 from '../assets/galeria/numeradas/127.webp';
+import foto128 from '../assets/galeria/numeradas/128.webp';
+import foto129 from '../assets/galeria/numeradas/129.webp';
+import foto130 from '../assets/galeria/numeradas/130.webp';
+import foto131 from '../assets/galeria/numeradas/131.webp';
+import foto132 from '../assets/galeria/numeradas/132.webp';
+import foto133 from '../assets/galeria/numeradas/133.webp';
+import foto134 from '../assets/galeria/numeradas/134.webp';
+import foto135 from '../assets/galeria/numeradas/135.webp';
+import foto136 from '../assets/galeria/numeradas/136.webp';
+import foto137 from '../assets/galeria/numeradas/137.webp';
+import foto138 from '../assets/galeria/numeradas/138.webp';
+import foto139 from '../assets/galeria/numeradas/139.webp';
+import foto140 from '../assets/galeria/numeradas/140.webp';
+import foto141 from '../assets/galeria/numeradas/141.webp';
+import foto142 from '../assets/galeria/numeradas/142.webp';
+import foto143 from '../assets/galeria/numeradas/143.webp';
+import foto144 from '../assets/galeria/numeradas/144.webp';
+import foto145 from '../assets/galeria/numeradas/145.webp';
+import foto146 from '../assets/galeria/numeradas/146.webp';
+import foto147 from '../assets/galeria/numeradas/147.webp';
+import foto148 from '../assets/galeria/numeradas/148.webp';
+import foto149 from '../assets/galeria/numeradas/149.webp';
+import foto150 from '../assets/galeria/numeradas/150.webp';
 
 type Texto = Record<Idioma, string>;
 
@@ -1089,6 +1161,223 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
     alt: {
       es: 'Los edificios del hotel entre las palmeras, desde el jardín.',
       en: 'The hotel buildings among the palms, seen from the garden.',
+    },
+  },
+  {
+    imagen: foto120,
+    alt: {
+      es: 'Arco de piedra con el rótulo del hotel, entre palmeras, con los camastros de la playa y el Caribe detrás.',
+      en: 'A stone arch bearing the hotel sign among palm trees, with the beach loungers and the Caribbean behind.',
+    },
+  },
+  {
+    imagen: foto121,
+    alt: {
+      es: 'Alberca alargada en la azotea, con pérgola de madera, duela y camastros mirando al mar.',
+      en: 'The long rooftop pool, with a wooden pergola, decking and loungers facing the sea.',
+    },
+  },
+  {
+    imagen: foto122,
+    alt: {
+      es: 'La alberca de la azotea desde un extremo, con la fila de camastros y el horizonte del mar.',
+      en: 'The rooftop pool seen from one end, with the row of loungers and the sea horizon.',
+    },
+  },
+  {
+    imagen: foto123,
+    alt: {
+      es: 'Alberca de la azotea con el muro de piedra caliza y el mar abierto al fondo.',
+      en: 'The rooftop pool with its limestone wall and the open sea beyond.',
+    },
+  },
+  {
+    imagen: foto124,
+    alt: {
+      es: 'Terraza de madera en la azotea con una hamaca colgada y dos sillas de tijera.',
+      en: 'A wooden rooftop terrace with a hanging hammock and two folding deck chairs.',
+    },
+  },
+  {
+    imagen: foto125,
+    alt: {
+      es: 'Camastros de madera junto al borde de la alberca de la azotea, con las palmeras y el mar detrás.',
+      en: 'Wooden loungers beside the rooftop pool edge, with the palm trees and the sea behind.',
+    },
+  },
+  {
+    imagen: foto126,
+    alt: {
+      es: 'Duela de la azotea con camastros alineados frente a la barandilla y el mar.',
+      en: 'Rooftop decking with loungers lined up facing the railing and the sea.',
+    },
+  },
+  {
+    imagen: foto127,
+    alt: {
+      es: 'El agua turquesa de la alberca de la azotea, con los camastros y la franja del mar arriba.',
+      en: 'The turquoise water of the rooftop pool, with the loungers and the band of sea above.',
+    },
+  },
+  {
+    imagen: foto128,
+    alt: {
+      es: 'Vista desde lo alto: los techos de palma del hotel entre las palmeras, y el mar al fondo.',
+      en: 'View from above: the hotel palm-thatched roofs among the palm trees, with the sea beyond.',
+    },
+  },
+  {
+    imagen: foto129,
+    alt: {
+      es: 'Vista aérea del hotel entre la vegetación, con la alberca asomando y el Caribe al fondo.',
+      en: 'Aerial view of the hotel among the greenery, with the pool showing and the Caribbean beyond.',
+    },
+  },
+  {
+    imagen: foto130,
+    alt: {
+      es: 'Vista aérea en vertical: las palmas del jardín, los edificios del hotel y la franja del mar.',
+      en: 'Vertical aerial view: the garden palms, the hotel buildings and the band of sea.',
+    },
+  },
+  {
+    imagen: foto131,
+    alt: {
+      es: 'El arco de piedra en la arena, con un tronco seco, la vegetación de la duna y el mar.',
+      en: 'The stone arch on the sand, with a piece of driftwood, the dune greenery and the sea.',
+    },
+  },
+  {
+    imagen: foto132,
+    alt: {
+      es: 'Mesa alta de madera con cocos verdes y banquetas, en una terraza frente a las palmeras y el mar.',
+      en: 'A tall wooden table with green coconuts and stools, on a terrace facing the palms and the sea.',
+    },
+  },
+  {
+    imagen: foto133,
+    alt: {
+      es: 'Fachada del hotel con su rótulo, los banderines de papel picado y las columnas de madera.',
+      en: 'The hotel facade with its sign, papel picado bunting and wooden columns.',
+    },
+  },
+  {
+    imagen: foto134,
+    alt: {
+      es: 'Paso de arena entre los edificios blancos, con la vegetación a los lados y el mar al fondo.',
+      en: 'A sand path between the white buildings, with greenery on both sides and the sea at the end.',
+    },
+  },
+  {
+    imagen: foto135,
+    alt: {
+      es: 'Andador entre la vegetación y las palmeras, camino del mar.',
+      en: 'A walkway through the greenery and palm trees, heading to the sea.',
+    },
+  },
+  {
+    imagen: foto136,
+    alt: {
+      es: 'Patio interior con palmeras altas entre los ventanales de madera del hotel.',
+      en: 'Inner courtyard with tall palms between the hotel wooden window fronts.',
+    },
+  },
+  {
+    imagen: foto137,
+    alt: {
+      es: 'Edificio blanco del hotel con sus balcones, entre la vegetación del jardín.',
+      en: 'A white hotel building with its balconies, among the garden greenery.',
+    },
+  },
+  {
+    imagen: foto138,
+    alt: {
+      es: 'Recepción del hotel: el mostrador de madera con el logotipo detrás, y las bancas de la sala.',
+      en: 'The hotel reception: the wooden counter with the logo behind it, and the seating benches.',
+    },
+  },
+  {
+    imagen: foto139,
+    alt: {
+      es: 'El arco de piedra con el rótulo del hotel, la escalera y los camastros sobre la arena.',
+      en: 'The stone arch with the hotel sign, the staircase and the loungers on the sand.',
+    },
+  },
+  {
+    imagen: foto140,
+    alt: {
+      es: 'Edificio del hotel con su escalera de madera y su techo de palma, entre las palmeras.',
+      en: 'A hotel building with its wooden staircase and palm-thatched roof, among the palm trees.',
+    },
+  },
+  {
+    imagen: foto141,
+    alt: {
+      es: 'El arco de piedra con el logotipo del hotel, las palmeras y los camastros en la arena.',
+      en: 'The stone arch bearing the hotel logo, the palm trees and the loungers on the sand.',
+    },
+  },
+  {
+    imagen: foto142,
+    alt: {
+      es: 'Balcón con una hamaca y una silla de madera, con la vegetación al otro lado de la barandilla.',
+      en: 'A balcony with a hammock and a wooden chair, greenery beyond the railing.',
+    },
+  },
+  {
+    imagen: foto143,
+    alt: {
+      es: 'Palapa sobre la arena con una hamaca y dos sillas de tijera de madera.',
+      en: 'A palapa on the sand with a hammock and two wooden folding chairs.',
+    },
+  },
+  {
+    imagen: foto144,
+    alt: {
+      es: 'Camas de playa con colchón y cojines bajo sombrillas blancas, sobre la arena.',
+      en: 'Beach beds with mattresses and cushions under white parasols, on the sand.',
+    },
+  },
+  {
+    imagen: foto145,
+    alt: {
+      es: 'Alberca bajo una pérgola de troncos, con los camastros alineados en el borde.',
+      en: 'A pool under a timber pergola, with loungers lined along its edge.',
+    },
+  },
+  {
+    imagen: foto146,
+    alt: {
+      es: 'La alberca bajo la pérgola de troncos, vista a lo largo desde un extremo.',
+      en: 'The pool under the timber pergola, seen lengthwise from one end.',
+    },
+  },
+  {
+    imagen: foto147,
+    alt: {
+      es: 'Cama de playa con cojines bajo una sombrilla, con un sombrero de palma, una bebida y un teléfono encima.',
+      en: 'A beach bed with cushions under a parasol, with a straw hat, a drink and a phone on it.',
+    },
+  },
+  {
+    imagen: foto148,
+    alt: {
+      es: 'El arco de piedra y la alberca desde la terraza alta, con la playa y el mar al fondo.',
+      en: 'The stone arch and the pool from the upper terrace, with the beach and the sea beyond.',
+    },
+  },
+  {
+    imagen: foto149,
+    alt: {
+      es: 'Alberca de borde infinito entre las palmeras, con la playa y el mar justo detrás.',
+      en: 'An infinity-edge pool among the palm trees, with the beach and the sea right behind.',
+    },
+  },
+  {
+    imagen: foto150,
+    alt: {
+      es: 'Rincón bajo techo de palma con una hamaca, dos pufs y una mesa baja de madera.',
+      en: 'A palm-roofed corner with a hammock, two bean bags and a low wooden table.',
     },
   },
 ];

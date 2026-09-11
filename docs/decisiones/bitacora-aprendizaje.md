@@ -4636,6 +4636,62 @@ que el criterio cambie eso es lo único que permite reabrir el descarte sin revi
 
 ---
 
+## L-143 · «¿Están todas?» se responde por contenido, nunca por nombre de archivo
+
+El 2026-09-11 Abraham pidió confirmar que en `/galeria/` estuvieran **todas** las fotografías de
+`Fotos definitivas/Galeria/`, y añadir las que faltaran. Pregunta de inventario, aparentemente
+trivial. No lo era, por una razón que el propio proyecto se había buscado: desde la quinta tanda
+**los archivos de la galería se llaman por su posición** —`001.webp`, `057.webp`— y el script de
+ingesta **no registra de qué original salió cada uno**. El nombre, que es el identificador obvio, se
+había destruido a propósito.
+
+La salida fue no usar nombres en absoluto. Se re-codificó cada uno de los 146 originales con la
+tubería exacta de `ingerir-fotos.mjs` —1600 px de lado mayor, WebP q85, `lanczos3`, `rotate()`
+antes de escalar— y se comparó el **SHA-256 del búfer** contra el de las 119 ya cargadas. Es
+reproducible porque la codificación es determinista: mismo binario, mismas opciones, mismos bytes.
+
+Y la prueba de que el método era correcto es que **los números cerraron solos**, sin ajustar nada:
+
+```
+originales examinados : 146
+ya cargados (hash =)  : 115
+SIN CARGAR            :  31
+numeradas sin origen  :   4   ← 042 043 044 045
+```
+
+115 + 4 = 119, las que había. Esas cuatro «sin origen» son exactamente las cuatro supervivientes de
+2025, que no están en esa carpeta porque son de otra sesión. Un cotejo que además **explica sus
+propios residuos** es un cotejo del que puedes fiarte; uno que deja sobras sin nombre, no.
+
+> **La regla:** cuando el identificador de un archivo es su posición, su procedencia deja de ser
+> deducible y hay que reconstruirla desde el único dato que no cambió — los píxeles. Si una tubería
+> de ingesta es determinista, su hash de salida **es** la huella del original, y el cotejo es exacto
+> en vez de aproximado.
+
+**El antipatrón evitado** es el del *inventario por nombre*: listar las dos carpetas, restar, y
+declarar la diferencia. Habría dado 146 − 119 = 27, y la respuesta correcta era **31**. Falla por los
+dos lados a la vez: cuenta de más las cuatro de 2025 —cargadas pero ausentes de la carpeta— y de
+menos las que sí faltaban.
+
+🐛 **Y el cotejo destapó una decisión tomada por el nombre, que es el mismo error mirando al revés.**
+Tres archivos de `booking/` se habían descartado en la quinta tanda con este argumento escrito:
+«las tres capturas de pantalla que venían en la misma carpeta: no son fotografías». Abiertas una a
+una, **las tres son fotografías del hotel** —el arco de piedra con la alberca y el mar, la alberca de
+borde infinito entre las palmeras, el rincón de la palapa con su hamaca y sus pufs— sin un píxel de
+interfaz, ni un precio, ni un logotipo de Booking. Alguien las recortó de una página y las guardó
+así, y `Captura de pantalla 2026-09-10 a la(s) 10.40.17 a.m..png` bastó para condenarlas.
+
+Duele especialmente porque **esta galería lleva tres curadurías evitando justo ese atajo**: ya está
+escrito en el archivo que «ordenar por tamaño no predice si una foto sirve» y que una foto se juzga
+mirándola. El nombre es otro proxy, y falló igual.
+
+⚠️ **Nota de macOS que costó un error de ejecución:** los nombres del disco vienen en **NFD** y los
+que escribes en un script van en **NFC**. `Captura…a la(s)…` con `á`/`(s)` no abre por ruta literal
+—`Input file is missing`— aunque la cadena se vea idéntica en pantalla. Se resuelven leyendo el
+directorio y comparando `.normalize('NFC')`.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

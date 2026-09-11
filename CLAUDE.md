@@ -302,6 +302,19 @@ propio en los dos idiomas. Reutiliza el visor de H2.3 en vez de duplicarlo. La c
 dato para Abraham: el archivo de 244 imágenes es desigual y no admite atajos —ordenar por tamaño
 de archivo no predice si una foto sirve—.
 
+✅ **La galería está COMPLETA desde el 2026-09-11: 150 fotografías**, y la carpeta
+`Fotos definitivas/Galeria/` está cargada **al 100 %** —sus 146 imágenes, las 146—. Por
+instrucción del cliente, literal: *«quiero que existan todas, no me importa nada»*. Entraron las 31
+que las curadurías anteriores habían apartado: 18 de 6K llamadas «editar», la recepción, 9 exports
+de Instagram y las 3 «capturas» de `booking/`, que **resultaron ser fotografías del hotel** y se
+habían descartado por el nombre del archivo (L-143).
+
+Se verificó **por contenido, no por nombre**: los archivos se llaman por su posición desde la quinta
+tanda, así que la procedencia se reconstruyó re-codificando cada original con la tubería de ingesta
+y comparando hashes. 115 ya estaban, 31 faltaban, 4 numeradas eran de 2025 — y 115 + 4 = 119, que
+era el total. Van al final, de la **120 a la 150**: colocarlas por calidad exigiría renumerar las 119
+anteriores y eso rompería la lista que el cliente tiene delante para decir «quita la 57».
+
 **La galería cambió DOS veces el 2026-09-10, y en sentidos opuestos.** Por la mañana el cliente
 tachó cinco de las nueve sobre la propia rejilla —no dio motivos y no se inventan— y quedó en
 cuatro. Por la tarde entraron **41 de la sesión con fotógrafo** y quedó en **45**: las cuatro de
@@ -828,7 +841,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **142 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **143 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
