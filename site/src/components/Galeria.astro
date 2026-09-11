@@ -69,9 +69,31 @@ interface Props {
    * recortar, está a un clic en el visor.
    */
   proporcion?: 'vertical' | 'cuadrada';
+  /**
+   * Cuántas fotografías por página. Sin él, la rejilla las pinta todas — que es
+   * lo correcto en las fichas de alojamiento, donde la mayor tiene 22.
+   *
+   * ── POR QUÉ SE PAGINA EN EL NAVEGADOR Y NO CON RUTAS ──────────────────────
+   * La galería general llegó a **119 fotografías** y el problema que hay que
+   * resolver es el SCROLL, no el peso: medido, esas 119 son 101 KB de HTML en
+   * crudo pero **16 KB comprimidos**, que es lo que viaja. Partirlo en rutas
+   * reales —`/galeria/2/`— habría ahorrado esos 16 KB y a cambio habría tocado
+   * el canonical, los `hreflang`, el sitemap, el estado activo del menú y el
+   * alcance del visor. Paginar en el cliente no toca ninguna de esas cinco
+   * cosas y deja la página igual de corta.
+   *
+   * **Y sin JavaScript no se rompe: se ven las 119**, que es exactamente lo que
+   * pasaba antes de paginar. Los controles nacen `hidden` y sólo aparecen si el
+   * script corre; unos botones de página que no pueden cambiar de página serían
+   * peores que no tenerlos.
+   *
+   * Las fotos ocultas **no se descargan**: siguen con `loading="lazy"` y un
+   * `<li hidden>` nunca entra en el viewport.
+   */
+  porPagina?: number;
 }
 const { imagenes, nombre, idioma, alternativas, titulo, comoTitular = false,
-        proporcion = 'vertical' } = Astro.props;
+        proporcion = 'vertical' , porPagina } = Astro.props;
 const t = usarT(idioma);
 const rotulo = titulo ?? t('galeria.titulo');
 const alt = (i: number) => alternativas?.[i] ?? t('galeria.alt', { nombre, n: i + 1 });
@@ -92,6 +114,11 @@ const alt = (i: number) => alternativas?.[i] ?? t('galeria.alt', { nombre, n: i 
  * paso, el visor deja de servir el original intacto —hasta 1600 px sin tocar—
  * y sirve una versión con la misma calidad 50 que el resto del sitio.
  */
+// Paginación: `paginas` sale 1 cuando no hay `porPagina` o cuando todo cabe en
+// una, y en ese caso no se pinta ningún control.
+const porPag = porPagina && porPagina > 0 ? porPagina : imagenes.length;
+const paginas = Math.max(1, Math.ceil(imagenes.length / porPag));
+
 const grandes = await Promise.all(
   imagenes.map((src) => getImage({ src, width: 1400, format: 'webp', quality: 50 })),
 );
@@ -111,7 +138,7 @@ const grandes = await Promise.all(
 
       <ul class="galeria__rejilla" role="list">
         {imagenes.map((img, i) => (
-          <li class="galeria__celda">
+          <li class="galeria__celda" data-pagina={Math.floor(i / porPag) + 1}>
             {/* El href apunta a la imagen grande: es lo que hace que la galería
                 siga sirviendo con el JavaScript desactivado o caído. */}
             <a
@@ -132,6 +159,28 @@ const grandes = await Promise.all(
           </li>
         ))}
       </ul>
+
+      {/* Controles de paginación. Nacen `hidden` a propósito: sin el script no
+          hay nada que paginar —se ven las 119— y unos botones inertes sólo
+          serían una trampa. El script les quita el `hidden`. */}
+      {paginas > 1 && (
+        <nav class="galeria__paginacion" aria-label={t('galeria.paginacion')} hidden>
+          <button type="button" class="galeria__pag galeria__pag--flecha" data-paso="-1">
+            <span aria-hidden="true">‹</span><span class="sr-only">{t('galeria.pagAnterior')}</span>
+          </button>
+          {Array.from({ length: paginas }, (_, n) => (
+            <button
+              type="button"
+              class="galeria__pag"
+              data-ir={n + 1}
+              aria-label={t('galeria.paginaActual', { n: n + 1, total: paginas })}
+            >{n + 1}</button>
+          ))}
+          <button type="button" class="galeria__pag galeria__pag--flecha" data-paso="1">
+            <span aria-hidden="true">›</span><span class="sr-only">{t('galeria.pagSiguiente')}</span>
+          </button>
+        </nav>
+      )}
     </div>
 
     {/* El visor. Vive vacío en el marcado y se rellena al abrirlo: así no se
@@ -164,9 +213,68 @@ const grandes = await Promise.all(
 )}
 
 <script>
+  const seccion = document.querySelector<HTMLElement>('.galeria');
+
+  /**
+   * Paginación. Vive FUERA del bloque del visor y antes que él, por dos razones:
+   * tiene que funcionar aunque el navegador no traiga `<dialog>`, y el visor
+   * necesita poder llamarla —ver `irAPaginaDe`.
+   */
+  let irAPaginaDe: (i: number) => void = () => {};
+  const paginacion = seccion?.querySelector<HTMLElement>('.galeria__paginacion');
+  if (seccion && paginacion) {
+    const celdas = [...seccion.querySelectorAll<HTMLElement>('.galeria__celda')];
+    const botones = [...paginacion.querySelectorAll<HTMLButtonElement>('.galeria__pag')];
+    const total = Math.max(...celdas.map((c) => Number(c.dataset.pagina)));
+    let actual = 0;
+
+    const pintar = (n: number, mover: boolean) => {
+      const previa = actual;
+      actual = Math.min(total, Math.max(1, n));
+      // `hidden` y no `display: none` en línea: es el estado, no el estilo, y
+      // así una hoja de estilos futura no puede contradecirlo sin querer.
+      for (const c of celdas) c.hidden = Number(c.dataset.pagina) !== actual;
+      for (const b of botones) {
+        const ir = Number(b.dataset.ir);
+        if (ir) {
+          // `aria-current="page"` y no `aria-pressed`: no es un interruptor,
+          // es «dónde estoy» dentro de un conjunto de páginas.
+          if (ir === actual) b.setAttribute('aria-current', 'page');
+          else b.removeAttribute('aria-current');
+        } else {
+          const paso = Number(b.dataset.paso);
+          b.disabled = paso < 0 ? actual === 1 : actual === total;
+        }
+      }
+      // Sólo se sube al principio cuando el cambio lo pidió una persona; si
+      // subiera también al arrancar, la página daría un salto al cargar.
+      if (mover && previa) {
+        const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        seccion.scrollIntoView({ block: 'start', behavior: quieto ? 'auto' : 'smooth' });
+      }
+    };
+
+    paginacion.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.galeria__pag');
+      if (!b) return;
+      const ir = Number(b.dataset.ir);
+      pintar(ir ? ir : actual + Number(b.dataset.paso), true);
+    });
+
+    // Si el visor salta a una foto de otra página hay que cambiar de página, o
+    // al cerrarlo el foco volvería a una miniatura OCULTA — y un foco en algo
+    // que no se ve es un callejón sin salida para quien navega con teclado.
+    irAPaginaDe = (i) => {
+      const pagina = Number(celdas[i]?.dataset.pagina);
+      if (pagina && pagina !== actual) pintar(pagina, false);
+    };
+
+    paginacion.hidden = false;
+    pintar(1, false);
+  }
+
   // Mejora progresiva: si esto no corre, la galería sigue siendo una lista de
   // enlaces a las fotos y todo funciona, sólo que sin visor.
-  const seccion = document.querySelector<HTMLElement>('.galeria');
   const visor = seccion?.querySelector<HTMLDialogElement>('.visor');
   if (seccion && visor && typeof visor.showModal === 'function') {
     const enlaces = [...seccion.querySelectorAll<HTMLAnchorElement>('.galeria__enlace')];
@@ -182,6 +290,7 @@ const grandes = await Promise.all(
       // El alt viaja desde la miniatura: describe la misma foto.
       img.alt = foto.alt;
       pie.textContent = `${indice + 1} / ${enlaces.length}`;
+      irAPaginaDe(indice);
     };
 
     enlaces.forEach((a, i) =>
@@ -250,6 +359,47 @@ const grandes = await Promise.all(
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .galeria__celda { min-width: 0; }
+
+  /* ── Paginación ─────────────────────────────────────────────────────────
+     44 px de lado: `--tap` es el mínimo de WCAG 2.5.8 (24 px) con holgura, y
+     el mismo tamaño que ya usan las flechas del visor. Un paginador de números
+     pequeños es justo el control que más falla en un teléfono. */
+  .galeria__paginacion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+  .galeria__pag {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 var(--space-2);
+    border: 1px solid rgb(34 34 34 / 0.2);
+    border-radius: var(--radio-sm, 4px);
+    background: transparent;
+    color: var(--color-ink);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 200ms var(--ease), border-color 200ms var(--ease);
+  }
+  .galeria__pag:hover:not(:disabled) { background: rgb(34 34 34 / 0.06); }
+  /* La página actual se marca con relleno y con `aria-current`, no sólo con
+     color: WCAG 1.4.1 —el color no puede ser el único portador de un estado. */
+  .galeria__pag[aria-current='page'] {
+    background: var(--color-boton);
+    border-color: var(--color-boton);
+    color: #fff;
+    font-weight: 600;
+  }
+  .galeria__pag:disabled { opacity: 0.35; cursor: default; }
+  .galeria__pag--flecha { font-size: var(--text-base); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .galeria__pag { transition: none; }
+  }
 
   .galeria__enlace {
     display: block;

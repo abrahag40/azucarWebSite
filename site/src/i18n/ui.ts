@@ -268,6 +268,11 @@ export const ui = {
     'galeria.anterior': 'Fotografía anterior',
     'galeria.siguiente': 'Fotografía siguiente',
     'galeria.cerrar': 'Cerrar el visor',
+    'galeria.paginacion': 'Páginas de la galería',
+    'galeria.pagina': 'Página {n}',
+    'galeria.paginaActual': 'Página {n} de {total}',
+    'galeria.pagAnterior': 'Página anterior',
+    'galeria.pagSiguiente': 'Página siguiente',
 
     'amenidades.facilidades': 'Todo lo que encontrarás',
     'instalaciones.titulo': 'Nuestros espacios',
@@ -545,6 +550,11 @@ export const ui = {
     'galeria.anterior': 'Previous photo',
     'galeria.siguiente': 'Next photo',
     'galeria.cerrar': 'Close the viewer',
+    'galeria.paginacion': 'Gallery pages',
+    'galeria.pagina': 'Page {n}',
+    'galeria.paginaActual': 'Page {n} of {total}',
+    'galeria.pagAnterior': 'Previous page',
+    'galeria.pagSiguiente': 'Next page',
 
     'amenidades.facilidades': 'Everything you will find',
     'instalaciones.titulo': 'Our spaces',
