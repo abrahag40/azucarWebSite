@@ -99,7 +99,7 @@ gratuito generoso, red global y vistas previas por rama.)*
 
 | Campo | Valor |
 |---|---|
-| Production branch | `claude/hotel-tulum-web-audit-0yly29` |
+| Production branch | `main` ← **cambiado el 2026-09-11, ver Parte 7** |
 | Framework preset | `Astro` |
 | Build command | `npm run build` |
 | Build output directory | `dist` |
@@ -266,7 +266,7 @@ ahora.
 |---|---|
 | `GITHUB_TOKEN` | el token del paso 2 |
 | `GITHUB_REPO` | `abrahag40/azucarWebSite` |
-| `GITHUB_RAMA` | `claude/hotel-tulum-web-audit-0yly29` |
+| `GITHUB_RAMA` | `main` ← **tiene que ser la rama de PRODUCCIÓN, ver Parte 7** |
 
 Sin las tres, el endpoint responde `503` y no opera — falla cerrado, igual que el de
 solicitudes.
@@ -293,6 +293,92 @@ publicado», que es lo que este proyecto corrige (regla 3).
 
 ---
 
+## Parte 7 — `main` estable y la rama de trabajo por delante
+
+> ⚠️ **De esta parte, el git ya está hecho; lo de Cloudflare no.** La rama `main` existe, está
+> empujada y es la rama por defecto de GitHub. **Falta un único cambio en el panel de Cloudflare**,
+> y hasta que lo hagas el sitio se sigue publicando desde la rama de trabajo, exactamente como
+> hasta ahora. Nada está roto mientras tanto: ése es el orden correcto y es a propósito.
+
+### Qué cambia y por qué
+
+Hasta el 2026-09-11 el repositorio tenía **una sola rama**, que era a la vez la de trabajo, la
+rama por defecto de GitHub y la de producción de Cloudflare. Funcionaba, pero no tenía frenos:
+cada `push` publicaba en el acto, y el cliente veía cualquier cosa a medio hacer.
+
+El esquema nuevo separa las dos funciones:
+
+```
+claude/hotel-tulum-web-audit-0yly29   trabajo   →  despliegue de VISTA PREVIA (URL propia)
+main                                  estable   →  PRODUCCIÓN (azucar-hotel-tulum.pages.dev)
+```
+
+**`main` se creó en el commit que ya estaba publicado y verificado** (`f6a3195`), así que en el
+momento de cambiar el ajuste, producción sirve exactamente lo mismo que servía un segundo antes.
+El cambio no puede alterar lo que ve el cliente — sólo de dónde sale.
+
+### El único paso que falta, y lo hace Abraham
+
+1. `dash.cloudflare.com` → **Workers & Pages** → proyecto **azucar-hotel-tulum**.
+2. **Settings → Build** (en versiones anteriores del panel, *Builds & deployments*).
+3. **Production branch**: cambiar `claude/hotel-tulum-web-audit-0yly29` por **`main`**. Guardar.
+4. Comprobar que **Preview deployments** sigue en *All branches* — es lo que da la URL de
+   vista previa de la rama de trabajo. Si está en *None*, la rama de trabajo deja de construirse
+   y se pierde justo lo que hace posible la demo de la Sprint Review (ADR-0002).
+
+No hace falta redesplegar: el siguiente `push` a `main` construye producción.
+
+### 🔴 Lo que cambia en tu día a día, y conviene no descubrirlo por sorpresa
+
+**`push` a la rama de trabajo deja de actualizar `azucar-hotel-tulum.pages.dev`.** Pasa a
+construir una vista previa en una URL aparte. Cloudflare la forma con el nombre de la rama y
+**convierte las barras en guiones**, así que será del estilo:
+
+```
+https://claude-hotel-tulum-web-audit-0yly29.azucar-hotel-tulum.pages.dev
+```
+
+El enlace exacto sale en el propio despliegue, en **Workers & Pages → el proyecto → Deployments**.
+
+Para que el cliente vea algo en la URL de siempre hay que **promoverlo**:
+
+```bash
+git checkout main && git merge --ff-only claude/hotel-tulum-web-audit-0yly29 && git push
+git checkout claude/hotel-tulum-web-audit-0yly29
+```
+
+`--ff-only` es deliberado: si falla es que `main` tiene algo que la rama de trabajo no, y eso
+hay que mirarlo en vez de resolverlo con un merge automático.
+
+### 🔴 El panel de precios va atado a esto
+
+`GITHUB_RAMA` (Parte 6) **tiene que apuntar a la rama de producción**. Si se queda en la rama de
+trabajo, el hotel cambia un precio, el panel responde «guardado» —y es verdad, el commit existe—
+pero **el sitio público no cambia**, porque esa rama ya no se publica. Un fallo silencioso y de
+los caros: nadie recibe un error, simplemente el precio viejo sigue en pantalla. Por eso la tabla
+de la Parte 6 dice ya `main`.
+
+*(Hoy no rompe nada porque el panel aún no está configurado y falla cerrado — ADR-0007.)*
+
+### Cómo se vuelve atrás
+
+Un solo ajuste: **Production branch** de vuelta a `claude/hotel-tulum-web-audit-0yly29` y guardar.
+No hay que tocar git, ni borrar `main`, ni revertir commits. Si además quieres deshacer el cambio
+en GitHub, la rama por defecto se cambia en **Settings → General → Default branch**.
+
+### Lo que NO se hizo, y por qué
+
+- **No se renombró la rama de trabajo.** `claude/hotel-tulum-web-audit-0yly29` es un nombre de
+  usar y tirar para algo que lleva seis sprints, pero su nombre está escrito en la configuración
+  de Cloudflare, en el CI y en este runbook. Renombrarla es un cambio aparte y merece su propio
+  momento, no ir de polizón en éste.
+- **No se activó protección de rama sobre `main`.** Es el siguiente paso natural —exigir el CI en
+  verde antes de fusionar cierra **R-20**, que lleva abierta desde que el CI estuvo trece commits
+  en rojo sin que nadie lo viera—, pero bloquea empujar directo a `main` y eso cambia cómo
+  trabajas. Se propone, no se impone.
+
+---
+
 ## Checklist de accesos pendientes
 
 - [ ] Titularidad de `azucarhotel.com` y acceso al registrador (**E2** · R-06)
@@ -301,6 +387,7 @@ publicado», que es lo que este proyecto corrige (regla 3).
 - [ ] Google Analytics — propiedad creada, ID de medición entregado (**E4**)
 - [ ] Google Search Console — verificado por DNS (**E4**)
 - [ ] Cloudflare Pages — repositorio conectado
+- [ ] **Cloudflare Pages — Production branch a `main`** (**Parte 7**) ← lo único que falta del cambio de ramas
 - [ ] Correo y WhatsApp oficiales de reservas (**B4**)
 - [ ] Pasarela de pago elegida (**B3**)
 - [ ] Cuenta de Resend creada y dominio de correo verificado (**Parte 5**)

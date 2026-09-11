@@ -20,6 +20,7 @@
 | **Encargo** | Rediseño y renovación del sitio web |
 | **Repositorio** | `abrahag40/azucarWebSite` |
 | **Rama de trabajo** | `claude/hotel-tulum-web-audit-0yly29` |
+| **Rama estable / producción** | `main` — creada el 2026-09-11. Ver §6 y Parte 7 del runbook |
 | **Código del sitio** | `site/` (Astro) |
 
 ### Hechos confirmados por el cliente
@@ -135,6 +136,14 @@ Mac, ni al navegador, ni salida a internet** hacia dominios externos. Consecuenc
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/).
 - **Decisiones:** toda decisión con consecuencias es un ADR en `docs/decisiones/`
   (formato Michael Nygard).
+- **Dos ramas desde el 2026-09-11.** `claude/hotel-tulum-web-audit-0yly29` es la de trabajo y
+  `main` la estable. **`main` es la rama por defecto de GitHub**, y está pensada para ser la de
+  producción de Cloudflare — ese ajuste lo hace Abraham en el panel (Parte 7 del runbook) y
+  **mientras no lo haga, producción se sigue publicando desde la rama de trabajo**.
+  Promover es `git checkout main && git merge --ff-only <rama de trabajo> && git push`.
+  🔴 Cuando el ajuste esté hecho, **`GITHUB_RAMA` del panel de precios tiene que ser `main`**: si
+  apunta a la rama de trabajo, el hotel guarda un precio, el panel dice «guardado» y el sitio
+  público no cambia. Fallo silencioso.
 - **Nunca** hacer push a una rama distinta de la designada sin autorización explícita.
 - **Nada de credenciales del cliente en el repositorio.** Los identificadores públicos
   (como `G-…` de GA4) sí pueden versionarse; las llaves no.
@@ -803,7 +812,14 @@ el cliente vea en la demo exactamente qué debe confirmar.
    como proveedor de correo (ADR-0006). Pasos exactos en
    [`runbook-accesos-y-despliegue.md`, Parte 5](docs/05-despliegue/runbook-accesos-y-despliegue.md#parte-5--resend--el-correo-de-solicitudes).
    No activa nada visible por sí solo — sigue esperando B4 y E-PRIV para cablearse.
-6. **Cloudflare Access + token de GitHub, para el panel de precios.** Sin esto el panel no
+6. 🆕 **Cambiar la Production branch de Cloudflare Pages a `main`.** Es UN ajuste, en
+   **Settings → Build** del proyecto. El git ya está hecho: `main` existe, está empujada, es la
+   rama por defecto de GitHub y nace del commit que ya estaba publicado y verificado, así que el
+   cambio no puede alterar lo que ve el cliente. Hasta que lo hagas, producción sale de la rama de
+   trabajo y **todo sigue igual que siempre**. Parte 7 del runbook, con el efecto secundario dicho
+   en voz alta: después, un `push` a la rama de trabajo ya no actualiza
+   `azucar-hotel-tulum.pages.dev`, sino una URL de vista previa.
+7. **Cloudflare Access + token de GitHub, para el panel de precios.** Sin esto el panel no
    funciona (falla cerrado, a propósito). Parte 6 del mismo runbook. 🔴 **Proteger las DOS
    rutas** —`/panel/` y `/api/precios`—: proteger sólo la página deja el endpoint que escribe
    accesible por su cuenta.
@@ -835,7 +851,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/01-descubrimiento/tripadvisor-fotos-y-cuentas.md`** | **Cómo quitar fotos y limpiar accesos en TripAdvisor, y por qué la ficha no se borra** |
 | `docs/01-descubrimiento/runbook-captura-httrack.md` | Comandos de captura |
 | `docs/04-diseno/analisis-plantilla-cappa.md` | Qué se extrae y qué se descarta de Cappa |
-| `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile |
+| `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile, **y el cambio a `main` (Parte 7)** |
 | `docs/decisiones/ADR-0001..0007` | Decisiones con consecuencias |
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
