@@ -90,6 +90,9 @@ const paginasDelBuild = (dir = DIST, acc = []) => {
     else if (e === 'index.html') {
       const r = `/${relative(DIST, dirname(p))}/`.replace('//', '/');
       acc.push(r === '//' ? '/' : r);
+    } else if (e.endsWith('.html') && !e.startsWith('404')) {
+      // Las fichas salen como `alojamiento/bungalow-mar.html`, no como carpeta.
+      acc.push(`/${relative(DIST, p).replace(/\.html$/, '')}/`);
     }
   }
   return acc;
@@ -97,7 +100,20 @@ const paginasDelBuild = (dir = DIST, acc = []) => {
 
 const objetivo = todas ? paginasDelBuild() : (rutas.length ? rutas : ['/']);
 
-const archivoDe = (ruta) => join(DIST, ruta === '/' ? '' : ruta, 'index.html');
+/**
+ * De una ruta de URL al archivo del build.
+ *
+ * Astro emite las dos formas: `/galeria/` sale como `galeria/index.html`, pero
+ * `/alojamiento/bungalow-mar/` sale como `alojamiento/bungalow-mar.html`. La
+ * primera versión de este script sólo probaba la primera y se plantó en la
+ * ficha de una habitación. Se prueban las dos, en ese orden.
+ */
+const archivoDe = (ruta) => {
+  const limpia = ruta === '/' ? '' : ruta.replace(/^\/|\/$/g, '');
+  const comoCarpeta = join(DIST, limpia, 'index.html');
+  if (existsSync(comoCarpeta)) return comoCarpeta;
+  return join(DIST, `${limpia}.html`);
+};
 
 if (!existsSync(DIST)) {
   console.error('  No hay `site/dist`. Corre el build antes de vigilar el despliegue.');
