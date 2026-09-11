@@ -4692,6 +4692,45 @@ directorio y comparando `.normalize('NFC')`.
 
 ---
 
+## L-144 · Una decisión que pareció paranoia el lunes es la que salva el martes
+
+El 2026-09-11 el cliente mandó **una lista de 105 números** con el orden en que quiere ver la
+galería. Ejecutarla movió 150 archivos y 150 textos alternativos. Salió a la primera y sin tocar una
+sola página más, y eso **no fue suerte**: fue una decisión incómoda tomada el día anterior.
+
+Cuando los archivos pasaron a llamarse por su posición —`001.webp`… en vez de
+`11-alberca-azotea-pergola.webp`— apareció un problema. Cuatro fotografías eran además el banner de
+`/actividades/`, `/reservar/`, `/nosotros/` y `/contacto/`. Si esas páginas apuntaran a un número,
+**la primera reordenación les cambiaría la foto en silencio**. Se resolvió duplicándolas: cada una
+conserva su archivo y su ruta de origen, y la galería usa una copia numerada. Costó 150 KB de
+repositorio y parecía redundante — dos copias idénticas del mismo JPEG.
+
+Ese martes se cobró. `grep -rln "numeradas/" site/src/` devuelve **un solo archivo**, `galeria.ts`,
+así que renumerar las 150 no podía alcanzar a nadie más. Sin la duplicación, la lista del cliente
+habría reordenado la galería **y cambiado cuatro banners de cuatro páginas que él no mencionó**, en
+silencio y sin error de build.
+
+> **La regla:** cuando un identificador pasa a codificar una **posición**, deja de servir como
+> referencia estable, y todo lo que apuntaba a él necesita su propio nombre antes de que llegue la
+> primera reordenación. El momento de pagar ese seguro es cuando cambias el esquema de nombres, no
+> cuando llega el reorden — entonces ya es tarde y el daño es invisible.
+
+**Y el reorden se verificó por aserción, no mirando la rejilla.** Tres comprobaciones, todas
+automáticas: que la lista nueva sea una **permutación** exacta de 1…150; que cada posición nueva
+contenga **byte a byte** el archivo de su posición vieja (SHA-256 antes y después); y que cada texto
+alternativo haya viajado con **su** foto, cotejado contra `git show HEAD:…/galeria.ts`. Un cambio que
+mueve 150 cosas y 150 cadenas a la vez tiene 150 formas de descolocar un `alt` una posición, y eso
+en una rejilla **no se ve**: las fotos siguen ahí, sólo que ciegas para quien no las ve.
+
+⚠️ **Dos cosas de la lista que eran del cliente y no nuestras**, y se registran como suyas: repitió
+ocho números —22, 149, 138, 40, 110, 115, 74 y 82— y la regla para resolverlo la dio Abraham (gana la
+primera aparición); y la lista **sólo nombraba 97 de las 150**. Las otras 53 se quedaron, detrás, por
+decisión de Abraham como Proxy PO: la instrucción era «reordenar», no «quitar», y el día antes el
+cliente había pedido expresamente que estuvieran todas. **Quitarlas después es trivial; deshacer un
+borrado, no** — ante una instrucción ambigua, se elige la lectura reversible.
+
+---
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |

@@ -309,6 +309,14 @@ que las curadurías anteriores habían apartado: 18 de 6K llamadas «editar», l
 de Instagram y las 3 «capturas» de `booking/`, que **resultaron ser fotografías del hotel** y se
 habían descartado por el nombre del archivo (L-143).
 
+🔀 **Y el 2026-09-11 el cliente mandó el ORDEN**, en una lista de 105 números: 8 repetidos —gana la
+primera aparición—, **97 únicos**. Como sólo nombraba 97 de las 150, las otras **53 se quedan detrás**,
+en las posiciones 98–150 y con su orden anterior: la instrucción era reordenar, no quitar. Los
+archivos se renumeraron 001–150, que es lo que el contrato de la numeración exige, y **no se movió
+ninguna otra página**: nada fuera de `galeria.ts` importa `numeradas/`, que era justo para lo que se
+duplicaron las cuatro fotos que también son banner (L-144). Verificado por hash y contra git: cada
+posición lleva los bytes de la suya y cada `alt` viajó con su foto.
+
 Se verificó **por contenido, no por nombre**: los archivos se llaman por su posición desde la quinta
 tanda, así que la procedencia se reconstruyó re-codificando cada original con la tubería de ingesta
 y comparando hashes. 115 ya estaban, 31 faltaban, 4 numeradas eran de 2025 — y 115 + 4 = 119, que
@@ -841,7 +849,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **143 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **144 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
