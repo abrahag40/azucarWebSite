@@ -93,11 +93,22 @@
  * `04-vista-selva-mar`, `05-camastros-palapa` y `09-entrada-piedra` son además
  * la portada de `/actividades/`, `/reservar/` y `/nosotros/`, y una de ellas
  * ilustra el Day Pass. Si esas páginas apuntaran a un número, la próxima
- * reordenación les cambiaría la foto **en silencio**. Conservan su nombre
- * original y su ruta; la galería usa una copia numerada. Astro emite un solo
- * archivo cuando el contenido es idéntico, así que al visitante no le cuesta
- * nada: lo que se duplica son 150 KB en el repositorio, y compran que una
- * reordenación no pueda tocar cuatro páginas que no son la galería.
+ * reordenación les cambiaría la foto **en silencio**. Cada una conserva su
+ * archivo y su ruta de ORIGEN, y la galería usa una copia numerada.
+ *
+ * 🔴 **La garantía es de CÓDIGO FUENTE, no de URL, y conviene no confundirse.**
+ * Astro deduplica por contenido: como la copia y el original son idénticos byte
+ * a byte, el build emite UN solo archivo, y el nombre que gana es arbitrario.
+ * Comprobado en producción: `/actividades/` sirve hoy `042.webp` y `/reservar/`
+ * sirve `043.webp`, aunque sus vistas importen `04-vista-selva-mar.webp` y
+ * `05-camastros-palapa.webp`. Eso **no rompe nada**: el día que se renumere, esas
+ * vistas seguirán importando su archivo de siempre y enseñando su foto de
+ * siempre; lo único que cambiará es con qué nombre sale del build, que es un
+ * detalle de empaquetado y no algo a lo que nadie apunte.
+ *
+ * Al visitante la duplicación no le cuesta un byte, justamente por esa
+ * deduplicación. Lo que se duplica son 150 KB en el repositorio, y compran que
+ * una reordenación de la galería no pueda tocar cuatro páginas que no lo son.
  *
  * ── CÓMO SE ORDENAN ─────────────────────────────────────────────────────────
  * No por tipo de espacio, sino por **fuerza visual descendente**: la primera es
