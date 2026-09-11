@@ -38,9 +38,10 @@ export const faq: Pregunta[] = [
          en: 'Yes. The hotel sits right on the beach, in the Tulum hotel zone.' },
   },
   {
-    p: { es: '¿Tienen camastros o camas de playa?', en: 'Do you have sun loungers or beach beds?' },
-    r: { es: 'Sí, y su uso está incluido para huéspedes.',
-         en: 'Yes, and they are included for hotel guests.' },
+    p: { es: '¿Tienen camastros, sombrillas o camas en la playa?',
+         en: 'Do you have sun loungers, umbrellas or beds on the beach?' },
+    r: { es: 'Sí, contamos con todo esto para que disfrutes tu estancia en nuestro mar.',
+         en: 'Yes, we have all of it so you can enjoy your stay by our sea.' },
   },
   {
     p: { es: '¿Su playa tiene rocas?', en: 'Does your beach have rocks?' },
@@ -53,8 +54,13 @@ export const faq: Pregunta[] = [
   },
   {
     p: { es: '¿Incluyen desayuno?', en: 'Is breakfast included?' },
-    r: { es: 'No, pero cada mañana ofrecemos una cortesía de fruta, café y pan en el área de snack, entre las habitaciones. No es un alimento completo, pero sí algo muy bueno para empezar el día.',
-         en: 'No, but every morning we offer a courtesy of fruit, coffee and bread in the snack area between the rooms. It is not a full meal, but it is a good way to start the day.' },
+    /* ⚠️ Texto del cliente (2026-09-11). Deja de mencionar la cortesía de
+       fruta, café y pan de la mañana, que SIGUE anunciada como amenidad en
+       `hotel.ts` y en `/servicios/`. No es contradicción —una cosa es que el
+       desayuno no esté incluido y otra que haya cortesía— pero el huésped ya no
+       se entera por aquí. Se anota por si se quiere recuperar. */
+    r: { es: 'No, sin embargo tenemos un exquisito y amplio menú para todo paladar.',
+         en: 'No, but we have a delicious and extensive menu for every palate.' },
   },
   {
     p: { es: '¿Rentan bicicletas?', en: 'Do you rent bicycles?' },
@@ -63,13 +69,15 @@ export const faq: Pregunta[] = [
   },
   {
     p: { es: '¿Hay electricidad?', en: 'Is there electricity?' },
-    r: { es: 'Sí, las 24 horas. La producimos nosotros mismos, así que sólo pedimos no usar durante mucho tiempo aparatos de consumo alto, para contribuir con la ecología.',
-         en: 'Yes, 24 hours a day. We generate our own power, so we only ask that you avoid using high-consumption appliances for long stretches, to help the environment.' },
+    /* ⚠️ Texto del cliente (2026-09-11). La respuesta anterior explicaba que el
+       hotel genera su propia electricidad y pedía moderar los aparatos de
+       consumo alto. Esa petición ya no se hace en ningún sitio del sitio. */
+    r: { es: 'Sí, las 24 horas.', en: 'Yes, 24 hours a day.' },
   },
   {
     p: { es: '¿Tienen Wi-Fi?', en: 'Do you have Wi-Fi?' },
-    r: { es: 'Sí, y es gratuito. En toda la zona de playa la señal es algo lenta, pero el servicio está disponible.',
-         en: 'Yes, and it is free. The signal is a little slow across the whole beach area, but the service is available.' },
+    r: { es: 'Sí, de alta velocidad en las habitaciones, áreas comunes y todo el hotel.',
+         en: 'Yes, high-speed in the rooms, the common areas and throughout the hotel.' },
   },
   {
     p: { es: '¿Tienen estacionamiento?', en: 'Do you have parking?' },
@@ -81,20 +89,46 @@ export const faq: Pregunta[] = [
          en: 'Yes. Every room and bungalow has air conditioning and a ceiling fan.' },
   },
   {
+    /* 🔴 CONTRADICE al 2026-09-03, y gana ésta por ser posterior. Aquel día el
+       cliente dijo «Smart TV sólo en Mar y Cielo» y así se escribieron las diez
+       fichas; hoy dice Mar, Cielo, Agua y Arrecife. Se añadió también a las
+       listas de «Incluye» de Agua y Arrecife, porque si no el sitio diría dos
+       cosas distintas sobre lo mismo en dos páginas. */
+    p: { es: '¿Hay TV en las habitaciones?', en: 'Is there a TV in the rooms?' },
+    r: { es: 'Solamente contamos con Smart TV en los bungalows Mar, Cielo, Agua y Arrecife.',
+         en: 'We only have a Smart TV in the Mar, Cielo, Agua and Arrecife bungalows.' },
+  },
+  {
+    p: { es: '¿Tienen cunas o camas extra?', en: 'Do you have cots or extra beds?' },
+    r: { es: 'Sí, contamos con una sujeta a disponibilidad, sin que genere un cargo adicional a tu reservación.',
+         en: 'Yes, we have one subject to availability, at no additional charge to your booking.' },
+  },
+  {
+    p: { es: '¿Cuentan con restaurante y bar?', en: 'Do you have a restaurant and bar?' },
+    r: { es: 'Sí, tenemos restaurante y bar frente al mar.',
+         en: 'Yes, we have a restaurant and bar facing the sea.' },
+  },
+  {
+    p: { es: '¿El hotel cuenta con seguridad?', en: 'Does the hotel have security?' },
+    r: { es: 'Sí, tenemos guardias las 24 horas, además de contar con caja de seguridad en cada habitación.',
+         en: 'Yes, we have guards 24 hours a day, and every room has a safety box.' },
+  },
+  {
       clave: 'mascotas',
     p: { es: '¿Aceptan mascotas?', en: 'Do you accept pets?' },
-    r: { es: 'Amamos las mascotas, pero por ahora no podemos recibirlas: no todos los huéspedes se sienten cómodos con animales.',
-         en: 'We love pets, but we cannot host them for now: not every guest is comfortable around animals.' },
+    r: { es: 'Amamos las mascotas, pero por el momento no podemos recibirlas.',
+         en: 'We love pets, but we cannot welcome them for the time being.' },
   },
   {
       clave: 'menores',
     p: { es: '¿Aceptan niños?', en: 'Do you accept children?' },
-    r: { es: 'Sí.', en: 'Yes.' },
+    r: { es: 'Sí, nos encanta tener familias felices disfrutando de Azucar Hotel Tulum.',
+         en: 'Yes — we love having happy families enjoying Azucar Hotel Tulum.' },
   },
   {
     p: { es: '¿Tienen alberca o jacuzzi?', en: 'Do you have a pool or a jacuzzi?' },
-    r: { es: 'Los dos: alberca infinita frente al mar, y un jacuzzi grande con camastros y hamacas en el roof top «Selvamar», con vista al mar y a la selva.',
-         en: 'Both: an infinity pool facing the sea, and a large jacuzzi with loungers and hammocks on the “Selvamar” rooftop, overlooking the sea and the jungle.' },
+    r: { es: 'Los dos: alberca infinita frente al mar, y un jacuzzi grande con camastros y hamacas en el roof top «Selvamar», con vista al mar y a la selva. Si deseas tu jacuzzi privado, entonces la mejor opción para ti son los Bungalows.',
+         en: 'Both: an infinity pool facing the sea, and a large jacuzzi with loungers and hammocks on the “Selvamar” rooftop, overlooking the sea and the jungle. If you would like your own private jacuzzi, then the Bungalows are your best option.' },
   },
   {
       clave: 'llegadaTarde',

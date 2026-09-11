@@ -74,8 +74,8 @@ export const politicas: GrupoPoliticas[] = [
         en: 'Check-in from 3:00 pm. Check-out by 12:00 noon.' },
       { es: 'Hay una tolerancia de 30 minutos en el check-out antes de que se generen cargos.',
         en: 'There is a 30-minute grace period at check-out before additional charges apply.' },
-      { es: 'Salida tardía hasta las 14:00: se cobra el 50 % de la tarifa de la habitación del día.',
-        en: 'Late check-out until 2:00 pm: 50 % of that day’s room rate applies.' },
+      { es: 'Si usted necesita realizar late checkout permaneciendo hasta las 14:00 hrs, se generará un cargo adicional equivalente al 50 % del monto de la tarifa de la habitación del día.',
+        en: 'If you need a late check-out and stay until 2:00 pm, an additional charge equivalent to 50 % of that day’s room rate will apply.' },
       { es: 'Después de las 14:00 se cobra el importe completo de una noche, a la tarifa del día.',
         en: 'After 2:00 pm, the full amount of one night is charged at that day’s rate.' },
     ],
@@ -109,7 +109,7 @@ export const politicas: GrupoPoliticas[] = [
        El jacuzzi de «Selvamar» sólo para mayores de 18 es la clase de condición
        que un huésped con hijos necesita saber ANTES de reservar, no al llegar. */
     clave: 'albercas',
-    titulo: { es: 'Albercas y jacuzzi', en: 'Pools and jacuzzi' },
+    titulo: { es: 'Uso de albercas y jacuzzi', en: 'Use of the pools and jacuzzi' },
     puntos: [
       { es: 'La alberca frente al mar puede usarla todo el mundo: niños, jóvenes y adultos.',
         en: 'The oceanfront pool is open to everyone: children, young people and adults.' },
@@ -125,8 +125,12 @@ export const politicas: GrupoPoliticas[] = [
     puntos: [
       { es: 'No se permite fumar en áreas cerradas —habitaciones o áreas comunes techadas— ni dentro de una alberca o de un jacuzzi.',
         en: 'Smoking is not permitted in enclosed areas — rooms or roofed common areas — nor inside a pool or jacuzzi.' },
-      { es: 'No se permite introducir alimentos ni bebidas de fuera del hotel a la playa, al restaurante ni a las áreas comunes.',
-        en: 'Outside food and drinks may not be brought onto the beach, into the restaurant or into the hotel’s common areas.' },
+      /* Texto del cliente (2026-09-11). Se reordenó la frase para que fuera
+         gramatical —la suya decía «a la playa, restaurante que no sean»— sin
+         tocar lo que dice. Y dice MENOS que la anterior a propósito: ya no
+         menciona las áreas comunes. Es su decisión, no un descuido nuestro. */
+      { es: 'No se permite introducir a la playa ni al restaurante alimentos o bebidas que no sean productos comercializados por el hotel.',
+        en: 'Food and drinks that are not sold by the hotel may not be brought onto the beach or into the restaurant.' },
     ],
   },
   {
@@ -137,8 +141,8 @@ export const politicas: GrupoPoliticas[] = [
     puntos: [
       { es: 'Toalla perdida o que salga del hotel: 150 USD.',
         en: 'Towel lost or taken from the hotel: USD 150.' },
-      { es: 'Daño a la propiedad: el costo de la reparación más 250 USD.',
-        en: 'Damage to the property: the cost of the repair plus USD 250.' },
+      { es: 'Cualquier daño a la propiedad deberá ser cubierto por el huésped en su totalidad antes de realizar su check-out; se calculará con base en un presupuesto del daño en cuestión.',
+        en: 'Any damage to the property must be paid for in full by the guest before check-out; the amount is calculated from a quote for the damage in question.' },
     ],
   },
   {
