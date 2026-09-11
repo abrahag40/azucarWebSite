@@ -80,6 +80,7 @@ import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
 import fotoHotel from '../assets/rooftop-white-pearl.webp';
+import fotoBocaPaila from '../assets/actividades/boca-paila-2026.webp';
 import fotoPueblo from '../assets/actividades/pueblo.jpg';
 import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
 import fotoSianKaan from '../assets/actividades/sian-kaan.jpg';
@@ -206,22 +207,20 @@ export const actividades: Actividad[] = [
     id: 'boca-paila',
     icono: 'bici',
     distancia: null,
-    /* 🔴 SIN FOTOGRAFÍA, Y ES DELIBERADO — 2026-09-11.
-       La que había era la del puente viejo (CC BY-SA 4.0 de Wikimedia) y el
-       cliente la describió como «horrible, un puente viejo sin sentido». Tenía
-       razón, pero quitarla deja un hueco que **no se puede rellenar hoy**: en
-       Commons no hay ninguna otra de Boca Paila con licencia usable —buscado—,
-       y el archivo del hotel no tiene ni una de esta carretera.
+    /* La del puente viejo salió el 2026-09-11 —«horrible, un puente viejo sin
+       sentido», dijo el cliente, y tenía razón— y estuvo unas horas en modo
+       glifo porque en Wikimedia Commons no hay otra de Boca Paila con licencia
+       usable. La sustituye ésta, que **Abraham confirmó como del hotel**, así
+       que va sin crédito y cierra la parte de R-38 que dependía de la imagen.
 
-       Así que se cae al modo glifo, que esta rejilla ya soporta desde que se
-       construyó justamente para los sitios sin foto. Es mejor que publicar una
-       fotografía que el propio cliente llama horrible, y de paso retira una de
-       las cuatro imágenes que obligan al pie de créditos.
-
-       Para que vuelva a tener foto hace falta una de dos cosas: que el hotel
-       mande una suya —la carretera pasa por su puerta— o que se elija una con
-       licencia y se ingiera con su crédito. Es R-38. */
-    imagen: null,
+       ⚠️ Queda anotado un detalle que no juzga nada pero conviene que esté
+       escrito: el archivo llegó llamándose
+       `boca-paila-casa-playa-tulum-quintana-roo-1618440219.jpg`, con el sufijo
+       numérico largo típico de una descarga de banco de imágenes. Se preguntó
+       por su procedencia antes de publicarla y la respuesta fue «es del hotel».
+       Si algún día resulta que no lo es, lo que hay que cambiar es esta línea
+       —`credito: null`— y no buscar el porqué otra vez desde cero. */
+    imagen: fotoBocaPaila,
     credito: null,
     titulo: { es: 'La carretera de Boca Paila', en: 'The Boca Paila road' },
     texto: {
