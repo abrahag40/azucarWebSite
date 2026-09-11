@@ -3,6 +3,13 @@ import { usarT, type Idioma } from '../i18n/ui';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import SeccionPresentacion from '../components/SeccionPresentacion.astro';
+// Las tres de la carpeta `home/` del cliente (2026-09-10): el pozo de piedra,
+// el andador de madera y las sillas de mimbre en el entarimado. Son detalles de
+// la casa, y van justo al lado del párrafo que dice que el hotel es artesanal y
+// construido por manos mayas — que es exactamente lo que enseñan.
+import portada1 from '../assets/portada-1.webp';
+import portada2 from '../assets/portada-2.webp';
+import portada3 from '../assets/portada-3.webp';
 import SeccionAlojamiento from '../components/SeccionAlojamiento.astro';
 import FranjaImagen from '../components/FranjaImagen.astro';
 import SeccionAmenidades from '../components/SeccionAmenidades.astro';
@@ -55,7 +62,7 @@ const t = usarT(idioma);
       Los fondos alternan blanco · cálido · oscuro · foto, que es el pulso
       visual de la plantilla y la razón de que el recorrido no se haga plano. */}
   <Hero idioma={idioma} />
-  <SeccionPresentacion idioma={idioma} />
+  <SeccionPresentacion idioma={idioma} fotos={[portada1, portada2, portada3]} />
   {/* Seis de los ocho tipos, no tres. Cappa muestra cinco en su carrusel de
       `rooms1`; con tres, la sección se leía como una muestra y no como un
       catálogo. Los ocho harían la portada más larga que la página de listado. */}

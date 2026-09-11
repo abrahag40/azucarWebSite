@@ -13,13 +13,34 @@
  * ha ganado premios y es un Small Luxury Hotel.
  */
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { usarT, idAncla, type Idioma } from '../i18n/ui';
 import { presentacion, contacto } from '../data/hotel';
 import foto1 from '../assets/nosotros-1.webp';
 import foto2 from '../assets/nosotros-2.webp';
 
-interface Props { idioma: Idioma }
-const { idioma } = Astro.props;
+/**
+ * Las fotografías son un PROP, y ése es el punto.
+ *
+ * Este componente lo usan dos páginas: la portada y `/nosotros/`. El cliente
+ * mandó el 2026-09-10 una carpeta llamada `home/` —tres detalles de la casa: el
+ * pozo de piedra, el andador de madera entre la vegetación y las dos sillas de
+ * mimbre en el entarimado— **para la portada**. Cambiar los imports habría
+ * puesto esas tres también en `/nosotros/`, que no era lo pedido.
+ *
+ * Con un prop, la portada pasa las suyas y `/nosotros/` se queda con las que
+ * tenía. Es la misma lección que `sobreHero`: cuando un componente vive en dos
+ * sitios, lo que cambia entre ellos se parametriza, no se edita.
+ *
+ * Van SIN `alt`, como iban las anteriores: acompañan a un texto que ya dice lo
+ * que ellas enseñan, así que describirlas obligaría a un lector de pantalla a
+ * oír dos veces lo mismo (WCAG 1.1.1, imagen decorativa).
+ */
+interface Props {
+  idioma: Idioma;
+  fotos?: ImageMetadata[];
+}
+const { idioma, fotos = [foto1, foto2] } = Astro.props;
 const t = usarT(idioma);
 ---
 <section id={idAncla(idioma, 'elHotel')} class="seccion presentacion" aria-labelledby="presentacion-titulo">
@@ -37,11 +58,36 @@ const t = usarT(idioma);
       </div>
     </div>
 
-    <div class="presentacion__fotos" data-revelar>
-      <Image class="presentacion__foto presentacion__foto--alta" src={foto1} alt=""
-        widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={50} />
-      <Image class="presentacion__foto" src={foto2} alt=""
-        widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={50} />
+    <div class={`presentacion__fotos presentacion__fotos--${fotos.length}`} data-revelar>
+      {/* Con TRES, las dos de la derecha van dentro de una columna propia. No es
+          adorno de marcado: es lo que hace que el bloque cuadre solo. La rejilla
+          queda con UNA fila, la vertical de la izquierda le fija el alto con su
+          proporción, y la columna se estira hasta ese alto y lo reparte entre
+          sus dos hijas. Con `grid-template-rows: 1fr 1fr` y las tres sueltas el
+          alto era circular —lo medí: 325 px de foto alta contra 421 de
+          contenedor, y los bordes de arriba sin alinear. */}
+      <Image
+        class="presentacion__foto presentacion__foto--alta"
+        src={fotos[0]}
+        alt=""
+        widths={[280, 420]}
+        sizes="(min-width: 60rem) 20rem, 42vw"
+        loading="lazy"
+        quality={50}
+      />
+      {fotos.length === 3 ? (
+        <div class="presentacion__columna">
+          {fotos.slice(1).map((f) => (
+            <Image class="presentacion__foto" src={f} alt=""
+              widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={50} />
+          ))}
+        </div>
+      ) : (
+        fotos.slice(1).map((f) => (
+          <Image class="presentacion__foto" src={f} alt=""
+            widths={[280, 420]} sizes="(min-width: 60rem) 20rem, 42vw" loading="lazy" quality={50} />
+        ))
+      )}
     </div>
   </div>
 </section>
@@ -111,6 +157,28 @@ const t = usarT(idioma);
     grid-template-columns: 1fr 1fr;
     gap: var(--space-4);
     align-items: start;
+  }
+  /* Con TRES fotos la rejilla de dos columnas dejaría la tercera sola en una
+     fila, descolgada. La primera pasa a ocupar las dos filas de la izquierda y
+     las otras dos se apilan a su derecha: la composición clásica de tres, y la
+     que aprovecha que la primera de la portada es vertical y las otras dos
+     apaisadas. No hace falta tocar nada para volver a dos. */
+  /* `stretch` y no el `start` heredado: la columna de la derecha tiene que
+     llegar exactamente hasta donde llega la vertical de la izquierda. */
+  .presentacion__fotos--3 { align-items: stretch; }
+  .presentacion__columna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 0;
+  }
+  /* `min-height: 0` en las dos: sin él, el mínimo automático de un ítem flex es
+     su contenido y las fotos se negarían a encoger, desbordando la columna. */
+  .presentacion__columna .presentacion__foto {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: auto;
   }
   .presentacion__foto {
     width: 100%;
