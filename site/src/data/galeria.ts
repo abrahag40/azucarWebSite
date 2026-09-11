@@ -137,6 +137,26 @@
  * viajando con su propia foto. Un reorden que mueve 150 archivos y 150 cadenas a
  * la vez no se revisa mirando la rejilla — se revisa con una aserción.
  *
+ * ── 🔀 OCTAVA TANDA: EL AJUSTE FINO, QUE ES LA PRUEBA DE QUE ESTO SIRVE ────
+ * El 2026-09-11, horas después de la reordenación grande, el cliente pidió dos
+ * retoques **por número**: intercambiar la 3 y la 6, y juntar en la página 1
+ * —de manera secuencial— la 9, 10, 5, 13, 111 y 17. Seis fotos de interior:
+ * cama, lavabo, regadera, clóset, doble lavabo y escritorio.
+ *
+ * Cinco de esas seis ya estaban en la página 1; la única que subía era la **111**,
+ * que vivía en la quinta. Así que lo que la petición pedía de verdad no era
+ * «tráelas», era **«ponlas juntas y en ese orden»**.
+ *
+ * ⚠️ **Dónde juntarlas no estaba en la instrucción, y cambiaba el resultado.**
+ * Al principio de la galería, el grupo habría empujado seis puestos a todo lo
+ * demás y habría enterrado el intercambio 3↔6 en las posiciones 9 y 11 — dos
+ * peticiones peleándose. Se preguntó, y Abraham eligió juntarlas **donde el
+ * grupo ya empezaba, en las posiciones 5–10**: se mueve lo mínimo y el
+ * intercambio se ve. La página 1 queda 1, 2, 6, 4 · 9, 10, 5, 13, 111, 17 · 3, 7…
+ *
+ * Que un cambio así se pueda pedir en una línea, ejecutar sin cacería y verificar
+ * con tres aserciones es exactamente para lo que se numeraron los archivos.
+ *
  * ── 🔢 LOS ARCHIVOS SE LLAMAN POR SU NÚMERO, Y ESO ES EL CONTRATO ──────────
  * Desde el 2026-09-10 las 119 viven en `assets/galeria/numeradas/` y se llaman
  * `001.webp` … `119.webp`, **en el mismo orden en que salen en la rejilla**. Lo
@@ -366,8 +386,8 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto003,
     alt: {
-      es: 'La calle frente al hotel, con palmeras y los locales de la acera.',
-      en: 'The street in front of the hotel, with palm trees and the shopfronts along it.',
+      es: 'Entrada del hotel con el rótulo y una guirnalda de banderines de papel picado.',
+      en: 'The hotel entrance with its sign and a garland of papel picado bunting.',
     },
   },
   {
@@ -380,750 +400,750 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto005,
     alt: {
-      es: 'Regadera de latón sobre un banco de piedra.',
-      en: 'A brass shower above a stone bench.',
-    },
-  },
-  {
-    imagen: foto006,
-    alt: {
-      es: 'Entrada del hotel con el rótulo y una guirnalda de banderines de papel picado.',
-      en: 'The hotel entrance with its sign and a garland of papel picado bunting.',
-    },
-  },
-  {
-    imagen: foto007,
-    alt: {
-      es: 'Arco de piedra con el rótulo del hotel, y detrás la alberca y las palmeras.',
-      en: 'Stone arch bearing the hotel sign, with the pool and the palm trees behind it.',
-    },
-  },
-  {
-    imagen: foto008,
-    alt: {
-      es: 'Recepción del hotel: el mostrador de madera con el logotipo detrás, y las bancas de la sala.',
-      en: 'The hotel reception: the wooden counter with the logo behind it, and the seating benches.',
-    },
-  },
-  {
-    imagen: foto009,
-    alt: {
       es: 'Cama bajo dosel, tras una cortina blanca.',
       en: 'A four-poster bed, behind a white curtain.',
     },
   },
   {
-    imagen: foto010,
+    imagen: foto006,
     alt: {
       es: 'Detalle del lavabo: grifo de latón, vaso de cristal y jabón sobre la piedra.',
       en: 'Washbasin detail: brass tap, glass tumbler and soap on the stone.',
     },
   },
   {
-    imagen: foto011,
+    imagen: foto007,
     alt: {
-      es: 'Fachada del hotel con su rótulo, los banderines de papel picado y las columnas de madera.',
-      en: 'The hotel facade with its sign, papel picado bunting and wooden columns.',
+      es: 'Regadera de latón sobre un banco de piedra.',
+      en: 'A brass shower above a stone bench.',
     },
   },
   {
-    imagen: foto012,
-    alt: {
-      es: 'Patio interior con palmeras altas entre los ventanales de madera del hotel.',
-      en: 'Inner courtyard with tall palms between the hotel wooden window fronts.',
-    },
-  },
-  {
-    imagen: foto013,
+    imagen: foto008,
     alt: {
       es: 'Pasillo del cuarto con el clóset abierto y una lámpara colgante.',
       en: 'The room passage with the closet open and a hanging lamp.',
     },
   },
   {
-    imagen: foto014,
+    imagen: foto009,
     alt: {
-      es: 'Pozo de piedra con dintel de madera, rodeado de vegetación.',
-      en: 'A stone well with a wooden lintel, surrounded by greenery.',
+      es: 'Doble lavabo de piedra con dos espejos y apliques de pared.',
+      en: 'A double stone washbasin with two mirrors and wall sconces.',
     },
   },
   {
-    imagen: foto015,
-    alt: {
-      es: 'Sendero de piedra entre palmeras, hacia los bungalows.',
-      en: 'A stone path between palm trees, leading to the bungalows.',
-    },
-  },
-  {
-    imagen: foto016,
-    alt: {
-      es: 'Las terrazas de las habitaciones con sus hamacas, vistas entre la vegetación.',
-      en: 'The room terraces with their hammocks, seen through the greenery.',
-    },
-  },
-  {
-    imagen: foto017,
+    imagen: foto010,
     alt: {
       es: 'Escritorio de madera junto al ventanal del balcón.',
       en: 'A wooden desk beside the balcony window wall.',
     },
   },
   {
+    imagen: foto011,
+    alt: {
+      es: 'La calle frente al hotel, con palmeras y los locales de la acera.',
+      en: 'The street in front of the hotel, with palm trees and the shopfronts along it.',
+    },
+  },
+  {
+    imagen: foto012,
+    alt: {
+      es: 'Arco de piedra con el rótulo del hotel, y detrás la alberca y las palmeras.',
+      en: 'Stone arch bearing the hotel sign, with the pool and the palm trees behind it.',
+    },
+  },
+  {
+    imagen: foto013,
+    alt: {
+      es: 'Recepción del hotel: el mostrador de madera con el logotipo detrás, y las bancas de la sala.',
+      en: 'The hotel reception: the wooden counter with the logo behind it, and the seating benches.',
+    },
+  },
+  {
+    imagen: foto014,
+    alt: {
+      es: 'Fachada del hotel con su rótulo, los banderines de papel picado y las columnas de madera.',
+      en: 'The hotel facade with its sign, papel picado bunting and wooden columns.',
+    },
+  },
+  {
+    imagen: foto015,
+    alt: {
+      es: 'Patio interior con palmeras altas entre los ventanales de madera del hotel.',
+      en: 'Inner courtyard with tall palms between the hotel wooden window fronts.',
+    },
+  },
+  {
+    imagen: foto016,
+    alt: {
+      es: 'Pozo de piedra con dintel de madera, rodeado de vegetación.',
+      en: 'A stone well with a wooden lintel, surrounded by greenery.',
+    },
+  },
+  {
+    imagen: foto017,
+    alt: {
+      es: 'Sendero de piedra entre palmeras, hacia los bungalows.',
+      en: 'A stone path between palm trees, leading to the bungalows.',
+    },
+  },
+  {
     imagen: foto018,
+    alt: {
+      es: 'Las terrazas de las habitaciones con sus hamacas, vistas entre la vegetación.',
+      en: 'The room terraces with their hammocks, seen through the greenery.',
+    },
+  },
+  {
+    imagen: foto019,
     alt: {
       es: 'Columna de piedra entre plantas tropicales.',
       en: 'A stone column among tropical plants.',
     },
   },
   {
-    imagen: foto019,
+    imagen: foto020,
     alt: {
       es: 'Cerca de bambú y vegetación junto a un muro claro.',
       en: 'A bamboo fence and greenery beside a pale wall.',
     },
   },
   {
-    imagen: foto020,
+    imagen: foto021,
     alt: {
       es: 'Andador entre los edificios del hotel, con vegetación a los lados.',
       en: 'A walkway between the hotel buildings, with greenery on both sides.',
     },
   },
   {
-    imagen: foto021,
+    imagen: foto022,
     alt: {
       es: 'Alberca de borde infinito entre las palmeras, con la playa y el mar justo detrás.',
       en: 'An infinity-edge pool among the palm trees, with the beach and the sea right behind.',
     },
   },
   {
-    imagen: foto022,
+    imagen: foto023,
     alt: {
       es: 'La alberca bajo la pérgola de troncos, vista a lo largo desde un extremo.',
       en: 'The pool under the timber pergola, seen lengthwise from one end.',
     },
   },
   {
-    imagen: foto023,
+    imagen: foto024,
     alt: {
       es: 'Cama de playa con cojines bajo una sombrilla, con un sombrero de palma, una bebida y un teléfono encima.',
       en: 'A beach bed with cushions under a parasol, with a straw hat, a drink and a phone on it.',
     },
   },
   {
-    imagen: foto024,
+    imagen: foto025,
     alt: {
       es: 'Camas de playa con colchón y cojines bajo sombrillas blancas, sobre la arena.',
       en: 'Beach beds with mattresses and cushions under white parasols, on the sand.',
     },
   },
   {
-    imagen: foto025,
+    imagen: foto026,
     alt: {
       es: 'El arco de piedra con el logotipo del hotel, las palmeras y los camastros en la arena.',
       en: 'The stone arch bearing the hotel logo, the palm trees and the loungers on the sand.',
     },
   },
   {
-    imagen: foto026,
+    imagen: foto027,
     alt: {
       es: 'Edificio blanco del hotel con sus balcones, entre la vegetación del jardín.',
       en: 'A white hotel building with its balconies, among the garden greenery.',
     },
   },
   {
-    imagen: foto027,
+    imagen: foto028,
     alt: {
       es: 'Paso de arena entre los edificios blancos, con la vegetación a los lados y el mar al fondo.',
       en: 'A sand path between the white buildings, with greenery on both sides and the sea at the end.',
     },
   },
   {
-    imagen: foto028,
+    imagen: foto029,
     alt: {
       es: 'Mesa alta de madera con cocos verdes y banquetas, en una terraza frente a las palmeras y el mar.',
       en: 'A tall wooden table with green coconuts and stools, on a terrace facing the palms and the sea.',
     },
   },
   {
-    imagen: foto029,
+    imagen: foto030,
     alt: {
       es: 'El arco de piedra en la arena, con un tronco seco, la vegetación de la duna y el mar.',
       en: 'The stone arch on the sand, with a piece of driftwood, the dune greenery and the sea.',
     },
   },
   {
-    imagen: foto030,
+    imagen: foto031,
     alt: {
       es: 'Vista aérea en vertical: las palmas del jardín, los edificios del hotel y la franja del mar.',
       en: 'Vertical aerial view: the garden palms, the hotel buildings and the band of sea.',
     },
   },
   {
-    imagen: foto031,
+    imagen: foto032,
     alt: {
       es: 'Vista desde lo alto: los techos de palma del hotel entre las palmeras, y el mar al fondo.',
       en: 'View from above: the hotel palm-thatched roofs among the palm trees, with the sea beyond.',
     },
   },
   {
-    imagen: foto032,
+    imagen: foto033,
     alt: {
       es: 'El agua turquesa de la alberca de la azotea, con los camastros y la franja del mar arriba.',
       en: 'The turquoise water of the rooftop pool, with the loungers and the band of sea above.',
     },
   },
   {
-    imagen: foto033,
+    imagen: foto034,
     alt: {
       es: 'Duela de la azotea con camastros alineados frente a la barandilla y el mar.',
       en: 'Rooftop decking with loungers lined up facing the railing and the sea.',
     },
   },
   {
-    imagen: foto034,
+    imagen: foto035,
     alt: {
       es: 'Terraza de madera en la azotea con una hamaca colgada y dos sillas de tijera.',
       en: 'A wooden rooftop terrace with a hanging hammock and two folding deck chairs.',
     },
   },
   {
-    imagen: foto035,
+    imagen: foto036,
     alt: {
       es: 'Alberca de la azotea con el muro de piedra caliza y el mar abierto al fondo.',
       en: 'The rooftop pool with its limestone wall and the open sea beyond.',
     },
   },
   {
-    imagen: foto036,
+    imagen: foto037,
     alt: {
       es: 'La alberca de la azotea desde un extremo, con la fila de camastros y el horizonte del mar.',
       en: 'The rooftop pool seen from one end, with the row of loungers and the sea horizon.',
     },
   },
   {
-    imagen: foto037,
+    imagen: foto038,
     alt: {
       es: 'Alberca alargada en la azotea, con pérgola de madera, duela y camastros mirando al mar.',
       en: 'The long rooftop pool, with a wooden pergola, decking and loungers facing the sea.',
     },
   },
   {
-    imagen: foto038,
+    imagen: foto039,
     alt: {
       es: 'Los edificios del hotel entre las palmeras, desde el jardín.',
       en: 'The hotel buildings among the palms, seen from the garden.',
     },
   },
   {
-    imagen: foto039,
+    imagen: foto040,
     alt: {
       es: 'La hamaca del balcón, vista desde dentro del cuarto.',
       en: 'The balcony hammock, seen from inside the room.',
     },
   },
   {
-    imagen: foto040,
+    imagen: foto041,
     alt: {
       es: 'Amanecer anaranjado sobre las olas.',
       en: 'An orange sunrise over the waves.',
     },
   },
   {
-    imagen: foto041,
+    imagen: foto042,
     alt: {
       es: 'Balcón con dos sillas y las palmeras, visto desde el cuarto.',
       en: 'A balcony with two chairs and the palms, seen from the room.',
     },
   },
   {
-    imagen: foto042,
+    imagen: foto043,
     alt: {
       es: 'El mar y el arco de piedra, desde un balcón de madera.',
       en: 'The sea and the stone arch, from a wooden balcony.',
     },
   },
   {
-    imagen: foto043,
+    imagen: foto044,
     alt: {
       es: 'Columna de piedra y vegetación junto a la terraza.',
       en: 'A stone column and greenery beside the terrace.',
     },
   },
   {
-    imagen: foto044,
+    imagen: foto045,
     alt: {
       es: 'Terraza bajo palapa con dos sillas de tijera, frente al mar.',
       en: 'A palm-thatched terrace with two folding chairs, facing the sea.',
     },
   },
   {
-    imagen: foto045,
+    imagen: foto046,
     alt: {
       es: 'Escalera exterior con una columna de piedra y vegetación.',
       en: 'An outdoor staircase with a stone column and greenery.',
     },
   },
   {
-    imagen: foto046,
+    imagen: foto047,
     alt: {
       es: 'Escalera de piedra con barandal de troncos.',
       en: 'A stone staircase with a railing of tree trunks.',
     },
   },
   {
-    imagen: foto047,
+    imagen: foto048,
     alt: {
       es: 'Balcón de barandal blanco, sobre la vegetación del jardín.',
       en: 'A balcony with a white balustrade, above the garden greenery.',
     },
   },
   {
-    imagen: foto048,
+    imagen: foto049,
     alt: {
       es: 'Cortina y ventanal hacia el balcón de barandal blanco.',
       en: 'A curtain and window wall onto the balcony with its white balustrade.',
     },
   },
   {
-    imagen: foto049,
+    imagen: foto050,
     alt: {
       es: 'La luna llena sobre el mar, entre nubes.',
       en: 'A full moon over the sea, through the clouds.',
     },
   },
   {
-    imagen: foto050,
+    imagen: foto051,
     alt: {
       es: 'La alberca de noche, con las palmeras iluminadas alrededor.',
       en: 'The pool at night, with the palms lit around it.',
     },
   },
   {
-    imagen: foto051,
+    imagen: foto052,
     alt: {
       es: 'Cielo nocturno con las palmeras recortadas contra las estrellas.',
       en: 'A night sky with the palms silhouetted against the stars.',
     },
   },
   {
-    imagen: foto052,
+    imagen: foto053,
     alt: {
       es: 'Cabecera de paneles de madera, iluminada desde abajo.',
       en: 'A headboard of wooden panels, lit from below.',
     },
   },
   {
-    imagen: foto053,
+    imagen: foto054,
     alt: {
       es: 'Cortinas entreabiertas hacia el balcón y las palmeras.',
       en: 'Curtains half-drawn onto the balcony and the palm trees.',
     },
   },
   {
-    imagen: foto054,
+    imagen: foto055,
     alt: {
       es: 'El balcón al atardecer desde dentro del cuarto, con dos sillas.',
       en: 'The balcony at sunset from inside the room, with two chairs.',
     },
   },
   {
-    imagen: foto055,
+    imagen: foto056,
     alt: {
       es: 'Habitación en penumbra, con el ventanal abierto al atardecer.',
       en: 'A dim room, with the window wall open onto the sunset.',
     },
   },
   {
-    imagen: foto056,
+    imagen: foto057,
     alt: {
       es: 'Terraza corrida con barandal blanco y las palmeras del jardín.',
       en: 'A long terrace with a white balustrade and the garden palms.',
     },
   },
   {
-    imagen: foto057,
+    imagen: foto058,
     alt: {
       es: 'Un pájaro posado en el barandal del balcón, con el mar detrás.',
       en: 'A bird perched on the balcony railing, with the sea behind.',
     },
   },
   {
-    imagen: foto058,
+    imagen: foto059,
     alt: {
       es: 'Hamaca en un balcón de madera, con las palmeras y el mar.',
       en: 'A hammock on a wooden balcony, with the palms and the sea.',
     },
   },
   {
-    imagen: foto059,
+    imagen: foto060,
     alt: {
       es: 'Camastros bajo una pérgola de madera, al atardecer.',
       en: 'Loungers under a wooden pergola, at sunset.',
     },
   },
   {
-    imagen: foto060,
+    imagen: foto061,
     alt: {
       es: 'Una palmera y el mar, desde un balcón de barandal blanco.',
       en: 'A palm tree and the sea, from a balcony with a white balustrade.',
     },
   },
   {
-    imagen: foto061,
+    imagen: foto062,
     alt: {
       es: 'Estar interior con sillones de madera y muro de piedra.',
       en: 'An interior lounge with wooden armchairs and a stone wall.',
     },
   },
   {
-    imagen: foto062,
+    imagen: foto063,
     alt: {
       es: 'El fondo de arena de la alberca, con conchas incrustadas.',
       en: 'The sandy bottom of the pool, with shells set into it.',
     },
   },
   {
-    imagen: foto063,
+    imagen: foto064,
     alt: {
       es: 'Una palmera plantada dentro de la alberca, en su propio brocal.',
       en: 'A palm tree planted inside the pool, in its own kerb.',
     },
   },
   {
-    imagen: foto064,
+    imagen: foto065,
     alt: {
       es: 'Borde de la alberca, con arena y conchas incrustadas.',
       en: 'The edge of the pool, with sand and embedded shells.',
     },
   },
   {
-    imagen: foto065,
+    imagen: foto066,
     alt: {
       es: 'Pasillo interior con paneles de bambú y una puerta de madera.',
       en: 'An interior passage with bamboo panels and a wooden door.',
     },
   },
   {
-    imagen: foto066,
+    imagen: foto067,
     alt: {
       es: 'Pasaderas de piedra dentro del agua de la alberca.',
       en: 'Stone stepping stones set into the water of the pool.',
     },
   },
   {
-    imagen: foto067,
+    imagen: foto068,
     alt: {
       es: 'Terraza sobre las copas de las palmeras, con el mar al fondo.',
       en: 'A terrace above the palm crowns, with the sea beyond.',
     },
   },
   {
-    imagen: foto068,
+    imagen: foto069,
     alt: {
       es: 'Entarimado con barandal, y el mar entre las palmeras.',
       en: 'Decking with a railing, and the sea between the palm trees.',
     },
   },
   {
-    imagen: foto069,
+    imagen: foto070,
     alt: {
       es: 'Paso estrecho entre un muro de piedra y una cerca de bambú.',
       en: 'A narrow passage between a stone wall and a bamboo fence.',
     },
   },
   {
-    imagen: foto070,
+    imagen: foto071,
     alt: {
       es: 'Entarimado de madera junto a la alberca, con el mar al fondo.',
       en: 'Wooden decking beside the pool, with the sea beyond.',
     },
   },
   {
-    imagen: foto071,
+    imagen: foto072,
     alt: {
       es: 'Mesa de madera en la terraza, con las palmeras y el mar detrás.',
       en: 'A wooden table on the terrace, with the palms and the sea behind.',
     },
   },
   {
-    imagen: foto072,
+    imagen: foto073,
     alt: {
       es: 'El Caribe turquesa, sin orilla a la vista.',
       en: 'The turquoise Caribbean, with no shore in sight.',
     },
   },
   {
-    imagen: foto073,
+    imagen: foto074,
     alt: {
       es: 'Cortinas abiertas al atardecer, con el mar al fondo.',
       en: 'Curtains open onto the sunset, with the sea beyond.',
     },
   },
   {
-    imagen: foto074,
+    imagen: foto075,
     alt: {
       es: 'Terraza de azotea con un camastro blanco y cojines, bajo el alero de palma.',
       en: 'A rooftop terrace with a white daybed and cushions, under the palm eaves.',
     },
   },
   {
-    imagen: foto075,
+    imagen: foto076,
     alt: {
       es: 'Barandal de madera y troncos, con la vegetación del jardín detrás.',
       en: 'A wooden and log railing, with the garden greenery behind it.',
     },
   },
   {
-    imagen: foto076,
+    imagen: foto077,
     alt: {
       es: 'Dos camastros de tejido en una terraza techada de palma, mirando a las palmeras y al mar.',
       en: 'Two woven loungers on a palm-thatched terrace, looking out to the palm trees and the sea.',
     },
   },
   {
-    imagen: foto077,
+    imagen: foto078,
     alt: {
       es: 'Detalle de los candados encadenados alrededor del tronco.',
       en: 'A close-up of the padlocks chained around the trunk.',
     },
   },
   {
-    imagen: foto078,
+    imagen: foto079,
     alt: {
       es: 'La fachada del hotel con el rótulo «Azucar Hotel Tulum» sobre las columnas.',
       en: 'The hotel facade with the “Azucar Hotel Tulum” sign above the columns.',
     },
   },
   {
-    imagen: foto079,
+    imagen: foto080,
     alt: {
       es: 'Acceso al hotel con la bandera de México y el rótulo sobre la escalera de madera.',
       en: 'The hotel entrance with the Mexican flag and the sign above the wooden staircase.',
     },
   },
   {
-    imagen: foto080,
+    imagen: foto081,
     alt: {
       es: 'Sendero de cemento entre la vegetación, hacia el interior del hotel.',
       en: 'A concrete path through the greenery, leading into the hotel.',
     },
   },
   {
-    imagen: foto081,
+    imagen: foto082,
     alt: {
       es: 'La fachada de las habitaciones con sus balcones, entre las palmeras.',
       en: 'The facade of the rooms with their balconies, among the palm trees.',
     },
   },
   {
-    imagen: foto082,
+    imagen: foto083,
     alt: {
       es: 'Escalera de madera entre la vegetación, con una enredadera cubriendo el muro.',
       en: 'A wooden staircase among the greenery, with a creeper covering the wall.',
     },
   },
   {
-    imagen: foto083,
+    imagen: foto084,
     alt: {
       es: 'Jardín de palmeras con un edificio de piedra al fondo.',
       en: 'A palm garden with a stone building behind.',
     },
   },
   {
-    imagen: foto084,
+    imagen: foto085,
     alt: {
       es: 'Jardín con un tronco a la deriva sobre la arena y una escalera al fondo.',
       en: 'A garden with a piece of driftwood on the sand and a staircase behind.',
     },
   },
   {
-    imagen: foto085,
+    imagen: foto086,
     alt: {
       es: 'Dos sillas de madera y una mesa de mimbre en un entarimado, junto a un muro claro.',
       en: 'Two wooden chairs and a wicker table on a deck, beside a pale wall.',
     },
   },
   {
-    imagen: foto086,
+    imagen: foto087,
     alt: {
       es: 'Ventana vertical que enmarca las palmas de la selva.',
       en: 'A tall window framing the palms of the jungle.',
     },
   },
   {
-    imagen: foto087,
+    imagen: foto088,
     alt: {
       es: 'Pasillo en penumbra que se abre a un balcón con una silla y el mar al fondo.',
       en: 'A dim passage opening onto a balcony with a chair and the sea beyond.',
     },
   },
   {
-    imagen: foto088,
+    imagen: foto089,
     alt: {
       es: 'Habitación con techo de madera y salida al balcón, con el mar al fondo.',
       en: 'A room with a wooden ceiling and a way out to the balcony, the sea beyond.',
     },
   },
   {
-    imagen: foto089,
+    imagen: foto090,
     alt: {
       es: 'Jacuzzi de mosaico en una terraza de piedra.',
       en: 'A mosaic jacuzzi on a stone terrace.',
     },
   },
   {
-    imagen: foto090,
+    imagen: foto091,
     alt: {
       es: 'Regadera de latón, con una ventana al mar.',
       en: 'A brass shower, with a window onto the sea.',
     },
   },
   {
-    imagen: foto091,
+    imagen: foto092,
     alt: {
       es: 'Regadera con las toallas colgadas en el muro de piedra.',
       en: 'A shower with the towels hung on the stone wall.',
     },
   },
   {
-    imagen: foto092,
+    imagen: foto093,
     alt: {
       es: 'Lavabo de piedra con espejo y una repisa de madera.',
       en: 'A stone washbasin with a mirror and a wooden shelf.',
     },
   },
   {
-    imagen: foto093,
+    imagen: foto094,
     alt: {
       es: 'Lavabo de piedra ante el ventanal.',
       en: 'A stone washbasin in front of the window wall.',
     },
   },
   {
-    imagen: foto094,
+    imagen: foto095,
     alt: {
       es: 'Cama con cabecera de listones de madera, bajo un techo de vigas.',
       en: 'A bed with a slatted wooden headboard, under a beamed ceiling.',
     },
   },
   {
-    imagen: foto095,
+    imagen: foto096,
     alt: {
       es: 'Habitación con cama, ventilador de techo y ventanal al balcón.',
       en: 'A room with a bed, a ceiling fan and a window wall onto the balcony.',
     },
   },
   {
-    imagen: foto096,
+    imagen: foto097,
     alt: {
       es: 'Clóset abierto de madera, vacío.',
       en: 'An open wooden closet, empty.',
     },
   },
   {
-    imagen: foto097,
+    imagen: foto098,
     alt: {
       es: 'Pasillo interior hacia el lavabo, con la puerta abierta al fondo.',
       en: 'An interior passage to the washbasin, with the door open at the end.',
     },
   },
   {
-    imagen: foto098,
+    imagen: foto099,
     alt: {
       es: 'Alberca alargada en la azotea, con pérgola de madera, camastros y el mar al fondo.',
       en: 'A long rooftop pool, with a wooden pergola, loungers and the sea beyond.',
     },
   },
   {
-    imagen: foto099,
+    imagen: foto100,
     alt: {
       es: 'Tumbonas de tijera en el entarimado de la azotea, frente al barandal y el mar.',
       en: 'Folding deckchairs on the rooftop decking, facing the railing and the sea.',
     },
   },
   {
-    imagen: foto100,
+    imagen: foto101,
     alt: {
       es: 'Dos hamacas de red atadas entre palmeras, sobre la arena.',
       en: 'Two net hammocks slung between palm trees, over the sand.',
     },
   },
   {
-    imagen: foto101,
+    imagen: foto102,
     alt: {
       es: 'Hamacas blancas colgadas bajo la pérgola de la azotea, sobre el entarimado de madera.',
       en: 'White hammocks hung under the rooftop pergola, above the wooden decking.',
     },
   },
   {
-    imagen: foto102,
+    imagen: foto103,
     alt: {
       es: 'Barra de madera con bancos altos y cocos verdes, frente a las palmeras y el mar.',
       en: 'A wooden bar with high stools and green coconuts, facing the palms and the sea.',
     },
   },
   {
-    imagen: foto103,
+    imagen: foto104,
     alt: {
       es: 'La selva de Tulum vista desde lo alto, bajo el alero de palma de una terraza.',
       en: 'The Tulum jungle seen from above, under the palm eaves of a terrace.',
     },
   },
   {
-    imagen: foto104,
+    imagen: foto105,
     alt: {
       es: 'Las copas de las palmas de la selva desde un balcón de barandal blanco.',
       en: 'The crowns of the jungle palms from a balcony with a white balustrade.',
     },
   },
   {
-    imagen: foto105,
+    imagen: foto106,
     alt: {
       es: 'La alberca de la azotea desde el otro extremo, con los camastros alineados a un lado.',
       en: 'The rooftop pool from the far end, with the loungers lined up along one side.',
     },
   },
   {
-    imagen: foto106,
+    imagen: foto107,
     alt: {
       es: 'Estar abierto con bancas y butacas de madera, junto al andador del jardín.',
       en: 'An open lounge with wooden benches and armchairs, beside the garden walkway.',
     },
   },
   {
-    imagen: foto107,
+    imagen: foto108,
     alt: {
       es: 'Sala de estar con sillones de madera, ventanales y ventilador de techo.',
       en: 'A sitting room with wooden armchairs, large windows and a ceiling fan.',
     },
   },
   {
-    imagen: foto108,
+    imagen: foto109,
     alt: {
       es: 'Pasillo con columnas de troncos, abierto al jardín de palmeras.',
       en: 'A passage lined with tree-trunk columns, open to the palm garden.',
     },
   },
   {
-    imagen: foto109,
+    imagen: foto110,
     alt: {
       es: 'Cama frente a un ventanal, con una hamaca en el balcón y el mar entre las palmas.',
       en: 'A bed facing a window wall, with a hammock on the balcony and the sea between the palms.',
     },
   },
   {
-    imagen: foto110,
+    imagen: foto111,
     alt: {
       es: 'Baño con puertas de madera y una tina de obra con borde de madera.',
       en: 'A bathroom with wooden doors and a masonry bathtub edged in wood.',
-    },
-  },
-  {
-    imagen: foto111,
-    alt: {
-      es: 'Doble lavabo de piedra con dos espejos y apliques de pared.',
-      en: 'A double stone washbasin with two mirrors and wall sconces.',
     },
   },
   {
