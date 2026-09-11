@@ -113,12 +113,6 @@ export interface Actividad {
   credito: Credito | null;
   distancia: Texto | null;
   /**
-   * La tarjeta del propio hotel. Ocupa 10 de las 12 columnas y va centrada, en
-   * vez de las 6 de las demás — pedido del cliente (2026-09-11) para que el
-   * hotel no compita de tú a tú con un cenote dentro de su propia página.
-   */
-  destacada?: boolean;
-  /**
    * Palabra del texto que va en CURSIVA — el nombre del restaurante, que el
    * cliente pidió así (2026-09-11).
    *
@@ -137,9 +131,14 @@ export interface Actividad {
    primero sería enseñar el obstáculo antes que la puerta. */
 export const actividades: Actividad[] = [
   /* ── LA CASA, LA PRIMERA ──────────────────────────────────────────────────
-     Pedida por el cliente el 2026-09-11: el hotel como «actividad», y con más
-     peso que las demás. Va la primera porque el orden de esta lista es «de lo
-     más cercano a lo más lejano», y nada está más cerca que donde ya duermes.
+     Pedida por el cliente el 2026-09-11: el hotel como «actividad». Va la
+     primera porque el orden de esta lista es «de lo más cercano a lo más
+     lejano», y nada está más cerca que donde ya duermes.
+
+     Nació ocupando 10 de 12 columnas, centrada, para que pesara más que un
+     cenote dentro de su propia página. **El cliente lo canceló el mismo día**:
+     todas iguales, de 6. Se anota para que no vuelva a proponerse como idea
+     nueva dentro de un mes.
 
      🔴 **Falta el SPA a propósito.** El dictado decía «nuestro spa debe ser
      imperdible en tu estancia», y el spa **no existe todavía**: en todo el
@@ -155,7 +154,6 @@ export const actividades: Actividad[] = [
     distancia: null,
     imagen: fotoHotel,
     credito: null,
-    destacada: true,
     cursiva: 'Tenedor',
     titulo: { es: 'Azucar Hotel Tulum', en: 'Azucar Hotel Tulum' },
     texto: {

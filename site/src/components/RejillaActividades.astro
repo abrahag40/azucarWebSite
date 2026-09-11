@@ -45,8 +45,8 @@ const partir = (texto: string, palabra?: string): [string, string, string] => {
 ---
 <ul class="actividades" role="list">
   {actividades.map((a) => (
-    <li class:list={[a.destacada && 'destacada']}>
-      <article class:list={['act', !a.imagen && 'act--glifo', a.destacada && 'act--destacada']}
+    <li>
+      <article class:list={['act', !a.imagen && 'act--glifo']}
         data-revelar>
         {/* Espaciador vacío que sólo aporta la PROPORCIÓN. Ver la nota de
             `.act__marco` en el CSS: es lo que hace que 3/4 sea un mínimo y no
@@ -57,10 +57,8 @@ const partir = (texto: string, palabra?: string): [string, string, string] => {
             class="act__foto"
             src={a.imagen}
             alt=""
-            widths={a.destacada ? [640, 960, 1280] : [320, 480, 640]}
-            sizes={a.destacada
-              ? '(min-width: 64rem) 60rem, 90vw'
-              : '(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw'}
+            widths={[420, 640, 900]}
+            sizes="(min-width: 64rem) 34rem, (min-width: 40rem) 45vw, 90vw"
             loading="lazy"
             quality={50}
           />
@@ -143,16 +141,6 @@ const partir = (texto: string, palabra?: string): [string, string, string] => {
      si el texto crece, manda el texto (ver la nota de arriba). */
   .act__marco { aspect-ratio: 4 / 5; }
   .act__texto { align-self: end; }
-
-  /* ── LA TARJETA DEL HOTEL ES MÁS ANCHA, ASÍ QUE ES MÁS BAJA ───────────────
-     Ocupa 10 de 12 columnas: con la misma proporción 4/5 que sus hermanas —que
-     ocupan 6— mediría más de 900 px de alto y sería un cartel, no una tarjeta.
-     16/7 la deja en una banda apaisada que ocupa una pantalla de portátil
-     entera sin obligar a bajar.
-
-     `aspect-ratio` aquí sigue siendo un MÍNIMO, igual que en las demás: si el
-     texto necesitara más, manda el texto. */
-  .act--destacada .act__marco { aspect-ratio: 16 / 7; }
 
   /* --- Modo GLIFO (respaldo desde que hay fotografías) ---------------------
      Fondo cálido y texto en tinta: 15.9:1, sin nada que medir. El glifo va
@@ -324,7 +312,17 @@ const partir = (texto: string, palabra?: string): [string, string, string] => {
   @media (min-width: 64rem) {
     .actividades { grid-template-columns: repeat(12, minmax(0, 1fr)); }
     .actividades > li { grid-column: span 6; }
-    /* `2 / span 10` centra sin `margin: auto`: deja una columna a cada lado. */
-    .actividades > li.destacada { grid-column: 2 / span 10; }
+
+    /* 🔴 LA PROPORCIÓN TIENE QUE BAJAR CUANDO LA TARJETA SE ENSANCHA, y ése fue
+       el defecto de la primera versión de dos por fila. El 4/5 de arriba se
+       eligió cuando las tarjetas medían 384 px: daba 480 px de alto, razonable.
+       Al pasar a dos por fila la tarjeta se fue a 540 px de ancho y el mismo
+       4/5 la estiró a **675 px de alto** — la mitad de una pantalla de portátil
+       por tarjeta, que es lo que el cliente vio como «un height muy grande».
+
+       5/4 la deja en 432 px a ese ancho: más baja que antes de ensancharla, y
+       sin caer en la banda estrecha que tampoco quería. Y sigue siendo un
+       MÍNIMO: si el texto necesita más, manda el texto. */
+    .act__marco { aspect-ratio: 5 / 4; }
   }
 </style>
