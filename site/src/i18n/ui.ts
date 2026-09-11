@@ -278,10 +278,16 @@ export const ui = {
     'instalaciones.titulo': 'Nuestros espacios',
     'actividades.titulo': 'Qué hacer en Tulum',
     'actividades.meta': 'Las ruinas frente al mar, los cenotes, Sian Ka’an, Cobá y la bahía de Akumal: qué hay alrededor de Azucar Hotel Tulum y por qué merece el viaje.',
-    // «Una de las ocho razones» hace el trabajo que el cliente pidió —enseñar
-    // que hay mucho más que la playa— SIN nombrar el sargazo. Nombrar un
-    // problema para restarle importancia lo fija en la cabeza de quien lee.
-    'actividades.entrada': 'El hotel está en la franja de arena entre el mar y la laguna, y el mar es sólo una de las ocho razones para estar aquí. Éstas son las otras siete.',
+    // «Una de las razones» hace el trabajo que el cliente pidió —enseñar que hay
+    // mucho más que la playa— SIN nombrar el sargazo. Nombrar un problema para
+    // restarle importancia lo fija en la cabeza de quien lee.
+    //
+    // 🔴 Sin CIFRA desde el 2026-09-11. Decía «una de las ocho razones… éstas
+    // son las otras siete», y al entrar la tarjeta del hotel pasaron a ser
+    // nueve: el texto se quedó contando mal el mismo día. Un número escrito a
+    // mano que describe una lista generada es una promesa de mantenimiento que
+    // nadie hizo — y la rompió la primera tarjeta que se añadió.
+    'actividades.entrada': 'El hotel está en la franja de arena entre el mar y la laguna, y el mar es sólo una de las razones para estar aquí. Éstas son las demás, empezando por la casa.',
     'actividades.creditos': 'Créditos fotográficos',
     'actividades.creditosNota': 'Las fotografías de esta página son de terceros y se publican bajo licencia libre, con la atribución que cada licencia exige.',
     'actividades.creditoObra': 'Obra',
@@ -560,7 +566,7 @@ export const ui = {
     'instalaciones.titulo': 'Our spaces',
     'actividades.titulo': 'What to do in Tulum',
     'actividades.meta': 'The seafront ruins, the cenotes, Sian Ka’an, Cobá and Akumal Bay: what surrounds Azucar Hotel Tulum and why it is worth the trip.',
-    'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon — and the sea is only one of eight reasons to be here. These are the other seven.',
+    'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon — and the sea is only one of the reasons to be here. These are the rest, starting at home.',
     'actividades.creditos': 'Photo credits',
     'actividades.creditosNota': 'The photographs on this page are by third parties and are published under free licences, with the attribution each licence requires.',
     'actividades.creditoObra': 'Work',

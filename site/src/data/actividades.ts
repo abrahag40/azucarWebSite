@@ -79,6 +79,7 @@
 import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
+import fotoHotel from '../assets/rooftop-white-pearl.webp';
 import fotoPueblo from '../assets/actividades/pueblo.jpg';
 import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
 import fotoSianKaan from '../assets/actividades/sian-kaan.jpg';
@@ -110,6 +111,23 @@ export interface Actividad {
   /** `null` sólo si la fotografía es del propio hotel. */
   credito: Credito | null;
   distancia: Texto | null;
+  /**
+   * La tarjeta del propio hotel. Ocupa 10 de las 12 columnas y va centrada, en
+   * vez de las 6 de las demás — pedido del cliente (2026-09-11) para que el
+   * hotel no compita de tú a tú con un cenote dentro de su propia página.
+   */
+  destacada?: boolean;
+  /**
+   * Palabra del texto que va en CURSIVA — el nombre del restaurante, que el
+   * cliente pidió así (2026-09-11).
+   *
+   * Es un campo aparte y no un `<em>` dentro de la cadena **a propósito**:
+   * marcado dentro de un texto traducido obliga a `set:html`, y ése es el
+   * camino por el que un día deja de escaparse algo. La plantilla parte el
+   * texto por esta palabra y envuelve la coincidencia. El escapado de Astro
+   * sigue intacto en los tres trozos.
+   */
+  cursiva?: string;
 }
 
 /* El ORDEN es el que pidió el cliente: de lo más cercano al hotel a lo más
@@ -117,6 +135,33 @@ export interface Actividad {
    vuelta de la esquina se hace, lo que está a dos horas se decide. Poner Cobá
    primero sería enseñar el obstáculo antes que la puerta. */
 export const actividades: Actividad[] = [
+  /* ── LA CASA, LA PRIMERA ──────────────────────────────────────────────────
+     Pedida por el cliente el 2026-09-11: el hotel como «actividad», y con más
+     peso que las demás. Va la primera porque el orden de esta lista es «de lo
+     más cercano a lo más lejano», y nada está más cerca que donde ya duermes.
+
+     🔴 **Falta el SPA a propósito.** El dictado decía «nuestro spa debe ser
+     imperdible en tu estancia», y el spa **no existe todavía**: en todo el
+     sitio se anuncia como «próximamente» y sin enlace, porque no hay una sola
+     línea que diga qué es. Escribirlo aquí en presente sería prometer un
+     servicio que el huésped no va a encontrar al llegar — exactamente el
+     defecto que este proyecto vino a corregir. Entra el día que abra.
+
+     La fotografía es del hotel, así que `credito: null`. */
+  {
+    id: 'hotel',
+    icono: 'alberca',
+    distancia: null,
+    imagen: fotoHotel,
+    credito: null,
+    destacada: true,
+    cursiva: 'Tenedor',
+    titulo: { es: 'Azucar Hotel Tulum', en: 'Azucar Hotel Tulum' },
+    texto: {
+      es: 'Empieza por casa: habitaciones hechas para descansar de verdad, y una playa de arena blanca y suave donde el amanecer se ve desde la cama. Las albercas y los roof tops son de los que se recuerdan, y el restaurante Tenedor sirve cocina internacional de autor frente al mar.',
+      en: 'Start at home: rooms made for real rest, and a beach of soft white sand where the sunrise arrives before you leave the bed. The pools and the rooftops are the kind you remember, and the Tenedor restaurant serves signature international cooking facing the sea.',
+    },
+  },
   {
     id: 'pueblo',
     icono: 'mercado',
@@ -197,9 +242,17 @@ export const actividades: Actividad[] = [
       fuente: "https://commons.wikimedia.org/wiki/File:SianKa'anBR-27527-1.jpg",
     },
     titulo: { es: 'Reserva de Sian Ka’an', en: 'Sian Ka’an Reserve' },
+    /* ⚠️ El cliente dictó también «lobos marinos» (2026-09-11) y NO entran: no
+       los hay en el Caribe mexicano. Lo que sí vive en Sian Ka'an y es igual de
+       vendedor son los manatíes, los delfines y las tortugas. Prometer un
+       animal que no existe allí es de las pocas cosas que un huésped puede
+       desmentir el mismo día, y con razón.
+
+       Y se escribe «puedes encontrarte», no «encontrarás»: la fauna silvestre
+       no se garantiza. */
     texto: {
-      es: 'En maya, «donde nace el cielo». Patrimonio de la Humanidad desde 1987, con canales que los mayas excavaron a mano y que mil años después siguen abiertos.',
-      en: 'In Maya, “where the sky is born”. A World Heritage Site since 1987, with canals the Maya dug by hand that are still open a thousand years later.',
+      es: 'En maya, «donde nace el cielo». Patrimonio de la Humanidad desde 1987, con canales que los mayas excavaron a mano y que mil años después siguen abiertos. Selva de monos araña por el camino; y en el agua puedes encontrarte delfines nadando a tu alrededor, tortugas enormes, manatíes y la isla de las aves.',
+      en: 'In Maya, “where the sky is born”. A World Heritage Site since 1987, with canals the Maya dug by hand that are still open a thousand years later. Spider monkeys in the jungle along the way; and in the water you may find dolphins swimming around you, huge turtles, manatees and the island of the birds.',
     },
   },
   {
@@ -270,8 +323,8 @@ export const actividades: Actividad[] = [
     },
     titulo: { es: 'Bahía de Akumal', en: 'Akumal Bay' },
     texto: {
-      es: 'Akumal es «lugar de las tortugas» en maya, y sigue siéndolo: comen en las praderas de pasto marino de su bahía. El acceso está regulado y tiene temporada.',
-      en: 'Akumal means “place of the turtles” in Maya, and it still is: they feed on the seagrass meadows of its bay. Access is regulated and has a season.',
+      es: 'Akumal es «lugar de las tortugas» en maya, y sigue siéndolo: comen en las praderas de pasto marino de su bahía. Hay tours guiados para hacer snorkel o bucear y asomarte a ese mundo marino. El acceso está regulado y tiene temporada.',
+      en: 'Akumal means “place of the turtles” in Maya, and it still is: they feed on the seagrass meadows of its bay. Guided tours take you snorkelling or diving into that underwater world. Access is regulated and has a season.',
     },
   },
 ];

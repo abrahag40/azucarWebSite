@@ -29,11 +29,24 @@ import type { Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
+
+/**
+ * Parte un texto en tres por la palabra que va en cursiva. Devuelve los trozos
+ * como CADENAS, que Astro escapa una por una: el `<em>` lo pone la plantilla,
+ * nunca el dato. Si la palabra no aparece, devuelve el texto entero y no pasa
+ * nada — no hay forma de que esto rompa una tarjeta.
+ */
+const partir = (texto: string, palabra?: string): [string, string, string] => {
+  if (!palabra) return [texto, '', ''];
+  const i = texto.indexOf(palabra);
+  if (i < 0) return [texto, '', ''];
+  return [texto.slice(0, i), palabra, texto.slice(i + palabra.length)];
+};
 ---
 <ul class="actividades" role="list">
   {actividades.map((a) => (
-    <li>
-      <article class:list={['act', !a.imagen && 'act--glifo']}
+    <li class:list={[a.destacada && 'destacada']}>
+      <article class:list={['act', !a.imagen && 'act--glifo', a.destacada && 'act--destacada']}
         data-revelar>
         {/* Espaciador vacío que sólo aporta la PROPORCIÓN. Ver la nota de
             `.act__marco` en el CSS: es lo que hace que 3/4 sea un mínimo y no
@@ -44,8 +57,10 @@ const { idioma } = Astro.props;
             class="act__foto"
             src={a.imagen}
             alt=""
-            widths={[320, 480, 640]}
-            sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw"
+            widths={a.destacada ? [640, 960, 1280] : [320, 480, 640]}
+            sizes={a.destacada
+              ? '(min-width: 64rem) 60rem, 90vw'
+              : '(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 90vw'}
             loading="lazy"
             quality={50}
           />
@@ -64,7 +79,10 @@ const { idioma } = Astro.props;
               del encabezado es estructura, no tamaño: el tamaño lo pone el CSS
               y se queda igual. */}
           <h2 class="act__titulo">{a.titulo[idioma]}</h2>
-          <p class="act__desc">{a.texto[idioma]}</p>
+          <p class="act__desc">{(() => {
+            const [antes, medio, despues] = partir(a.texto[idioma], a.cursiva);
+            return medio ? <>{antes}<em>{medio}</em>{despues}</> : antes;
+          })()}</p>
           {/* `distancia` está en `null` en las ocho hasta que responda C-LLEG.
               Cuando llegue el dato, esta línea aparece sola. */}
           {a.distancia && <p class="act__distancia">{a.distancia[idioma]}</p>}
@@ -125,6 +143,16 @@ const { idioma } = Astro.props;
      si el texto crece, manda el texto (ver la nota de arriba). */
   .act__marco { aspect-ratio: 4 / 5; }
   .act__texto { align-self: end; }
+
+  /* ── LA TARJETA DEL HOTEL ES MÁS ANCHA, ASÍ QUE ES MÁS BAJA ───────────────
+     Ocupa 10 de 12 columnas: con la misma proporción 4/5 que sus hermanas —que
+     ocupan 6— mediría más de 900 px de alto y sería un cartel, no una tarjeta.
+     16/7 la deja en una banda apaisada que ocupa una pantalla de portátil
+     entera sin obligar a bajar.
+
+     `aspect-ratio` aquí sigue siendo un MÍNIMO, igual que en las demás: si el
+     texto necesitara más, manda el texto. */
+  .act--destacada .act__marco { aspect-ratio: 16 / 7; }
 
   /* --- Modo GLIFO (respaldo desde que hay fotografías) ---------------------
      Fondo cálido y texto en tinta: 15.9:1, sin nada que medir. El glifo va
@@ -281,5 +309,22 @@ const { idioma } = Astro.props;
      incompleta no es un defecto: las tarjetas conservan su tamaño y la fila se
      alinea a la izquierda, que es como se lee. */
   @media (min-width: 40rem) { .actividades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 64rem) { .actividades { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  /* ── DE TRES POR FILA A DOS, SOBRE UNA REJILLA DE 12 ──────────────────────
+     Pedido del cliente el 2026-09-11, y con un motivo que se ve al leer: los
+     textos crecieron —Sian Ka'an pasó de 150 a 300 caracteres— y en una tarjeta
+     de un tercio de ancho el velo del pie trepaba hasta la mitad de la
+     fotografía para caber. Menos tarjetas por fila es MÁS foto visible, no
+     menos contenido.
+
+     Doce columnas en vez de dos o tres porque así caben las dos medidas que
+     pidió: **6 para cada actividad** —dos por fila— y **10 centradas para la
+     tarjeta del hotel**, que es la que tiene que pesar más dentro de su propia
+     página. Con `repeat(2, …)` la de 10 no se puede expresar. */
+  @media (min-width: 64rem) {
+    .actividades { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .actividades > li { grid-column: span 6; }
+    /* `2 / span 10` centra sin `margin: auto`: deja una columna a cada lado. */
+    .actividades > li.destacada { grid-column: 2 / span 10; }
+  }
 </style>
