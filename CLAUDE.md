@@ -871,6 +871,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 | **`scripts/video-hero.sh`** | **De los DOS reels del cliente al vídeo del héroe: qué planos entran, cuáles se descartan y por qué, y la receta de codificación medida** |
 | **`scripts/ingerir-fotos.mjs`** | **De la sesión del fotógrafo a `site/src/assets/`: por qué el maestro se queda en 1600 px y a calidad 85** |
+| **`scripts/esperar-despliegue.mjs`** | **¿Ya está en producción lo que acabo de construir? Compara CONTENIDO —el HTML byte a byte y cada recurso— en vez del nombre de un archivo, que es como fallaron los vigilantes escritos a mano** |
 | **`scripts/contraste-hero.mjs`** | **¿Se lee el texto del héroe sobre el vídeo? Compone las tres capas de velo sobre el píxel más claro de cada fotograma, en escritorio y en móvil** |
 | **`scripts/muestras-correo.mjs`** | **Seis muestras de los dos correos, para revisarlos a ojo. `--enviar` los manda con Resend** |
 
@@ -899,6 +900,10 @@ node scripts/auditar-accesibilidad.mjs site/dist
 
 # ¿Está sano un despliegue? Criterio de reversión (H5.6)
 node scripts/verificar-despliegue.mjs https://azucar-hotel-tulum.pages.dev
+
+# ¿Ya ENTRÓ lo que acabo de empujar? Espera y compara contenido, no nombres
+node scripts/esperar-despliegue.mjs /actividades/ /galeria/
+node scripts/esperar-despliegue.mjs --todas        # las 51 páginas
 
 # Redirecciones del relanzamiento — contra el build o contra una URL real
 node scripts/verificar-301.mjs site/dist
