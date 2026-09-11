@@ -79,7 +79,7 @@
 import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
-import fotoHotel from '../assets/rooftop-white-pearl.webp';
+import fotoHotel from '../assets/actividades/hotel-fachada.webp';
 import fotoBocaPaila from '../assets/actividades/boca-paila-2026.webp';
 import fotoPueblo from '../assets/actividades/pueblo.jpg';
 import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
@@ -147,7 +147,16 @@ export const actividades: Actividad[] = [
      servicio que el huésped no va a encontrar al llegar — exactamente el
      defecto que este proyecto vino a corregir. Entra el día que abra.
 
-     La fotografía es del hotel, así que `credito: null`. */
+     La fotografía es del hotel, así que `credito: null`.
+
+     🔴 **Y es una COPIA de `galeria/numeradas/003.webp`, no un import de ella.**
+     La eligió el cliente por su URL en producción (2026-09-11). Importar el
+     archivo numerado habría sido cómodo y habría roto el contrato que sostiene
+     toda la galería: esos nombres son POSICIONES, y el día que el cliente pida
+     reordenar, «003» pasará a ser otra fotografía y esta tarjeta cambiaría de
+     imagen sin que nadie la tocara. Es exactamente el motivo por el que las
+     cuatro fotos que también son banner de otra página se duplicaron (L-144).
+     Por eso vive aquí con nombre propio: `hotel-fachada.webp`. */
   {
     id: 'hotel',
     icono: 'alberca',
