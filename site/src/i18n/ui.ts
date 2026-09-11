@@ -46,7 +46,7 @@ export const ui = {
     // lo mismo. La abreviatura era una concesión, no una decisión editorial.
     'nav.politicas': 'Políticas y privacidad',
     'nav.galeria': 'Galería',
-    'nav.actividades': 'Actividades',
+    'nav.actividades': 'Qué hacer en Tulum',
     'nav.ubicacion': 'Cómo llegar',
     // Marca de lo que aún no existe. Se anuncia, no se enlaza: un apartado del
     // menú que lleva a una página vacía es peor que un apartado que dice
@@ -423,7 +423,7 @@ export const ui = {
     'nav.antesDeViajar': 'Before you travel',
     'nav.politicas': 'Policies and privacy',
     'nav.galeria': 'Gallery',
-    'nav.actividades': 'Activities',
+    'nav.actividades': 'What to do in Tulum',
     'nav.ubicacion': 'Getting here',
     'nav.proximamente': 'coming soon',
     'nav.faq': 'Frequent questions',

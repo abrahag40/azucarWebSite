@@ -101,7 +101,7 @@ const enlaces: Entrada[] = [
   },
   {
     etiqueta: t('nav.amenidades'),
-    rutas: ['servicios', 'restaurante', 'actividades'],
+    rutas: ['servicios', 'restaurante'],
     href: ruta(idioma, 'servicios'),
     hijos: [
       { etiqueta: t('nav.verTodoAmenidades'), href: ruta(idioma, 'servicios') },
@@ -111,15 +111,38 @@ const enlaces: Entrada[] = [
       { etiqueta: t('nav.daypass'), href: `${ruta(idioma, 'servicios')}#daypass` },
       { etiqueta: t('nav.rooftopSelvamar'), href: `${ruta(idioma, 'servicios')}#rooftop-selvamar` },
       { etiqueta: t('nav.rooftopWhitePearl'), href: `${ruta(idioma, 'servicios')}#rooftop-white-pearl` },
-      /* «Qué hacer en Tulum» entra aquí el 2026-09-02, y es una VUELTA ATRÁS
-         explícita: el 2026-09-01 el cliente la quiso suelta y argumenté a favor
-         —lo de esa página no es del hotel, y las amenidades son aquello por lo
-         que el hotel responde—. El argumento sigue en pie; la decisión es suya
-         y ha cambiado. Se anota para que el archivo no se contradiga.
-         Va la ÚLTIMA del panel, después de lo que sí es del hotel. */
-      { etiqueta: t('nav.actividades'), href: ruta(idioma, 'actividades') },
     ],
   },
+  /* ── «¿QUÉ HACER EN TULUM?» SUBE A LA BARRA — 2026-09-11 ──────────────────
+     Tercera vuelta de esta entrada, y conviene que quede el historial: el
+     2026-09-01 el cliente la quiso suelta, el 2026-09-02 la bajó dentro de
+     Amenidades, y hoy la sube otra vez con nombre nuevo. La decisión es suya
+     las tres veces.
+
+     🔴 **Y rompe la regla que este archivo se había puesto**: R-35 decía
+     «ninguna etiqueta más larga que “Antes de viajar”», y ésta lo es. Medido en
+     el navegador al umbral REAL de escritorio, 68rem = 1088 px, sumando las tres
+     piezas de la fila:
+
+                                    con Barlow Condensed   con el respaldo
+       sin esta entrada (antes)            950 px               985 px
+       «¿Qué hacer en Tulum?»            1 038 px             1 176 px
+       «Qué hacer en Tulum»              1 025 px                  —
+
+     Con los signos de interrogación la portada **desbordaba 9 px** a 1088: los
+     dos signos miden 13 px y son exactamente lo que sobraba. Sin ellos entra con
+     63 px de holgura y cero desborde.
+
+     Se publica **sin los signos**, que además es el `<h1>` que ya tiene la
+     página. La alternativa era subir el umbral de 68rem a 72rem, y eso devuelve
+     a la hamburguesa la banda de 1088–1152 px — justo la que se recuperó el
+     2026-09-02 porque el cliente se quejaba de no ver el menú. Trece píxeles de
+     puntuación no valen esa banda.
+
+     ⚠️ Con la tipografía de respaldo sigue sin caber (1 176 px). Eso es R-35 y
+     no lo estrena esta entrada: la cura es que la barra no dependa del ancho
+     exacto de una fuente, y mientras tanto la fuente se precarga. */
+  { etiqueta: t('nav.actividades'), rutas: ['actividades'], href: ruta(idioma, 'actividades') },
   { etiqueta: t('nav.galeria'), rutas: ['galeria'], href: ruta(idioma, 'galeria') },
   {
     etiqueta: t('nav.eventos'),
@@ -714,8 +737,51 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
      menú se precarga desde `Base.astro`; el riesgo residual es R-35.
 
      🔴 LA REGLA, otra vez: si hace falta un apartado más, **sale otro**. Con
-     siete el mínimo era 1143 y ya no cabía aquí. */
-  @media (min-width: 68rem) {
+     siete el mínimo era 1143 y ya no cabía aquí.
+
+     ── 🔴 Y EL 2026-09-11 HIZO FALTA UN APARTADO MÁS: EL UMBRAL SUBE A 72rem ──
+     El cliente pidió «Qué hacer en Tulum» en la barra. Séptimo apartado, y a
+     68rem NO CABE.
+
+     Medido preguntándole al navegador el `max-content` del `<ul>` del menú y
+     comparándolo con el hueco que le dejan la marca y las acciones —que a
+     1088 px son 723 px—:
+
+                                      el menú pide    ¿cabe en 723?
+       seis apartados, fuente real        585 px        sí, +138
+       seis apartados, con el respaldo    677 px        sí,  +46
+       SIETE, fuente real                 737 px        **no, −14**
+       SIETE, con los signos «¿…?»        750 px        no,  −27
+       SIETE, con el respaldo             856 px        no, −133
+
+     ⚠️ **Y no desbordaba: “Antes de viajar” se partía en tres renglones.** El
+     flex encogía el rótulo en vez de sacar la barra de la pantalla, así que
+     sumar los anchos de las tres piezas daba «cabe» —1038 de 1088— y la barra
+     se veía rota igual. Es exactamente el error contra el que avisa el párrafo
+     de arriba: se le pregunta el mínimo al navegador, no se suma a mano.
+
+     ── EL NÚMERO BUENO, medido con `nowrap` puesto ────────────────────────
+     Con los rótulos ya sin partirse, el fallo vuelve a ser un desborde y se
+     puede barrer el ancho de la fila hasta encontrarlo:
+
+                                    ancho mínimo de la fila
+       seis apartados                     1 000 px
+       SIETE apartados                    **1 152 px**
+
+     La fila es el contenedor menos su relleno lateral, así que el umbral tiene
+     que dejarle 1 152 px libres. **76rem = 1216 px** los deja; 72rem no —a 1152
+     la fila se queda en 1 104 y sigue sin caber—.
+
+     El precio, dicho claro: **entre 1088 y 1216 px vuelve la hamburguesa.** Es
+     la banda que se recuperó el 2026-09-02 y se pierde entera, porque el
+     cliente ha pedido en la barra un apartado que no cabía en ella. La
+     alternativa era la regla de arriba —si entra uno, sale otro— y ésa es una
+     decisión de contenido, no de código.
+
+     ⚠️ Con la tipografía de RESPALDO ni siquiera 1500 px bastan, contra los
+     1092 que bastaban con seis. R-35 se agrava y sigue mitigado sólo por la
+     precarga de la fuente. */
+  @media (min-width: 76rem) {
     .menu { display: none; }
     .nav { display: block; }
     .cabecera__acciones { display: flex; }
@@ -741,6 +807,17 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
   .desplegable { position: relative; }
 
   .desplegable__disparador {
+    /* 🐛 `nowrap`, y es un defecto ANTERIOR a la entrada nueva. Los enlaces de
+       la barra lo llevan desde siempre (`.nav__lista > li > a`), pero un
+       <summary> no es un <a> y se quedaba fuera: cuando la barra se apretaba,
+       «Antes de viajar» se partía en dos o tres renglones en vez de forzar a la
+       barra a reconocer que no cabía. No se veía como un error —la cabecera
+       mantenía su alto— y por eso sobrevivió: el flex encogía el rótulo y todo
+       parecía correcto mientras el menú se leía «ANTES / DE / VIAJAR».
+
+       Con `nowrap` el fallo vuelve a ser honesto —desborda, y se mide—, que es
+       la condición para poder elegir el umbral con un número delante. */
+    white-space: nowrap;
     /* Un <summary> no es un <a>: el selector `.nav__lista > li > a` no lo
        alcanza, así que se quedaba con la tipografía por defecto del navegador
        —tamaño de párrafo, sin versalitas ni tracking— mientras sus seis
