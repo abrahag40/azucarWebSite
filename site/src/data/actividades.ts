@@ -81,7 +81,6 @@ import type { Idioma } from '../i18n/ui';
 
 import fotoPueblo from '../assets/actividades/pueblo.jpg';
 import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
-import fotoBocaPaila from '../assets/actividades/boca-paila.jpg';
 import fotoSianKaan from '../assets/actividades/sian-kaan.jpg';
 import fotoKaanLuum from '../assets/actividades/kaan-luum.jpg';
 import fotoCenotes from '../assets/actividades/cenotes.jpg';
@@ -131,9 +130,13 @@ export const actividades: Actividad[] = [
       fuente: 'https://commons.wikimedia.org/wiki/File:Street_Dancers_-_Tulum_QR_2020.jpg',
     },
     titulo: { es: 'El pueblo de Tulum', en: 'Tulum town' },
+    /* Texto del cliente (2026-09-11). Pidió expresamente **no decir dónde
+       está** —lo anterior abría con «cruzando la carretera federal»— sino qué
+       se hace allí. Los platos son el «(ejemplos)» que dejó indicado: son la
+       cocina yucateca de diario, no una carta de restaurante concreto. */
     texto: {
-      es: 'Cruzando la carretera federal está el Tulum que vive todo el año: el mercado, el olor del comal a las siete de la mañana y los precios de quien no está de paso.',
-      en: 'Across the highway is the Tulum that lives here all year: the market, the smell of the comal at seven in the morning, and the prices of people who are not passing through.',
+      es: 'Recorrer sus calles entre artesanías, boutiques locales y el folclor de un pueblo mágico lleno de vida todo el año. Color, y la peculiar gastronomía maya de siempre —cochinita pibil, panuchos, sopa de lima—: sin lujo, y sin perder nunca su encanto.',
+      en: 'Wander its streets among craft stalls, local boutiques and the folklore of a pueblo mágico that is alive all year round. Colour, and the Maya cooking of always — cochinita pibil, panuchos, sopa de lima: no luxury, and never any less charming for it.',
     },
   },
   {
@@ -158,18 +161,27 @@ export const actividades: Actividad[] = [
     id: 'boca-paila',
     icono: 'bici',
     distancia: null,
-    imagen: fotoBocaPaila,
-    credito: {
-      obra: 'Boca Paila, east',
-      autor: 'Wasquewhat',
-      licencia: 'CC BY-SA 4.0',
-      licenciaUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-      fuente: 'https://commons.wikimedia.org/wiki/File:Boca_Paila,east.jpg',
-    },
+    /* 🔴 SIN FOTOGRAFÍA, Y ES DELIBERADO — 2026-09-11.
+       La que había era la del puente viejo (CC BY-SA 4.0 de Wikimedia) y el
+       cliente la describió como «horrible, un puente viejo sin sentido». Tenía
+       razón, pero quitarla deja un hueco que **no se puede rellenar hoy**: en
+       Commons no hay ninguna otra de Boca Paila con licencia usable —buscado—,
+       y el archivo del hotel no tiene ni una de esta carretera.
+
+       Así que se cae al modo glifo, que esta rejilla ya soporta desde que se
+       construyó justamente para los sitios sin foto. Es mejor que publicar una
+       fotografía que el propio cliente llama horrible, y de paso retira una de
+       las cuatro imágenes que obligan al pie de créditos.
+
+       Para que vuelva a tener foto hace falta una de dos cosas: que el hotel
+       mande una suya —la carretera pasa por su puerta— o que se elija una con
+       licencia y se ingiera con su crédito. Es R-38. */
+    imagen: null,
+    credito: null,
     titulo: { es: 'La carretera de Boca Paila', en: 'The Boca Paila road' },
     texto: {
-      es: 'Una franja de arena con el mar de un lado y la laguna del otro, y el hotel justo en medio. Se recorre entera en bicicleta, sin una sola cuesta.',
-      en: 'A strip of sand with the sea on one side and the lagoon on the other, and the hotel right in the middle. You can ride all of it, without a single hill.',
+      es: 'Donde el agua dulce de la laguna se funde con la salada del Caribe: una franja de arena con el mar de un lado y el manglar del otro, y el hotel justo en medio. Se recorre en bicicleta, sin una sola cuesta, o en coche hasta la entrada de Sian Ka’an.',
+      en: 'Where the fresh water of the lagoon meets the salt water of the Caribbean: a strip of sand with the sea on one side and the mangrove on the other, and the hotel right in the middle. Ride it by bicycle, without a single hill, or drive it as far as the Sian Ka’an entrance.',
     },
   },
   {
