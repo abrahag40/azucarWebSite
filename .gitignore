@@ -45,3 +45,8 @@ npm-debug.log*
 
 # hts-log.txt NO se ignora: es la evidencia de que la captura termino completa
 !investigacion/mirrors/**/hts-log.txt
+
+# Muestras de correo generadas por scripts/muestras-correo.mjs.
+# Son salida reproducible: se regeneran con un comando y cambian en cada
+# ejecucion. Versionarlas ensucia el diff sin aportar nada.
+muestras-correo/

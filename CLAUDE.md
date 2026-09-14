@@ -333,6 +333,12 @@ hacer: las 133 de la cola se renumeraron 018–150 → **020–152**, así que *
 tenga apuntado por encima del 17 se ha desplazado dos**. Verificado archivo a archivo contra git:
 las 17 primeras intactas, las 133 de la cola con los bytes de su antecesora y su `alt` con ellas.
 
+📌 **Y después subió a 155**, con tres que entraron **al final** (153–155: la terraza de un bungalow,
+la escalera entre los bungalows y la regadera de travertino). Al ir al final **no corrieron ningún
+número**, que es la diferencia entre añadir y reordenar: la lista que el cliente tenga apuntada
+sigue siendo válida. 🔴 **El único corrimiento vivo sigue siendo el +2 del 2026-09-14** sobre los
+números por encima del 17.
+
 Se verificó **por contenido, no por nombre**: los archivos se llaman por su posición desde la quinta
 tanda, así que la procedencia se reconstruyó re-codificando cada original con la tubería de ingesta
 y comparando hashes. 115 ya estaban, 31 faltaban, 4 numeradas eran de 2025 — y 115 + 4 = 119, que
