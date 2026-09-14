@@ -326,6 +326,13 @@ ninguna otra página**: nada fuera de `galeria.ts` importa `numeradas/`, que era
 duplicaron las cuatro fotos que también son banner (L-144). Verificado por hash y contra git: cada
 posición lleva los bytes de la suya y cada `alt` viajó con su foto.
 
+➕ **Y el 2026-09-14 la galería pasa de 150 a 152.** El cliente mandó dos fotografías nuevas —dos
+tucanes en un árbol y los camastros junto al jacuzzi de un patio— y pidió meterlas **después de la
+17**, «recorriendo las demás». Eso es exactamente lo que el contrato de la numeración obliga a
+hacer: las 133 de la cola se renumeraron 018–150 → **020–152**, así que **todo número que el cliente
+tenga apuntado por encima del 17 se ha desplazado dos**. Verificado archivo a archivo contra git:
+las 17 primeras intactas, las 133 de la cola con los bytes de su antecesora y su `alt` con ellas.
+
 Se verificó **por contenido, no por nombre**: los archivos se llaman por su posición desde la quinta
 tanda, así que la procedencia se reconstruyó re-codificando cada original con la tubería de ingesta
 y comparando hashes. 115 ya estaban, 31 faltaban, 4 numeradas eran de 2025 — y 115 + 4 = 119, que
