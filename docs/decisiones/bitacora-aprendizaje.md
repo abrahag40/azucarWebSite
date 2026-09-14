@@ -4731,10 +4731,65 @@ borrado, no** — ante una instrucción ambigua, se elige la lectura reversible.
 
 ---
 
+## L-145 · La tarifa que se publica no es el precio que se paga
+
+El encargo fue explícito: elegir pasarela de pagos «dando gran prioridad al costo de comisión».
+La tentación era ordenar cinco tarifas de menor a mayor y entregar la lista. Habría sido ordenar
+la columna equivocada.
+
+**Tres correcciones cambiaron el resultado, y ninguna es una opinión:**
+
+**Primera: el IVA.** En México las pasarelas publican la tarifa **sin IVA** y el IVA se suma.
+Todas lo dicen, cada una en un pie de página distinto, y es fácil comparar una cifra con IVA
+contra otra sin él. Son 16 % de error sobre la comisión — suficiente para invertir dos puestos.
+
+**Segunda: la cuota fija es ruido a este ticket.** «3.6 % + $3» y «3.4 % + $3» parecen
+comparables porque las dos llevan un sumando visible. En una reserva de cuatro noches —$18 000
+de supuesto— esos $3 pesan **0.017 %**. La comparación se decide **sólo** en el porcentaje, y
+mirar la cuota fija es mirar la parte que no mueve nada. En una tienda de tickets de $200 sería
+exactamente al revés: ahí la fija vale 1.5 % y decide.
+
+**Tercera, y la que voltea la tabla: la tarifa no es el único costo.** Una pasarela que cobra
+3.96 % y rechaza una de cada doce tarjetas extranjeras no te cuesta 3.96 %: en la rechazada te
+cuesta **el 100 %**. La variable que decide se llama **tasa de autorización**, no la publica
+nadie, y por eso la industria compara tarifas — se compara lo que se puede ver, no lo que
+decide. El antipatrón tiene nombre: ***rate shopping***.
+
+Lo interesante es que la duda **sí se puede acotar sin el dato**, con una división:
+
+```
+neto = aceptación × (1 − comisión)
+punto de empate = (1 − 0.0396) ÷ (1 − 0.0478) = 1.0085
+```
+
+La opción cara empata aceptando un **0.85 % más**. Eso convierte «no tengo el dato» en «el dato
+tendría que ser absurdamente favorable a la barata para que gane», que es una frase que sí se
+puede poner delante de un cliente. **Un análisis de sensibilidad no sustituye a una medición,
+pero convierte una incógnita en un rango con el que se decide.**
+
+Y después apareció lo que valía más que toda la comparación: **cobrar en pesos en vez de en
+dólares ahorra 2 puntos** —la conversión la paga el banco del huésped— y **partir el cobro en
+anticipo en línea + resto en recepción ahorra otro punto y medio**, además de mover el grueso
+del dinero a *card-present*, donde el contracargo casi no existe. Las dos juntas ahorran más
+que la diferencia entre la mejor y la peor pasarela de la tabla, **y no dependen de con quién
+se firme**.
+
+> **La regla:** antes de comparar proveedores, comprobar que se está comparando el **costo
+> total del resultado** y no el número que el proveedor eligió poner en su página. Y antes de
+> optimizar la elección, mirar si hay una palanca en **cómo se usa** que valga más que la
+> elección entera. Casi siempre la hay.
+
+Ver [`estudio-pasarelas-de-pago.md`](../02-requerimientos/estudio-pasarelas-de-pago.md).
+Emparenta con [[L-026]] —AVIF descartado porque la medición contradijo lo que «se sabe»— y con
+[[L-141]]: en los dos casos, la cifra que todo el mundo cita no era la que había que mirar.
+
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
 |---|---|---|---|
+| R-43 | 🔴 **El panel de precios no puede ponerle precio a Arrecife ni a Luna.** `precios.json` conserva las **8** claves de antes del 2026-09-03 y `TIPOS_VALIDOS` sale de ahí (`Object.keys(precios.porTipo)`), pero `Panel.astro` pinta las filas desde la colección, que tiene **10**. El hotel verá dos renglones que el endpoint rechazará como «tipo inventado». Es el fallo silencioso que ADR-0007 quería evitar, entrando por la puerta que nadie miró: añadir dos tipos al catálogo y no al archivo de precios | Medio | Añadir `bungalow-arrecife` y `bungalow-luna` a `porTipo` con `null`, y **una aserción en `verificar-todo.sh`** que falle si las claves de `precios.json` no son exactamente los tipos publicados de la colección. Sin la aserción, el tercer tipo nuevo repetirá el defecto |
+| R-44 | **La tarifa internacional de Openpay (3.70 %) no está verificada en fuente oficial.** Dos fuentes secundarias coinciden, pero su propio sitio de comisiones devolvió 404, 503 y una página vacía el 2026-09-14. Y BBVA publica además un «2.25 % de descuento» para Link de Pago que no sé si convive con esa tabla o la sustituye — **si la sustituye, Openpay es la más barata del estudio por bastante** y el ranking cambia | Medio | Confirmarlo con un ejecutivo de BBVA **antes** de que el cliente decida. Ver [`estudio-pasarelas-de-pago.md`](../02-requerimientos/estudio-pasarelas-de-pago.md) §3.1 y §6 |
 | R-41 | **Tres fotografías que el cliente quitó de la galería siguen siendo el banner de otras páginas.** El 2026-09-10 tachó cinco de las nueve; tres de esas cinco son la portada de `/restaurante/` (roof top al atardecer), la de `/eventos/` (arco de la playa) y la foto del restaurante dentro de `/restaurante/` (alberca del roof top). Los archivos no se borran por eso. **Y si también salen de ahí, el banco no da:** quedan cuatro fotos para seis banners, y de las cuatro sólo la alberca de noche está sin usar | Medio | Una pregunta de una línea al cliente: «¿esas tres salen también de las páginas donde son portada, o sólo de la galería?». Si salen, hace falta material nuevo, no recolocación |
 | R-42 | ~~**La galería quedó en cuatro fotografías y el adelanto de la portada ya no adelanta nada**~~ **CERRADA el mismo día que se abrió, 2026-09-10.** Se abrió por la mañana, con el recorte del cliente; por la tarde entraron las 41 de la sesión con fotógrafo y el banco pasó a 45. El adelanto de la portada volvió a ser un adelanto —enseña nueve— | Ninguno | Sin acción. Queda como recordatorio de que un riesgo de «falta material» puede caducar en horas cuando el material ya existía y no había llegado |
 | R-40 | **En monitores ultrapanorámicos (21:9, p. ej. 2560×1080) el logotipo del final del vídeo se recorta por arriba y por abajo**, unos 39 px por lado. No es un defecto de codificación: el logotipo mide 445 px de alto sobre 1080 de ancho, así que su proporción más apaisada posible es 2.43:1 y ahí el elemento va a 2.94:1 (L-137) | Bajo | Pedir al cliente una tarjeta final con el logotipo más pequeño —más aire alrededor—. Con el material actual no tiene arreglo por código |

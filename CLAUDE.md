@@ -797,7 +797,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | ~~**C1**~~ | ~~Tabla de los 8 tipos~~ ✅ **RESUELTA 2026-09-02**: 24 unidades con desglose por tipología, enviado por la gerencia | Ya no bloquea. El catálogo suma **24 de 24** desde el 2026-09-03. Ahora `build:prod` lo bloquea otra cosa, más pequeña: **capacidad y camas de Arrecife y Luna** (R-34) |
 | **C3** | Desglose fiscal | **Sprint 3 completo** + publicar precios del panel |
 | **C-LLEG** | Tiempos y costos desde el aeropuerto; referencias físicas | Completar H4.5 |
-| **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela | **Sprint 3 completo** |
+| **B1–B4** | Responsable, SLA, correo y WhatsApp, pasarela. 🆕 **B4 se parte en cuatro**: banco del hotel, terminal física, anticipo o total, y MSI — ver el §7 del [estudio de pasarelas](docs/02-requerimientos/estudio-pasarelas-de-pago.md) | **Sprint 3 completo** |
 | **E-PRIV** | Aviso de privacidad conforme a LFPDPPP | Requisito de **entrada** del sprint 3 |
 | **C-AMEN** | ¿Existen el Day Pass / Beach Club y el rooftop «White Pearl»? ¿Y qué eventos hace el hotel? | Publicar `/eventos/` y dos de las cinco amenidades |
 | **R-01** | Licencia de iconos de Cappa | Sustituibles por un set libre |
@@ -861,6 +861,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | `docs/05-despliegue/runbook-accesos-y-despliegue.md` | Cloudflare, GA4, Search Console, Business Profile, **y el cambio a `main` (Parte 7)** |
 | `docs/decisiones/ADR-0001..0007` | Decisiones con consecuencias |
 | **`docs/02-requerimientos/mensaje-cliente-desbloqueo.md`** | **Mensaje al cliente, listo para enviar** |
+| **`docs/02-requerimientos/estudio-pasarelas-de-pago.md`** | **Estudio de mercado de pasarelas de pago: las cinco tarifas con IVA, el punto donde la cara gana a la barata, y las cuatro palancas que ahorran más que elegir bien** |
 | `docs/04-diseno/mapeo-cappa-a-sitio.md` | Qué sección de Cappa alimenta cada página |
 | **`docs/04-diseno/fidelidad-a-cappa.md`** | **Cuánto se parece el sitio a la plantilla, medido elemento por elemento** |
 | **`docs/04-diseno/inventario-fotos-definitivas.md`** | **Las 157 fotos nuevas del hotel: qué desbloquean, qué rompen si se cargan a ciegas, y en qué orden entran** |
@@ -872,7 +873,7 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **144 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **145 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
