@@ -367,6 +367,8 @@ import foto149 from '../assets/galeria/numeradas/149.webp';
 import foto150 from '../assets/galeria/numeradas/150.webp';
 import foto151 from '../assets/galeria/numeradas/151.webp';
 import foto152 from '../assets/galeria/numeradas/152.webp';
+import foto153 from '../assets/galeria/numeradas/153.webp';
+import foto154 from '../assets/galeria/numeradas/154.webp';
 
 type Texto = Record<Idioma, string>;
 
@@ -1433,6 +1435,20 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
     alt: {
       es: 'Rincón bajo techo de palma con una hamaca, dos pufs y una mesa baja de madera.',
       en: 'A palm-roofed corner with a hammock, two bean bags and a low wooden table.',
+    },
+  },
+  {
+    imagen: foto153,
+    alt: {
+      es: 'La terraza de un bungalow, con su hamaca, su tumbona de madera y el techo de palma.',
+      en: 'A bungalow terrace, with its hammock, wooden lounger and palm-thatch roof.',
+    },
+  },
+  {
+    imagen: foto154,
+    alt: {
+      es: 'La escalera de madera que baja entre los bungalows, con las palmeras y la arena al fondo.',
+      en: 'The wooden staircase down between the bungalows, with the palms and the sand beyond.',
     },
   },
 ];
