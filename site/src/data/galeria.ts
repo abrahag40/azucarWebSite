@@ -369,6 +369,7 @@ import foto151 from '../assets/galeria/numeradas/151.webp';
 import foto152 from '../assets/galeria/numeradas/152.webp';
 import foto153 from '../assets/galeria/numeradas/153.webp';
 import foto154 from '../assets/galeria/numeradas/154.webp';
+import foto155 from '../assets/galeria/numeradas/155.webp';
 
 type Texto = Record<Idioma, string>;
 
@@ -1449,6 +1450,13 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
     alt: {
       es: 'La escalera de madera que baja entre los bungalows, con las palmeras y la arena al fondo.',
       en: 'The wooden staircase down between the bungalows, with the palms and the sand beyond.',
+    },
+  },
+  {
+    imagen: foto155,
+    alt: {
+      es: 'La regadera de travertino, con su banco de obra y la luz que entra por el ventanal esmerilado.',
+      en: 'The travertine shower, with its built-in bench and the light through the frosted window.',
     },
   },
 ];
