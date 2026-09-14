@@ -169,9 +169,12 @@
  * esto viene a dar.
  *
  * ⚠️ **Y por eso CUATRO fotos están dos veces en el repositorio, a propósito.**
- * `04-vista-selva-mar`, `05-camastros-palapa` y `09-entrada-piedra` son además
- * la portada de `/actividades/`, `/reservar/` y `/nosotros/`, y una de ellas
- * ilustra el Day Pass. A ellas se suma `recepcion.webp` —el banner de
+ * `05-camastros-palapa` y `09-entrada-piedra` son además la portada de
+ * `/reservar/` y `/nosotros/`, y una de ellas ilustra el Day Pass.
+ * `04-vista-selva-mar` lo era de `/actividades/` hasta el 2026-09-14, cuando esa
+ * cabecera pasó a la toma de septiembre del mismo mirador —la 144, copiada con
+ * nombre propio a `assets/vista-aerea-hotel.webp` por esta misma razón—. El
+ * archivo de 2025 se queda: sigue siendo la 119 de esta galería. A ellas se suma `recepcion.webp` —el banner de
  * `/contacto/`—, que desde la sexta tanda está también como `138.webp`. Si esas páginas apuntaran a un número, la próxima
  * reordenación les cambiaría la foto **en silencio**. Cada una conserva su
  * archivo y su ruta de ORIGEN, y la galería usa una copia numerada.

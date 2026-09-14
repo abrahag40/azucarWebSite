@@ -16,7 +16,13 @@ import BannerPagina from '../components/BannerPagina.astro';
 import RejillaActividades from '../components/RejillaActividades.astro';
 import FranjaLlamada from '../components/FranjaLlamada.astro';
 import { usarT, type Idioma } from '../i18n/ui';
-import banner from '../assets/galeria/04-vista-selva-mar.webp';
+/* El mirador sobre la selva, en la toma de la sesion profesional de septiembre
+   de 2026 -la misma vista que traia la de 2025, con nube y con el destello del
+   sol en el mar en vez del cielo azul liso-. Es la 144 de la galeria general,
+   pero NO se importa de `galeria/numeradas/`: esa carpeta se llama por POSICION
+   y el proximo reorden cambiaria esta cabecera en silencio. Copia con nombre
+   propio, que es lo que la L-144 obliga a hacer. */
+import banner from '../assets/vista-aerea-hotel.webp';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
