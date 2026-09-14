@@ -86,7 +86,15 @@ azotea, o el beach club — que es además la otra mitad de R-29 (**Day Pass / B
 | Hab Delux Doble vista selva | 6 | 3 | King vista selva (3) |
 | **Bongalow Aire** | **10** | **0** | Cielo (8), Luna (1), Agua (1) |
 
-🔴 **Bongalow Aire no tiene UNA SOLA fotografía que sea suya.** Sus diez archivos son ocho tomas del
+✅ **RESUELTO A MEDIAS EL 2026-09-14: ya hay 14 fotos de Aire, y son de Booking.** El cliente mandó
+una carpeta `Aire/` con 10 archivos más 5 pegados en el chat —14 únicos, uno repetido—, todos del
+lote de Booking (768 px de lado menor). **Cinco de ellas ya estaban publicadas en la galería general**
+—las 133, 135, 136, 007 y 140— y las otras nueve no estaban en ninguna parte del sitio. Entre ellas
+van **tres de la recámara de Aire**, que es exactamente lo que faltaba. Lo que sigue abierto es la
+pregunta del roof top: este lote **tampoco enseña un jacuzzi en la azotea de Aire**. El párrafo de
+abajo describe el estado de «Fotos definitivas», que no ha cambiado.
+
+🔴 **En «Fotos definitivas», Bongalow Aire no tiene UNA SOLA fotografía que sea suya.** Sus diez archivos son ocho tomas del
 roof top idénticas byte a byte a las de Cielo, una escalera de caracol que también está en Luna y
 una regadera que también está en Agua. **No hay ni una foto de su recámara.**
 
@@ -148,8 +156,10 @@ JPEG en git es irreversible y no aporta un píxel visible.
 
 ## Preguntas para el cliente (cuatro, y caben en un correo)
 
-1. **Bungalow Aire**: no hay ninguna foto suya. ¿Nos mandan de su recámara? Y las ocho del roof top
-   que están archivadas en Aire y en Cielo: **¿son dos azoteas o es la misma?**
+1. ~~**Bungalow Aire**: no hay ninguna foto suya. ¿Nos mandan de su recámara?~~ ✅ **RESPONDIDA el
+   2026-09-14** con la carpeta `Aire/`: 14 fotos de Booking, tres de ellas de la recámara. **Sigue
+   abierta la segunda mitad**: las ocho del roof top archivadas en Aire y en Cielo, **¿son dos
+   azoteas o es la misma?** El lote nuevo no la contesta.
 2. **«Perla Blanca»**: ¿es la azotea de la alberca, la terraza de playa con la barra, o las dos?
    ¿Y es lo mismo que el Day Pass / Beach Club?
 3. Los archivos llamados **«editar» / «para editar»**: ¿están terminados o les falta retoque?
