@@ -16,35 +16,56 @@
  *
  * `Restaurante y Bar` NO está aquí: tiene página propia porque tiene una carta
  * entera detrás.
+ *
+ * ── DE UNA FOTO A UNA MINI GALERÍA (cliente, 2026-09-15) ───────────────────
+ * Cada espacio era una fila de dos mitades: una fotografía a un lado y el texto
+ * al otro, alternando. Ahora es título, descripción y **debajo un carrusel de
+ * tres fotos**, que es lo que pidió el cliente y lo que un espacio necesita:
+ * una sola foto de una alberca no dice si es grande, si tiene sombra ni qué se
+ * ve desde ella; tres, sí.
+ *
+ * 🔴 Las fotos se importan de `desde-galeria/`, NUNCA de `galeria/numeradas/`.
+ * Esa carpeta se llama por POSICIÓN y el próximo reorden cambiaría estas
+ * fotografías en silencio (L-144). Ver `assets/desde-galeria/LEEME.md`.
+ *
+ * ── EL SPA NO TIENE CARRUSEL, Y NO ES UN HUECO ─────────────────────────────
+ * No hay una sola fotografía del spa porque el spa todavía no existe. En vez de
+ * rellenar con fotos de otro sitio —que es exactamente lo que este proyecto
+ * viene corrigiendo—, lleva una tarjeta sobria que dice «próximamente». Es la
+ * regla 7: anunciar sin prometer.
  */
-import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import CarruselFotos from './CarruselFotos.astro';
 import { instalaciones } from '../data/hotel';
 import { usarT, type Idioma } from '../i18n/ui';
-import fotoSelvamar from '../assets/galeria/06-alberca-roof-top.webp';
-/* 🔴 «White Pearl» DEJA DE SER UNA FOTO PRESTADA. Hasta el 2026-09-10 esta
-   sección se ilustraba con `01-roof-top-atardecer`, que es del roof top del
-   restaurante: la única azotea de la que teníamos fotografía. Abraham confirmó
-   ese día que las nueve fotos de la carpeta «Perla Blanca» son de este roof
-   top, así que ahora se ve el sitio del que habla el texto — la terraza alta
-   con su alberca larga, el deck y el mar detrás.
 
-   ⚠️ La FOTO está confirmada; el TEXTO sigue siendo nuestro. Por eso
-   `ejemplo: true` no se toca en `hotel.ts`: lo que nadie ha dicho todavía es
-   que la terraza esté «reservada para atardeceres y celebraciones pequeñas».
-   Que exista el sitio y que la descripción sea suya son dos cosas distintas. */
-import fotoWhitePearl from '../assets/rooftop-white-pearl.webp';
-import fotoDaypass from '../assets/galeria/05-camastros-palapa.webp';
-import fotoSpa from '../assets/galeria/08-patio-arboles.webp';
+import arcoAlberca from '../assets/desde-galeria/azotea-alberca-pergola.webp';
+import azoteaAgua from '../assets/desde-galeria/azotea-agua-turquesa.webp';
+import albercaInfinita from '../assets/desde-galeria/alberca-infinita-mar.webp';
+import azoteaMuro from '../assets/desde-galeria/azotea-alberca-muro.webp';
+import azoteaDuela from '../assets/desde-galeria/azotea-duela-camastros.webp';
+import azoteaHamaca from '../assets/desde-galeria/azotea-hamaca-sillas.webp';
+import camasPlaya from '../assets/desde-galeria/camas-playa-sombrillas.webp';
+import camaSombrero from '../assets/desde-galeria/cama-playa-sombrero.webp';
+import albercaPergola from '../assets/desde-galeria/alberca-pergola-troncos.webp';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);
 
-const fotos: Record<string, ImageMetadata> = {
-  'rooftop-selvamar': fotoSelvamar,
-  'rooftop-white-pearl': fotoWhitePearl,
-  daypass: fotoDaypass,
-  spa: fotoSpa,
+/* El dato dice QUÉ foto y con qué texto alternativo; este mapa dice DÓNDE está
+   el archivo. Separarlo permite que `hotel.ts` no importe imágenes y siga
+   siendo datos puros — y que el `alt` viaje traducido, que es su sitio. */
+const archivos: Record<string, ImageMetadata> = {
+  'azotea-alberca-pergola': arcoAlberca,
+  'azotea-agua-turquesa': azoteaAgua,
+  'alberca-infinita-mar': albercaInfinita,
+  'azotea-alberca-muro': azoteaMuro,
+  'azotea-duela-camastros': azoteaDuela,
+  'azotea-hamaca-sillas': azoteaHamaca,
+  'camas-playa-sombrillas': camasPlaya,
+  'cama-playa-sombrero': camaSombrero,
+  'alberca-pergola-troncos': albercaPergola,
 };
 ---
 <section class="seccion" aria-labelledby="instalaciones-titulo">
@@ -54,29 +75,29 @@ const fotos: Record<string, ImageMetadata> = {
     </header>
 
     <div class="instalaciones">
-      {instalaciones.map((x, i) => (
-        <article
-          id={x.id}
-          class:list={['instalacion', i % 2 === 1 && 'instalacion--invertida']}
-          data-revelar
-          aria-labelledby={`${x.id}-titulo`}
-        >
-          <Image
-            class="instalacion__foto"
-            src={fotos[x.id]}
-            alt=""
-            widths={[480, 800]}
-            sizes="(min-width: 56rem) 26rem, 92vw"
-            loading="lazy"
-            quality={50}
-          />
-          <div class="instalacion__texto">
-            <h3 id={`${x.id}-titulo`} class="instalacion__titulo">
-              {x.titulo[idioma]}
-              {x.proximamente && <em class="etiqueta-pronto">{t('nav.proximamente')}</em>}
-            </h3>
-            {x.parrafos.map((p) => <p class="instalacion__parrafo">{p[idioma]}</p>)}
-          </div>
+      {instalaciones.map((x) => (
+        <article id={x.id} class="instalacion" data-revelar aria-labelledby={`${x.id}-titulo`}>
+          <h3 id={`${x.id}-titulo`} class="instalacion__titulo">
+            {x.titulo[idioma]}
+            {x.proximamente && <em class="etiqueta-pronto">{t('nav.proximamente')}</em>}
+          </h3>
+          {x.parrafos.map((p) => <p class="instalacion__parrafo">{p[idioma]}</p>)}
+
+          {x.fotos && x.fotos.length > 0 ? (
+            <CarruselFotos
+              idioma={idioma}
+              etiqueta={t('carrusel.region', { espacio: x.titulo[idioma] })}
+              fotos={x.fotos.map((f) => ({ imagen: archivos[f.id], alt: f.alt[idioma] }))}
+            />
+          ) : (
+            /* Sin fotos no se pone una rejilla vacía ni una foto prestada: se
+               dice que viene. El `aria-hidden` del adorno evita que un lector
+               de pantalla lea un rombo. */
+            <p class="pronto">
+              <span class="pronto__adorno" aria-hidden="true">◆</span>
+              <span class="pronto__texto">{t('instalaciones.proximamente')}</span>
+            </p>
+          )}
         </article>
       ))}
     </div>
@@ -84,7 +105,6 @@ const fotos: Record<string, ImageMetadata> = {
 </section>
 
 <style>
-  .instalaciones { display: grid; gap: var(--space-8); }
   /* SIN `scroll-margin-top`. Lo llevaba, y sobraba: `base.css` ya declara
      `scroll-padding-top: var(--desplazamiento-ancla)` en el `html`, que cubre
      TODOS los destinos de ancla del sitio. Los dos se SUMAN —no se anulan— y el
@@ -92,27 +112,18 @@ const fotos: Record<string, ImageMetadata> = {
      de saltar, el doble de lo necesario. Se vio midiendo, no mirando: 240
      píxeles de aire parecen una decisión de diseño hasta que sabes que 120 eran
      el número. */
-  .instalacion {
-    display: grid;
-    gap: var(--space-6);
-    align-items: center;
-  }
-  .instalacion__foto {
-    width: 100%; height: auto;
-    border-radius: var(--radius-md);
-    object-fit: cover;
-    aspect-ratio: 4 / 3;
-  }
+  .instalaciones { display: grid; gap: var(--space-8); }
+
+  .instalacion { max-width: var(--container-text); }
   .instalacion__titulo {
     display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
     font-size: var(--text-xl);
     margin-bottom: var(--space-4);
   }
-  .instalacion__parrafo {
-    color: var(--color-ink-muted);
-    line-height: var(--leading-body);
-    margin-bottom: var(--space-3);
-  }
+  /* La misma etiqueta que el menú. Se repite porque el CSS con ámbito de Astro
+     no cruza de un componente a otro —lo comprueba `verificar-estilos.mjs`— y
+     estaba definida en la versión anterior de este archivo: al reescribirlo se
+     perdió y el guardián lo cazó en el acto. */
   .etiqueta-pronto {
     font-family: var(--font-ui);
     font-size: var(--text-xs);
@@ -123,13 +134,33 @@ const fotos: Record<string, ImageMetadata> = {
     border: 1px solid var(--color-accent);
     border-radius: var(--radius-sm);
     padding: 0 var(--space-2);
+    white-space: nowrap;
   }
 
-  /* Dos columnas alternando lado, como la sección `about` de Cappa. Debajo de
-     56rem se apilan y la foto va siempre arriba: en un teléfono la fotografía
-     es la que hace entrar en el texto, no al revés. */
-  @media (min-width: 56rem) {
-    .instalacion { grid-template-columns: 26rem minmax(0, 1fr); gap: var(--space-8); }
-    .instalacion--invertida .instalacion__foto { order: 2; }
+  .instalacion__parrafo {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-body);
+    margin-bottom: var(--space-3);
+  }
+  .instalacion__parrafo:last-of-type { margin-bottom: 0; }
+
+  /* El «próximamente» del spa. Sobrio a propósito: es un hueco reconocido, no
+     una sección de menos — si se disfrazara de contenido, mentiría. */
+  .pronto {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-5) 0 0;
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-alt);
+  }
+  .pronto__adorno { color: var(--color-boton); font-size: var(--text-sm); }
+  .pronto__texto {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-ink);
+    letter-spacing: 0.02em;
   }
 </style>

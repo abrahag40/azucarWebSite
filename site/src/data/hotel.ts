@@ -248,6 +248,8 @@ export const instalaciones: {
   id: string;
   titulo: Texto;
   parrafos: Texto[];
+  /** Mini galeria del espacio. `id` = archivo de `assets/desde-galeria/`. */
+  fotos?: { id: string; alt: Texto }[];
   proximamente?: boolean;
   ejemplo?: boolean;
 }[] = [
@@ -264,6 +266,11 @@ export const instalaciones: {
         en: 'Below, at beach level, the infinity pool opens straight onto the sea.',
       },
     ],
+    fotos: [
+      { id: 'azotea-alberca-pergola', alt: { es: 'La alberca alargada de la azotea, con su pérgola de madera, la duela y los camastros mirando al mar.', en: 'The long rooftop pool, with its wooden pergola, decking and loungers facing the sea.' } },
+      { id: 'azotea-agua-turquesa', alt: { es: 'El agua turquesa de la alberca de la azotea, con los camastros y la franja del mar arriba.', en: 'The turquoise water of the rooftop pool, with the loungers and the strip of sea above.' } },
+      { id: 'alberca-infinita-mar', alt: { es: 'La alberca de borde infinito entre las palmeras, con la playa y el mar justo detrás.', en: 'The infinity pool among the palm trees, with the beach and the sea right behind.' } },
+    ],
   },
   {
     id: 'rooftop-white-pearl',
@@ -274,6 +281,11 @@ export const instalaciones: {
         es: 'La terraza alta del hotel, reservada para atardeceres y celebraciones pequeñas. Blanco, madera y el mar de fondo.',
         en: 'The hotel’s upper terrace, kept for sunsets and small celebrations. White, wood and the sea behind.',
       },
+    ],
+    fotos: [
+      { id: 'azotea-alberca-muro', alt: { es: 'La alberca de la azotea con el muro de piedra caliza y el mar abierto al fondo.', en: 'The rooftop pool with its limestone wall and the open sea behind.' } },
+      { id: 'azotea-duela-camastros', alt: { es: 'La duela de la azotea con los camastros alineados frente a la barandilla y el mar.', en: 'The rooftop decking with the loungers lined up along the railing and the sea.' } },
+      { id: 'azotea-hamaca-sillas', alt: { es: 'Terraza de madera en la azotea, con una hamaca colgada y dos sillas de tijera.', en: 'Wooden rooftop terrace, with a hanging hammock and two folding chairs.' } },
     ],
   },
   {
@@ -291,6 +303,11 @@ export const instalaciones: {
         es: 'El cupo es limitado y se confirma por escrito. Escríbenos con la fecha y te decimos disponibilidad y precio, impuestos incluidos.',
         en: 'Places are limited and confirmed in writing. Write to us with the date and we will tell you availability and price, taxes included.',
       },
+    ],
+    fotos: [
+      { id: 'camas-playa-sombrillas', alt: { es: 'Camas de playa con colchón y cojines bajo sombrillas blancas, sobre la arena.', en: 'Beach beds with mattresses and cushions under white parasols, on the sand.' } },
+      { id: 'cama-playa-sombrero', alt: { es: 'Cama de playa con cojines bajo una sombrilla, con un sombrero de palma y una bebida encima.', en: 'A beach bed with cushions under a parasol, with a palm hat and a drink on it.' } },
+      { id: 'alberca-pergola-troncos', alt: { es: 'La alberca bajo la pérgola de troncos, vista a lo largo desde un extremo.', en: 'The pool under the log pergola, seen lengthwise from one end.' } },
     ],
   },
   {

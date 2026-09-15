@@ -13,8 +13,19 @@ import MenuRestaurante from '../components/MenuRestaurante.astro';
 import { carta } from '../data/restaurante';
 import { usarT, type Idioma } from '../i18n/ui';
 import { Image } from 'astro:assets';
-import banner from '../assets/galeria/01-roof-top-atardecer.webp';
-import fotoCocina from '../assets/galeria/06-alberca-roof-top.webp';
+/* La portada es EL RESTAURANTE (cliente, 2026-09-15): la palapa sobre las
+   columnas de piedra con su escalera de madera, a pie de playa. Es la 25 de la
+   galería, del lote que el propio cliente mandó ayer.
+
+   ✅ ESTO CIERRA R-41 PARA ESTA PÁGINA. Las dos fotos que llevaba
+   —`01-roof-top-atardecer` de portada y `06-alberca-roof-top` dentro— eran DOS
+   DE LAS CINCO que el cliente tachó de la galería el 2026-09-10 y que seguían
+   siendo la cara de `/restaurante/`. Una página de restaurante ilustrada con la
+   alberca de la azotea era además un desajuste de asunto, no sólo de curaduría.
+
+   🔴 De `desde-galeria/`, no de `numeradas/` — L-144. */
+import banner from '../assets/desde-galeria/restaurante-playa.webp';
+import fotoCocina from '../assets/desde-galeria/terraza-cocos-mar.webp';
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const t = usarT(idioma);

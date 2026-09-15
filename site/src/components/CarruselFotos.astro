@@ -1,0 +1,156 @@
+---
+/**
+ * Mini galería en carrusel — tres fotos, para «Nuestros espacios».
+ *
+ * ── POR QUE UN SCROLLER Y NO UN CARRUSEL «DE VERDAD» ───────────────────────
+ * Lo que la gente llama carrusel suele ser una pila de imagenes absolutas que
+ * se turnan con JavaScript. Eso trae tres problemas que aqui no hacen falta:
+ * sin JS no se ve nada, el lector de pantalla anuncia las tres a la vez aunque
+ * dos esten ocultas, y hay que reimplementar el gesto de arrastrar.
+ *
+ * Esto es una LISTA CON DESBORDAMIENTO HORIZONTAL y `scroll-snap`. El navegador
+ * pone gratis el gesto tactil, la inercia, la rueda del raton y el teclado. Los
+ * botones solo llaman a `scrollBy`. Sin JavaScript sigue siendo una galeria
+ * que se desliza con el dedo — se degrada, no se rompe.
+ *
+ * ── ACCESIBILIDAD ──────────────────────────────────────────────────────────
+ * · La pista lleva `tabindex="0"`: una region que se desplaza tiene que poder
+ *   recorrerse con el teclado (WCAG 2.1.1). Sin eso, quien no usa raton no
+ *   llega a la segunda foto.
+ * · Lleva `role="group"` y su nombre, para que se anuncie como una unidad y no
+ *   como tres imagenes sueltas.
+ * · Los botones son `<button>` de verdad, con nombre accesible, y se OCULTAN a
+ *   la tecnologia de asistencia (`aria-hidden`) porque duplican algo que el
+ *   teclado ya hace: anunciarlos seria ofrecer dos caminos al mismo sitio.
+ * · `alt` real por foto: son fotografias informativas, no decoracion.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+  /** Las fotos, ya importadas. Dos como minimo para que el carrusel tenga sentido. */
+  fotos: { imagen: ImageMetadata; alt: string }[];
+  /** Nombre accesible de la region, p. ej. «Fotos de Rooftop SelvaMar». */
+  etiqueta: string;
+}
+const { idioma, fotos, etiqueta } = Astro.props;
+const t = usarT(idioma);
+---
+<div class="carrusel">
+  <ul class="carrusel__pista" role="group" aria-label={etiqueta} tabindex="0">
+    {fotos.map((f) => (
+      <li class="carrusel__hueco">
+        <Image
+          class="carrusel__foto"
+          src={f.imagen}
+          alt={f.alt}
+          widths={[400, 700]}
+          sizes="(min-width: 56rem) 22rem, 80vw"
+          loading="lazy"
+          quality={50}
+        />
+      </li>
+    ))}
+  </ul>
+
+  {fotos.length > 1 && (
+    <p class="carrusel__mandos">
+      <button type="button" class="carrusel__boton" data-carrusel="atras" aria-hidden="true" tabindex="-1">
+        <span class="sr-only">{t('carrusel.anterior')}</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+          <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button type="button" class="carrusel__boton" data-carrusel="adelante" aria-hidden="true" tabindex="-1">
+        <span class="sr-only">{t('carrusel.siguiente')}</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+          <path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </p>
+  )}
+</div>
+
+<script>
+  // Un solo manejador para todos los carruseles de la pagina: delegacion en el
+  // documento en vez de un `addEventListener` por boton. Con cuatro espacios
+  // son ocho oyentes menos, y sobre todo un solo sitio donde mirar.
+  document.addEventListener('click', (e) => {
+    const boton = (e.target as HTMLElement).closest<HTMLElement>('[data-carrusel]');
+    if (!boton) return;
+    const pista = boton.closest('.carrusel')?.querySelector<HTMLElement>('.carrusel__pista');
+    if (!pista) return;
+    // Se desplaza el ancho de UNA foto, leido del DOM y no de una constante:
+    // el hueco mide distinto en telefono y en escritorio, y una cifra fija
+    // dejaria la foto a medias en uno de los dos.
+    const paso = pista.querySelector('.carrusel__hueco')?.getBoundingClientRect().width ?? 280;
+    const hueco = parseFloat(getComputedStyle(pista).gap) || 0;
+    pista.scrollBy({ left: (paso + hueco) * (boton.dataset.carrusel === 'atras' ? -1 : 1), behavior: 'smooth' });
+  });
+</script>
+
+<style>
+  .carrusel { margin-top: var(--space-5); }
+
+  .carrusel__pista {
+    display: flex;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* `scroll-padding` para que la foto enganchada no quede pegada al borde. */
+    scroll-padding-inline: 0;
+    /* Sin esto, el contorno del foco se recorta contra el desbordamiento. */
+    outline-offset: 3px;
+    /* El desplazamiento suave se respeta, salvo a quien pidio no tener
+       movimiento: ahi el salto es instantaneo (WCAG 2.3.3). */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carrusel__pista { scroll-behavior: auto; }
+  }
+  .carrusel__pista:focus-visible { outline: 2px solid var(--color-accent); }
+
+  .carrusel__hueco {
+    flex: 0 0 auto;
+    width: min(80vw, 22rem);
+    scroll-snap-align: start;
+  }
+  .carrusel__foto {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
+  }
+
+  .carrusel__mandos {
+    display: flex;
+    gap: var(--space-2);
+    justify-content: flex-end;
+    margin: var(--space-3) 0 0;
+  }
+  .carrusel__boton {
+    /* 44 px: el minimo de area tactil de WCAG 2.5.8, que en este proyecto ya ha
+       fallado varias veces por confiar en el alto de linea de un enlace. */
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+  .carrusel__boton:hover { border-color: var(--color-boton); color: var(--color-boton); }
+  .carrusel__boton:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+</style>

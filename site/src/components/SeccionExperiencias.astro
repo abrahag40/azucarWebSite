@@ -34,9 +34,16 @@ import { usarT, ruta, type Idioma } from '../i18n/ui';
  * Lección: una carencia sólo se puede afirmar tras mirar TODO el material. Con
  * una muestra parcial, lo honesto es decir «no encontré», no «no hay».
  */
-import playa from '../assets/galeria/02-arco-playa.webp';
-import alberca from '../assets/galeria/06-alberca-roof-top.webp';
-import jacuzzi from '../assets/experiencias/jacuzzi-terraza.webp';
+/* Las tres pasan a la GALERÍA, páginas 1 y 2 (cliente, 2026-09-15).
+   Y de paso se arregla media R-41: `02-arco-playa` y `06-alberca-roof-top` son
+   DOS DE LAS CINCO que el cliente tachó de la galería el 2026-09-10 y que
+   seguían ilustrando la portada. Ya no. La única que queda en ese caso es
+   `02-arco-playa` en `/eventos/`, que nadie ha pedido tocar.
+
+   🔴 De `desde-galeria/`, no de `numeradas/` — L-144. */
+import playa from '../assets/desde-galeria/arco-logotipo-camastros.webp';
+import alberca from '../assets/desde-galeria/alberca-infinita-mar.webp';
+import jacuzzi from '../assets/desde-galeria/jacuzzi-camastros-patio.webp';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;

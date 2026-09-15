@@ -7,9 +7,17 @@ import SeccionPresentacion from '../components/SeccionPresentacion.astro';
 // el andador de madera y las sillas de mimbre en el entarimado. Son detalles de
 // la casa, y van justo al lado del párrafo que dice que el hotel es artesanal y
 // construido por manos mayas — que es exactamente lo que enseñan.
-import portada1 from '../assets/portada-1.webp';
-import portada2 from '../assets/portada-2.webp';
-import portada3 from '../assets/portada-3.webp';
+/* Las tres de la presentación salen ahora de la GALERÍA, de sus páginas 1 y 2
+   (cliente, 2026-09-15): el arco con el rótulo y la alberca, el patio interior
+   de palmeras altas y las camas de playa bajo las sombrillas. Identidad,
+   arquitectura y playa — tres cosas distintas, no tres veces lo mismo.
+
+   🔴 Se importan de `desde-galeria/`, NO de `numeradas/`: esa carpeta se llama
+   por posición y el próximo reorden cambiaría la portada en silencio (L-144).
+   Ver `assets/desde-galeria/LEEME.md`. */
+import portada1 from '../assets/desde-galeria/arco-alberca.webp';
+import portada2 from '../assets/desde-galeria/patio-palmeras.webp';
+import portada3 from '../assets/desde-galeria/camas-playa-sombrillas.webp';
 import SeccionAlojamiento from '../components/SeccionAlojamiento.astro';
 import FranjaImagen from '../components/FranjaImagen.astro';
 import SeccionAmenidades from '../components/SeccionAmenidades.astro';

@@ -324,6 +324,10 @@ export const ui = {
 
     'amenidades.facilidades': 'Todo lo que encontrarás',
     'instalaciones.titulo': 'Nuestros espacios',
+    'instalaciones.proximamente': 'Muy pronto',
+    'carrusel.region': 'Fotos de {espacio}',
+    'carrusel.anterior': 'Ver la foto anterior',
+    'carrusel.siguiente': 'Ver la foto siguiente',
     'actividades.titulo': 'Qué hacer en Tulum',
     'actividades.meta': 'Las ruinas frente al mar, los cenotes, Sian Ka’an, Cobá y la bahía de Akumal: qué hay alrededor de Azucar Hotel Tulum y por qué merece el viaje.',
     // «Una de las razones» hace el trabajo que el cliente pidió —enseñar que hay
@@ -657,6 +661,10 @@ export const ui = {
 
     'amenidades.facilidades': 'Everything you will find',
     'instalaciones.titulo': 'Our spaces',
+    'instalaciones.proximamente': 'Coming soon',
+    'carrusel.region': 'Photos of {espacio}',
+    'carrusel.anterior': 'See the previous photo',
+    'carrusel.siguiente': 'See the next photo',
     'actividades.titulo': 'What to do in Tulum',
     'actividades.meta': 'The seafront ruins, the cenotes, Sian Ka’an, Cobá and Akumal Bay: what surrounds Azucar Hotel Tulum and why it is worth the trip.',
     'actividades.entrada': 'The hotel sits on the strip of sand between the sea and the lagoon — and the sea is only one of the reasons to be here. These are the rest, starting at home.',
