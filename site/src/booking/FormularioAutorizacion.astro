@@ -16,11 +16,18 @@
  * entrega al cliente de correo del huesped. Sin JavaScript, el `mailto:` del
  * propio formulario sigue funcionando.
  */
+import { getCollection } from 'astro:content';
 import { contacto } from '../data/hotel';
 import { usarT, type Idioma } from '../i18n/ui';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
+
+/* El tipo de alojamiento sale de la COLECCION, no de una lista escrita a mano:
+   es la misma fuente que el catalogo y que `FormularioSolicitud`, asi que el
+   dia que entre un tipo nuevo aparece aqui solo. Mismo orden que el listado. */
+const tipos = (await getCollection('alojamiento', (x) => x.data.publicado))
+  .sort((a, b) => a.data.orden - b.data.orden);
 const t = usarT(idioma);
 
 const rotulos = {
@@ -90,7 +97,10 @@ const correoVacio = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('t
     <div class="grupo__campos">
       <p class="campo">
         <label for="habitaciones">{t('tdc.habitaciones')}</label>
-        <input type="text" id="habitaciones" name="habitaciones" required aria-describedby="pista-habitaciones" />
+        <select id="habitaciones" name="habitaciones" required aria-describedby="pista-habitaciones">
+          <option value="">{t('tdc.elige')}</option>
+          {tipos.map((x) => <option value={x.data.nombre[idioma]}>{x.data.nombre[idioma]}</option>)}
+        </select>
         <span class="campo__nota" id="pista-habitaciones">{t('tdc.habitacionesPista')}</span>
       </p>
       <p class="campo">
@@ -327,13 +337,30 @@ const correoVacio = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('t
     padding: 0;
     margin-bottom: var(--space-4);
   }
-  .grupo__campos { display: grid; gap: var(--space-4); margin-bottom: var(--space-4); }
+  .grupo__campos {
+    display: grid;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    /* 🔴 Sin esto una columna con nota al pie ESTIRA a la de al lado, y el
+       `.campo` estirado reparte el sobrante entre su etiqueta y su control:
+       hueco enorme bajo el rotulo y un `select` mas alto que el `input` de su
+       derecha. Es el defecto que el cliente vio en «Tipo de tarjeta». */
+    align-items: start;
+  }
   .grupo__campos--dos { grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 30rem) {
     .grupo__campos--dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
-  .campo { display: grid; gap: var(--space-1); margin: 0; min-width: 0; }
+  .campo {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    min-width: 0;
+    /* La segunda mitad del mismo arreglo: aunque el `.campo` acabe mas alto que
+       su contenido, sus filas no se separan. */
+    align-content: start;
+  }
   .campo label { font-size: var(--text-sm); font-weight: 500; }
   .campo__opcional { font-weight: 400; color: var(--color-ink-muted); }
   .campo__nota { font-size: var(--text-sm); color: var(--color-ink-muted); margin: 0; }
@@ -345,8 +372,7 @@ const correoVacio = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('t
     align-items: flex-start;
     gap: var(--space-3);
   }
-  .campo--casilla input { width: auto; min-height: 0; margin-top: 0.15em; flex: none; }
-  .campo--casilla label { font-weight: 400; }
+  .campo--casilla label { font-weight: 400; line-height: 1.5; }
 
   .campo :is(input, select) {
     font: inherit;
@@ -358,8 +384,33 @@ const correoVacio = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('t
     border-radius: var(--radius-sm);
     background: var(--color-surface);
     box-sizing: border-box;
-    min-height: 3rem;
+    /* 3.25rem y no 3rem: por debajo de eso el `select` se queda en su alto
+       intrinseco -48 px- y el `input` llega a 50 por su contenido, y los dos
+       controles de una misma fila salen desparejos. Con el piso por encima de
+       los dos, mandan el `min-height` y no el control. */
+    min-height: 3.25rem;
+    /* `line-height` EXPLICITO. Sin el, un `select` y un `input` con el mismo
+       relleno salen con 4 px de diferencia porque `normal` no se resuelve
+       igual en los dos controles, y en una fila de dos columnas se nota. */
+    line-height: 1.5;
   }
+  /* 🔴 VA DESPUES de la regla de arriba, y no es casualidad.
+     `.campo--casilla input` y `.campo :is(input, select)` tienen la MISMA
+     especificidad (0,1,1), asi que decide el orden. Estaba escrita antes y
+     perdia: la casilla recibia `width: 100%`, relleno y `min-height: 3rem` y
+     salia como un cuadro gigante que empujaba su etiqueta contra el margen,
+     partiendola en una palabra por linea. Se ve en la captura del cliente.
+     Si alguien reordena este bloque, el defecto vuelve. */
+  .campo--casilla input[type='checkbox'] {
+    width: 1.15rem;
+    height: 1.15rem;
+    min-height: 0;
+    padding: 0;
+    margin-top: 0.2em;
+    flex: none;
+    accent-color: var(--color-boton);
+  }
+
   .campo :is(input, select):focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;

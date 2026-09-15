@@ -12,16 +12,25 @@
 # redirecciones que acumula posicionamiento desde 2008 no se nota hasta semanas
 # después, cuando el tráfico ya cayó.
 #
-# ── LO QUE NO ESTÁ AQUÍ, Y ES DELIBERADO ────────────────────────────────────
-# /autorizacion-de-pago-con-tdc/ y /en/cc-payment-authorization/ NO se
-# redirigen. Son las páginas que capturan número de tarjeta y CVV. Redirigirlas
-# las mantendría vivas como URL; dejarlas caer en 404 le dice a Google que
-# desaparecieron. Es el único caso del proyecto en el que perder posicionamiento
-# es exactamente lo que queremos.
+# ── LAS DOS DE DATOS DE TARJETA: MORÍAN EN 404, Y YA NO ─────────────────────
+# Hasta el 2026-09-14 estas dos caían en 404 A PROPÓSITO. Son las páginas que
+# capturan número de tarjeta y CVV, y sin un destino seguro al que mandarlas,
+# matar la URL era la única forma de no mantener viva la infracción.
+#
+# Ese razonamiento caducó el día que existió el destino: /autorizacion-tdc/
+# recoge la misma autorización SIN pedir número ni CVV. Ahora la redirección es
+# lo mejor de las dos: la URL vieja deja de servir el formulario inseguro —ya no
+# existe en este sitio— y quien llegue por un enlace antiguo, un marcador o un
+# correo del hotel aterriza donde tiene que aterrizar en vez de en nada.
+#
+# 🔴 SI ALGUIEN QUITA /autorizacion-tdc/, HAY QUE QUITAR TAMBIÉN ESTAS DOS
+# REGLAS. Una redirección a una página que no existe es un 404 con un salto de
+# más, y encima invisible en el mapa de 301.
 
 # ── Español ─────────────────────────────────────────────────────────────────
 # El esquema de URLs se conservó a propósito (ADR-0004), así que la mayoría
 # redirigen a sí mismas y no hacen falta. Sólo se listan las que cambian.
+/autorizacion-de-pago-con-tdc/  /autorizacion-tdc/  301
 /habitaciones/               /alojamiento/          301
 /amenidades-y-facilidades/   /servicios/            301
 # `/nosotros/` VUELVE A EXISTIR (cliente, 2026-09-01): el apartado está en el
@@ -34,6 +43,7 @@
 # ── Inglés ──────────────────────────────────────────────────────────────────
 # /en/rooms/, /en/services/, /en/frequent-questions/, /en/policies/ y
 # /en/contact/ se conservan idénticas: no necesitan regla.
+/en/cc-payment-authorization/  /en/card-authorization/  301
 /en/home/                    /en/                   301
 /en/amenities-facilities/    /en/services/          301
 /en/about-us/                /en/about/             301

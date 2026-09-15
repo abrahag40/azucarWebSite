@@ -729,10 +729,34 @@ compuesto no contiene ninguna secuencia de 13–19 dígitos, que `ultimos4Valido
 (35 + 13). El campo además trunca a cuatro dígitos *mientras se teclea*: pegar una tarjeta entera
 no llega a entrar.
 
-⚠️ **Lo que NO se hizo, y es una línea si se quiere:** `/autorizacion-de-pago-con-tdc/` y
-`/en/cc-payment-authorization/` **siguen muriendo en 404**. Esa decisión se tomó cuando no había
-a dónde mandarlas; ahora existe un destino seguro y redirigirlas recuperaría su tráfico. Está sin
-hacer a propósito: cambia una decisión documentada del mapa de 301 y no se pidió.
+✅ **Y las dos URLs viejas YA REDIRIGEN** (2026-09-15, a petición de Abraham).
+`/autorizacion-de-pago-con-tdc/` → `/autorizacion-tdc/` y `/en/cc-payment-authorization/` →
+`/en/card-authorization/`. Morían en 404 **a propósito** mientras no hubo destino seguro: matar la
+URL era la única forma de no mantener viva la infracción. Ese razonamiento caducó el día que
+existió el destino. `DEBEN_MORIR` en `verificar-301.mjs` se queda **vacío**, y las dos se
+comprueban como las demás: **13 reglas, 25 URLs, 0 fallos**.
+
+🔴 **Si alguien quita `/autorizacion-tdc/`, hay que quitar también esas dos reglas** — una
+redirección a una página que no existe es un 404 con un salto de más, y encima invisible en el mapa.
+
+🐛 **La primera versión de la interfaz salió torcida, y el porqué es una lección de CSS.** El
+cliente mandó dos capturas: el `select` de «Tipo de tarjeta» más alto que el `input` de al lado y
+con un hueco enorme bajo su rótulo, y la casilla de aceptación convertida en un cuadro gigante que
+empujaba su etiqueta contra el margen, partiéndola en una palabra por línea. **Dos causas
+distintas:** la rejilla estiraba la columna sin nota al pie para igualarla con la que sí la tiene
+—se arregla con `align-items: start` y `align-content: start`—, y `.campo--casilla input` estaba
+escrita **antes** que `.campo :is(input, select)` con la **misma especificidad (0,1,1)**, así que
+perdía por orden y la casilla heredaba `width: 100%`, relleno y `min-height`. Además, `select` e
+`input` con el mismo relleno salen con 2–4 px de diferencia porque `line-height: normal` no se
+resuelve igual en los dos controles: se fija `line-height: 1.5` y `min-height: 3.25rem`, por encima
+del alto intrínseco de ambos. **Medido después: los 18 controles miden exactamente 52 px.**
+
+**Y el tipo de alojamiento es un desplegable**, no un campo de texto: sale de la colección
+`alojamiento`, la misma fuente que el catálogo, así que un tipo nuevo aparece ahí solo.
+
+**Móvil comprobado a 375 px**, que era la otra petición: las siete rejillas colapsan a **una sola
+columna de 343 px**, los controles ocupan el ancho entero y **`scrollWidth` es 375 — cero desborde
+horizontal**.
 
 
 ### 🖼️ El héroe deja de ser a sangre — 2026-09-07

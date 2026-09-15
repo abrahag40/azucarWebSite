@@ -47,7 +47,11 @@ const viejas = [
 ].sort();
 
 // Las que se dejan caer a propósito. Ver la cabecera de site/public/_redirects.
-const DEBEN_MORIR = ['/autorizacion-de-pago-con-tdc/', '/en/cc-payment-authorization/'];
+//
+// Estaban aquí las dos de datos de tarjeta hasta el 2026-09-14. Salieron cuando
+// se publicó `/autorizacion-tdc/`: ya hay un destino seguro, así que redirigen
+// como cualquier otra y este guardián las comprueba como a las demás.
+const DEBEN_MORIR = [];
 
 // ── Reglas declaradas ────────────────────────────────────────────────────────
 const reglas = readFileSync(join(RAIZ, 'site/public/_redirects'), 'utf8')
