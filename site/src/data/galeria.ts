@@ -418,8 +418,8 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto002,
     alt: {
-      es: 'Atardecer nublado sobre el mar, con el sol bajo en el horizonte.',
-      en: 'A cloudy sunset over the sea, the sun low on the horizon.',
+      es: 'Amanecer anaranjado sobre las olas.',
+      en: 'An orange sunrise over the waves.',
     },
   },
   {
@@ -565,8 +565,8 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto023,
     alt: {
-      es: 'Baño de travertino con dos espejos ovalados enmarcados en piedra y dos lavabos redondos sobre una encimera labrada.',
-      en: 'Travertine bathroom with two oval mirrors framed in stone and two round basins on a carved counter.',
+      es: 'Camas de playa con colchón y cojines bajo sombrillas blancas, sobre la arena.',
+      en: 'Beach beds with mattresses and cushions under white parasols, on the sand.',
     },
   },
   {
@@ -628,8 +628,8 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto032,
     alt: {
-      es: 'Camas de playa con colchón y cojines bajo sombrillas blancas, sobre la arena.',
-      en: 'Beach beds with mattresses and cushions under white parasols, on the sand.',
+      es: 'Baño de travertino con dos espejos ovalados enmarcados en piedra y dos lavabos redondos sobre una encimera labrada.',
+      en: 'Travertine bathroom with two oval mirrors framed in stone and two round basins on a carved counter.',
     },
   },
   {
@@ -740,8 +740,8 @@ export const fotos: { imagen: ImageMetadata; alt: Texto }[] = [
   {
     imagen: foto048,
     alt: {
-      es: 'Amanecer anaranjado sobre las olas.',
-      en: 'An orange sunrise over the waves.',
+      es: 'Atardecer nublado sobre el mar, con el sol bajo en el horizonte.',
+      en: 'A cloudy sunset over the sea, the sun low on the horizon.',
     },
   },
   {
