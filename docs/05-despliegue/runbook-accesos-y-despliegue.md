@@ -295,10 +295,14 @@ publicado», que es lo que este proyecto corrige (regla 3).
 
 ## Parte 7 — `main` estable y la rama de trabajo por delante
 
-> ⚠️ **De esta parte, el git ya está hecho; lo de Cloudflare no.** La rama `main` existe, está
-> empujada y es la rama por defecto de GitHub. **Falta un único cambio en el panel de Cloudflare**,
-> y hasta que lo hagas el sitio se sigue publicando desde la rama de trabajo, exactamente como
-> hasta ahora. Nada está roto mientras tanto: ése es el orden correcto y es a propósito.
+> ✅ **HECHA ENTERA el 2026-09-15.** El git estaba desde el 2026-09-11 y el ajuste de Cloudflare
+> se aplicó ese día: **Production branch = `main`**, con *Automatic deployments* activos y
+> *Preview branch* en **All non-Production branches**, que es lo que mantiene viva la URL de vista
+> previa de la rama de trabajo.
+>
+> El cambio se hizo sobre el commit `13494ff`, que era el mismo en las dos ramas, así que
+> producción sirvió exactamente lo mismo antes y después. Lo que sigue queda como registro de qué
+> se cambió y de lo que hay que recordar a partir de ahora.
 
 ### Qué cambia y por qué
 
@@ -317,7 +321,7 @@ main                                  estable   →  PRODUCCIÓN (azucar-hotel-t
 momento de cambiar el ajuste, producción sirve exactamente lo mismo que servía un segundo antes.
 El cambio no puede alterar lo que ve el cliente — sólo de dónde sale.
 
-### El único paso que falta, y lo hace Abraham
+### El paso, tal y como se hizo
 
 1. `dash.cloudflare.com` → **Workers & Pages** → proyecto **azucar-hotel-tulum**.
 2. **Settings → Build** (en versiones anteriores del panel, *Builds & deployments*).
@@ -326,7 +330,17 @@ El cambio no puede alterar lo que ve el cliente — sólo de dónde sale.
    vista previa de la rama de trabajo. Si está en *None*, la rama de trabajo deja de construirse
    y se pierde justo lo que hace posible la demo de la Sprint Review (ADR-0002).
 
-No hace falta redesplegar: el siguiente `push` a `main` construye producción.
+No hace falta redesplegar: el siguiente `push` a `main` construye producción. En el momento del
+cambio, el despliegue vivo en `azucar-hotel-tulum.pages.dev` seguía siendo el que se construyó
+desde la rama de trabajo —Cloudflare mantiene el último de producción hasta que hay uno nuevo—, y
+se sustituyó con el primer `push` a `main` posterior.
+
+🔴 **Y una que no estaba escrita aquí: `GITHUB_RAMA` del panel de precios.** Al hacer el cambio,
+**Variables and secrets estaba VACÍO** —ni una sola variable—, así que no había nada que corregir
+y el panel sigue fallando cerrado como está diseñado. Pero el día que se configure (Parte 6), esa
+variable tiene que nacer valiendo `main`: si apunta a la rama de trabajo, el hotel guarda un
+precio, el panel dice «guardado» porque el commit sí se hace, y el sitio público no cambia nunca.
+Ningún error y ningún aviso.
 
 ### 🔴 Lo que cambia en tu día a día, y conviene no descubrirlo por sorpresa
 
