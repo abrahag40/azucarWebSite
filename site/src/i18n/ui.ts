@@ -169,11 +169,11 @@ export const ui = {
     // 🔴 El hallazgo crítico del proyecto, repetido donde ocurre el trabajo:
     // el sitio vigente captura número de tarjeta y CVV (R-13, PCI-DSS 3.3.1 y
     // 4.2.1). Un runbook se lee una vez; esto se lee en cada solicitud.
-    'manager.aviso': 'Nunca pidas número de tarjeta ni CVV, ni por correo ni por teléfono. Para apartar, envía el enlace de pago del hotel.',
     'manager.cierre': 'Esta solicitud no compromete disponibilidad: nada queda apartado hasta que tú lo confirmes.',
     'reserva.acuseAsunto': 'Recibimos tu solicitud — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hola {nombre},',
-    'reserva.acuseIntro': 'Esto es lo que recibimos. El hotel revisa la disponibilidad a mano y te responde por este mismo correo con el total, impuestos incluidos.',
+    'reserva.acuseGracias': 'Gracias por su preferencia por Azucar Hotel Tulum. Disfrute de nuestras promociones reservando directamente con nosotros.',
+    'reserva.acuseIntro': 'Hemos recibido su solicitud. Le responderemos a la brevedad, también puede comunicarse al WhatsApp {whatsapp}.',
     'reserva.acuseCierre': 'Es una solicitud sujeta a confirmación del hotel, no una reserva confirmada.',
     // Saludo por hora del correo HTML de acuse (`correoHtml.ts`). Es la hora
     // de Tulum, no la del huésped -no la sabemos-. Sólo se usa en la versión
@@ -503,11 +503,11 @@ export const ui = {
     'manager.intro': 'Check availability and reply to the guest with the total, taxes included.',
     'manager.contacto': 'Guest contact',
     'manager.responder': 'Reply to the guest',
-    'manager.aviso': 'Never ask for a card number or CVV, by email or by phone. To hold the room, send the hotel payment link.',
     'manager.cierre': 'This request does not hold anything: nothing is reserved until you confirm it.',
     'reserva.acuseAsunto': 'We received your request — Azucar Hotel Tulum',
     'reserva.acuseSaludo': 'Hi {nombre},',
-    'reserva.acuseIntro': 'Here is what we received. The hotel checks availability by hand and will reply to this same email with the total, taxes included.',
+    'reserva.acuseGracias': 'Thank you for choosing Azucar Hotel Tulum. Enjoy our special offers by booking directly with us.',
+    'reserva.acuseIntro': 'We have received your request. We will reply shortly; you can also reach us on WhatsApp at {whatsapp}.',
     'reserva.acuseCierre': 'This is a request subject to confirmation by the hotel, not a confirmed reservation.',
     'reserva.saludoManana': 'Good morning',
     'reserva.saludoTarde': 'Good afternoon',

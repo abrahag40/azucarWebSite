@@ -53,7 +53,7 @@ export const contacto = {
    * a `/contacto/`, que es cierto hoy. En cuanto el cliente confirme, este
    * campo es el unico cambio que hace falta para que el boton abra WhatsApp.
    */
-  whatsapp: null as string | null,
+  whatsapp: '528113802176' as string | null,
 } as const;
 
 /** Presentación. Fuente: `/nosotros/` y `/en/about-us/`. */

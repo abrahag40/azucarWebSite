@@ -36,6 +36,9 @@
 import { componerSolicitud, camposInvalidos, type Solicitud, type Rotulos } from '../../src/booking/solicitud';
 import { correoAcuseHtml, correoManagerHtml, saludoPorHoraUTC } from '../../src/booking/correoHtml';
 import { usarT, type Idioma } from '../../src/i18n/ui';
+// El WhatsApp del acuse sale del DATO, no de la cadena traducida: si el hotel
+// cambia de numero, se cambia en un sitio y no en cuatro (L-115).
+import { contacto } from '../../src/data/hotel';
 
 /** Sólo lo que este archivo necesita de un almacén KV -- no hace falta el
  *  paquete `@cloudflare/workers-types` para tres métodos. */
@@ -178,7 +181,9 @@ function correoAcuse(
   const texto = [
     t('reserva.acuseSaludo', { nombre: s.nombre }),
     '',
-    t('reserva.acuseIntro'),
+    t('reserva.acuseGracias'),
+    '',
+    t('reserva.acuseIntro', { whatsapp: contacto.telefonos[0] }),
     '',
     resumen,
     '',
@@ -188,7 +193,8 @@ function correoAcuse(
   const claveSaludo = saludoPorHoraUTC(new Date().getUTCHours());
   const html = correoAcuseHtml(s, r, {
     saludo: t(CLAVES_SALUDO[claveSaludo]),
-    intro: t('reserva.acuseIntro'),
+    gracias: t('reserva.acuseGracias'),
+    intro: t('reserva.acuseIntro', { whatsapp: contacto.telefonos[0] }),
     cierre: t('reserva.acuseCierre'),
     idioma,
   });
@@ -205,7 +211,6 @@ function correoManager(idioma: Idioma, s: Solicitud, r: Rotulos): string {
     intro: t('manager.intro'),
     contacto: t('manager.contacto'),
     responder: t('manager.responder'),
-    aviso: t('manager.aviso'),
     cierre: t('manager.cierre'),
     idioma,
   });

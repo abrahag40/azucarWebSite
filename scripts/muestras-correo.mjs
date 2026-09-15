@@ -42,6 +42,7 @@ import { join } from 'node:path';
 import { componerSolicitud } from '../site/src/booking/solicitud.ts';
 import { correoAcuseHtml, correoManagerHtml, saludoPorHoraUTC } from '../site/src/booking/correoHtml.ts';
 import { ui } from '../site/src/i18n/ui.ts';
+import { contacto } from '../site/src/data/hotel.ts';
 
 const args = process.argv.slice(2);
 const enviar = args.includes('--enviar');
@@ -101,7 +102,7 @@ function textosManager(idioma) {
   return {
     antetitulo: t['manager.antetitulo'], intro: t['manager.intro'],
     contacto: t['manager.contacto'], responder: t['manager.responder'],
-    aviso: t['manager.aviso'], cierre: t['manager.cierre'], idioma,
+    cierre: t['manager.cierre'], idioma,
   };
 }
 
@@ -109,7 +110,13 @@ function textos(idioma, horaUTC) {
   const t = ui[idioma];
   const clave = saludoPorHoraUTC(horaUTC);
   const saludo = { manana: 'reserva.saludoManana', tarde: 'reserva.saludoTarde', noche: 'reserva.saludoNoche' }[clave];
-  return { saludo: t[saludo], intro: t['reserva.acuseIntro'], cierre: t['reserva.acuseCierre'], idioma };
+  return {
+    saludo: t[saludo],
+    gracias: t['reserva.acuseGracias'],
+    intro: t['reserva.acuseIntro'].replaceAll('{whatsapp}', contacto.telefonos[0]),
+    cierre: t['reserva.acuseCierre'],
+    idioma,
+  };
 }
 
 const VARIANTES = [

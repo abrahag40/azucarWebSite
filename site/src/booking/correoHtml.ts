@@ -107,6 +107,8 @@ export function saludoPorHoraUTC(horaUTC: number): SaludoHora {
 export interface TextosAcuse {
   /** Ya resuelto por `saludoPorHoraUTC` + `usarT`, p. ej. "Buenas tardes". */
   saludo: string;
+  /** El agradecimiento que abre el mensaje (`reserva.acuseGracias`). */
+  gracias: string;
   intro: string;
   cierre: string;
   /** Para el `lang` del documento -- no se adivina desde el texto. */
@@ -174,6 +176,7 @@ export function correoAcuseHtml(s: Solicitud, r: Rotulos, textos: TextosAcuse): 
 
       <div style="padding:32px;font-family:Arial,Helvetica,sans-serif;color:#222222;font-size:16px;line-height:1.6;">
         <p style="margin:0 0 16px;font-size:18px;">${escaparHtml(textos.saludo)}, ${escaparHtml(s.nombre)}.</p>
+        <p style="margin:0 0 16px;color:#444444;">${escaparHtml(textos.gracias)}</p>
         <p style="margin:0 0 24px;color:#444444;">${escaparHtml(textos.intro)}</p>
 
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:8px;">
@@ -236,8 +239,6 @@ export interface TextosManager {
   contacto: string;
   /** Etiqueta del botón que abre la respuesta. */
   responder: string;
-  /** 🔴 El aviso de no pedir datos de tarjeta. */
-  aviso: string;
   /** Recordatorio de que es una solicitud, no una reserva. */
   cierre: string;
   idioma: 'es' | 'en';
@@ -316,12 +317,6 @@ export function correoManagerHtml(s: Solicitud, r: Rotulos, textos: TextosManage
              style="display:inline-block;background:#376452;color:#ffffff;text-decoration:none;
                     padding:14px 30px;border-radius:2px;font-size:14px;letter-spacing:0.12em;
                     text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">${escaparHtml(textos.responder)}</a>
-        </div>
-
-        <!-- 🔴 El aviso de PCI-DSS, donde ocurre el trabajo. Ver la nota de
-             arriba: un runbook se lee una vez; esto, cada vez. -->
-        <div style="margin-top:26px;padding:16px 18px;background:#fdf3f3;border-left:3px solid #9b2c2c;border-radius:2px;">
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#9b2c2c;font-family:Arial,Helvetica,sans-serif;font-weight:600;">${escaparHtml(textos.aviso)}</p>
         </div>
 
         <p style="margin:20px 0 0;font-size:14px;color:#666666;">${escaparHtml(textos.cierre)}</p>

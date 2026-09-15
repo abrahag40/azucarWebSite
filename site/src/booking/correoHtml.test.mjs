@@ -52,7 +52,13 @@ const base = {
   llegada: '2026-03-10', salida: '2026-03-13', tipo: 'bungalow-mar',
   adultos: 2, menores: 0, nombre: 'Ana Ruiz', correo: 'ana@example.com',
 };
-const textos = { saludo: 'Buenas tardes', intro: 'Esto es lo que recibimos.', cierre: 'Sujeta a confirmación.', idioma: 'es' };
+const textos = {
+  saludo: 'Buenas tardes',
+  gracias: 'Gracias por su preferencia por Azucar Hotel Tulum.',
+  intro: 'Hemos recibido su solicitud. WhatsApp +52 (81) 1380-2176.',
+  cierre: 'Sujeta a confirmación.',
+  idioma: 'es',
+};
 
 test('el HTML incluye el saludo, el nombre y las noches calculadas', () => {
   const html = correoAcuseHtml(base, R, textos);
@@ -105,13 +111,18 @@ test('declara su propia codificación y su idioma -- sin esto los acentos se ven
    Lo que se comprueba aquí NO es que se vea bonito -eso son las muestras de
    `scripts/muestras-correo.mjs`, que hay que MIRAR-. Es lo que un `assert`
    sí puede afirmar y una mirada se deja: que el texto del huésped nunca se
-   ejecute, que los enlaces de acción existan, y que el aviso de tarjeta esté.
-   Ese último no es cosmético: es el hallazgo crítico del proyecto (R-13), y
-   una prueba es lo que impide que alguien lo quite "porque estorba". */
+   ejecute y que los enlaces de acción existan.
+
+   🔴 AQUÍ HABÍA UN TERCER GUARDIÁN Y EL CLIENTE PIDIÓ RETIRARLO (2026-09-14).
+   Comprobaba que el aviso de PCI-DSS —«nunca pidas número de tarjeta ni CVV»—
+   viajara en cada correo al manager, y su comentario decía que existía para
+   impedir que alguien lo quitara «porque estorba». Se retira porque lo pidió
+   quien decide, no porque dejara de ser cierto: la regla 4 de CLAUDE.md sigue
+   vigente y el hallazgo R-13 sigue abierto. Queda escrito aquí para que el
+   próximo que lea este archivo sepa que faltó a propósito. */
 const TM = {
   antetitulo: 'Nueva solicitud', intro: 'Comprueba la disponibilidad.',
   contacto: 'Contacto del huésped', responder: 'Responder al huésped',
-  aviso: 'Nunca pidas número de tarjeta ni CVV.',
   cierre: 'Nada queda apartado hasta que tú lo confirmes.', idioma: 'es',
 };
 
@@ -141,14 +152,18 @@ test('manager: el texto del huésped NO se ejecuta', () => {
   assert.match(html, /&lt;b&gt;x&lt;\/b&gt;/);
 });
 
-test('manager: el aviso de datos de tarjeta SIEMPRE viaja', () => {
-  // R-13, PCI-DSS 3.3.1 y 4.2.1. Va en el correo y no sólo en el runbook
-  // porque el runbook se lee una vez y esto se lee en cada solicitud.
-  assert.match(correoManagerHtml(base, R, TM), /Nunca pidas número de tarjeta ni CVV\./);
-});
-
 test('manager: las fechas van arriba, antes que ningún otro dato', () => {
   const html = correoManagerHtml(base, R, TM);
   assert.ok(html.indexOf('2026-03-10') < html.indexOf('Contacto del huésped'),
     'el manager comprueba las fechas primero: si no van arriba, el diseño no hace su trabajo');
+});
+
+test('acuse: el agradecimiento abre el mensaje y el WhatsApp viaja', () => {
+  // Texto literal del cliente (2026-09-14). El número NO se teclea aquí ni en
+  // la cadena traducida: sale de `contacto.telefonos[0]` y llega resuelto.
+  const html = correoAcuseHtml(base, R, textos);
+  assert.match(html, /Gracias por su preferencia por Azucar Hotel Tulum/);
+  assert.match(html, /WhatsApp \+52 \(81\) 1380-2176/);
+  assert.ok(html.indexOf('Gracias por su preferencia') < html.indexOf('Hemos recibido su solicitud'),
+    'el agradecimiento abre: si va después, el mensaje empieza por el trámite');
 });
