@@ -82,14 +82,38 @@ for (const [de, a] of Object.entries(REDIRECCIONES)) {
   else OK(`301 ${de} → ${a}`);
 }
 
-// ── 3. 🚨 Las páginas que NO deben existir ──────────────────────────────────
-// Capturaban número de tarjeta y CVV. Que vuelvan a resolver es el único
-// escenario de este proyecto en el que revertir sería lo INCORRECTO: habría que
-// tirarlas, no restaurar el sitio que las servía.
-for (const ruta of ['/autorizacion-de-pago-con-tdc/', '/en/cc-payment-authorization/']) {
-  const { codigo } = await pedir(ruta);
-  if (codigo === 404) OK(`404 ${ruta} (correcto)`);
-  else F('🚨 Página de datos de tarjeta viva', `${ruta} respondió ${codigo}; debe ser 404`);
+// ── 3. 🚨 Que NADIE pida datos de tarjeta ───────────────────────────────────
+//
+// Esta comprobación cambió el 2026-09-15 y conviene entender por qué, porque
+// la versión anterior habría pedido revertir un despliegue SANO.
+//
+// Antes exigía que `/autorizacion-de-pago-con-tdc/` y su gemela inglesa
+// devolvieran 404. Tenía sentido mientras esas URLs no tenían a dónde ir: el
+// formulario que servían capturaba número de tarjeta y CVV, y matar la URL era
+// la única forma de no mantener viva la infracción.
+//
+// Desde que existe `/autorizacion-tdc/` —los mismos 18 campos legítimos, sin
+// PAN y sin CVV— las dos redirigen ahí con un 301. Un guardián que siguiera
+// exigiendo 404 gritaría «criterio de reversión cumplido» sobre un sitio
+// correcto, y un guardián que se equivoca deja de ser creído.
+//
+// 🔴 LO QUE SE COMPRUEBA AHORA ES LA PROPIEDAD QUE IMPORTA, no la incidental:
+// que a donde quiera que lleven esas URLs, NADIE pida datos de tarjeta. Eso es
+// verdad con un 404 y con un 301, y seguiría siendo la comprobación correcta si
+// mañana cambia otra vez el destino.
+const CAMPOS_PROHIBIDOS =
+  /name\s*=\s*["'][^"']*(numero_tarjeta|card_?number|cardnumber|codigo_cvc|cvv|cvc|exp_tarjeta)[^"']*["']/i;
+
+for (const ruta of ['/autorizacion-de-pago-con-tdc/', '/en/cc-payment-authorization/', '/autorizacion-tdc/', '/en/card-authorization/']) {
+  const res = await fetch(destino + ruta, { redirect: 'follow' }).catch(() => null);
+  if (!res) { F('No respondió', ruta); continue; }
+  if (res.status >= 400 && res.status !== 404) { F('Respuesta inesperada', `${ruta} → ${res.status}`); continue; }
+  const html = res.status === 404 ? '' : await res.text().catch(() => '');
+  if (CAMPOS_PROHIBIDOS.test(html)) {
+    F('🚨 Se están pidiendo datos de tarjeta', `${ruta} sirve un campo de número de tarjeta o CVV`);
+  } else {
+    OK(`${ruta} no pide datos de tarjeta (${res.status})`);
+  }
 }
 
 // ── 4. Señales de SEO en la portada ─────────────────────────────────────────
@@ -112,11 +136,24 @@ if (/<meta[^>]+name="robots"[^>]*noindex/i.test(home))
 // ── 5. Reglas del proyecto que no se rompen ─────────────────────────────────
 if (/reserva confirmada|booking confirmed/i.test(home))
   F('ADR-0003', 'la interfaz promete una reserva confirmada');
-const terceros = [...home.matchAll(/(?:href|src)="(https?:\/\/[^"]+)"/gi)]
+// 🔴 Sólo cuenta lo que la portada CARGA, no a dónde ENLAZA. Hasta el
+// 2026-09-15 esto contaba `href` y `src` por igual, y el día que se encendió el
+// botón de WhatsApp empezó a avisar de que «la portada carga de wa.me» — cuando
+// un `<a href>` no descarga nada hasta que alguien lo pulsa. Lo que esta
+// comprobación protege es la privacidad del visitante: un recurso de terceros
+// le filtra la IP con sólo abrir la página. Un enlace saliente, no.
+//
+// Cargan: cualquier `src` y el `href` de un `<link>` (hojas de estilo,
+// precargas, iconos). No carga: el `href` de un `<a>`.
+const cargas = [
+  ...home.matchAll(/\ssrc="(https?:\/\/[^"]+)"/gi),
+  ...home.matchAll(/<link\b[^>]*\shref="(https?:\/\/[^"]+)"/gi),
+];
+const terceros = cargas
   .map((m) => new URL(m[1]).host)
   .filter((h) => !/azucarhotel\.com$|pages\.dev$/.test(h));
 if (terceros.length) A('Origen de terceros', `la portada carga de ${[...new Set(terceros)].join(', ')}`);
-else OK('cero orígenes de terceros');
+else OK('cero orígenes de terceros que se carguen');
 
 // ── 6. Cabeceras (aviso, no fallo: no justifican revertir) ──────────────────
 const { cabeceras } = await pedir('/');
