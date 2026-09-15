@@ -40,6 +40,11 @@ const explorar = [
   { clave: 'nav.ubicacion', path: 'ubicacion' },
   { clave: 'nav.faq', path: 'preguntas-frecuentes' },
   { clave: 'nav.contacto', path: 'contacto' },
+  /* Autorización de cargo a TDC (cliente, 2026-09-14). Va la ÚLTIMA y sólo en
+     el pie: es un trámite que se hace una vez y por indicación del hotel, no
+     una sección que alguien navegue. La etiqueta es la que pidió el cliente,
+     literal, aunque sea larga — es como la nombra él al pedírsela al huésped. */
+  { clave: 'tdc.titulo', path: 'autorizacion-tdc' },
 ] as const;
 
 /* Las DOS primeras frases de la presentación, no una.

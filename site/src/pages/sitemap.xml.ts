@@ -24,6 +24,9 @@ export const GET: APIRoute = async () => {
   const secciones = [
     '', 'nosotros', 'alojamiento', 'servicios', 'eventos', 'galeria', 'actividades', 'reservar',
     'ubicacion', 'preguntas-frecuentes', 'politicas', 'contacto', 'aviso-de-privacidad',
+    // Enlazada desde el pie de las 53 páginas: una URL que todo el sitio enlaza
+    // y que el sitemap omite es justo la incoherencia que Search Console marca.
+    'autorizacion-tdc',
     // Sólo si la página existe: la ruta se genera condicionalmente según
     // `carta.publicable`, y un sitemap que apunta a un 404 es peor que uno
     // incompleto — Search Console lo reporta como error.

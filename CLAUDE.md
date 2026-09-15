@@ -369,7 +369,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 
 | | |
 |---|---|
-| Páginas | **50** públicas (25 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/`. Las cuatro nuevas son Arrecife y Luna en los dos idiomas |
+| Páginas | **52** públicas (26 rutas × 2 idiomas) + `/panel/`, interna · plantilla **sin duplicar**: `src/views/`. Las cuatro nuevas son Arrecife y Luna en los dos idiomas |
 | Archivos JavaScript externos | **0** · en línea: 897 B en las 17 páginas con galería, 3.3 KB en las 2 de solicitud, 1.4 KB del vídeo en las 2 portadas |
 | Portada | 22 KB de HTML + 21 KB de CSS compartido |
 | Imágenes | 190 WebP · **1 MB menos**: el visor servía originales intactos y ahora sirve derivadas |
@@ -382,7 +382,7 @@ Ver `docs/05-despliegue/mapa-301.md` y L-032.
 | **¿Cuánto cuesta el vídeo?** | **Medido con A/B sobre la misma URL** (`prefers-reduced-motion` no descarga nada): **LCP +10 ms — ruido**, CLS 0, TBT 0. Lo único real es **Speed Index +410 ms**, que no es un CWV. El elemento LCP es la fotografía en **33 de 34 informes** —la excepción es la pasada de arranque en frío, ver `medicion-calidad.md`— y el vídeo se pide **73 ms después** de que la foto termine |
 | **axe-core 4.13** | **0 violaciones**, re-medido el 2026-09-01 sobre 10 páginas tras el cambio de paleta a pistacho |
 | **html-validate** | **0 incidencias** en 45 páginas · **ya no es periódico: es un guardián de `verificar-todo.sh`**, y al entrar encontró un `<form>` sin botón de envío en el panel |
-| Pruebas unitarias | **35 casos** sobre `componerSolicitud`, los dos correos HTML y la concordancia de número · 0 dependencias nuevas |
+| Pruebas unitarias | **48 casos** · `componerSolicitud`, los dos correos HTML, la concordancia de número y la autorización de cargo —incluida la que falla si el mensaje llegara a contener algo con forma de número de tarjeta— · 0 dependencias nuevas |
 
 ### ✅ Contradicción del restaurante — resuelta, con un matiz
 
@@ -698,6 +698,43 @@ del `<p>` —800 px— en vez de los renglones pintados —237 px—. Casi apago
 arreglar un problema que no existía. Ver L-136.
 
 
+### 💳 Autorización de cargo a TDC — construida SIN datos de tarjeta, 2026-09-14
+
+El cliente pidió replicar `/autorizacion-de-pago-con-tdc/` del sitio vigente y enlazarlo desde
+el pie. **Se construyó, con una amputación deliberada.**
+
+El formulario viejo tiene **22 campos**; cuatro son número de tarjeta, mes y año de expiración y
+CVV, y Contact Form 7 los manda por correo. Eso es el hallazgo crítico del sprint 0 (R-13):
+incumple **PCI-DSS 4.2.1** y, sobre todo, **PCI-DSS 3.2** —el código de seguridad no puede
+almacenarse después de autorizar, sin excepciones, y un correo lo almacena para siempre—. Es la
+**regla 4**.
+
+**Están los otros 18**, en `/autorizacion-tdc/` y `/en/card-authorization/`, más los **últimos
+cuatro dígitos** en lugar del PAN: es el truncamiento que PCI-DSS permite expresamente y basta
+para que el hotel identifique la tarjeta. Un documento de autorización no necesita el número
+completo para ser válido, y el CVV no pinta nada en un consentimiento escrito.
+
+🔴 **Abraham reafirmó la petición sabiendo del incumplimiento.** No se construyeron los cuatro
+campos igualmente: quien se lleva el daño si ese buzón se filtra son huéspedes que no eligieron
+el riesgo. Lo que sí se hizo fue **descomponer el requerimiento** hasta ver que el desacuerdo
+ocupaba el 18 % y entregar el 82 % restante. Ver **L-146**.
+
+**Cómo se cobra entonces**, y ninguna de las dos depende de B4: la **terminal virtual (MOTO)** del
+banco adquirente —que el hotel probablemente ya tiene— o un **enlace de pago** cuando haya
+pasarela. En las dos, la tarjeta nunca toca este sitio ni el correo del hotel.
+
+**Verificado con pruebas, no con comentarios:** `autorizacion.test.mjs` afirma que el mensaje
+compuesto no contiene ninguna secuencia de 13–19 dígitos, que `ultimos4Validos` rechaza un PAN de
+16, y que el domicilio se arma sin comas huérfanas cuando falta el interior. **48 casos en total**
+(35 + 13). El campo además trunca a cuatro dígitos *mientras se teclea*: pegar una tarjeta entera
+no llega a entrar.
+
+⚠️ **Lo que NO se hizo, y es una línea si se quiere:** `/autorizacion-de-pago-con-tdc/` y
+`/en/cc-payment-authorization/` **siguen muriendo en 404**. Esa decisión se tomó cuando no había
+a dónde mandarlas; ahora existe un destino seguro y redirigirlas recuperaría su tráfico. Está sin
+hacer a propósito: cambia una decisión documentada del mapa de 301 y no se pidió.
+
+
 ### 🖼️ El héroe deja de ser a sangre — 2026-09-07
 
 A petición del cliente: el vídeo ya no llega a los bordes. Arriba, «a la altura del menú», y
@@ -879,9 +916,10 @@ el cliente vea en la demo exactamente qué debe confirmar.
 | **`docs/06-traspaso/guia-de-textos.md`** | **Dónde se cambia cada texto, sin tocar plantillas. Para editar contenido sin ayuda** |
 | `docs/06-traspaso/traspaso-tecnico.md` | Traspaso a quien mantenga el sitio + lo que sólo sabe Abraham |
 | `docs/06-traspaso/guion-capacitacion.md` | Guion de la sesión de 45 min, para grabar |
-| **`docs/decisiones/bitacora-aprendizaje.md`** | **145 lecciones acumuladas + riesgos abiertos** |
+| **`docs/decisiones/bitacora-aprendizaje.md`** | **146 lecciones acumuladas + riesgos abiertos** |
 | `site/README.md` | Cómo correr el sitio y qué reglas hace cumplir el código |
 | **`site/src/booking/README.md`** | **Frontera del módulo de reserva: interfaz, y qué NO hace hoy y por qué** |
+| **`site/src/booking/autorizacion.ts`** | **Autorización de cargo a TDC: los 18 campos que sí se piden, los 4 que no, y las dos formas de cobrar que no dependen de la pasarela** |
 | `scripts/README.md` | Ingesta de capturas y auditor automatizado |
 | **`scripts/video-hero.sh`** | **De los DOS reels del cliente al vídeo del héroe: qué planos entran, cuáles se descartan y por qué, y la receta de codificación medida** |
 | **`scripts/ingerir-fotos.mjs`** | **De la sesión del fotógrafo a `site/src/assets/`: por qué el maestro se queda en 1600 px y a calidad 85** |

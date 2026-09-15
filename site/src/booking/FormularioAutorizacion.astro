@@ -1,0 +1,405 @@
+---
+/**
+ * Formulario de autorizacion de cargo a tarjeta (cliente, 2026-09-14).
+ *
+ * 🔴 LOS CUATRO CAMPOS QUE NO ESTAN, Y POR QUE. El formulario del sitio vigente
+ * tiene 22 y captura numero de tarjeta, mes y ano de expiracion y CVV, y los
+ * manda por correo. Aqui estan los 18 que si se pueden pedir, mas los cuatro
+ * ultimos digitos en lugar del PAN. El porque completo, con las clausulas de
+ * PCI-DSS, esta en la cabecera de `autorizacion.ts`.
+ *
+ * El aviso de seguridad va ARRIBA DEL TODO y en lenguaje de huesped, no de
+ * auditor: quien llega buscando donde teclear su tarjeta tiene que entender en
+ * una frase por que no se la pedimos, o pensara que la pagina esta rota.
+ *
+ * Mismo mecanismo que `FormularioSolicitud`: se compone en el navegador y se
+ * entrega al cliente de correo del huesped. Sin JavaScript, el `mailto:` del
+ * propio formulario sigue funcionando.
+ */
+import { contacto } from '../data/hotel';
+import { usarT, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+
+const rotulos = {
+  asunto: t('tdc.asunto'),
+  fecha: t('tdc.fecha'),
+  llegada: t('tdc.llegada'),
+  salida: t('tdc.salida'),
+  habitaciones: t('tdc.habitaciones'),
+  huespedes: t('tdc.huespedes'),
+  huespedPrincipal: t('tdc.huespedPrincipal'),
+  // El rótulo del CORREO es el corto: en el formulario la frase larga dice
+  // dónde mirar en la tarjeta, pero en el mensaje al hotel sólo estorba.
+  titular: t('tdc.titularCorto'),
+  telefono: t('tdc.telefono'),
+  tipoTarjeta: t('tdc.tipoTarjeta'),
+  ultimos4: t('tdc.ultimos4'),
+  domicilio: t('tdc.domicilio'),
+  total: t('tdc.total'),
+  declaracion: t('tdc.declaracion'),
+};
+const mensajes = {
+  faltan: t('tdc.faltan'),
+  ultimos4Mal: t('tdc.ultimos4Mal'),
+  aceptaFalta: t('tdc.aceptaFalta'),
+};
+/* Las etiquetas por nombre de campo: el resumen de errores nombra el campo que
+   falta, no dice «faltan datos». Un error que no dice cual no es un error util. */
+const etiquetas: Record<string, string> = {
+  fecha: t('tdc.fecha'), llegada: t('tdc.llegada'), salida: t('tdc.salida'),
+  habitaciones: t('tdc.habitaciones'), huespedes: t('tdc.huespedes'),
+  huespedPrincipal: t('tdc.huespedPrincipal'), nombreTitular: t('tdc.titular'),
+  telefono: t('tdc.telefono'), tipoTarjeta: t('tdc.tipoTarjeta'), ultimos4: t('tdc.ultimos4'),
+  calle: t('tdc.calle'), numeroExterior: t('tdc.numeroExterior'),
+  codigoPostal: t('tdc.codigoPostal'), colonia: t('tdc.colonia'),
+  ciudad: t('tdc.ciudad'), pais: t('tdc.pais'), total: t('tdc.total'),
+};
+const correoVacio = `mailto:${contacto.correo}?subject=${encodeURIComponent(t('tdc.asunto'))}`;
+---
+<p class="tdc__seguridad">{t('tdc.comoSeCobra')}</p>
+
+<div class="errores" id="tdc-errores" role="alert" hidden>
+  <p class="errores__titulo" id="tdc-errores-titulo"></p>
+  <ul class="errores__lista"></ul>
+</div>
+
+<form class="tdc" id="tdc" novalidate>
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('tdc.grupoReserva')}</legend>
+    <div class="grupo__campos grupo__campos--dos">
+      <p class="campo">
+        <label for="fecha">{t('tdc.fecha')}</label>
+        <input type="date" id="fecha" name="fecha" required autocomplete="off" />
+      </p>
+      <p class="campo">
+        <label for="huespedes">{t('tdc.huespedes')}</label>
+        <input type="number" id="huespedes" name="huespedes" value="2" min="1" max="20" required />
+      </p>
+      <p class="campo">
+        <label for="llegada">{t('tdc.llegada')}</label>
+        <input type="date" id="llegada" name="llegada" required autocomplete="off" />
+      </p>
+      <p class="campo">
+        <label for="salida">{t('tdc.salida')}</label>
+        <input type="date" id="salida" name="salida" required autocomplete="off" />
+      </p>
+    </div>
+    <div class="grupo__campos">
+      <p class="campo">
+        <label for="habitaciones">{t('tdc.habitaciones')}</label>
+        <input type="text" id="habitaciones" name="habitaciones" required aria-describedby="pista-habitaciones" />
+        <span class="campo__nota" id="pista-habitaciones">{t('tdc.habitacionesPista')}</span>
+      </p>
+      <p class="campo">
+        <label for="huespedPrincipal">{t('tdc.huespedPrincipal')}</label>
+        <input type="text" id="huespedPrincipal" name="huespedPrincipal" required autocomplete="name" />
+      </p>
+    </div>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('tdc.grupoTitular')}</legend>
+    <div class="grupo__campos">
+      <p class="campo">
+        <label for="nombreTitular">{t('tdc.titular')}</label>
+        <input type="text" id="nombreTitular" name="nombreTitular" required autocomplete="cc-name" />
+      </p>
+      <p class="campo">
+        <label for="telefono">{t('tdc.telefono')}</label>
+        <input type="tel" id="telefono" name="telefono" required autocomplete="tel" />
+      </p>
+    </div>
+    <div class="grupo__campos grupo__campos--dos">
+      <p class="campo">
+        <label for="tipoTarjeta">{t('tdc.tipoTarjeta')}</label>
+        <select id="tipoTarjeta" name="tipoTarjeta" required>
+          <option value="">{t('tdc.elige')}</option>
+          <option value="Visa">Visa</option>
+          <option value="Mastercard">Mastercard</option>
+          <option value="American Express">American Express</option>
+          <option value={t('tdc.otra')}>{t('tdc.otra')}</option>
+        </select>
+      </p>
+      <p class="campo">
+        <label for="ultimos4">{t('tdc.ultimos4')}</label>
+        {/* `inputmode` numerico y `maxlength` 4. El tope no es comodidad: es lo
+            que mantiene este campo en el truncamiento que PCI-DSS permite. La
+            validacion real vive en `ultimos4Validos`, y tiene prueba. */}
+        <input
+          type="text" id="ultimos4" name="ultimos4" required
+          inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off"
+          aria-describedby="pista-ultimos4"
+        />
+        <span class="campo__nota" id="pista-ultimos4">{t('tdc.ultimos4Pista')}</span>
+      </p>
+    </div>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('tdc.grupoDomicilio')}</legend>
+    <div class="grupo__campos">
+      <p class="campo">
+        <label for="calle">{t('tdc.calle')}</label>
+        <input type="text" id="calle" name="calle" required autocomplete="address-line1" />
+      </p>
+    </div>
+    <div class="grupo__campos grupo__campos--dos">
+      <p class="campo">
+        <label for="numeroExterior">{t('tdc.numeroExterior')}</label>
+        <input type="text" id="numeroExterior" name="numeroExterior" required autocomplete="off" />
+      </p>
+      <p class="campo">
+        <label for="numeroInterior">
+          {t('tdc.numeroInterior')} <span class="campo__opcional">({t('reserva.opcional')})</span>
+        </label>
+        <input type="text" id="numeroInterior" name="numeroInterior" autocomplete="address-line2" />
+      </p>
+      <p class="campo">
+        <label for="colonia">{t('tdc.colonia')}</label>
+        <input type="text" id="colonia" name="colonia" required autocomplete="address-level3" />
+      </p>
+      <p class="campo">
+        <label for="codigoPostal">{t('tdc.codigoPostal')}</label>
+        <input type="text" id="codigoPostal" name="codigoPostal" required autocomplete="postal-code" />
+      </p>
+      <p class="campo">
+        <label for="ciudad">{t('tdc.ciudad')}</label>
+        <input type="text" id="ciudad" name="ciudad" required autocomplete="address-level2" />
+      </p>
+      <p class="campo">
+        <label for="pais">{t('tdc.pais')}</label>
+        <input type="text" id="pais" name="pais" required autocomplete="country-name" />
+      </p>
+    </div>
+  </fieldset>
+
+  <fieldset class="grupo">
+    <legend class="grupo__titulo">{t('tdc.grupoAutorizacion')}</legend>
+    <div class="grupo__campos">
+      <p class="campo">
+        <label for="total">{t('tdc.total')}</label>
+        <input type="text" id="total" name="total" required inputmode="decimal" aria-describedby="pista-total" />
+        <span class="campo__nota" id="pista-total">{t('tdc.totalPista')}</span>
+      </p>
+    </div>
+    <p class="tdc__declaracion">{t('tdc.declaracion')}</p>
+    <p class="campo campo--casilla">
+      <input type="checkbox" id="acepto" name="acepto" required />
+      <label for="acepto">{t('tdc.acepto')}</label>
+    </p>
+  </fieldset>
+
+  <button type="submit" class="boton boton--primario">{t('reserva.revisar')}</button>
+</form>
+
+<section class="resumen" id="tdc-resumen" aria-labelledby="tdc-resumen-titulo" hidden>
+  <h2 class="resumen__titulo" id="tdc-resumen-titulo" tabindex="-1">{t('reserva.resumenTitulo')}</h2>
+  <pre class="resumen__texto" id="tdc-resumen-texto"></pre>
+  <p class="resumen__pie">{t('reserva.resumenPie')}</p>
+  <p class="resumen__acciones">
+    <a class="boton boton--primario" id="tdc-correo" href={correoVacio}>{t('reserva.enviarCorreo')}</a>
+    <button type="button" class="boton boton--secundario" id="tdc-copiar">{t('reserva.copiar')}</button>
+    <button type="button" class="boton boton--secundario" id="tdc-editar">{t('reserva.editar')}</button>
+  </p>
+  <p class="sr-only" id="tdc-estado" aria-live="polite"></p>
+</section>
+
+<script type="application/json" id="tdc-datos" set:html={JSON.stringify({ rotulos, mensajes, etiquetas, destino: contacto.correo, copiado: t('reserva.copiado') })} />
+
+<script>
+  import { componerAutorizacion, camposFaltantes, ultimos4Validos, enlaceCorreo } from './autorizacion';
+
+  const form = document.querySelector<HTMLFormElement>('#tdc');
+  const datos = document.querySelector<HTMLScriptElement>('#tdc-datos');
+  if (form && datos) {
+    const { rotulos, mensajes, etiquetas, destino, copiado } = JSON.parse(datos.textContent!);
+    const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+    const cajaErr = $<HTMLElement>('#tdc-errores');
+    const listaErr = cajaErr.querySelector('ul')!;
+    const resumen = $<HTMLElement>('#tdc-resumen');
+    const hoy = new Date().toISOString().slice(0, 10);
+
+    campo('fecha').value = hoy;
+    campo('llegada').min = hoy;
+    campo('salida').min = hoy;
+    campo('llegada').addEventListener('change', () => { campo('salida').min = campo('llegada').value || hoy; });
+
+    // El campo de los cuatro digitos rechaza lo que no sea numero MIENTRAS se
+    // teclea: si alguien empieza a pegar su tarjeta entera, no llega a entrar.
+    campo('ultimos4').addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      el.value = el.value.replace(/\D/g, '').slice(0, 4);
+    });
+
+    const leer = () => ({
+      fecha: campo('fecha').value, llegada: campo('llegada').value, salida: campo('salida').value,
+      habitaciones: campo('habitaciones').value, huespedes: Number(campo('huespedes').value),
+      huespedPrincipal: campo('huespedPrincipal').value, nombreTitular: campo('nombreTitular').value,
+      telefono: campo('telefono').value, tipoTarjeta: campo('tipoTarjeta').value,
+      ultimos4: campo('ultimos4').value, calle: campo('calle').value,
+      numeroExterior: campo('numeroExterior').value, numeroInterior: campo('numeroInterior').value,
+      codigoPostal: campo('codigoPostal').value, colonia: campo('colonia').value,
+      ciudad: campo('ciudad').value, pais: campo('pais').value, total: campo('total').value,
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const a = leer();
+      const faltan = camposFaltantes(a);
+      const errores: { texto: string; campo: string }[] = faltan.map((k) => ({
+        texto: etiquetas[k] ?? k, campo: k,
+      }));
+      if (a.ultimos4 && !ultimos4Validos(a.ultimos4)) {
+        errores.push({ texto: mensajes.ultimos4Mal, campo: 'ultimos4' });
+      }
+      if (!(campo('acepto') as HTMLInputElement).checked) {
+        errores.push({ texto: mensajes.aceptaFalta, campo: 'acepto' });
+      }
+
+      form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+      if (errores.length) {
+        resumen.hidden = true;
+        $<HTMLElement>('#tdc-errores-titulo').textContent = mensajes.faltan;
+        listaErr.innerHTML = '';
+        for (const err of errores) {
+          const li = document.createElement('li');
+          const a2 = document.createElement('a');
+          a2.href = `#${err.campo}`;
+          a2.textContent = err.texto;
+          li.append(a2);
+          listaErr.append(li);
+          campo(err.campo)?.setAttribute('aria-invalid', 'true');
+        }
+        cajaErr.hidden = false;
+        cajaErr.scrollIntoView({ block: 'nearest' });
+        return;
+      }
+
+      cajaErr.hidden = true;
+      const { asunto, cuerpo } = componerAutorizacion(a, rotulos);
+      $<HTMLElement>('#tdc-resumen-texto').textContent = cuerpo;
+      $<HTMLAnchorElement>('#tdc-correo').href = enlaceCorreo(destino, asunto, cuerpo);
+      resumen.hidden = false;
+      $<HTMLElement>('#tdc-resumen-titulo').focus();
+    });
+
+    $<HTMLButtonElement>('#tdc-copiar').addEventListener('click', async () => {
+      await navigator.clipboard?.writeText($<HTMLElement>('#tdc-resumen-texto').textContent ?? '');
+      $<HTMLElement>('#tdc-estado').textContent = copiado;
+    });
+    $<HTMLButtonElement>('#tdc-editar').addEventListener('click', () => {
+      resumen.hidden = true;
+      campo('fecha').focus();
+    });
+  }
+</script>
+
+<style>
+  .tdc { max-width: var(--container-text); }
+
+  /* El aviso de por que no pedimos la tarjeta. Va ARRIBA y con peso visual:
+     es la primera pregunta que se hace quien llega a esta pagina. */
+  .tdc__seguridad {
+    max-width: var(--container-text);
+    border-left: 3px solid var(--color-boton);
+    background: var(--color-surface-alt);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+  .tdc__declaracion {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+    margin: var(--space-4) 0 var(--space-3);
+  }
+
+  .grupo { border: 0; padding: 0; min-width: 0; margin-bottom: var(--space-6); }
+  .grupo__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    padding: 0;
+    margin-bottom: var(--space-4);
+  }
+  .grupo__campos { display: grid; gap: var(--space-4); margin-bottom: var(--space-4); }
+  .grupo__campos--dos { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 30rem) {
+    .grupo__campos--dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .campo { display: grid; gap: var(--space-1); margin: 0; min-width: 0; }
+  .campo label { font-size: var(--text-sm); font-weight: 500; }
+  .campo__opcional { font-weight: 400; color: var(--color-ink-muted); }
+  .campo__nota { font-size: var(--text-sm); color: var(--color-ink-muted); margin: 0; }
+
+  /* La casilla es lo unico que NO va en columna: una casilla sobre su etiqueta
+     rompe la asociacion visual que el `for` ya establece. */
+  .campo--casilla {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .campo--casilla input { width: auto; min-height: 0; margin-top: 0.15em; flex: none; }
+  .campo--casilla label { font-weight: 400; }
+
+  .campo :is(input, select) {
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    font-size: max(1rem, var(--text-base));
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    box-sizing: border-box;
+    min-height: 3rem;
+  }
+  .campo :is(input, select):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .campo :is(input, select)[aria-invalid='true'] {
+    border-color: var(--color-error);
+    border-width: 2px;
+  }
+
+  .errores {
+    max-width: var(--container-text);
+    border-left: 3px solid var(--color-error);
+    background: var(--color-surface-alt);
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-sm);
+  }
+  .errores__titulo { font-weight: 500; margin-bottom: var(--space-2); }
+  .errores__lista { margin: 0; padding-left: var(--space-5); }
+  .errores__lista a { color: var(--color-error); }
+
+  .resumen {
+    max-width: var(--container-text);
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+  }
+  .resumen__titulo { font-size: var(--text-xl); margin-bottom: var(--space-4); }
+  .resumen__titulo:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+  .resumen__texto {
+    font: inherit;
+    font-size: var(--text-sm);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-4);
+  }
+  .resumen__pie { font-size: var(--text-sm); color: var(--color-ink-muted); margin-bottom: var(--space-4); }
+  .resumen__acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: 0; }
+</style>

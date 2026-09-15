@@ -1,0 +1,57 @@
+---
+/**
+ * Autorizacion de cargo a tarjeta (cliente, 2026-09-14).
+ *
+ * Sustituye a `/autorizacion-de-pago-con-tdc/` del sitio vigente, que captura
+ * numero de tarjeta y CVV y los manda por correo. Aqui estan sus 18 campos
+ * legitimos; los cuatro de la tarjeta no, y en su lugar van los ultimos cuatro
+ * digitos. El porque, con las clausulas, en `src/booking/autorizacion.ts`.
+ *
+ * La pagina vive en el PIE y no en la barra: es un tramite, no una seccion que
+ * se navegue. Mismo criterio que «Como llegar» y «Contacto».
+ */
+import Base from '../layouts/Base.astro';
+import BannerPagina from '../components/BannerPagina.astro';
+import banner from '../assets/franja-habitacion.webp';
+import FormularioAutorizacion from '../booking/FormularioAutorizacion.astro';
+import { usarT, ruta, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const t = usarT(idioma);
+---
+<Base
+  idioma={idioma}
+  rutaActual="autorizacion-tdc"
+  titulo={`${t('tdc.tituloCorto')} | Azucar Hotel Tulum`}
+  descripcion={t('tdc.meta')}
+>
+  <BannerPagina imagen={banner} titulo={t('tdc.titulo')} />
+
+  <section class="seccion seccion--entrada">
+    <div class="contenedor"><p class="entrada entrada-pagina">{t('tdc.entrada')}</p></div>
+  </section>
+
+  <div class="seccion">
+    <div class="contenedor">
+      <FormularioAutorizacion idioma={idioma} />
+      <p class="tdc__volver">
+        <a href={ruta(idioma, 'reservar')}>{t('reserva.cta')}</a>
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  /* Estas dos también están en `Reservar.astro`, y se repiten a propósito: el
+     CSS con ámbito de Astro no cruza de un componente a otro, así que heredarlas
+     no es una opción. Es lo que comprueba `verificar-estilos.mjs`. */
+  .seccion--entrada { padding-bottom: 0; }
+  .entrada { margin: 0; }   /* el tamaño lo pone `.entrada-pagina` en base.css */
+
+  .tdc__volver {
+    max-width: var(--container-text);
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+  }
+</style>

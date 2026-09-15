@@ -4784,6 +4784,57 @@ Emparenta con [[L-026]] —AVIF descartado porque la medición contradijo lo que
 [[L-141]]: en los dos casos, la cifra que todo el mundo cita no era la que había que mirar.
 
 
+## L-146 · Un requerimiento tiene una NECESIDAD debajo, y casi nunca son lo mismo
+
+El cliente pidió replicar en el sitio nuevo su formulario de autorización de cargo a
+tarjeta. Ese formulario captura número de tarjeta, expiración y CVV y los manda por correo:
+es el hallazgo crítico del sprint 0, incumple **PCI-DSS 4.2.1** —el PAN no viaja por
+mensajería de usuario final sin proteger— y sobre todo **PCI-DSS 3.2**, que prohíbe
+almacenar el código de seguridad después de autorizar, sin excepciones. Un correo lo
+almacena para siempre, en cada buzón y cada copia de seguridad por los que pasa.
+
+Abraham reafirmó la petición sabiendo eso: *«entiendo el incumplimiento… pero es
+requerimiento del cliente»*. Y tenía razón en lo suyo: el hotel necesita ese documento de
+verdad, sobre todo cuando quien paga no es quien se hospeda.
+
+**Lo que desatascó la conversación no fue argumentar más fuerte: fue contar los campos.**
+
+El formulario viejo tiene **22**. Cuatro son datos de tarjeta. **Los otros 18 —fechas,
+huéspedes, habitaciones, huésped principal, titular, teléfono, tipo de tarjeta, domicilio
+de facturación completo, importe y aceptación— son datos personales normales y no había
+ninguna razón para no construirlos.** El desacuerdo ocupaba el 18 % del encargo y estaba
+tapando el 82 % que no tenía problema.
+
+Y al mirar los cuatro de cerca, tres ni siquiera hacían falta: **un documento de
+autorización no necesita el PAN completo para ser válido.** Necesita identificar la tarjeta,
+y para eso PCI-DSS permite expresamente los **últimos cuatro dígitos**. El CVV no pinta nada
+en una autorización escrita — sirve para autenticar una transacción, no para documentar un
+consentimiento.
+
+> **La regla:** cuando un requerimiento choca con un límite duro, no se negocia el límite ni
+> se rechaza el requerimiento entero. Se descompone el requerimiento hasta encontrar **qué
+> parte exacta** choca, que casi siempre es más pequeña de lo que parecía, y se busca qué
+> necesidad real cubría esa parte. Aquí la necesidad era «que el hotel pueda cobrar a
+> distancia», y tiene dos respuestas limpias que **no dependen de elegir pasarela**: la
+> terminal virtual (MOTO) del banco adquirente, que el hotel probablemente ya tiene, y el
+> enlace de pago cuando llegue B4.
+
+**El antipatrón evitado tiene dos caras y las dos son malas.** Una es construirlo como lo
+pidieron y dejar el problema dentro del sitio que existe para arreglarlo. La otra es
+contestar «no se puede» y devolverle al cliente un encargo entero sin hacer, cuando el 82 %
+sí se podía. *Rigor sí, parálisis no* — es la sección 2.5 de CLAUDE.md aplicada a una
+restricción legal en vez de a una metodológica.
+
+**Y la comprobación se escribió como prueba, no como comentario.** `autorizacion.test.mjs`
+afirma que el mensaje compuesto no contiene ninguna secuencia de 13 a 19 dígitos y que
+`ultimos4Validos` rechaza un PAN de 16. Un comentario que diga «aquí no va la tarjeta»
+envejece; una prueba que falle cuando alguien suba el máximo de 4 a 16, no.
+
+Ver [`site/src/booking/autorizacion.ts`](../../site/src/booking/autorizacion.ts) y
+[[L-145]], que es la misma idea sobre dinero: mirar el **costo total del resultado** y no el
+número que el proveedor puso en su página.
+
+
 ## Riesgos abiertos
 
 | # | Riesgo | Impacto | Acción |
