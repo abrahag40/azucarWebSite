@@ -80,7 +80,7 @@ import type { ImageMetadata } from 'astro';
 import type { Idioma } from '../i18n/ui';
 
 import fotoHotel from '../assets/actividades/hotel-fachada.webp';
-import fotoBocaPaila from '../assets/actividades/boca-paila-2026.webp';
+import fotoBocaPaila from '../assets/actividades/boca-paila-aerea.webp';
 import fotoPueblo from '../assets/actividades/pueblo.jpg';
 import fotoZona from '../assets/actividades/zona-arqueologica.jpg';
 import fotoSianKaan from '../assets/actividades/sian-kaan.jpg';
@@ -214,19 +214,28 @@ export const actividades: Actividad[] = [
     id: 'boca-paila',
     icono: 'bici',
     distancia: null,
-    /* La del puente viejo salió el 2026-09-11 —«horrible, un puente viejo sin
-       sentido», dijo el cliente, y tenía razón— y estuvo unas horas en modo
-       glifo porque en Wikimedia Commons no hay otra de Boca Paila con licencia
-       usable. La sustituye ésta, que **Abraham confirmó como del hotel**, así
-       que va sin crédito y cierra la parte de R-38 que dependía de la imagen.
+    /* TERCERA FOTO EN ESTE HUECO, y conviene leer las tres.
 
-       ⚠️ Queda anotado un detalle que no juzga nada pero conviene que esté
-       escrito: el archivo llegó llamándose
-       `boca-paila-casa-playa-tulum-quintana-roo-1618440219.jpg`, con el sufijo
-       numérico largo típico de una descarga de banco de imágenes. Se preguntó
-       por su procedencia antes de publicarla y la respuesta fue «es del hotel».
+       1. La original era del puente viejo, CC BY-SA 4.0 de Wikimedia. Salió el
+          2026-09-11: «horrible, un puente viejo sin sentido», dijo el cliente.
+       2. La sustituyó una vista de la carretera, sin crédito porque Abraham la
+          confirmó como del hotel.
+       3. Y el 2026-09-14 entra ésta, que el cliente mandó: la aérea del puente
+          sobre la boca de la laguna, con la barra de arena y el Caribe al
+          fondo. Vuelve a salir el puente, pero desde el aire y con el agua —que
+          es justo lo que la primera no tenía.
+
+       ⚠️ MISMO DETALLE QUE LA VEZ ANTERIOR, Y POR ESO SE VUELVE A ESCRIBIR. El
+       archivo llegó como `Boca-Paila-Bridge.jpg`, a 1200×800 y sin EXIF, y con
+       el atributo `com.apple.quarantine` de macOS marcando que **se descargó
+       con Chrome** —no salió de la carpeta de fotos del hotel—. Se preguntó por
+       su procedencia antes de publicarla y Abraham respondió, el 2026-09-14,
+       que es del hotel y que la bajaron de un recurso propio. Por eso
+       `credito: null`.
+
        Si algún día resulta que no lo es, lo que hay que cambiar es esta línea
-       —`credito: null`— y no buscar el porqué otra vez desde cero. */
+       —y no reconstruir el porqué desde cero. Es la segunda vez que una foto de
+       este hueco llega con pinta de descarga: R-38 sigue mereciendo la pena. */
     imagen: fotoBocaPaila,
     credito: null,
     titulo: { es: 'La carretera de Boca Paila', en: 'The Boca Paila road' },
